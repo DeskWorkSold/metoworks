@@ -1,0 +1,11 @@
+#bot .nav-link{
+    color: white ;
+    margin-left: 0.5rem;
+    font-size: 16px;
+    padding: 10px;
+    text-align: -webkit-center;
+    border-left: 1px solid white !important;
+}
+#bot{
+    z-index: 1;
+}
