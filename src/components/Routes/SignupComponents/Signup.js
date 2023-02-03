@@ -8,33 +8,63 @@ import "react-tabs/style/react-tabs.css";
 import axios from "axios";
 
 export const Signup = () => {
-  
   const [freelancerSignupData, setFreelancerSignUpData] = useState({
-    firstName : "",
-    lastName : "",
-    email : "",
-    password : "",
-    confirmPassword : ""
-  })
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   // console.log('freelancerSignupData', freelancerSignupData);
   const [recruiterSignupData, setRecruiterSignUpData] = useState({
-    firstName : "",
-    lastName : "",
-    email : "",
-    password : "",
-    confirmPassword : ""
-  })
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   // console.log(recruiterSignupData, 'recruiterSignupData');
 
-const freelancerFunc = () => {
+  const freelancerFunc = () => {
+    if (
+      freelancerSignupData.password === freelancerSignupData.confirmPassword
+    ) {
+      let obj = {
+        firstName: freelancerSignupData.firstName,
+        lastName: freelancerSignupData.lastName,
+        email: freelancerSignupData.email,
+        password: freelancerSignupData.password,
+      };
+      axios
+        .post("http://localhost:3000/v1/auth/register", obj)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
 
-  axios.post("http://localhost:5000/api/v1/user/register?type=freelancer",{freelancerSignupData}).then((res)=>{
-    console.log(res)
-}).catch((error)=>{
-    console.log(error)
-}
-)
-}
+  const RecruiterFunc = () => {
+    if (recruiterSignupData.password === recruiterSignupData.confirmPassword) {
+      let obj1 = {
+        firstName: recruiterSignupData.firstName,
+        lastName: recruiterSignupData.lastName,
+        email: recruiterSignupData.email,
+        password: recruiterSignupData.password,
+        role : "recuriter"
+      };
+      axios
+        .post("http://localhost:3000/v1/auth/register", obj1)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  };
   return (
     <Container>
       <Row className="align-items-center">
@@ -87,7 +117,12 @@ const freelancerFunc = () => {
                                   className="form-control"
                                   type={"text"}
                                   name="Fname"
-                                  onChange={(e) => setFreelancerSignUpData({...freelancerSignupData, firstName : e.target.value})}
+                                  onChange={(e) =>
+                                    setFreelancerSignUpData({
+                                      ...freelancerSignupData,
+                                      firstName: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="First Name"
@@ -103,7 +138,12 @@ const freelancerFunc = () => {
                                   className="form-control"
                                   type={"text"}
                                   name="Lname"
-                                  onChange={(e) => setFreelancerSignUpData({...freelancerSignupData, lastName : e.target.value})}
+                                  onChange={(e) =>
+                                    setFreelancerSignUpData({
+                                      ...freelancerSignupData,
+                                      lastName: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Last Name"
@@ -119,7 +159,12 @@ const freelancerFunc = () => {
                                   className="form-control"
                                   type={"Email"}
                                   name="email"
-                                  onChange={(e) => setFreelancerSignUpData({...freelancerSignupData, email : e.target.value})}
+                                  onChange={(e) =>
+                                    setFreelancerSignUpData({
+                                      ...freelancerSignupData,
+                                      email: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Email"
@@ -135,7 +180,12 @@ const freelancerFunc = () => {
                                   className="form-control"
                                   type={"password"}
                                   name="password"
-                                  onChange={(e) => setFreelancerSignUpData({...freelancerSignupData, password : e.target.value})}
+                                  onChange={(e) =>
+                                    setFreelancerSignUpData({
+                                      ...freelancerSignupData,
+                                      password: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Password"
@@ -151,7 +201,12 @@ const freelancerFunc = () => {
                                   className="form-control"
                                   type={"password"}
                                   name="confirmpassword"
-                                  onChange={(e) => setFreelancerSignUpData({...freelancerSignupData, confirmPassword : e.target.value})}
+                                  onChange={(e) =>
+                                    setFreelancerSignUpData({
+                                      ...freelancerSignupData,
+                                      confirmPassword: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Confirm Password"
@@ -200,6 +255,7 @@ const freelancerFunc = () => {
                                   background: "#39BEC1",
                                   border: "none",
                                 }}
+                                onClick={freelancerFunc}
                               >
                                 SIGN UP
                               </Button>
@@ -227,7 +283,12 @@ const freelancerFunc = () => {
                                   className="form-control"
                                   type={"text"}
                                   name="Fname"
-                                  onChange={(e) => setRecruiterSignUpData({...recruiterSignupData, firstName : e.target.value})}
+                                  onChange={(e) =>
+                                    setRecruiterSignUpData({
+                                      ...recruiterSignupData,
+                                      firstName: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="First Name"
@@ -243,8 +304,12 @@ const freelancerFunc = () => {
                                   className="form-control"
                                   type={"text"}
                                   name="Lname"
-                                  onChange={(e) => setRecruiterSignUpData({...recruiterSignupData, lastName : e.target.value})}
-
+                                  onChange={(e) =>
+                                    setRecruiterSignUpData({
+                                      ...recruiterSignupData,
+                                      lastName: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Last Name"
@@ -260,7 +325,12 @@ const freelancerFunc = () => {
                                   className="form-control"
                                   type={"Email"}
                                   name="email"
-                                  onChange={(e) => setRecruiterSignUpData({...recruiterSignupData, email : e.target.value})}
+                                  onChange={(e) =>
+                                    setRecruiterSignUpData({
+                                      ...recruiterSignupData,
+                                      email: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Email"
@@ -276,7 +346,12 @@ const freelancerFunc = () => {
                                   className="form-control"
                                   type={"password"}
                                   name="password"
-                                  onChange={(e) => setRecruiterSignUpData({...recruiterSignupData, password : e.target.value})}
+                                  onChange={(e) =>
+                                    setRecruiterSignUpData({
+                                      ...recruiterSignupData,
+                                      password: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Password"
@@ -292,7 +367,12 @@ const freelancerFunc = () => {
                                   className="form-control"
                                   type={"password"}
                                   name="confirmpassword"
-                                  onChange={(e) => setRecruiterSignUpData({...recruiterSignupData, confirmPassword : e.target.value})}
+                                  onChange={(e) =>
+                                    setRecruiterSignUpData({
+                                      ...recruiterSignupData,
+                                      confirmPassword: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Confirm Password"
@@ -341,6 +421,7 @@ const freelancerFunc = () => {
                                   background: "#39BEC1",
                                   border: "none",
                                 }}
+                                onClick={RecruiterFunc}
                               >
                                 SIGN UP
                               </Button>

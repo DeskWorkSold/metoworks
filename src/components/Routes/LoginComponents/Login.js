@@ -6,29 +6,52 @@ import { BrowserRouter as Route, Router, Link, Switch } from "react-router-dom";
 
 import "react-tabs/style/react-tabs.css";
 import axios from "axios";
+import { Navigation } from "swiper";
+import { useNavigate } from "react-router-dom/dist";
 
 export const Login = () => {
   const [freelancerData, setFreelancerData] = useState({
-    userName : "",
+    email : "",
     password : ""
   }) 
 // console.log(freelancerData, 'freelancerData dataaaaaa');
 const [recruiterData, setRecruiterData] = useState({
-  userName : "",
+  email : "",
   password : ""
 }) 
 // console.log(recruiterData, 'recruiterData dataaaaaa');
 
 // npm catch clean --force 
 
+const navigate = useNavigate()
+
 const freelancerFunc = () => {
-  axios.post("http://localhost:5000/api/v1/user/login",{freelancerData}).then((res)=>{
+  axios.post("http://localhost:3000/v1/auth/login",freelancerData).then((res)=>{
     console.log(res)
+    let data = res.data.user.role
+    // console.log(data, 'daata');
+    if(data === "freelancer") {
+    navigate("/FreelancerProfile")}
 }).catch((error)=>{
     console.log(error)
 }
 )
 }
+
+const RecruiteFunc = () => {
+  axios.post("http://localhost:3000/v1/auth/login",recruiterData).then((res)=>{
+    console.log(res)
+    let data = res.data.user.role
+    // console.log(data, 'daata');
+    if(data === "recuriter") {
+      navigate("/CompanyProfile")
+    }
+}).catch((error)=>{
+    console.log(error)
+}
+)
+}
+
 
   return (
     <Container>
@@ -84,7 +107,7 @@ const freelancerFunc = () => {
                                   name="FullName"
                                   //   value={user.name}
                                   //   onChange={getUserData}
-                                  onChange={(e) => setFreelancerData({...freelancerData, userName : e.target.value})}
+                                  onChange={(e) => setFreelancerData({...freelancerData, email : e.target.value})}
                                   placeholder="User Name"
                                   required
                                 />
@@ -131,7 +154,7 @@ const freelancerFunc = () => {
                           </h3>
                           <Col lg="12" className="webkit">
                             <div className="py-3">
-                              <Link to="/FreelancerProfile">
+                              {/* <Link to="/FreelancerProfile"> */}
                                 <Button
                                   className="text-white border-rounded text-xl px-5 py-2 w-2/3"
                                   style={{
@@ -142,7 +165,7 @@ const freelancerFunc = () => {
                                 >
                                   LOGIN
                                 </Button>
-                              </Link>
+                              {/* </Link> */}
                             </div>
                             <p
                               className="pt-2 text-xl"
@@ -167,7 +190,7 @@ const freelancerFunc = () => {
                                   className="form-control"
                                   type={"text"}
                                   name="FullName"
-                                  onChange={(e) => setRecruiterData({...recruiterData, userName : e.target.value})}
+                                  onChange={(e) => setRecruiterData({...recruiterData, email : e.target.value})}
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="User Name"
@@ -216,17 +239,18 @@ const freelancerFunc = () => {
                           </h3>
                           <Col lg="12" className="webkit">
                             <div className="py-3">
-                              <Link to="/CompanyProfile">
+                              {/* <Link to="/CompanyProfile"> */}
                                 <Button
                                   className="text-white border-rounded text-xl px-5 py-2 w-2/3"
                                   style={{
                                     background: "#39BEC1",
                                     border: "none",
                                   }}
+                                  onClick={RecruiteFunc}
                                 >
                                   LOGIN
                                 </Button>
-                              </Link>
+                              {/* </Link> */}
                             </div>
                             <p
                               className="pt-2 text-xl"

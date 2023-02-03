@@ -14,6 +14,9 @@ import Modal from "react-bootstrap/Modal";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 function MyVerticallyCenteredModal(props) {
+  const [jobData, setJobData] = useState ({})
+  console.log(jobData, 'Dataa');
+
   return (
     <Modal
       {...props}
@@ -40,6 +43,7 @@ function MyVerticallyCenteredModal(props) {
                     className="form-control"
                     name="fname"
                     type={"text"}
+                    onChange={(e) => setJobData({...jobData, jobTitle : e.target.value})}
                     //   value={user.number}
                     //   onChange={getUserData}
                     placeholder="Doctor for Child
@@ -53,7 +57,9 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Industry
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example"  
+                  onChange={(e) => setJobData({...jobData, jobIndustry : e.target.value})}
+                  >
                     <option value="DEFAULT" disabled="">
                       Select Job Industry
                     </option>
@@ -216,7 +222,8 @@ function MyVerticallyCenteredModal(props) {
                     }}
                     onChange={(event, editor) => {
                       const data = editor.getData();
-                      console.log({ event, editor, data });
+                      setJobData({...jobData, jobDiscription : data})
+                      ;
                     }}
                     onBlur={(event, editor) => {
                       console.log("Blur.", editor);
