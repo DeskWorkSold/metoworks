@@ -14,7 +14,28 @@ import Modal from "react-bootstrap/Modal";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 function MyVerticallyCenteredModal(props) {
-  const [jobData, setJobData] = useState ({})
+  const [jobData, setJobData] = useState ({
+    jobTitle : '',
+    jobIndustry : '',
+    jobFunction : '',
+    subJobFunction : '',
+    jobLocation : '',
+    jobDiscription : '',
+    jobRequirements : '',
+    profession : '',
+    educationLevel : '',
+    employementType : '',
+    startDate : '',
+    endDate : '',
+    madeOfWork : '',
+    noOfOpenings : '',
+    salaryInfo : '',
+    minSalary : '',
+    maxSalary : '',
+    salaryType : '',
+    postedDate : '',
+    additionalEmails : ''
+  })
   console.log(jobData, 'Dataa');
 
   return (
@@ -105,7 +126,9 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Function
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" 
+                  onChange={(e) => setJobData({...jobData, jobFunction : e.target.value})}
+                  >
                     <option value="DEFAULT" disabled="">
                       Select Job Function
                     </option>
@@ -143,7 +166,7 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Sub Job Function
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, subJobFunction : e.target.value})}>
                     <option value="DEFAULT" disabled="">
                       Sub Job Function
                     </option>
@@ -166,7 +189,7 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Location
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, jobLocation : e.target.value})}>
                     <option value="DEFAULT" disabled="">
                       Select Job Location
                     </option>
@@ -208,7 +231,7 @@ function MyVerticallyCenteredModal(props) {
               </Col>
               <Col lg="12">
                 <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
+                  <label className="text-lg" style={{ width: "100%" }} >
                     Job Description
                   </label>
                   <CKEditor
@@ -250,7 +273,8 @@ function MyVerticallyCenteredModal(props) {
                     }}
                     onChange={(event, editor) => {
                       const data = editor.getData();
-                      console.log({ event, editor, data });
+                      // console.log({ event, editor, data });
+                      setJobData({...jobData, jobRequirements : data})
                     }}
                     onBlur={(event, editor) => {
                       console.log("Blur.", editor);
@@ -277,6 +301,7 @@ function MyVerticallyCenteredModal(props) {
                     placeholder="Enter Profession
                 "
                     required
+                    onChange={(e) => setJobData({...jobData, profession : e.target.value})}
                   />
                 </fieldset>
               </Col>
@@ -285,7 +310,7 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Education Level
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, educationLevel : e.target.value})}>
                     <option>Select Education level</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -309,7 +334,7 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Employment Type
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, employementType : e.target.value})}>
                     <option>Select Employement Type</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -330,7 +355,7 @@ function MyVerticallyCenteredModal(props) {
               </Col>
               <Col lg="12">
                 <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
+                  <label className="text-lg" style={{ width: "100%" }} >
                     Profession
                   </label>
                 </fieldset>
@@ -373,6 +398,7 @@ function MyVerticallyCenteredModal(props) {
                       Start :
                     </label>
                     <input
+                    onChange={(e) => setJobData({...jobData, startDate : e.target.value})}
                       style={{ width: "100%" }}
                       className="form-control"
                       type={"date"}
@@ -388,6 +414,7 @@ function MyVerticallyCenteredModal(props) {
                       End :
                     </label>
                     <input
+                    onChange={(e) => setJobData({...jobData, endDate : e.target.value})}
                       style={{ width: "100%" }}
                       className="form-control mx-2"
                       type={"date"}
@@ -406,7 +433,9 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Mode of Work
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" 
+                    onChange={(e) => setJobData({...jobData, madeOfWork : e.target.value})}
+                    >
                     <option>Select Mode of Work</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -436,6 +465,7 @@ function MyVerticallyCenteredModal(props) {
                     className="form-control"
                     type={"number"}
                     name="firstname"
+                    onChange={(e) => setJobData({...jobData, noOfOpenings : e.target.value})}
                     //   value={user.name}
                     //   onChange={getUserData}
                     placeholder="Enter No. of Openings
@@ -449,7 +479,9 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Salary Info
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" 
+                    onChange={(e) => setJobData({...jobData, salaryInfo : e.target.value})}
+                    >
                     <option value="DEFAULT" disabled="">
                       Currency
                     </option>
@@ -486,6 +518,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control"
                       type={"number"}
                       name="firstname"
+                    onChange={(e) => setJobData({...jobData, minSalary : e.target.value})}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Minimum Salary"
@@ -501,6 +534,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control mx-2"
                       type={"number"}
                       name="firstname"
+                    onChange={(e) => setJobData({...jobData, maxSalary : e.target.value})}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Maximum Salary
@@ -518,14 +552,15 @@ function MyVerticallyCenteredModal(props) {
                     name="radios"
                     class="form-check-input"
                     id="exampleRadio1"
+                    value="Salary Negotiable"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) => setJobData({...jobData, salaryType : e.target.value})}
+                  />
                   <label
                     class="form-check-label"
                     for="exampleRadio1"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Salary Negotiable
                   </label>
                   <input
@@ -533,14 +568,15 @@ function MyVerticallyCenteredModal(props) {
                     name="radios"
                     class="form-check-input"
                     id="exampleRadio2"
+                    value="Project Based"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) => setJobData({...jobData, salaryType : e.target.value})}
+                  />
                   <label
                     class="form-check-label"
                     for="exampleRadio2"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Project Based
                   </label>
                   <input
@@ -549,13 +585,14 @@ function MyVerticallyCenteredModal(props) {
                     class="form-check-input"
                     id="exampleRadio3"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    value="Others"
+                    onChange={(e) => setJobData({...jobData, salaryType : e.target.value})}
+                  />
                   <label
                     class="form-check-label"
                     for="exampleRadio3"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Others
                   </label>
                 </fieldset>
@@ -568,14 +605,15 @@ function MyVerticallyCenteredModal(props) {
                     class="form-check-input"
                     name="bsradio"
                     id="radio1"
+                    value="Per Day"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
+                  />
                   <label
                     for="radio1"
                     class="form-check-label pl-2"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Per Day
                   </label>
                   <input
@@ -583,14 +621,15 @@ function MyVerticallyCenteredModal(props) {
                     class="form-check-input"
                     name="bsradio"
                     id="radio2"
+                    value="per Week"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
+                  />
                   <label
                     for="radio2"
                     class="form-check-label pl-2"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Per Week
                   </label>
                   <input
@@ -598,14 +637,15 @@ function MyVerticallyCenteredModal(props) {
                     class="form-check-input"
                     name="bsradio"
                     id="radio3"
+                    value="per Month"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
+                  />
                   <label
                     for="radio3"
                     class="form-check-label pl-2"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Per Month
                   </label>
                   <input
@@ -613,14 +653,15 @@ function MyVerticallyCenteredModal(props) {
                     class="form-check-input"
                     name="bsradio"
                     id="radio4"
+                    value="others"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
+                  />
                   <label
                     for="radio4"
                     class="form-check-label pl-2"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Others
                   </label>
                 </fieldset>
@@ -640,8 +681,8 @@ function MyVerticallyCenteredModal(props) {
                       name="firstname"
                       //   value={user.name}
                       //   onChange={getUserData}
-                      placeholder="Enter No. of Openings
-                "
+                      placeholder="Enter No. of Openings"
+                    onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
                     />
                   </fieldset>
@@ -658,6 +699,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control"
                       type={"email"}
                       name="firstname"
+                    onChange={(e) => setJobData({...jobData, additionalEmails : e.target.value})}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Enter Additional Emails
