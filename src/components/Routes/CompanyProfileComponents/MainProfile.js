@@ -13,12 +13,16 @@ import Modal from "react-bootstrap/Modal";
 // import React, { Component } from 'react';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { useNavigate } from "react-router-dom/dist";
+import { useEffect } from "react";
+import axios from '../../../utils/axios.api'
+
 function MyVerticallyCenteredModal(props) {
   const [jobData, setJobData] = useState ({
     jobTitle : '',
     jobIndustry : '',
     jobFunction : '',
-    subJobFunction : '',
+    subJobFunction : 'damy',
     jobLocation : '',
     jobDiscription : '',
     jobRequirements : '',
@@ -33,10 +37,21 @@ function MyVerticallyCenteredModal(props) {
     minSalary : '',
     maxSalary : '',
     salaryType : '',
+    salaryFreq : '',
     postedDate : '',
-    additionalEmails : ''
+    additionalEmails : '',
+    role : 'companyJob'
   })
-  console.log(jobData, 'Dataa');
+  // console.log(jobData, 'Dataa');
+  const navigate = useNavigate()
+  const postFun = () => {
+    axios.post('http://localhost:3000/v1/job-post', jobData).then((res) => {
+      console.log(res, 'data sended successfully');
+      // navigate('/CompanyProfile')
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
 
   return (
     <Modal
@@ -68,7 +83,6 @@ function MyVerticallyCenteredModal(props) {
                     //   value={user.number}
                     //   onChange={getUserData}
                     placeholder="Doctor for Child
-
                 "
                   />
                 </fieldset>
@@ -734,7 +748,7 @@ function MyVerticallyCenteredModal(props) {
         </Button>
         <Button
           style={{ background: "none", color: "#39BEC1" }}
-          onClick={props.post}
+          onClick={postFun}
         >
           Post
         </Button>
@@ -748,6 +762,38 @@ export const MainProfile = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [modalShow, setModalShow] = React.useState(false);
+  const [userId, setUserId] = useState('')
+  console.log(userId, 'user ID');
+
+  const [profileData, setProfileData] = useState({
+    firstName : '',
+    lastName : '',
+    email : '',
+    phoneNumber : '',
+    foundedIn : '',
+    whatsMakesUsSpecial : '',
+    companyName : '',
+    companyScope : '',
+    salaryRange : '',
+    headquarters : '',
+    companyLocation : '',
+    description : '',
+    role : 'companyJob'
+  })
+  console.log(profileData, 'profile Data');
+  useEffect(() => {
+  let id = localStorage.getItem('id')
+  setUserId(id)
+  },[])
+
+const profileFunc = () => {
+  
+  axios.patch(`http://localhost:3000/v1/users/manageUsers?userId=${userId}`, profileData).then((res) => {
+    console.log(res, 'profile data successfully added');
+  }).catch((err) => {
+    console.log(err);
+  })
+}
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -918,10 +964,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="fname"
                                       type={"text"}
+                                      onChange={(e) => setProfileData({...profileData, firstName : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
                                       placeholder="Gia 
-
                 "
                                     />
                                   </fieldset>
@@ -939,10 +985,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="lname"
                                       type={"text"}
+                                      onChange={(e) => setProfileData({...profileData, lastName : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
                                       placeholder="Jay 
-
                 "
                                     />
                                   </fieldset>
@@ -960,10 +1006,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="email"
                                       type={"email"}
+                                      onChange={(e) => setProfileData({...profileData, email : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
                                       placeholder="gaiaewreeytyrt@gmail.com 
-
                 "
                                     />
                                   </fieldset>
@@ -981,10 +1027,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
+                                      onChange={(e) => setProfileData({...profileData, phoneNumber : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
                                       placeholder="61453472
-
                 "
                                     />
                                   </fieldset>
@@ -1002,10 +1048,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
+                                      onChange={(e) => setProfileData({...profileData, foundedIn : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
                                       placeholder="2000
-
                 "
                                     />
                                   </fieldset>
@@ -1023,6 +1069,7 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
+                                      onChange={(e) => setProfileData({...profileData, whatsMakesUsSpecial : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
                                       placeholder="A Service Like No Other
@@ -1054,10 +1101,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       type={"text"}
                                       name="firstname"
+                                      onChange={(e) => setProfileData({...profileData, companyName : e.target.value})}
                                       //   value={user.name}
                                       //   onChange={getUserData}
                                       placeholder="Gia (PVT) LTD
-
                 "
                                       required
                                     />
@@ -1077,6 +1124,7 @@ export const MainProfile = () => {
                                       className="form-control"
                                       type={"text"}
                                       name="lastname"
+                                      onChange={(e) => setProfileData({...profileData, companyScope : e.target.value})}
                                       //   value={user.email}
                                       //   onChange={getUserData}
                                       placeholder="IT Industry
@@ -1098,6 +1146,7 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="Email"
                                       type={"text"}
+                                      onChange={(e) => setProfileData({...profileData, salaryRange : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
                                       placeholder="https://www.me2work.com/
@@ -1119,6 +1168,7 @@ export const MainProfile = () => {
                                         className="form-control"
                                         name="minwork"
                                         type={"text"}
+                                        onChange={(e) => setProfileData({...profileData, headquarters : e.target.value})}
                                         //   value={user.number}
                                         //   onChange={getUserData}
                                         placeholder="USA
@@ -1140,6 +1190,7 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="Email"
                                       type={"text"}
+                                      onChange={(e) => setProfileData({...profileData, companyLocation : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
                                       placeholder="Huston
@@ -1156,6 +1207,7 @@ export const MainProfile = () => {
                                       Description
                                     </label>
                                     <textarea
+                                    onChange={(e) => setProfileData({...profileData, description : e.target.value})}
                                       placeholder="Description"
                                       className="form-control"
                                     />
@@ -1186,6 +1238,7 @@ export const MainProfile = () => {
                           <Button
                             variant="primary"
                             style={{ background: "none", color: "#39BEC1" }}
+                            onClick={profileFunc}
                           >
                             Save
                           </Button>

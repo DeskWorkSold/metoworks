@@ -23,6 +23,8 @@ const [recruiterData, setRecruiterData] = useState({
 
 // npm catch clean --force 
 
+
+
 const navigate = useNavigate()
 
 const freelancerFunc = () => {
@@ -41,9 +43,11 @@ const freelancerFunc = () => {
 const RecruiteFunc = () => {
   axios.post("http://localhost:3000/v1/auth/login",recruiterData).then((res)=>{
     console.log(res)
-    let data = res.data.user.role
+    const {role,id} = res.data.user
+    localStorage.setItem('id', id)
+    localStorage.setItem('access-token', res.data.tokens.access.token)
     // console.log(data, 'daata');
-    if(data === "recuriter") {
+    if(role === "recuriter") {
       navigate("/CompanyProfile")
     }
 }).catch((error)=>{

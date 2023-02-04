@@ -39,6 +39,8 @@ export const Signup = () => {
         .post("http://localhost:3000/v1/auth/register", obj)
         .then((res) => {
           console.log(res);
+          let id = res.data.user.id
+          localStorage.setItem('id', id)
         })
         .catch((error) => {
           console.log(error);
