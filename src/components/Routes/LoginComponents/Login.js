@@ -11,51 +11,73 @@ import { useNavigate } from "react-router-dom/dist";
 
 export const Login = () => {
   const [freelancerData, setFreelancerData] = useState({
-    email : "",
-    password : ""
-  }) 
-// console.log(freelancerData, 'freelancerData dataaaaaa');
-const [recruiterData, setRecruiterData] = useState({
-  email : "",
-  password : ""
-}) 
-// console.log(recruiterData, 'recruiterData dataaaaaa');
+    email: "",
+    password: "",
+  });
+  // console.log(freelancerData, 'freelancerData dataaaaaa');
+  const [recruiterData, setRecruiterData] = useState({
+    email: "",
+    password: "",
+  });
 
-// npm catch clean --force 
+  const [validation, setValidation] = useState('')
+  // console.log(recruiterData, 'recruiterData dataaaaaa');
 
+  // npm catch clean --force
 
-
-const navigate = useNavigate()
-
-const freelancerFunc = () => {
-  axios.post("http://localhost:3000/v1/auth/login",freelancerData).then((res)=>{
-    console.log(res)
-    let data = res.data.user.role
-    // console.log(data, 'daata');
-    if(data === "freelancer") {
-    navigate("/FreelancerProfile")}
-}).catch((error)=>{
-    console.log(error)
-}
-)
-}
-
-const RecruiteFunc = () => {
-  axios.post("http://localhost:3000/v1/auth/login",recruiterData).then((res)=>{
-    console.log(res)
-    const {role,id} = res.data.user
-    localStorage.setItem('id', id)
-    localStorage.setItem('access-token', res.data.tokens.access.token)
-    // console.log(data, 'daata');
-    if(role === "recuriter") {
-      navigate("/CompanyProfile")
+  const navigate = useNavigate();
+  const validatorLoginAuth = (data) => {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(data.email)) {
+      if (data.password.length >= 6) {
+        return true;
+      }
+      return "password must be 6 character or long";
     }
-}).catch((error)=>{
-    console.log(error)
-}
-)
-}
+    return "please enter correct email address";
+  };
+  const freelancerFunc = () => {
+    let isValidate = validatorLoginAuth(freelancerData);
+    if (isValidate == true) {
+      axios
+        .post("http://localhost:3000/v1/auth/login", freelancerData)
+        .then((res) => {
+          console.log(res);
+          let data = res.data.user.role;
+          // console.log(data, 'daata');
+          if (data === "freelancer") {
+            navigate("/FreelancerProfile");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      setValidation(isValidate);
+    }
+  };
 
+  const RecruiteFunc = () => {
+    let isValidate = validatorLoginAuth(recruiterData)
+    if(isValidate === true) {
+    axios
+      .post("http://localhost:3000/v1/auth/login", recruiterData)
+      .then((res) => {
+        console.log(res);
+        const { role, id } = res.data.user;
+        localStorage.setItem("id", id);
+        localStorage.setItem("access-token", res.data.tokens.access.token);
+        // console.log(data, 'daata');
+        if (role === "recuriter") {
+          navigate("/CompanyProfile");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } else {
+      setValidation(isValidate)
+    }
+  };
 
   return (
     <Container>
@@ -69,7 +91,6 @@ const RecruiteFunc = () => {
                   <Tabs className="webkit" id="tablet">
                     <TabList className="webkit py-4 d-flex-for-res">
                       <Tab>
-         
                         <Image
                           className="p-3"
                           style={{
@@ -111,13 +132,18 @@ const RecruiteFunc = () => {
                                   name="FullName"
                                   //   value={user.name}
                                   //   onChange={getUserData}
-                                  onChange={(e) => setFreelancerData({...freelancerData, email : e.target.value})}
+                                  onChange={(e) =>
+                                    setFreelancerData({
+                                      ...freelancerData,
+                                      email: e.target.value,
+                                    })
+                                  }
                                   placeholder="User Name"
                                   required
                                 />
                               </fieldset>
                             </Col>
-                            <Col lg="12">
+                            <Col lg='12'>
                               <fieldset>
                                 {/* <label style={{ width: "100%" }}>First name</label> */}
                                 <input
@@ -125,7 +151,12 @@ const RecruiteFunc = () => {
                                   className="form-control"
                                   type={"password"}
                                   name="Password"
-                                 onChange={(e) => setFreelancerData({...freelancerData, password : e.target.value})}
+                                  onChange={(e) =>
+                                    setFreelancerData({
+                                      ...freelancerData,
+                                      password: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Password"
@@ -133,6 +164,9 @@ const RecruiteFunc = () => {
                                 />
                               </fieldset>
                             </Col>
+                            {validation && validation.length ? <Col lg="12">
+                              <p style={{color : 'red'}}> {validation} </p>
+                              </Col> : <span> </span>} 
                           </Row>
                           <h3
                             style={{
@@ -159,16 +193,16 @@ const RecruiteFunc = () => {
                           <Col lg="12" className="webkit">
                             <div className="py-3">
                               {/* <Link to="/FreelancerProfile"> */}
-                                <Button
-                                  className="text-white border-rounded text-xl px-5 py-2 w-2/3"
-                                  style={{
-                                    background: "#39BEC1",
-                                    border: "none",
-                                  }}
-                                  onClick={freelancerFunc}
-                                >
-                                  LOGIN
-                                </Button>
+                              <Button
+                                className="text-white border-rounded text-xl px-5 py-2 w-2/3"
+                                style={{
+                                  background: "#39BEC1",
+                                  border: "none",
+                                }}
+                                onClick={freelancerFunc}
+                              >
+                                LOGIN
+                              </Button>
                               {/* </Link> */}
                             </div>
                             <p
@@ -194,7 +228,12 @@ const RecruiteFunc = () => {
                                   className="form-control"
                                   type={"text"}
                                   name="FullName"
-                                  onChange={(e) => setRecruiterData({...recruiterData, email : e.target.value})}
+                                  onChange={(e) =>
+                                    setRecruiterData({
+                                      ...recruiterData,
+                                      email: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="User Name"
@@ -210,7 +249,12 @@ const RecruiteFunc = () => {
                                   className="form-control"
                                   type={"password"}
                                   name="Password"
-                                  onChange={(e) => setRecruiterData({...recruiterData, password : e.target.value})}
+                                  onChange={(e) =>
+                                    setRecruiterData({
+                                      ...recruiterData,
+                                      password: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Password"
@@ -218,6 +262,9 @@ const RecruiteFunc = () => {
                                 />
                               </fieldset>
                             </Col>
+                            {validation && validation.length ? <Col lg="12">
+                              <p style={{color : 'red'}}> {validation} </p>
+                              </Col> : <span> </span>} 
                           </Row>
                           <h3
                             style={{
@@ -244,16 +291,16 @@ const RecruiteFunc = () => {
                           <Col lg="12" className="webkit">
                             <div className="py-3">
                               {/* <Link to="/CompanyProfile"> */}
-                                <Button
-                                  className="text-white border-rounded text-xl px-5 py-2 w-2/3"
-                                  style={{
-                                    background: "#39BEC1",
-                                    border: "none",
-                                  }}
-                                  onClick={RecruiteFunc}
-                                >
-                                  LOGIN
-                                </Button>
+                              <Button
+                                className="text-white border-rounded text-xl px-5 py-2 w-2/3"
+                                style={{
+                                  background: "#39BEC1",
+                                  border: "none",
+                                }}
+                                onClick={RecruiteFunc}
+                              >
+                                LOGIN
+                              </Button>
                               {/* </Link> */}
                             </div>
                             <p

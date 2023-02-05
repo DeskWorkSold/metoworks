@@ -764,6 +764,7 @@ export const MainProfile = () => {
   const [modalShow, setModalShow] = React.useState(false);
   const [userId, setUserId] = useState('')
   console.log(userId, 'user ID');
+  // const [isProfileData, setIsProfileData] = useState({})
 
   const [profileData, setProfileData] = useState({
     firstName : '',
@@ -778,17 +779,28 @@ export const MainProfile = () => {
     headquarters : '',
     companyLocation : '',
     description : '',
-    role : 'companyJob'
   })
   console.log(profileData, 'profile Data');
   useEffect(() => {
   let id = localStorage.getItem('id')
   setUserId(id)
+  initialFun(id)
   },[])
+
+  const initialFun = (id) => {
+    axios.get(`http://localhost:3000/v1/users/${id}`).then((res)=> {
+      console.log(res, 'Initial Data');
+      let data = res.data
+      // setIsProfileData(data)
+      setProfileData(data)
+    }).catch((err)=> {
+      console.log(err);
+    })
+  }
 
 const profileFunc = () => {
   
-  axios.patch(`http://localhost:3000/v1/users/manageUsers?userId=${userId}`, profileData).then((res) => {
+  axios.patch(`http://localhost:3000/v1/users/${userId}`, profileData).then((res) => {
     console.log(res, 'profile data successfully added');
   }).catch((err) => {
     console.log(err);
@@ -849,9 +861,9 @@ const profileFunc = () => {
                   </Col>
                   <Col lg="4">
                     <h2 className="text-3xl py-3 robot">
-                      Gia (PVT) LTD <br />
+                      {profileData?.companyName ? profileData.companyName : 'Gia (PVT) LTD'} <br />
                       <span className="text-xl" style={{ color: "#6A489C" }}>
-                        A Service Like No Other
+                        {profileData?.whatsMakesUsSpecial ? profileData.whatsMakesUsSpecial : 'A Service Like No Other'}
                       </span>
                     </h2>
                   </Col>
@@ -866,8 +878,8 @@ const profileFunc = () => {
 
                               fontWeight: "bolder",
                             }}
-                          />{" "}
-                          Founded in 2000
+                          />
+                          Founded in {profileData?.foundedIn ? profileData.foundedIn : '2000'}
                         </li>
                         <li>
                           <FontAwesomeIcon
@@ -876,8 +888,8 @@ const profileFunc = () => {
                               color: "#39BEC1",
                               fontWeight: "bolder",
                             }}
-                          />{" "}
-                          USA
+                          />
+                          {profileData?.headquarters ? profileData.headquarters : 'USA'}
                         </li>
                         <li>
                           {" "}
@@ -887,7 +899,7 @@ const profileFunc = () => {
                               color: "#39BEC1",
                               fontWeight: "bolder",
                             }}
-                          />{" "}
+                          />
                           https://www.me2work.com/
                         </li>
                       </ul>
@@ -964,6 +976,7 @@ const profileFunc = () => {
                                       className="form-control"
                                       name="fname"
                                       type={"text"}
+                                      value={ profileData?.firstName || ''}
                                       onChange={(e) => setProfileData({...profileData, firstName : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
@@ -985,6 +998,7 @@ const profileFunc = () => {
                                       className="form-control"
                                       name="lname"
                                       type={"text"}
+                                      value={profileData?.lastName || ''}
                                       onChange={(e) => setProfileData({...profileData, lastName : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
@@ -1002,10 +1016,12 @@ const profileFunc = () => {
                                       Email Address
                                     </label>
                                     <input
+                                      disabled
                                       style={{ width: "100%" }}
                                       className="form-control"
                                       name="email"
                                       type={"email"}
+                                      value={profileData?.email || ''}
                                       onChange={(e) => setProfileData({...profileData, email : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
@@ -1027,6 +1043,7 @@ const profileFunc = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
+                                      value={profileData?.phoneNumber || ''}
                                       onChange={(e) => setProfileData({...profileData, phoneNumber : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
@@ -1048,11 +1065,11 @@ const profileFunc = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
+                                      value={profileData?.foundedIn || ''}
                                       onChange={(e) => setProfileData({...profileData, foundedIn : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder="2000
-                "
+                                      placeholder="2000"
                                     />
                                   </fieldset>
                                 </Col>
@@ -1069,6 +1086,7 @@ const profileFunc = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
+                                      value={profileData?.whatsMakesUsSpecial || ''}
                                       onChange={(e) => setProfileData({...profileData, whatsMakesUsSpecial : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
@@ -1084,7 +1102,7 @@ const profileFunc = () => {
                                 className="text-2xl"
                                 style={{ color: "#39BEC1" }}
                               >
-                                Company Info{" "}
+                                Company Info
                               </h2>
                               <div className="p-3">
                                 <Col lg="12">
@@ -1101,6 +1119,7 @@ const profileFunc = () => {
                                       className="form-control"
                                       type={"text"}
                                       name="firstname"
+                                      value={profileData?.companyName || ''}
                                       onChange={(e) => setProfileData({...profileData, companyName : e.target.value})}
                                       //   value={user.name}
                                       //   onChange={getUserData}
@@ -1124,6 +1143,7 @@ const profileFunc = () => {
                                       className="form-control"
                                       type={"text"}
                                       name="lastname"
+                                      value={profileData?.companyScope || ''}
                                       onChange={(e) => setProfileData({...profileData, companyScope : e.target.value})}
                                       //   value={user.email}
                                       //   onChange={getUserData}
@@ -1146,6 +1166,7 @@ const profileFunc = () => {
                                       className="form-control"
                                       name="Email"
                                       type={"text"}
+                                      value={profileData?.salaryRange || ''}
                                       onChange={(e) => setProfileData({...profileData, salaryRange : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
@@ -1168,6 +1189,7 @@ const profileFunc = () => {
                                         className="form-control"
                                         name="minwork"
                                         type={"text"}
+                                        value={profileData?.headquarters || ''}
                                         onChange={(e) => setProfileData({...profileData, headquarters : e.target.value})}
                                         //   value={user.number}
                                         //   onChange={getUserData}
@@ -1190,6 +1212,7 @@ const profileFunc = () => {
                                       className="form-control"
                                       name="Email"
                                       type={"text"}
+                                      value={profileData?.companyLocation || ''}
                                       onChange={(e) => setProfileData({...profileData, companyLocation : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
@@ -1210,6 +1233,7 @@ const profileFunc = () => {
                                     onChange={(e) => setProfileData({...profileData, description : e.target.value})}
                                       placeholder="Description"
                                       className="form-control"
+                                      value={profileData?.description || ''}
                                     />
                                     {/* <input
                                       style={{ width: "100%" }}
@@ -1308,7 +1332,7 @@ const profileFunc = () => {
                         <h2 className="text-xl font-semibold">Full Name</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          Gia Jay
+                          {profileData?.firstName && profileData?.lastName ? profileData.firstName + ' ' + profileData.lastName : 'Gia Jay'} 
                         </h2>
                       </div>
                     </Col>
@@ -1317,7 +1341,7 @@ const profileFunc = () => {
                         <h2 className="text-xl font-semibold">Email</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          gaiaewreeytyrt@gmail.com
+                          {profileData?.email ? profileData.email : 'gaiaewreeytyrt@gmail.com'}
                         </h2>
                       </div>
                     </Col>
@@ -1326,7 +1350,7 @@ const profileFunc = () => {
                         <h2 className="text-xl font-semibold">Phone Number</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          61453472
+                          {profileData?.phoneNumber ? profileData.phoneNumber : '61453472'}
                         </h2>
                       </div>
                     </Col>
@@ -1343,7 +1367,7 @@ const profileFunc = () => {
                         <h2 className="text-xl font-semibold">Company Name</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          Gia (PVT) LTD
+                          {profileData?.companyName ? profileData.companyName : 'Gia (PVT) LTD'}
                         </h2>
                       </div>
                     </Col>
@@ -1352,7 +1376,7 @@ const profileFunc = () => {
                         <h2 className="text-xl font-semibold">Company Scope</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          IT Industry
+                          {profileData?.companyScope ? profileData.companyScope : 'IT Industry'}
                         </h2>
                       </div>
                     </Col>
@@ -1374,7 +1398,7 @@ const profileFunc = () => {
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          Huston
+                          {profileData?.companyLocation ? profileData.companyLocation :'Huston'}
                         </h2>
                       </div>
                     </Col>
@@ -1385,13 +1409,14 @@ const profileFunc = () => {
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          A . It has survived t is a long established fact that
+                       {profileData?.description ? profileData.description : 
+                       `A .It has survived t is a long established fact that
                           a reader will be distracted by the readable content of
                           a page when looking at its layout. The point of using
                           Lorem Ipsum is that it has a more-or-less normal
                           distribution of letters, as opposed to using 'Content
                           here, content here', making it look like readable
-                          English.
+                          English.`}
                         </h2>
                       </div>
                     </Col>
