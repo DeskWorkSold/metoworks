@@ -62,13 +62,17 @@ export const FreelanceProfileView = () => {
   const handleShow9 = () => setShow9(true);
   const [userId, setUserId] = useState("");
   console.log(userId, "ID");
+  const [isCheckBox, setIsCheckBox] = useState('false')
   const [profileData, setProfileData] = useState({});
-  console.log(profileData);
+  const [profileExp, setProfileExp] = useState({});
+  // console.log(profileExp);
 
   useEffect(() => {
     let id = localStorage.getItem("id");
     setUserId(id);
     initialFun(id);
+    setProfileData({...profileData, uid : id})
+    setProfileExp({...profileExp, uid : id})
   }, []);
 
   const initialFun = (id) => {
@@ -96,7 +100,26 @@ export const FreelanceProfileView = () => {
       });
   };
 
-  const ProfileExp = () => {};
+  const ProfileExp = () => {
+    axios
+    .post(`http://localhost:3000/v1/freelancerExp`, profileExp)
+    .then((res) => {
+      console.log(res, "profile data successfully added");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  };
+
+  const checkBoxHandleChange = (e) => {
+    if(e.target.value === 'on'){
+    setIsCheckBox('true')
+    setProfileExp({...profileExp, currentlyWorking : isCheckBox})
+  } else {
+      setIsCheckBox('false')
+      setProfileExp({...profileExp, currentlyWorking : isCheckBox})
+    }
+  }
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -858,6 +881,7 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="fname"
                                 type={"text"}
+                                onChange={(e) => setProfileExp({...profileExp, profession : e.target.value})}
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Gia 
@@ -878,7 +902,8 @@ export const FreelanceProfileView = () => {
                                 style={{ width: "100%" }}
                                 className="form-control"
                                 name="lname"
-                                type={"number"}
+                                value={profileExp?.companyName}
+                                onChange={(e) => setProfileExp({...profileExp, companyName : e.target.value})}
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Jay 
@@ -895,7 +920,10 @@ export const FreelanceProfileView = () => {
                               >
                                 Job Industry
                               </label>
-                              <Form.Select aria-label="Default select example">
+                              <Form.Select aria-label="Default select example"
+                                      value={profileExp?.jobIndustry || 'Jay'}
+                                      onChange={(e) => setProfileExp({...profileExp, jobIndustry : e.target.value})}
+                              >
                                 <option hidden="">Job Industry</option>
                                 <option>Universities / Education</option>
                                 <option>Manufacturing</option>
@@ -940,7 +968,10 @@ export const FreelanceProfileView = () => {
                               >
                                 Job Function
                               </label>
-                              <Form.Select aria-label="Default select example">
+                              <Form.Select aria-label="Default select example"
+                               value={profileExp?.jobFunction || 'Jay'}
+                               onChange={(e) => setProfileExp({...profileExp, jobFunction : e.target.value})}
+                              >
                                 <option hidden="">Job Function</option>
                                 <option>HR &amp; Admin</option>
                                 <option>General Management</option>
@@ -975,7 +1006,9 @@ export const FreelanceProfileView = () => {
                                   color: "#7A7979",
                                 }}
                               >
-                                <FormCheck id="check" color="blue" />
+                                <FormCheck id="check" color="blue" 
+                                  onChange={checkBoxHandleChange}
+                                  />
                                 &#160;&#160;I am currently working in this role
                               </span>
                             </Col>
@@ -992,6 +1025,8 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   name="email"
                                   type={"date"}
+                                  value={profileExp?.startDate || 'startDate'}
+                                  onChange={(e) => setProfileExp({...profileExp, startDate : e.target.value})}
                                   //   value={user.number}
                                   //   onChange={getUserData}
                                   placeholder="A Service Like No Other
@@ -1013,6 +1048,8 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   type={"date"}
                                   name="firstname"
+                                  value={profileExp?.endDate || 'startDate'}
+                                  onChange={(e) => setProfileExp({...profileExp, endDate : e.target.value})}
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Gia (PVT) LTD
@@ -1034,6 +1071,8 @@ export const FreelanceProfileView = () => {
                                 <textarea
                                   placeholder="Description"
                                   className="form-control"
+                                  value={profileExp?.description  }
+                                  onChange={(e) => setProfileExp({...profileExp, description : e.target.value})}
                                 />
                               </fieldset>
                             </Col>
@@ -1052,6 +1091,7 @@ export const FreelanceProfileView = () => {
                       <Button
                         variant="primary"
                         style={{ background: "none", color: "#39BEC1" }}
+                        onClick={ProfileExp}
                       >
                         Save
                       </Button>
