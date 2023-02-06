@@ -30,6 +30,7 @@ import Modal from "react-bootstrap/Modal";
 import axios from "../../../utils/axios.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Language } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 export const FreelanceProfileView = () => {
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
@@ -63,20 +64,22 @@ export const FreelanceProfileView = () => {
   const handleShow9 = () => setShow9(true);
   const [userId, setUserId] = useState("");
   // console.log(userId, "ID");
-  const [isCheckBox, setIsCheckBox] = useState('false')
+  const [isCheckBox, setIsCheckBox] = useState("false");
   const [profileData, setProfileData] = useState({});
   const [profileExp, setProfileExp] = useState({});
   const [isEducation, setIsEducation] = useState({});
-  const [isAchievement, setIsAchievement] = useState({})
-  const [isLanguage, setIsLanguage] = useState({})
+  const [isAchievement, setIsAchievement] = useState({});
+  const [isLanguage, setIsLanguage] = useState({});
+  const [isEducationData, setIsEducationData] = useState({});
 
-  console.log(isLanguage, 'isLanguage');
+  console.log(isEducationData, "isEducationData");
 
   useEffect(() => {
     let id = localStorage.getItem("id");
     setUserId(id);
     initialFun(id);
     ProfileExpData(id);
+    educationData();
     setProfileData({ ...profileData, uid: id });
     setProfileExp({ ...profileExp, uid: id });
     setIsEducation({ ...isEducation, uid: id });
@@ -114,8 +117,8 @@ export const FreelanceProfileView = () => {
       .post(`http://localhost:3000/v1/freelancerExp`, profileExp)
       .then((res) => {
         console.log(res, "profile data successfully added");
-        setProfileExp(res.data, 'ProfileExp')
-        ProfileExpData()
+        setProfileExp(res.data, "ProfileExp");
+        ProfileExpData();
       })
       .catch((err) => {
         console.log(err);
@@ -123,37 +126,56 @@ export const FreelanceProfileView = () => {
   };
 
   const ProfileExpData = (id) => {
-    axios.get(`http://localhost:3000/v1/freelancerExp/`).then((res) => {
-      console.log(res, 'ProfileExpData');
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
+    axios
+      .get(`http://localhost:3000/v1/freelancerExp/`)
+      .then((res) => {
+        console.log(res, "ProfileExpData");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const checkBoxHandleChange = () => {
-    if (isCheckBox === 'true') {
+    if (isCheckBox === "true") {
       // alert('checkbox is false')
-      setIsCheckBox('false')
-      setProfileExp({ ...profileExp, currentlyWorking: 'off' })
+      setIsCheckBox("false");
+      setProfileExp({ ...profileExp, currentlyWorking: "off" });
     } else {
       // alert('checkbox is true')
-      setIsCheckBox('true')
-      setProfileExp({ ...profileExp, currentlyWorking: 'on' })
+      setIsCheckBox("true");
+      setProfileExp({ ...profileExp, currentlyWorking: "on" });
     }
-  }
+  };
 
   const educationFunc = () => {
+    let formdata = new FormData();
+    Object.entries(isEducation).map(([key, value]) => {
+      formdata.append(key, value);
+    });
     axios
-      .post(`http://localhost:3000/v1/education`, isEducation)
+      .post(`http://localhost:3000/v1/education`, formdata)
       .then((res) => {
         console.log(res, "profile data successfully added");
-        setProfileExp(res.data, 'ProfileExp')
+        setProfileExp(res.data, "ProfileExp");
         // ProfileExpData()
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
+
+  const educationData = () => {
+    axios
+      .get(`http://localhost:3000/v1/education/`)
+      .then((res) => {
+        let data = Object.values(res.data.data)
+        setIsEducationData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const achievementFunc = () => {
     axios
@@ -164,7 +186,7 @@ export const FreelanceProfileView = () => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   const LanguageFunc = () => {
     axios
@@ -175,7 +197,7 @@ export const FreelanceProfileView = () => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -366,8 +388,8 @@ export const FreelanceProfileView = () => {
                                 type={"text"}
                                 value={
                                   profileData?.firstName +
-                                  " " +
-                                  profileData?.lastName || ""
+                                    " " +
+                                    profileData?.lastName || ""
                                 }
                                 onChange={(e) =>
                                   setProfileData({
@@ -779,8 +801,8 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
                           {profileData?.fullName ||
                             profileData?.firstName +
-                            " " +
-                            profileData.lastName ||
+                              " " +
+                              profileData.lastName ||
                             "Ella Jay"}
                         </h2>
                       </div>
@@ -937,7 +959,12 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="fname"
                                 type={"text"}
-                                onChange={(e) => setProfileExp({ ...profileExp, profession: e.target.value })}
+                                onChange={(e) =>
+                                  setProfileExp({
+                                    ...profileExp,
+                                    profession: e.target.value,
+                                  })
+                                }
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Gia 
@@ -959,7 +986,12 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="lname"
                                 value={profileExp?.companyName}
-                                onChange={(e) => setProfileExp({ ...profileExp, companyName: e.target.value })}
+                                onChange={(e) =>
+                                  setProfileExp({
+                                    ...profileExp,
+                                    companyName: e.target.value,
+                                  })
+                                }
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Jay 
@@ -976,9 +1008,15 @@ export const FreelanceProfileView = () => {
                               >
                                 Job Industry
                               </label>
-                              <Form.Select aria-label="Default select example"
-                                value={profileExp?.jobIndustry || 'Jay'}
-                                onChange={(e) => setProfileExp({ ...profileExp, jobIndustry: e.target.value })}
+                              <Form.Select
+                                aria-label="Default select example"
+                                value={profileExp?.jobIndustry || "Jay"}
+                                onChange={(e) =>
+                                  setProfileExp({
+                                    ...profileExp,
+                                    jobIndustry: e.target.value,
+                                  })
+                                }
                               >
                                 <option hidden="">Job Industry</option>
                                 <option>Universities / Education</option>
@@ -1024,9 +1062,15 @@ export const FreelanceProfileView = () => {
                               >
                                 Job Function
                               </label>
-                              <Form.Select aria-label="Default select example"
-                                value={profileExp?.jobFunction || 'Jay'}
-                                onChange={(e) => setProfileExp({ ...profileExp, jobFunction: e.target.value })}
+                              <Form.Select
+                                aria-label="Default select example"
+                                value={profileExp?.jobFunction || "Jay"}
+                                onChange={(e) =>
+                                  setProfileExp({
+                                    ...profileExp,
+                                    jobFunction: e.target.value,
+                                  })
+                                }
                               >
                                 <option hidden="">Job Function</option>
                                 <option>HR &amp; Admin</option>
@@ -1062,7 +1106,9 @@ export const FreelanceProfileView = () => {
                                   color: "#7A7979",
                                 }}
                               >
-                                <FormCheck id="check" color="blue"
+                                <FormCheck
+                                  id="check"
+                                  color="blue"
                                   onChange={checkBoxHandleChange}
                                 />
                                 &#160;&#160;I am currently working in this role
@@ -1081,8 +1127,13 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   name="email"
                                   type={"date"}
-                                  value={profileExp?.startDate || 'startDate'}
-                                  onChange={(e) => setProfileExp({ ...profileExp, startDate: e.target.value })}
+                                  value={profileExp?.startDate || "startDate"}
+                                  onChange={(e) =>
+                                    setProfileExp({
+                                      ...profileExp,
+                                      startDate: e.target.value,
+                                    })
+                                  }
                                   //   value={user.number}
                                   //   onChange={getUserData}
                                   placeholder="A Service Like No Other
@@ -1104,8 +1155,13 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   type={"date"}
                                   name="firstname"
-                                  value={profileExp?.endDate || 'startDate'}
-                                  onChange={(e) => setProfileExp({ ...profileExp, endDate: e.target.value })}
+                                  value={profileExp?.endDate || "startDate"}
+                                  onChange={(e) =>
+                                    setProfileExp({
+                                      ...profileExp,
+                                      endDate: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Gia (PVT) LTD
@@ -1128,7 +1184,12 @@ export const FreelanceProfileView = () => {
                                   placeholder="Description"
                                   className="form-control"
                                   value={profileExp?.description}
-                                  onChange={(e) => setProfileExp({ ...profileExp, description: e.target.value })}
+                                  onChange={(e) =>
+                                    setProfileExp({
+                                      ...profileExp,
+                                      description: e.target.value,
+                                    })
+                                  }
                                 />
                               </fieldset>
                             </Col>
@@ -1650,8 +1711,14 @@ export const FreelanceProfileView = () => {
                               >
                                 Education Level
                               </label>
-                              <Form.Select aria-label="Default select example"
-                                onChange={(e) => setIsEducation({ ...isEducation, educationLevel: e.target.value })}
+                              <Form.Select
+                                aria-label="Default select example"
+                                onChange={(e) =>
+                                  setIsEducation({
+                                    ...isEducation,
+                                    educationLevel: e.target.value,
+                                  })
+                                }
                               >
                                 <option hidden="">Education Level</option>
                                 <option>Associate Degree</option>
@@ -1676,8 +1743,12 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="institute"
                                 type={"text"}
-                                onChange={(e) => setIsEducation({ ...isEducation, institute: e.target.value })}
-
+                                onChange={(e) =>
+                                  setIsEducation({
+                                    ...isEducation,
+                                    institute: e.target.value,
+                                  })
+                                }
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Jay 
@@ -1694,8 +1765,14 @@ export const FreelanceProfileView = () => {
                               >
                                 Major
                               </label>
-                              <Form.Select aria-label="Default select example"
-                                onChange={(e) => setIsEducation({ ...isEducation, major: e.target.value })}
+                              <Form.Select
+                                aria-label="Default select example"
+                                onChange={(e) =>
+                                  setIsEducation({
+                                    ...isEducation,
+                                    major: e.target.value,
+                                  })
+                                }
                               >
                                 <option hidden="">Major</option>
                                 <option>Masters of Law</option>
@@ -1718,7 +1795,12 @@ export const FreelanceProfileView = () => {
                                   style={{ width: "100%" }}
                                   className="form-control"
                                   name="email"
-                                  onChange={(e) => setIsEducation({ ...isEducation, startingDate: e.target.value })}
+                                  onChange={(e) =>
+                                    setIsEducation({
+                                      ...isEducation,
+                                      startingDate: e.target.value,
+                                    })
+                                  }
                                   type={"date"}
                                   //   value={user.number}
                                   //   onChange={getUserData}
@@ -1741,7 +1823,12 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   type={"date"}
                                   name="firstname"
-                                  onChange={(e) => setIsEducation({ ...isEducation, endingDate: e.target.value })}
+                                  onChange={(e) =>
+                                    setIsEducation({
+                                      ...isEducation,
+                                      endingDate: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Gia (PVT) LTD"
@@ -1760,6 +1847,12 @@ export const FreelanceProfileView = () => {
 
                                 <input
                                   type="file"
+                                  onChange={(e) => {
+                                    setIsEducation({
+                                      ...isEducation,
+                                      certificate: e.target.files[0],
+                                    });
+                                  }}
                                   class="form-control"
                                   id="customFile"
                                 />
@@ -1790,8 +1883,291 @@ export const FreelanceProfileView = () => {
                 <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
                   Education
                 </h2>
-
                 <hr className="mt-2" />
+                {isEducationData.length > 0 &&
+                  isEducationData.map((event, index) => {
+                    console.log(event, 'eveeeeeeent');
+                    return (
+                      <>
+                        <Container>
+                          <Row className="align-items-center row">
+                            <Col>
+                              <Row className="align-items-center">
+                                <Col lg="3">
+                                  <div className="p3">
+                                    <h2 className="text-xl font-semibold">
+                                      {event.institute}
+                                    </h2>
+
+                                    <h2
+                                      className="text-lg"
+                                      style={{ color: "#7A7979" }}
+                                    >
+                                      {event.educationLevel}
+                                    </h2>
+                                  </div>
+                                </Col>
+                                <Col lg="3">
+                                  <div className="p3">
+                                    <h2
+                                      className="text-xl"
+                                      style={{ color: "#6A489C" }}
+                                    >
+                                      {event.major}
+                                    </h2>
+
+                                    <h2
+                                      className="text-lg"
+                                      style={{ color: "#7A7979" }}
+                                    >
+                                      {event.startingDate + ' - ' + event.endingDate}
+                                    </h2>
+                                  </div>
+                                </Col>
+                                <Col lg="3">
+                                  {event?.certificate ? 
+                                <div className="p-3 webkit">
+                                <Link to={`${event.certificate}`}>
+                                <Button
+                                  className="text-white border-rounded px-3 py-2"
+                                  style={{
+                                    background: "#39BEC1",
+                                    border: "none",
+                                  }}
+                                >
+                                  see certificate
+                                </Button>
+                                </Link>
+                              </div> : ''  
+                                }
+                                  
+                                </Col>
+                                <Col lg="3">
+                                  <div className="p-3 webkit">
+                                    <div className="inline-flex">
+                                      <div className="w-10">
+                                        <button
+                                          onClick={handleShow6}
+                                          className="text-white border-rounded"
+                                          style={{
+                                            background: "none",
+                                            border: "none",
+                                          }}
+                                        >
+                                          <BiEdit
+                                            style={{
+                                              color: "#39BEC1",
+                                              fontSize: "30px",
+                                            }}
+                                          />
+                                        </button>
+                                        <Modal
+                                          show={show6}
+                                          onHide={handleClose6}
+                                          backdrop="static"
+                                          keyboard={false}
+                                        >
+                                          <Modal.Header closeButton>
+                                            <Modal.Title
+                                              style={{ color: "black" }}
+                                            >
+                                              Edit Education
+                                            </Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            <Row>
+                                              <div className="p-3">
+                                                <Col lg="12">
+                                                  <fieldset>
+                                                    <label
+                                                      className="text-lg"
+                                                      style={{ width: "100%" }}
+                                                    >
+                                                      Education Level
+                                                    </label>
+                                                    <Form.Select aria-label="Default select example">
+                                                      <option hidden="">
+                                                        Education Level
+                                                      </option>
+                                                      <option>
+                                                        Associate Degree
+                                                      </option>
+                                                      <option>
+                                                        Bachelor Degree
+                                                      </option>
+                                                      <option>
+                                                        Master Degree
+                                                      </option>
+                                                      <option>
+                                                        Doctorate Degree
+                                                      </option>
+                                                      <option>PhD</option>
+                                                      <option>Others</option>
+                                                    </Form.Select>
+                                                  </fieldset>
+                                                </Col>
+                                                <Col lg="12">
+                                                  <fieldset>
+                                                    <label
+                                                      className="text-lg"
+                                                      style={{ width: "100%" }}
+                                                    >
+                                                      Institute
+                                                    </label>
+                                                    <input
+                                                      style={{ width: "100%" }}
+                                                      className="form-control"
+                                                      name="institute"
+                                                      type={"text"}
+                                                      //   value={user.number}
+                                                      //   onChange={getUserData}
+                                                      placeholder="Jay 
+
+                "
+                                                    />
+                                                  </fieldset>
+                                                </Col>
+                                                <Col lg="12">
+                                                  <fieldset>
+                                                    <label
+                                                      className="text-lg"
+                                                      style={{ width: "100%" }}
+                                                    >
+                                                      Major
+                                                    </label>
+                                                    <Form.Select aria-label="Default select example">
+                                                      <option hidden="">
+                                                        Major
+                                                      </option>
+                                                      <option>
+                                                        Masters of Law
+                                                      </option>
+                                                      <option>
+                                                        Computer Science
+                                                      </option>
+                                                      <option>
+                                                        Phsycology
+                                                      </option>
+                                                    </Form.Select>
+                                                  </fieldset>
+                                                </Col>
+
+                                                <Row>
+                                                  <Col lg="6">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Start Date
+                                                      </label>
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        name="email"
+                                                        type={"date"}
+                                                        //   value={user.number}
+                                                        //   onChange={getUserData}
+                                                        placeholder="A Service Like No Other
+                "
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="6">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        End Date
+                                                      </label>
+
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        type={"date"}
+                                                        name="firstname"
+                                                        //   value={user.name}
+                                                        //   onChange={getUserData}
+                                                        placeholder="Gia (PVT) LTD
+
+                "
+                                                        required
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="6">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Upload Certification
+                                                      </label>
+
+                                                      <input
+                                                        type="file"
+                                                        class="form-control"
+                                                        id="customFile"
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                </Row>
+                                              </div>
+                                            </Row>
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button
+                                              variant="secondary"
+                                              onClick={handleClose6}
+                                              style={{
+                                                background: "none",
+                                                color: "#C1C1C1",
+                                              }}
+                                            >
+                                              Cancel
+                                            </Button>
+                                            <Button
+                                              variant="primary"
+                                              style={{
+                                                background: "none",
+                                                color: "#39BEC1",
+                                              }}
+                                            >
+                                              Save
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
+                                      </div>
+                                      <div className="w-10">
+                                        <ImBin
+                                          style={{
+                                            color: "#39BEC1",
+                                            fontSize: "30px",
+                                          }}
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Col>
+                              </Row>
+                            </Col>
+                          </Row>
+                        </Container>
+                      </>
+                    );
+                  })}
+                {/* <hr className="mt-2" />
                 <Container>
                   <Row className="align-items-center row">
                     <Col>
@@ -2160,7 +2536,7 @@ export const FreelanceProfileView = () => {
                       </Row>
                     </Col>
                   </Row>
-                </Container>
+                </Container> */}
               </div>
             </div>
           </Col>
@@ -2208,12 +2584,15 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="fname"
                                 type={"text"}
-                                onChange={(e) => setIsAchievement({ ...isAchievement, title: e.target.value })}
+                                onChange={(e) =>
+                                  setIsAchievement({
+                                    ...isAchievement,
+                                    title: e.target.value,
+                                  })
+                                }
                                 //   value={user.number}
                                 //   onChange={getUserData}
-                                placeholder="Gia 
-
-                "
+                                placeholder="Gia"
                               />
                             </fieldset>
                           </Col>
@@ -2226,7 +2605,12 @@ export const FreelanceProfileView = () => {
                                 Description
                               </label>
                               <textarea
-                                onChange={(e) => setIsAchievement({ ...isAchievement, description: e.target.value })}
+                                onChange={(e) =>
+                                  setIsAchievement({
+                                    ...isAchievement,
+                                    description: e.target.value,
+                                  })
+                                }
                                 placeholder="Description"
                                 className="form-control"
                               />
@@ -2296,7 +2680,6 @@ export const FreelanceProfileView = () => {
                               className="text-white border-rounded px-3 py-2"
                               style={{ background: "#39BEC1", border: "none" }}
                             >
-                              {" "}
                               see certificate
                             </Button>
                           </div>
@@ -2349,9 +2732,7 @@ export const FreelanceProfileView = () => {
                                               type={"text"}
                                               //   value={user.number}
                                               //   onChange={getUserData}
-                                              placeholder="Gia 
-
-                "
+                                              placeholder="Gia"
                                             />
                                           </fieldset>
                                         </Col>
@@ -2441,7 +2822,6 @@ export const FreelanceProfileView = () => {
                               className="text-white border-rounded px-3 py-2"
                               style={{ background: "#39BEC1", border: "none" }}
                             >
-                              {" "}
                               see certificate
                             </Button>
                           </div>
@@ -2450,7 +2830,6 @@ export const FreelanceProfileView = () => {
                           <div className="p-3 webkit">
                             <div className="inline-flex">
                               <div className="w-10">
-                                {" "}
                                 <BiEdit
                                   style={{
                                     color: "#39BEC1",
@@ -2515,8 +2894,14 @@ export const FreelanceProfileView = () => {
                               >
                                 Language Type
                               </label>
-                              <Form.Select aria-label="Default select example"
-                                onClick={(e) => setIsLanguage({ ...isLanguage, languageType: e.target.value })}
+                              <Form.Select
+                                aria-label="Default select example"
+                                onClick={(e) =>
+                                  setIsLanguage({
+                                    ...isLanguage,
+                                    languageType: e.target.value,
+                                  })
+                                }
                               >
                                 <option hidden="">Language Type</option>
                                 <option value="English">English</option>
@@ -2570,12 +2955,15 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="lname"
                                 type={"text"}
-                                onClick={(e) => setIsLanguage({ ...isLanguage, examLevel: e.target.value })}
+                                onClick={(e) =>
+                                  setIsLanguage({
+                                    ...isLanguage,
+                                    examLevel: e.target.value,
+                                  })
+                                }
                                 //   value={user.number}
                                 //   onChange={getUserData}
-                                placeholder="Jay 
-
-                "
+                                placeholder="Jay"
                               />
                             </fieldset>
                           </Col>
@@ -2592,9 +2980,14 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="lname"
                                 type={"text"}
-                                onClick={(e) => setIsLanguage({ ...isLanguage, gradingLevel: e.target.value })}
-                              //   value={user.number}
-                              //   onChange={getUserData}
+                                onClick={(e) =>
+                                  setIsLanguage({
+                                    ...isLanguage,
+                                    gradingLevel: e.target.value,
+                                  })
+                                }
+                                //   value={user.number}
+                                //   onChange={getUserData}
                               />
                             </fieldset>
                           </Col>
@@ -2816,8 +3209,8 @@ export const FreelanceProfileView = () => {
                                                   className="form-control"
                                                   name="lname"
                                                   type={"text"}
-                                                //   value={user.number}
-                                                //   onChange={getUserData}
+                                                  //   value={user.number}
+                                                  //   onChange={getUserData}
                                                 />
                                               </fieldset>
                                             </Col>

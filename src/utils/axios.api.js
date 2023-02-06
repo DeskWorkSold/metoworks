@@ -1,25 +1,26 @@
-import axios from 'axios';
+import axios from "axios";
 
 const instance = axios.create({
-  baseURL: 'http://localhost:3000/'
+  baseURL: "http://localhost:3000/",
 });
 
 instance.interceptors.request.use(
-  config => {
-    const token = localStorage.getItem('access-token');
+  (config) => {
+    const token = localStorage.getItem("access-token");
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
-  error => Promise.reject(error)
+  (error) => Promise.reject(error)
 );
 
 export default {
   get(url, params) {
     return instance.get(url, { params });
   },
-  post(url, data) {
+  post(url, data, headers) {
+    if (headers) return instance.post(url, data, {headers});
     return instance.post(url, data);
   },
   put(url, data) {
@@ -30,5 +31,5 @@ export default {
   },
   delete(url) {
     return instance.delete(url);
-  }
+  },
 };
