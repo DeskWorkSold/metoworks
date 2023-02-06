@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { useState, Component, useEffect } from "react";
 import {
   Container,
   Button,
@@ -27,7 +27,7 @@ import {
   faUserClock,
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
-
+import axios from '../../../utils/axios.api'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export const FreelanceProfileView = () => {
   const [show, setShow] = useState(false);
@@ -35,7 +35,6 @@ export const FreelanceProfileView = () => {
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleClose1 = () => setShow1(false);
@@ -46,6 +45,36 @@ export const FreelanceProfileView = () => {
   const handleShow3 = () => setShow3(true);
   const handleClose4 = () => setShow4(false);
   const handleShow4 = () => setShow4(true);
+  const [userId, setUserId] = useState('')
+  console.log(userId, 'ID');
+  const [profileData, setProfileData] = useState({})
+  console.log(profileData);
+
+  useEffect(() => {
+    let id = localStorage.getItem('id')
+    setUserId(id)
+    initialFun(id)
+    },[])
+  
+    const initialFun = (id) => {
+      axios.get(`http://localhost:3000/v1/users/${id}`).then((res)=> {
+        console.log(res, 'Initial Data');
+        let data = res.data
+        // setIsProfileData(data)
+        setProfileData(data)
+      }).catch((err)=> {
+        console.log(err);
+      })
+    }
+
+    const profileFunc = () => {
+  
+      axios.patch(`http://localhost:3000/v1/users/${userId}`, profileData).then((res) => {
+        console.log(res, 'profile data successfully added');
+      }).catch((err) => {
+        console.log(err);
+      })
+    }
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -80,7 +109,7 @@ export const FreelanceProfileView = () => {
                   </Col>
                   <Col lg="4">
                     <h2 className="text-3xl py-3 robot">
-                      Ella Jay <br />
+                      {profileData?.firstName + ' ' + profileData?.lastName || 'Ella jay'} <br />
                       <span className="text-xl" style={{ color: "#6A489C" }}>
                         Web Developer
                       </span>
@@ -108,8 +137,8 @@ export const FreelanceProfileView = () => {
 
                               fontWeight: "bolder",
                             }}
-                          />{" "}
-                          Freelancer
+                          />
+                          {profileData?.role || 'Freelancer'}
                         </li>
                         <li>
                           <FontAwesomeIcon
@@ -118,7 +147,7 @@ export const FreelanceProfileView = () => {
                               color: "#39BEC1",
                               fontWeight: "bolder",
                             }}
-                          />{" "}
+                          />
                           Nugegoda, Sri Lanka
                         </li>
                       </ul>
@@ -225,13 +254,15 @@ export const FreelanceProfileView = () => {
                                 className="text-lg"
                                 style={{ width: "100%" }}
                               >
-                                First Name
+                                Full Name
                               </label>
                               <input
                                 style={{ width: "100%" }}
                                 className="form-control"
                                 name="fname"
                                 type={"text"}
+                                value={profileData?.firstName + ' ' + profileData?.lastName || ''}
+                                onChange={(e) => setProfileData({...profileData, fullName : e.target.value})}
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Gia 
@@ -241,24 +272,20 @@ export const FreelanceProfileView = () => {
                             </fieldset>
                           </Col>
                           <Col lg="12">
-                            <fieldset>
+                          <fieldset>
                               <label
                                 className="text-lg"
                                 style={{ width: "100%" }}
                               >
                                 Visa/HK Permit
                               </label>
-                              <input
-                                style={{ width: "100%" }}
-                                className="form-control"
-                                name="lname"
-                                type={"number"}
-                                //   value={user.number}
-                                //   onChange={getUserData}
-                                placeholder="Jay 
-
-                "
-                              />
+                              <Form.Select aria-label="Default select example"
+                                         value={profileData?.visaHkPermit || ''}
+                                         onChange={(e) => setProfileData({...profileData, visaHkPermit : e.target.value})}>
+                                <option hidden="">Choose...</option>
+                                <option>Yes</option>
+                                <option>No</option>
+                              </Form.Select>
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -269,7 +296,9 @@ export const FreelanceProfileView = () => {
                               >
                                 Gender
                               </label>
-                              <Form.Select aria-label="Default select example">
+                              <Form.Select aria-label="Default select example"
+                                         value={profileData?.gender || ''}
+                                         onChange={(e) => setProfileData({...profileData, gender : e.target.value})}>
                                 <option hidden="">Choose...</option>
                                 <option>Male</option>
                                 <option>Female</option>
@@ -286,6 +315,8 @@ export const FreelanceProfileView = () => {
                                 About Me
                               </label>
                               <textarea
+                                         value={profileData?.aboutMe || ''}
+                                         onChange={(e) => setProfileData({...profileData, aboutMe : e.target.value})}
                                 placeholder="Description"
                                 className="form-control"
                               />
@@ -305,6 +336,8 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   name="phone"
                                   type={"text"}
+                                  value={profileData?.phoneNumber || ''}
+                                  onChange={(e) => setProfileData({...profileData, phoneNumber : e.target.value})}
                                   //   value={user.number}
                                   //   onChange={getUserData}
                                   placeholder="2000
@@ -326,6 +359,8 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   name="email"
                                   type={"date"}
+                                  value={profileData?.dob || ''}
+                                  onChange={(e) => setProfileData({...profileData, dob : e.target.value})}
                                   //   value={user.number}
                                   //   onChange={getUserData}
                                   placeholder="A Service Like No Other
@@ -347,6 +382,8 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   type={"text"}
                                   name="firstname"
+                                  value={profileData?.countryTimeZone || ''}
+                                  onChange={(e) => setProfileData({...profileData, countryTimeZone : e.target.value})}
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Gia (PVT) LTD
@@ -372,6 +409,8 @@ export const FreelanceProfileView = () => {
                                   name="lastname"
                                   //   value={user.email}
                                   //   onChange={getUserData}
+                                  value={profileData?.city || ''}
+                                  onChange={(e) => setProfileData({...profileData, city : e.target.value})}
                                   placeholder="IT Industry
                 "
                                   required
@@ -391,6 +430,8 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   name="Email"
                                   type={"text"}
+                                  value={profileData?.address || ''}
+                                  onChange={(e) => setProfileData({...profileData, address : e.target.value})}
                                   //   value={user.number}
                                   //   onChange={getUserData}
                                   placeholder="https://www.me2work.com/
@@ -412,6 +453,8 @@ export const FreelanceProfileView = () => {
                                     className="form-control"
                                     name="minwork"
                                     type={"text"}
+                                    value={profileData?.state || ''}
+                                    onChange={(e) => setProfileData({...profileData, state : e.target.value})}
                                     //   value={user.number}
                                     //   onChange={getUserData}
                                     placeholder="USA
@@ -430,7 +473,10 @@ export const FreelanceProfileView = () => {
                               >
                                 Salary Range
                               </label>
-                              <Form.Select aria-label="Default select example">
+                              <Form.Select aria-label="Default select example"
+                                          value={profileData?.salaryRange || ''}
+                                          onChange={(e) => setProfileData({...profileData, salaryRange : e.target.value})}
+                                          >
                                 <option hidden="">Choose...</option>
                                 <option>per month basis</option>
                                 <option>per project basis</option>
@@ -461,6 +507,8 @@ export const FreelanceProfileView = () => {
                                   Min :
                                 </label>
                                 <input
+                                            value={profileData?.min || ''}
+                                            onChange={(e) => setProfileData({...profileData, min : e.target.value})}
                                   style={{ width: "100%" }}
                                   className="form-control"
                                   type={"number"}
@@ -479,6 +527,8 @@ export const FreelanceProfileView = () => {
                                   Max :
                                 </label>
                                 <input
+                                value={profileData?.max || ''}
+                                            onChange={(e) => setProfileData({...profileData, max : e.target.value})}
                                   style={{ width: "100%" }}
                                   className="form-control"
                                   type={"number"}
@@ -529,10 +579,11 @@ export const FreelanceProfileView = () => {
                         Cancel
                       </Button>
                       <Button
+                         onClick={profileFunc}
                         variant="primary"
                         style={{ background: "none", color: "#39BEC1" }}
                       >
-                        Save
+                        Save 
                       </Button>
                     </Modal.Footer>
                   </Modal>
@@ -549,7 +600,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Full Name</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          Ella Jay
+                          {profileData?.fullName || profileData?.firstName + ' ' + profileData.lastName || 'Ella Jay'}
                         </h2>
                       </div>
                     </Col>
@@ -560,7 +611,7 @@ export const FreelanceProfileView = () => {
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          90065
+                          {profileData?.visaHkPermit === 'Yes' ? '90065' : '-'}
                         </h2>
                       </div>
                     </Col>
@@ -569,7 +620,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Phone</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          088676534
+                          {profileData?.phoneNumber || "088676534"}
                         </h2>
                       </div>
                     </Col>
@@ -578,7 +629,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Date of Birth</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          2004-01-05
+                          {profileData?.dob || '2004-01-05'}
                         </h2>
                       </div>
                     </Col>
@@ -589,7 +640,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Gender</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          Female
+                        {profileData?.gender || "female"}
                         </h2>
                       </div>
                     </Col>
@@ -598,7 +649,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Country</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          Sri Lanka
+                          {profileData?.countryTimeZone || 'Sri Lanka'}
                         </h2>
                       </div>
                     </Col>
@@ -607,7 +658,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">City</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          Nugegoda
+                          {profileData?.city || 'Nugegoda'}
                         </h2>
                       </div>
                     </Col>
@@ -616,7 +667,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Address</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          45, Nugegoda Road, Hill street
+                          {profileData?.address || '45, Nugegoda Road, Hill street'}
                         </h2>
                       </div>
                     </Col>
@@ -625,7 +676,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">State</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          Western
+                          {profileData?.state || 'Western'}
                         </h2>
                       </div>
                     </Col>
@@ -638,7 +689,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">About Me</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          It has survived t is a long established fact that a
+                          {profileData?.aboutMe || `It has survived t is a long established fact that a
                           reader will be distracted by the readable content of a
                           page when looking at its layout. The point of using
                           Lorem Ipsum is that it has a more-or-less normal
@@ -650,7 +701,7 @@ export const FreelanceProfileView = () => {
                           point of using Lorem Ipsum is that it has a
                           more-or-less normal distribution of letters, as
                           opposed to using 'Content here, content here', making
-                          it look like readable English.
+                          it look like readable English.`}
                         </h2>
                       </div>
                     </Col>

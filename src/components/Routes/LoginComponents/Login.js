@@ -42,9 +42,11 @@ export const Login = () => {
         .post("http://localhost:3000/v1/auth/login", freelancerData)
         .then((res) => {
           console.log(res);
-          let data = res.data.user.role;
+          const {role, id} = res.data.user
+          localStorage.setItem("id", id);
+          localStorage.setItem("access-token", res.data.tokens.access.token);
           // console.log(data, 'daata');
-          if (data === "freelancer") {
+          if (role === "freelancer") {
             navigate("/FreelancerProfile");
           }
         })
