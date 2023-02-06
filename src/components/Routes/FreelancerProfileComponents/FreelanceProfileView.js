@@ -27,7 +27,7 @@ import {
   faUserClock,
 } from "@fortawesome/free-solid-svg-icons";
 import Modal from "react-bootstrap/Modal";
-import axios from '../../../utils/axios.api'
+import axios from "../../../utils/axios.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export const FreelanceProfileView = () => {
   const [show, setShow] = useState(false);
@@ -35,6 +35,11 @@ export const FreelanceProfileView = () => {
   const [show2, setShow2] = useState(false);
   const [show3, setShow3] = useState(false);
   const [show4, setShow4] = useState(false);
+  const [show5, setShow5] = useState(false);
+  const [show6, setShow6] = useState(false);
+  const [show7, setShow7] = useState(false);
+  const [show8, setShow8] = useState(false);
+  const [show9, setShow9] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleClose1 = () => setShow1(false);
@@ -45,36 +50,53 @@ export const FreelanceProfileView = () => {
   const handleShow3 = () => setShow3(true);
   const handleClose4 = () => setShow4(false);
   const handleShow4 = () => setShow4(true);
-  const [userId, setUserId] = useState('')
-  console.log(userId, 'ID');
-  const [profileData, setProfileData] = useState({})
+  const handleClose5 = () => setShow5(false);
+  const handleShow5 = () => setShow5(true);
+  const handleClose6 = () => setShow6(false);
+  const handleShow6 = () => setShow6(true);
+  const handleClose7 = () => setShow7(false);
+  const handleShow7 = () => setShow7(true);
+  const handleClose8 = () => setShow8(false);
+  const handleShow8 = () => setShow8(true);
+  const handleClose9 = () => setShow9(false);
+  const handleShow9 = () => setShow9(true);
+  const [userId, setUserId] = useState("");
+  console.log(userId, "ID");
+  const [profileData, setProfileData] = useState({});
   console.log(profileData);
 
   useEffect(() => {
-    let id = localStorage.getItem('id')
-    setUserId(id)
-    initialFun(id)
-    },[])
-  
-    const initialFun = (id) => {
-      axios.get(`http://localhost:3000/v1/users/${id}`).then((res)=> {
-        console.log(res, 'Initial Data');
-        let data = res.data
-        // setIsProfileData(data)
-        setProfileData(data)
-      }).catch((err)=> {
-        console.log(err);
-      })
-    }
+    let id = localStorage.getItem("id");
+    setUserId(id);
+    initialFun(id);
+  }, []);
 
-    const profileFunc = () => {
-  
-      axios.patch(`http://localhost:3000/v1/users/${userId}`, profileData).then((res) => {
-        console.log(res, 'profile data successfully added');
-      }).catch((err) => {
-        console.log(err);
+  const initialFun = (id) => {
+    axios
+      .get(`http://localhost:3000/v1/users/${id}`)
+      .then((res) => {
+        console.log(res, "Initial Data");
+        let data = res.data;
+        // setIsProfileData(data)
+        setProfileData(data);
       })
-    }
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const profileFunc = () => {
+    axios
+      .patch(`http://localhost:3000/v1/users/${userId}`, profileData)
+      .then((res) => {
+        console.log(res, "profile data successfully added");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const ProfileExp = () => {};
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -109,7 +131,9 @@ export const FreelanceProfileView = () => {
                   </Col>
                   <Col lg="4">
                     <h2 className="text-3xl py-3 robot">
-                      {profileData?.firstName + ' ' + profileData?.lastName || 'Ella jay'} <br />
+                      {profileData?.firstName + " " + profileData?.lastName ||
+                        "Ella jay"}{" "}
+                      <br />
                       <span className="text-xl" style={{ color: "#6A489C" }}>
                         Web Developer
                       </span>
@@ -138,7 +162,7 @@ export const FreelanceProfileView = () => {
                               fontWeight: "bolder",
                             }}
                           />
-                          {profileData?.role || 'Freelancer'}
+                          {profileData?.role || "Freelancer"}
                         </li>
                         <li>
                           <FontAwesomeIcon
@@ -261,8 +285,17 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="fname"
                                 type={"text"}
-                                value={profileData?.firstName + ' ' + profileData?.lastName || ''}
-                                onChange={(e) => setProfileData({...profileData, fullName : e.target.value})}
+                                value={
+                                  profileData?.firstName +
+                                    " " +
+                                    profileData?.lastName || ""
+                                }
+                                onChange={(e) =>
+                                  setProfileData({
+                                    ...profileData,
+                                    fullName: e.target.value,
+                                  })
+                                }
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Gia 
@@ -272,16 +305,23 @@ export const FreelanceProfileView = () => {
                             </fieldset>
                           </Col>
                           <Col lg="12">
-                          <fieldset>
+                            <fieldset>
                               <label
                                 className="text-lg"
                                 style={{ width: "100%" }}
                               >
                                 Visa/HK Permit
                               </label>
-                              <Form.Select aria-label="Default select example"
-                                         value={profileData?.visaHkPermit || ''}
-                                         onChange={(e) => setProfileData({...profileData, visaHkPermit : e.target.value})}>
+                              <Form.Select
+                                aria-label="Default select example"
+                                value={profileData?.visaHkPermit || ""}
+                                onChange={(e) =>
+                                  setProfileData({
+                                    ...profileData,
+                                    visaHkPermit: e.target.value,
+                                  })
+                                }
+                              >
                                 <option hidden="">Choose...</option>
                                 <option>Yes</option>
                                 <option>No</option>
@@ -296,9 +336,16 @@ export const FreelanceProfileView = () => {
                               >
                                 Gender
                               </label>
-                              <Form.Select aria-label="Default select example"
-                                         value={profileData?.gender || ''}
-                                         onChange={(e) => setProfileData({...profileData, gender : e.target.value})}>
+                              <Form.Select
+                                aria-label="Default select example"
+                                value={profileData?.gender || ""}
+                                onChange={(e) =>
+                                  setProfileData({
+                                    ...profileData,
+                                    gender: e.target.value,
+                                  })
+                                }
+                              >
                                 <option hidden="">Choose...</option>
                                 <option>Male</option>
                                 <option>Female</option>
@@ -315,8 +362,13 @@ export const FreelanceProfileView = () => {
                                 About Me
                               </label>
                               <textarea
-                                         value={profileData?.aboutMe || ''}
-                                         onChange={(e) => setProfileData({...profileData, aboutMe : e.target.value})}
+                                value={profileData?.aboutMe || ""}
+                                onChange={(e) =>
+                                  setProfileData({
+                                    ...profileData,
+                                    aboutMe: e.target.value,
+                                  })
+                                }
                                 placeholder="Description"
                                 className="form-control"
                               />
@@ -336,8 +388,13 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   name="phone"
                                   type={"text"}
-                                  value={profileData?.phoneNumber || ''}
-                                  onChange={(e) => setProfileData({...profileData, phoneNumber : e.target.value})}
+                                  value={profileData?.phoneNumber || ""}
+                                  onChange={(e) =>
+                                    setProfileData({
+                                      ...profileData,
+                                      phoneNumber: e.target.value,
+                                    })
+                                  }
                                   //   value={user.number}
                                   //   onChange={getUserData}
                                   placeholder="2000
@@ -359,8 +416,13 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   name="email"
                                   type={"date"}
-                                  value={profileData?.dob || ''}
-                                  onChange={(e) => setProfileData({...profileData, dob : e.target.value})}
+                                  value={profileData?.dob || ""}
+                                  onChange={(e) =>
+                                    setProfileData({
+                                      ...profileData,
+                                      dob: e.target.value,
+                                    })
+                                  }
                                   //   value={user.number}
                                   //   onChange={getUserData}
                                   placeholder="A Service Like No Other
@@ -382,8 +444,13 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   type={"text"}
                                   name="firstname"
-                                  value={profileData?.countryTimeZone || ''}
-                                  onChange={(e) => setProfileData({...profileData, countryTimeZone : e.target.value})}
+                                  value={profileData?.countryTimeZone || ""}
+                                  onChange={(e) =>
+                                    setProfileData({
+                                      ...profileData,
+                                      countryTimeZone: e.target.value,
+                                    })
+                                  }
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Gia (PVT) LTD
@@ -409,8 +476,13 @@ export const FreelanceProfileView = () => {
                                   name="lastname"
                                   //   value={user.email}
                                   //   onChange={getUserData}
-                                  value={profileData?.city || ''}
-                                  onChange={(e) => setProfileData({...profileData, city : e.target.value})}
+                                  value={profileData?.city || ""}
+                                  onChange={(e) =>
+                                    setProfileData({
+                                      ...profileData,
+                                      city: e.target.value,
+                                    })
+                                  }
                                   placeholder="IT Industry
                 "
                                   required
@@ -430,8 +502,13 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   name="Email"
                                   type={"text"}
-                                  value={profileData?.address || ''}
-                                  onChange={(e) => setProfileData({...profileData, address : e.target.value})}
+                                  value={profileData?.address || ""}
+                                  onChange={(e) =>
+                                    setProfileData({
+                                      ...profileData,
+                                      address: e.target.value,
+                                    })
+                                  }
                                   //   value={user.number}
                                   //   onChange={getUserData}
                                   placeholder="https://www.me2work.com/
@@ -453,8 +530,13 @@ export const FreelanceProfileView = () => {
                                     className="form-control"
                                     name="minwork"
                                     type={"text"}
-                                    value={profileData?.state || ''}
-                                    onChange={(e) => setProfileData({...profileData, state : e.target.value})}
+                                    value={profileData?.state || ""}
+                                    onChange={(e) =>
+                                      setProfileData({
+                                        ...profileData,
+                                        state: e.target.value,
+                                      })
+                                    }
                                     //   value={user.number}
                                     //   onChange={getUserData}
                                     placeholder="USA
@@ -473,10 +555,16 @@ export const FreelanceProfileView = () => {
                               >
                                 Salary Range
                               </label>
-                              <Form.Select aria-label="Default select example"
-                                          value={profileData?.salaryRange || ''}
-                                          onChange={(e) => setProfileData({...profileData, salaryRange : e.target.value})}
-                                          >
+                              <Form.Select
+                                aria-label="Default select example"
+                                value={profileData?.salaryRange || ""}
+                                onChange={(e) =>
+                                  setProfileData({
+                                    ...profileData,
+                                    salaryRange: e.target.value,
+                                  })
+                                }
+                              >
                                 <option hidden="">Choose...</option>
                                 <option>per month basis</option>
                                 <option>per project basis</option>
@@ -507,8 +595,13 @@ export const FreelanceProfileView = () => {
                                   Min :
                                 </label>
                                 <input
-                                            value={profileData?.min || ''}
-                                            onChange={(e) => setProfileData({...profileData, min : e.target.value})}
+                                  value={profileData?.min || ""}
+                                  onChange={(e) =>
+                                    setProfileData({
+                                      ...profileData,
+                                      min: e.target.value,
+                                    })
+                                  }
                                   style={{ width: "100%" }}
                                   className="form-control"
                                   type={"number"}
@@ -527,8 +620,13 @@ export const FreelanceProfileView = () => {
                                   Max :
                                 </label>
                                 <input
-                                value={profileData?.max || ''}
-                                            onChange={(e) => setProfileData({...profileData, max : e.target.value})}
+                                  value={profileData?.max || ""}
+                                  onChange={(e) =>
+                                    setProfileData({
+                                      ...profileData,
+                                      max: e.target.value,
+                                    })
+                                  }
                                   style={{ width: "100%" }}
                                   className="form-control"
                                   type={"number"}
@@ -579,11 +677,11 @@ export const FreelanceProfileView = () => {
                         Cancel
                       </Button>
                       <Button
-                         onClick={profileFunc}
+                        onClick={profileFunc}
                         variant="primary"
                         style={{ background: "none", color: "#39BEC1" }}
                       >
-                        Save 
+                        Save
                       </Button>
                     </Modal.Footer>
                   </Modal>
@@ -600,7 +698,11 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Full Name</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.fullName || profileData?.firstName + ' ' + profileData.lastName || 'Ella Jay'}
+                          {profileData?.fullName ||
+                            profileData?.firstName +
+                              " " +
+                              profileData.lastName ||
+                            "Ella Jay"}
                         </h2>
                       </div>
                     </Col>
@@ -611,7 +713,7 @@ export const FreelanceProfileView = () => {
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.visaHkPermit === 'Yes' ? '90065' : '-'}
+                          {profileData?.visaHkPermit === "Yes" ? "90065" : "-"}
                         </h2>
                       </div>
                     </Col>
@@ -629,7 +731,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Date of Birth</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.dob || '2004-01-05'}
+                          {profileData?.dob || "2004-01-05"}
                         </h2>
                       </div>
                     </Col>
@@ -640,7 +742,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Gender</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                        {profileData?.gender || "female"}
+                          {profileData?.gender || "female"}
                         </h2>
                       </div>
                     </Col>
@@ -649,7 +751,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Country</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.countryTimeZone || 'Sri Lanka'}
+                          {profileData?.countryTimeZone || "Sri Lanka"}
                         </h2>
                       </div>
                     </Col>
@@ -658,7 +760,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">City</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.city || 'Nugegoda'}
+                          {profileData?.city || "Nugegoda"}
                         </h2>
                       </div>
                     </Col>
@@ -667,7 +769,8 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Address</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.address || '45, Nugegoda Road, Hill street'}
+                          {profileData?.address ||
+                            "45, Nugegoda Road, Hill street"}
                         </h2>
                       </div>
                     </Col>
@@ -676,7 +779,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">State</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.state || 'Western'}
+                          {profileData?.state || "Western"}
                         </h2>
                       </div>
                     </Col>
@@ -689,7 +792,8 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">About Me</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.aboutMe || `It has survived t is a long established fact that a
+                          {profileData?.aboutMe ||
+                            `It has survived t is a long established fact that a
                           reader will be distracted by the readable content of a
                           page when looking at its layout. The point of using
                           Lorem Ipsum is that it has a more-or-less normal
@@ -1022,13 +1126,294 @@ export const FreelanceProfileView = () => {
                           <div className="p-3 webkit">
                             <div className="inline-flex">
                               <div className="w-10">
-                                {" "}
-                                <BiEdit
+                                <button
+                                  onClick={handleShow5}
+                                  className="text-white border-rounded"
                                   style={{
-                                    color: "#39BEC1",
-                                    fontSize: "30px",
+                                    background: "none",
+                                    border: "none",
                                   }}
-                                />
+                                >
+                                  <BiEdit
+                                    style={{
+                                      color: "#39BEC1",
+                                      fontSize: "30px",
+                                    }}
+                                  />
+                                </button>
+                                <Modal
+                                  show={show5}
+                                  onHide={handleClose5}
+                                  backdrop="static"
+                                  keyboard={false}
+                                >
+                                  <Modal.Header closeButton>
+                                    <Modal.Title style={{ color: "black" }}>
+                                      Edit Experience
+                                    </Modal.Title>
+                                  </Modal.Header>
+                                  <Modal.Body>
+                                    <Row>
+                                      <div className="p-3">
+                                        <Col lg="12">
+                                          <fieldset>
+                                            <label
+                                              className="text-lg"
+                                              style={{ width: "100%" }}
+                                            >
+                                              Profession
+                                            </label>
+                                            <input
+                                              style={{ width: "100%" }}
+                                              className="form-control"
+                                              name="fname"
+                                              type={"text"}
+                                              //   value={user.number}
+                                              //   onChange={getUserData}
+                                              placeholder="Gia 
+
+                "
+                                            />
+                                          </fieldset>
+                                        </Col>
+                                        <Col lg="12">
+                                          <fieldset>
+                                            <label
+                                              className="text-lg"
+                                              style={{ width: "100%" }}
+                                            >
+                                              Company Name
+                                            </label>
+                                            <input
+                                              style={{ width: "100%" }}
+                                              className="form-control"
+                                              name="lname"
+                                              type={"number"}
+                                              //   value={user.number}
+                                              //   onChange={getUserData}
+                                              placeholder="Jay 
+
+                "
+                                            />
+                                          </fieldset>
+                                        </Col>
+                                        <Col lg="12">
+                                          <fieldset>
+                                            <label
+                                              className="text-lg"
+                                              style={{ width: "100%" }}
+                                            >
+                                              Job Industry
+                                            </label>
+                                            <Form.Select aria-label="Default select example">
+                                              <option hidden="">
+                                                Job Industry
+                                              </option>
+                                              <option>
+                                                Universities / Education
+                                              </option>
+                                              <option>Manufacturing</option>
+                                              <option>Security</option>
+                                              <option>Real Estate</option>
+                                              <option>
+                                                Professional Consultings (Legal,
+                                                HR, Finance etc.)
+                                              </option>
+                                              <option>
+                                                Banking and Finance
+                                              </option>
+                                              <option>
+                                                Beauty Care and Health / Welness
+                                                / Fitness
+                                              </option>
+                                              <option>
+                                                Government / Public Utilities
+                                              </option>
+                                              <option>
+                                                Hospitality / Travel / Airlines
+                                                / Clubhouse
+                                              </option>
+                                              <option>
+                                                IT / R&amp;D / Cyber Security /
+                                                Telecommunication / Science
+                                              </option>
+                                              <option>Retail</option>
+                                              <option>Insurance</option>
+                                              <option>
+                                                Logistics / Transportaton /
+                                                Supply Chain
+                                              </option>
+                                              <option>
+                                                F&amp;B / Wine &amp; Spriits
+                                              </option>
+                                              <option>
+                                                Logistics / Transportaton /
+                                                Supply Chain
+                                              </option>
+                                              <option>
+                                                Medical / Pharmacy / Hospital
+                                              </option>
+                                              <option>Engineerings</option>
+                                              <option>Others</option>
+                                            </Form.Select>
+                                          </fieldset>
+                                        </Col>
+                                        <Col lg="12">
+                                          <fieldset>
+                                            <label
+                                              className="text-lg"
+                                              style={{ width: "100%" }}
+                                            >
+                                              Job Function
+                                            </label>
+                                            <Form.Select aria-label="Default select example">
+                                              <option hidden="">
+                                                Job Function
+                                              </option>
+                                              <option>HR &amp; Admin</option>
+                                              <option>
+                                                General Management
+                                              </option>
+                                              <option>
+                                                Finance and Accounting
+                                              </option>
+                                              <option>
+                                                Sales and Marketing
+                                              </option>
+                                              <option>
+                                                Banking and Financial Institue
+                                                Professionals
+                                              </option>
+                                              <option>
+                                                Insurance Professionals
+                                                (back-end functions)
+                                              </option>
+                                              <option>
+                                                IT Professionals (Specific
+                                                Fields)
+                                              </option>
+                                              <option>Manufacturing</option>
+                                              <option>
+                                                Real Estate (Surveyers /
+                                                reasearchers etc.)
+                                              </option>
+                                              <option>
+                                                Finance and Accounting
+                                              </option>
+                                              <option>
+                                                Professional Designers
+                                              </option>
+                                              <option>
+                                                Lecturers / Teachers
+                                              </option>
+                                              <option>
+                                                Engineering / Architect
+                                              </option>
+                                              <option>Others</option>
+                                            </Form.Select>
+                                          </fieldset>
+                                        </Col>
+                                        <Row>
+                                          <Col lg="12" className="pt-3">
+                                            <span
+                                              style={{
+                                                display: "inline-flex",
+                                                color: "#7A7979",
+                                              }}
+                                            >
+                                              <FormCheck
+                                                id="check"
+                                                color="blue"
+                                              />
+                                              &#160;&#160;I am currently working
+                                              in this role
+                                            </span>
+                                          </Col>
+                                          <Col lg="6">
+                                            <fieldset>
+                                              <label
+                                                className="text-lg"
+                                                style={{ width: "100%" }}
+                                              >
+                                                Start Date
+                                              </label>
+                                              <input
+                                                style={{ width: "100%" }}
+                                                className="form-control"
+                                                name="email"
+                                                type={"date"}
+                                                //   value={user.number}
+                                                //   onChange={getUserData}
+                                                placeholder="A Service Like No Other
+                "
+                                              />
+                                            </fieldset>
+                                          </Col>
+                                          <Col lg="6">
+                                            <fieldset>
+                                              <label
+                                                className="text-lg"
+                                                style={{ width: "100%" }}
+                                              >
+                                                End Date
+                                              </label>
+
+                                              <input
+                                                style={{ width: "100%" }}
+                                                className="form-control"
+                                                type={"date"}
+                                                name="firstname"
+                                                //   value={user.name}
+                                                //   onChange={getUserData}
+                                                placeholder="Gia (PVT) LTD
+
+                "
+                                                required
+                                              />
+                                            </fieldset>
+                                          </Col>
+                                          <Col lg="12">
+                                            <fieldset>
+                                              <label
+                                                className="text-lg"
+                                                style={{ width: "100%" }}
+                                              >
+                                                Description
+                                              </label>
+
+                                              <textarea
+                                                placeholder="Description"
+                                                className="form-control"
+                                              />
+                                            </fieldset>
+                                          </Col>
+                                        </Row>
+                                      </div>
+                                    </Row>
+                                  </Modal.Body>
+                                  <Modal.Footer>
+                                    <Button
+                                      variant="secondary"
+                                      onClick={handleClose5}
+                                      style={{
+                                        background: "none",
+                                        color: "#C1C1C1",
+                                      }}
+                                    >
+                                      Cancel
+                                    </Button>
+                                    <Button
+                                      onClick={ProfileExp}
+                                      variant="primary"
+                                      style={{
+                                        background: "none",
+                                        color: "#39BEC1",
+                                      }}
+                                    >
+                                      Save
+                                    </Button>
+                                  </Modal.Footer>
+                                </Modal>
                               </div>
                               <div className="w-10">
                                 <ImBin
@@ -1352,13 +1737,180 @@ export const FreelanceProfileView = () => {
                           <div className="p-3 webkit">
                             <div className="inline-flex">
                               <div className="w-10">
-                                {" "}
-                                <BiEdit
+                                <button
+                                  onClick={handleShow6}
+                                  className="text-white border-rounded"
                                   style={{
-                                    color: "#39BEC1",
-                                    fontSize: "30px",
+                                    background: "none",
+                                    border: "none",
                                   }}
-                                />
+                                >
+                                  <BiEdit
+                                    style={{
+                                      color: "#39BEC1",
+                                      fontSize: "30px",
+                                    }}
+                                  />
+                                </button>
+                                <Modal
+                                  show={show6}
+                                  onHide={handleClose6}
+                                  backdrop="static"
+                                  keyboard={false}
+                                >
+                                  <Modal.Header closeButton>
+                                    <Modal.Title style={{ color: "black" }}>
+                                      Edit Education
+                                    </Modal.Title>
+                                  </Modal.Header>
+                                  <Modal.Body>
+                                    <Row>
+                                      <div className="p-3">
+                                        <Col lg="12">
+                                          <fieldset>
+                                            <label
+                                              className="text-lg"
+                                              style={{ width: "100%" }}
+                                            >
+                                              Education Level
+                                            </label>
+                                            <Form.Select aria-label="Default select example">
+                                              <option hidden="">
+                                                Education Level
+                                              </option>
+                                              <option>Associate Degree</option>
+                                              <option>Bachelor Degree</option>
+                                              <option>Master Degree</option>
+                                              <option>Doctorate Degree</option>
+                                              <option>PhD</option>
+                                              <option>Others</option>
+                                            </Form.Select>
+                                          </fieldset>
+                                        </Col>
+                                        <Col lg="12">
+                                          <fieldset>
+                                            <label
+                                              className="text-lg"
+                                              style={{ width: "100%" }}
+                                            >
+                                              Institute
+                                            </label>
+                                            <input
+                                              style={{ width: "100%" }}
+                                              className="form-control"
+                                              name="institute"
+                                              type={"text"}
+                                              //   value={user.number}
+                                              //   onChange={getUserData}
+                                              placeholder="Jay 
+
+                "
+                                            />
+                                          </fieldset>
+                                        </Col>
+                                        <Col lg="12">
+                                          <fieldset>
+                                            <label
+                                              className="text-lg"
+                                              style={{ width: "100%" }}
+                                            >
+                                              Major
+                                            </label>
+                                            <Form.Select aria-label="Default select example">
+                                              <option hidden="">Major</option>
+                                              <option>Masters of Law</option>
+                                              <option>Computer Science</option>
+                                              <option>Phsycology</option>
+                                            </Form.Select>
+                                          </fieldset>
+                                        </Col>
+
+                                        <Row>
+                                          <Col lg="6">
+                                            <fieldset>
+                                              <label
+                                                className="text-lg"
+                                                style={{ width: "100%" }}
+                                              >
+                                                Start Date
+                                              </label>
+                                              <input
+                                                style={{ width: "100%" }}
+                                                className="form-control"
+                                                name="email"
+                                                type={"date"}
+                                                //   value={user.number}
+                                                //   onChange={getUserData}
+                                                placeholder="A Service Like No Other
+                "
+                                              />
+                                            </fieldset>
+                                          </Col>
+                                          <Col lg="6">
+                                            <fieldset>
+                                              <label
+                                                className="text-lg"
+                                                style={{ width: "100%" }}
+                                              >
+                                                End Date
+                                              </label>
+
+                                              <input
+                                                style={{ width: "100%" }}
+                                                className="form-control"
+                                                type={"date"}
+                                                name="firstname"
+                                                //   value={user.name}
+                                                //   onChange={getUserData}
+                                                placeholder="Gia (PVT) LTD
+
+                "
+                                                required
+                                              />
+                                            </fieldset>
+                                          </Col>
+                                          <Col lg="6">
+                                            <fieldset>
+                                              <label
+                                                className="text-lg"
+                                                style={{ width: "100%" }}
+                                              >
+                                                Upload Certification
+                                              </label>
+
+                                              <input
+                                                type="file"
+                                                class="form-control"
+                                                id="customFile"
+                                              />
+                                            </fieldset>
+                                          </Col>
+                                        </Row>
+                                      </div>
+                                    </Row>
+                                  </Modal.Body>
+                                  <Modal.Footer>
+                                    <Button
+                                      variant="secondary"
+                                      onClick={handleClose6}
+                                      style={{
+                                        background: "none",
+                                        color: "#C1C1C1",
+                                      }}
+                                    >
+                                      Cancel
+                                    </Button>
+                                    <Button
+                                      variant="primary"
+                                      style={{
+                                        background: "none",
+                                        color: "#39BEC1",
+                                      }}
+                                    >
+                                      Save
+                                    </Button>
+                                  </Modal.Footer>
+                                </Modal>
                               </div>
                               <div className="w-10">
                                 <ImBin
@@ -1647,13 +2199,110 @@ export const FreelanceProfileView = () => {
                           <div className="p-3 webkit">
                             <div className="inline-flex">
                               <div className="w-10">
-                                {" "}
-                                <BiEdit
+                                <button
+                                  onClick={handleShow7}
+                                  className="text-white border-rounded"
                                   style={{
-                                    color: "#39BEC1",
-                                    fontSize: "30px",
+                                    background: "none",
+                                    border: "none",
                                   }}
-                                />
+                                >
+                                  <BiEdit
+                                    style={{
+                                      color: "#39BEC1",
+                                      fontSize: "30px",
+                                    }}
+                                  />
+                                </button>
+                                <Modal
+                                  show={show7}
+                                  onHide={handleClose7}
+                                  backdrop="static"
+                                  keyboard={false}
+                                >
+                                  <Modal.Header closeButton>
+                                    <Modal.Title style={{ color: "black" }}>
+                                      Edit Achievements
+                                    </Modal.Title>
+                                  </Modal.Header>
+                                  <Modal.Body>
+                                    <Row>
+                                      <div className="p-3">
+                                        <Col lg="12">
+                                          <fieldset>
+                                            <label
+                                              className="text-lg"
+                                              style={{ width: "100%" }}
+                                            >
+                                              Title
+                                            </label>
+                                            <input
+                                              style={{ width: "100%" }}
+                                              className="form-control"
+                                              name="fname"
+                                              type={"text"}
+                                              //   value={user.number}
+                                              //   onChange={getUserData}
+                                              placeholder="Gia 
+
+                "
+                                            />
+                                          </fieldset>
+                                        </Col>
+                                        <Col lg="12">
+                                          <fieldset>
+                                            <label
+                                              className="text-lg"
+                                              style={{ width: "100%" }}
+                                            >
+                                              Description
+                                            </label>
+                                            <textarea
+                                              placeholder="Description"
+                                              className="form-control"
+                                            />
+                                          </fieldset>
+                                        </Col>
+                                        <Col lg="12">
+                                          <fieldset>
+                                            <label
+                                              className="text-lg"
+                                              style={{ width: "100%" }}
+                                            >
+                                              Upload Certification
+                                            </label>
+                                            <input
+                                              type="file"
+                                              class="form-control"
+                                              id="customFile"
+                                            />
+                                          </fieldset>
+                                        </Col>
+                                      </div>
+                                    </Row>
+                                  </Modal.Body>
+                                  <Modal.Footer>
+                                    <Button
+                                      variant="secondary"
+                                      onClick={handleClose7}
+                                      style={{
+                                        background: "none",
+                                        color: "#C1C1C1",
+                                      }}
+                                    >
+                                      Cancel
+                                    </Button>
+                                    <Button
+                                      variant="primary"
+                                      style={{
+                                        background: "none",
+                                        color: "#39BEC1",
+                                      }}
+                                    >
+                                      Save
+                                    </Button>
+                                  </Modal.Footer>
+                                </Modal>
                               </div>
                               <div className="w-10">
                                 <ImBin
@@ -1885,13 +2534,207 @@ export const FreelanceProfileView = () => {
                               <div className="p-3 webkit">
                                 <div className="inline-flex">
                                   <div className="w-10">
-                                    {" "}
-                                    <BiEdit
+                                    <button
+                                      onClick={handleShow8}
+                                      className="text-white border-rounded"
                                       style={{
-                                        color: "#39BEC1",
-                                        fontSize: "30px",
+                                        background: "none",
+                                        border: "none",
                                       }}
-                                    />
+                                    >
+                                      <BiEdit
+                                        style={{
+                                          color: "#39BEC1",
+                                          fontSize: "30px",
+                                        }}
+                                      />
+                                    </button>
+                                    <Modal
+                                      show={show8}
+                                      onHide={handleClose8}
+                                      backdrop="static"
+                                      keyboard={false}
+                                    >
+                                      <Modal.Header closeButton>
+                                        <Modal.Title style={{ color: "black" }}>
+                                          Edit Languages
+                                        </Modal.Title>
+                                      </Modal.Header>
+                                      <Modal.Body>
+                                        <Row>
+                                          <div className="p-3">
+                                            <Col lg="12">
+                                              <fieldset>
+                                                <label
+                                                  className="text-lg"
+                                                  style={{ width: "100%" }}
+                                                >
+                                                  Language Type
+                                                </label>
+                                                <Form.Select aria-label="Default select example">
+                                                  <option hidden="">
+                                                    Language Type
+                                                  </option>
+                                                  <option value="English">
+                                                    English
+                                                  </option>
+                                                  <option value="Arabic">
+                                                    Arabic
+                                                  </option>
+                                                  <option value="Spanish">
+                                                    Spanish
+                                                  </option>
+                                                  <option value="Hindi">
+                                                    Hindi
+                                                  </option>
+                                                  <option value="Cantonese">
+                                                    Cantonese
+                                                  </option>
+                                                  <option value="French">
+                                                    French
+                                                  </option>
+                                                  <option value="German">
+                                                    German
+                                                  </option>
+                                                  <option value="Italian">
+                                                    Italian
+                                                  </option>
+                                                  <option value="Japanese">
+                                                    Japanese
+                                                  </option>
+                                                  <option value="Korean">
+                                                    Korean
+                                                  </option>
+                                                  <option value="Mandarin">
+                                                    Mandarin
+                                                  </option>
+                                                  <option value="Bengali">
+                                                    Bengali
+                                                  </option>
+                                                  <option value="Burmese">
+                                                    Burmese
+                                                  </option>
+                                                  <option value="Czech">
+                                                    Czech
+                                                  </option>
+                                                  <option value="Dutch">
+                                                    Dutch
+                                                  </option>
+                                                  <option value="Greek">
+                                                    Greek
+                                                  </option>
+                                                  <option value="Hakka">
+                                                    Hakka
+                                                  </option>
+                                                  <option value="Hungarian">
+                                                    Hungarian
+                                                  </option>
+                                                  <option value="Hunnanese">
+                                                    Hunnanese
+                                                  </option>
+                                                  <option value="Malay/Indonesian">
+                                                    Malay/Indonesian
+                                                  </option>
+                                                  <option value="Nepali">
+                                                    Nepali
+                                                  </option>
+                                                  <option value="Portuguese">
+                                                    Portuguese
+                                                  </option>
+                                                  <option value="Russian">
+                                                    Russian
+                                                  </option>
+                                                  <option value="Shanghainese">
+                                                    Shanghainese
+                                                  </option>
+                                                  <option value="Swedish">
+                                                    Swedish
+                                                  </option>
+                                                  <option value="Tagalog">
+                                                    Tagalog
+                                                  </option>
+                                                  <option value="Telugu">
+                                                    Telugu
+                                                  </option>
+                                                  <option value="Thai">
+                                                    Thai
+                                                  </option>
+                                                  <option value="Turkish">
+                                                    Turkish
+                                                  </option>
+                                                  <option value="Vietnamese">
+                                                    Vietnamese
+                                                  </option>
+                                                  <option value="Others">
+                                                    Others
+                                                  </option>
+                                                </Form.Select>
+                                              </fieldset>
+                                            </Col>
+                                            <Col lg="12">
+                                              <fieldset>
+                                                <label
+                                                  className="text-lg"
+                                                  style={{ width: "100%" }}
+                                                >
+                                                  Exam Level
+                                                </label>
+                                                <input
+                                                  style={{ width: "100%" }}
+                                                  className="form-control"
+                                                  name="lname"
+                                                  type={"text"}
+                                                  //   value={user.number}
+                                                  //   onChange={getUserData}
+                                                  placeholder="Jay 
+
+                "
+                                                />
+                                              </fieldset>
+                                            </Col>
+                                            <Col lg="12">
+                                              <fieldset>
+                                                <label
+                                                  className="text-lg"
+                                                  style={{ width: "100%" }}
+                                                >
+                                                  Grading Level
+                                                </label>
+                                                <input
+                                                  style={{ width: "100%" }}
+                                                  className="form-control"
+                                                  name="lname"
+                                                  type={"text"}
+                                                  //   value={user.number}
+                                                  //   onChange={getUserData}
+                                                />
+                                              </fieldset>
+                                            </Col>
+                                          </div>
+                                        </Row>
+                                      </Modal.Body>
+                                      <Modal.Footer>
+                                        <Button
+                                          variant="secondary"
+                                          onClick={handleClose8}
+                                          style={{
+                                            background: "none",
+                                            color: "#C1C1C1",
+                                          }}
+                                        >
+                                          Cancel
+                                        </Button>
+                                        <Button
+                                          variant="primary"
+                                          style={{
+                                            background: "none",
+                                            color: "#39BEC1",
+                                          }}
+                                        >
+                                          Save
+                                        </Button>
+                                      </Modal.Footer>
+                                    </Modal>
                                   </div>
                                   <div className="w-10">
                                     <ImBin
@@ -1913,7 +2756,6 @@ export const FreelanceProfileView = () => {
                               <div className="p-3 webkit">
                                 <div className="inline-flex">
                                   <div className="w-10">
-                                    {" "}
                                     <BiEdit
                                       style={{
                                         color: "#39BEC1",
