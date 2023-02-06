@@ -29,6 +29,7 @@ import {
 import Modal from "react-bootstrap/Modal";
 import axios from "../../../utils/axios.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Language } from "@mui/icons-material";
 export const FreelanceProfileView = () => {
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
@@ -61,25 +62,33 @@ export const FreelanceProfileView = () => {
   const handleClose9 = () => setShow9(false);
   const handleShow9 = () => setShow9(true);
   const [userId, setUserId] = useState("");
-  console.log(userId, "ID");
+  // console.log(userId, "ID");
   const [isCheckBox, setIsCheckBox] = useState('false')
   const [profileData, setProfileData] = useState({});
   const [profileExp, setProfileExp] = useState({});
-  // console.log(profileExp);
+  const [isEducation, setIsEducation] = useState({});
+  const [isAchievement, setIsAchievement] = useState({})
+  const [isLanguage, setIsLanguage] = useState({})
+
+  console.log(isLanguage, 'isLanguage');
 
   useEffect(() => {
     let id = localStorage.getItem("id");
     setUserId(id);
     initialFun(id);
-    setProfileData({...profileData, uid : id})
-    setProfileExp({...profileExp, uid : id})
+    ProfileExpData(id);
+    setProfileData({ ...profileData, uid: id });
+    setProfileExp({ ...profileExp, uid: id });
+    setIsEducation({ ...isEducation, uid: id });
+    setIsAchievement({ ...isAchievement, uid: id });
+    setIsLanguage({ ...isLanguage, uid: id });
   }, []);
 
   const initialFun = (id) => {
     axios
       .get(`http://localhost:3000/v1/users/${id}`)
       .then((res) => {
-        console.log(res, "Initial Data");
+        // console.log(res, "Initial Data");
         let data = res.data;
         // setIsProfileData(data)
         setProfileData(data);
@@ -102,23 +111,70 @@ export const FreelanceProfileView = () => {
 
   const ProfileExp = () => {
     axios
-    .post(`http://localhost:3000/v1/freelancerExp`, profileExp)
-    .then((res) => {
-      console.log(res, "profile data successfully added");
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .post(`http://localhost:3000/v1/freelancerExp`, profileExp)
+      .then((res) => {
+        console.log(res, "profile data successfully added");
+        setProfileExp(res.data, 'ProfileExp')
+        ProfileExpData()
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const checkBoxHandleChange = (e) => {
-    if(e.target.value === 'on'){
-    setIsCheckBox('true')
-    setProfileExp({...profileExp, currentlyWorking : isCheckBox})
-  } else {
+  const ProfileExpData = (id) => {
+    axios.get(`http://localhost:3000/v1/freelancerExp/`).then((res) => {
+      console.log(res, 'ProfileExpData');
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const checkBoxHandleChange = () => {
+    if (isCheckBox === 'true') {
+      // alert('checkbox is false')
       setIsCheckBox('false')
-      setProfileExp({...profileExp, currentlyWorking : isCheckBox})
+      setProfileExp({ ...profileExp, currentlyWorking: 'off' })
+    } else {
+      // alert('checkbox is true')
+      setIsCheckBox('true')
+      setProfileExp({ ...profileExp, currentlyWorking: 'on' })
     }
+  }
+
+  const educationFunc = () => {
+    axios
+      .post(`http://localhost:3000/v1/education`, isEducation)
+      .then((res) => {
+        console.log(res, "profile data successfully added");
+        setProfileExp(res.data, 'ProfileExp')
+        // ProfileExpData()
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  const achievementFunc = () => {
+    axios
+      .post(`http://localhost:3000/v1/achievement`, isAchievement)
+      .then((res) => {
+        console.log(res, "profile data successfully added");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
+  const LanguageFunc = () => {
+    axios
+      .post(`http://localhost:3000/v1/language`, isLanguage)
+      .then((res) => {
+        console.log(res, "profile data successfully added");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   return (
@@ -310,8 +366,8 @@ export const FreelanceProfileView = () => {
                                 type={"text"}
                                 value={
                                   profileData?.firstName +
-                                    " " +
-                                    profileData?.lastName || ""
+                                  " " +
+                                  profileData?.lastName || ""
                                 }
                                 onChange={(e) =>
                                   setProfileData({
@@ -723,8 +779,8 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
                           {profileData?.fullName ||
                             profileData?.firstName +
-                              " " +
-                              profileData.lastName ||
+                            " " +
+                            profileData.lastName ||
                             "Ella Jay"}
                         </h2>
                       </div>
@@ -881,7 +937,7 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="fname"
                                 type={"text"}
-                                onChange={(e) => setProfileExp({...profileExp, profession : e.target.value})}
+                                onChange={(e) => setProfileExp({ ...profileExp, profession: e.target.value })}
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Gia 
@@ -903,7 +959,7 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="lname"
                                 value={profileExp?.companyName}
-                                onChange={(e) => setProfileExp({...profileExp, companyName : e.target.value})}
+                                onChange={(e) => setProfileExp({ ...profileExp, companyName: e.target.value })}
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Jay 
@@ -921,8 +977,8 @@ export const FreelanceProfileView = () => {
                                 Job Industry
                               </label>
                               <Form.Select aria-label="Default select example"
-                                      value={profileExp?.jobIndustry || 'Jay'}
-                                      onChange={(e) => setProfileExp({...profileExp, jobIndustry : e.target.value})}
+                                value={profileExp?.jobIndustry || 'Jay'}
+                                onChange={(e) => setProfileExp({ ...profileExp, jobIndustry: e.target.value })}
                               >
                                 <option hidden="">Job Industry</option>
                                 <option>Universities / Education</option>
@@ -969,8 +1025,8 @@ export const FreelanceProfileView = () => {
                                 Job Function
                               </label>
                               <Form.Select aria-label="Default select example"
-                               value={profileExp?.jobFunction || 'Jay'}
-                               onChange={(e) => setProfileExp({...profileExp, jobFunction : e.target.value})}
+                                value={profileExp?.jobFunction || 'Jay'}
+                                onChange={(e) => setProfileExp({ ...profileExp, jobFunction: e.target.value })}
                               >
                                 <option hidden="">Job Function</option>
                                 <option>HR &amp; Admin</option>
@@ -1006,9 +1062,9 @@ export const FreelanceProfileView = () => {
                                   color: "#7A7979",
                                 }}
                               >
-                                <FormCheck id="check" color="blue" 
+                                <FormCheck id="check" color="blue"
                                   onChange={checkBoxHandleChange}
-                                  />
+                                />
                                 &#160;&#160;I am currently working in this role
                               </span>
                             </Col>
@@ -1026,7 +1082,7 @@ export const FreelanceProfileView = () => {
                                   name="email"
                                   type={"date"}
                                   value={profileExp?.startDate || 'startDate'}
-                                  onChange={(e) => setProfileExp({...profileExp, startDate : e.target.value})}
+                                  onChange={(e) => setProfileExp({ ...profileExp, startDate: e.target.value })}
                                   //   value={user.number}
                                   //   onChange={getUserData}
                                   placeholder="A Service Like No Other
@@ -1049,7 +1105,7 @@ export const FreelanceProfileView = () => {
                                   type={"date"}
                                   name="firstname"
                                   value={profileExp?.endDate || 'startDate'}
-                                  onChange={(e) => setProfileExp({...profileExp, endDate : e.target.value})}
+                                  onChange={(e) => setProfileExp({ ...profileExp, endDate: e.target.value })}
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Gia (PVT) LTD
@@ -1071,8 +1127,8 @@ export const FreelanceProfileView = () => {
                                 <textarea
                                   placeholder="Description"
                                   className="form-control"
-                                  value={profileExp?.description  }
-                                  onChange={(e) => setProfileExp({...profileExp, description : e.target.value})}
+                                  value={profileExp?.description}
+                                  onChange={(e) => setProfileExp({ ...profileExp, description: e.target.value })}
                                 />
                               </fieldset>
                             </Col>
@@ -1594,7 +1650,9 @@ export const FreelanceProfileView = () => {
                               >
                                 Education Level
                               </label>
-                              <Form.Select aria-label="Default select example">
+                              <Form.Select aria-label="Default select example"
+                                onChange={(e) => setIsEducation({ ...isEducation, educationLevel: e.target.value })}
+                              >
                                 <option hidden="">Education Level</option>
                                 <option>Associate Degree</option>
                                 <option>Bachelor Degree</option>
@@ -1618,6 +1676,8 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="institute"
                                 type={"text"}
+                                onChange={(e) => setIsEducation({ ...isEducation, institute: e.target.value })}
+
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Jay 
@@ -1634,7 +1694,9 @@ export const FreelanceProfileView = () => {
                               >
                                 Major
                               </label>
-                              <Form.Select aria-label="Default select example">
+                              <Form.Select aria-label="Default select example"
+                                onChange={(e) => setIsEducation({ ...isEducation, major: e.target.value })}
+                              >
                                 <option hidden="">Major</option>
                                 <option>Masters of Law</option>
                                 <option>Computer Science</option>
@@ -1656,6 +1718,7 @@ export const FreelanceProfileView = () => {
                                   style={{ width: "100%" }}
                                   className="form-control"
                                   name="email"
+                                  onChange={(e) => setIsEducation({ ...isEducation, startingDate: e.target.value })}
                                   type={"date"}
                                   //   value={user.number}
                                   //   onChange={getUserData}
@@ -1678,11 +1741,10 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   type={"date"}
                                   name="firstname"
+                                  onChange={(e) => setIsEducation({ ...isEducation, endingDate: e.target.value })}
                                   //   value={user.name}
                                   //   onChange={getUserData}
-                                  placeholder="Gia (PVT) LTD
-
-                "
+                                  placeholder="Gia (PVT) LTD"
                                   required
                                 />
                               </fieldset>
@@ -1718,6 +1780,7 @@ export const FreelanceProfileView = () => {
                       <Button
                         variant="primary"
                         style={{ background: "none", color: "#39BEC1" }}
+                        onClick={educationFunc}
                       >
                         Save
                       </Button>
@@ -2145,6 +2208,7 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="fname"
                                 type={"text"}
+                                onChange={(e) => setIsAchievement({ ...isAchievement, title: e.target.value })}
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Gia 
@@ -2162,6 +2226,7 @@ export const FreelanceProfileView = () => {
                                 Description
                               </label>
                               <textarea
+                                onChange={(e) => setIsAchievement({ ...isAchievement, description: e.target.value })}
                                 placeholder="Description"
                                 className="form-control"
                               />
@@ -2196,6 +2261,7 @@ export const FreelanceProfileView = () => {
                       <Button
                         variant="primary"
                         style={{ background: "none", color: "#39BEC1" }}
+                        onClick={achievementFunc}
                       >
                         Save
                       </Button>
@@ -2449,7 +2515,9 @@ export const FreelanceProfileView = () => {
                               >
                                 Language Type
                               </label>
-                              <Form.Select aria-label="Default select example">
+                              <Form.Select aria-label="Default select example"
+                                onClick={(e) => setIsLanguage({ ...isLanguage, languageType: e.target.value })}
+                              >
                                 <option hidden="">Language Type</option>
                                 <option value="English">English</option>
                                 <option value="Arabic">Arabic</option>
@@ -2502,6 +2570,7 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="lname"
                                 type={"text"}
+                                onClick={(e) => setIsLanguage({ ...isLanguage, examLevel: e.target.value })}
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Jay 
@@ -2523,8 +2592,9 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="lname"
                                 type={"text"}
-                                //   value={user.number}
-                                //   onChange={getUserData}
+                                onClick={(e) => setIsLanguage({ ...isLanguage, gradingLevel: e.target.value })}
+                              //   value={user.number}
+                              //   onChange={getUserData}
                               />
                             </fieldset>
                           </Col>
@@ -2542,6 +2612,7 @@ export const FreelanceProfileView = () => {
                       <Button
                         variant="primary"
                         style={{ background: "none", color: "#39BEC1" }}
+                        onClick={LanguageFunc}
                       >
                         Save
                       </Button>
@@ -2745,8 +2816,8 @@ export const FreelanceProfileView = () => {
                                                   className="form-control"
                                                   name="lname"
                                                   type={"text"}
-                                                  //   value={user.number}
-                                                  //   onChange={getUserData}
+                                                //   value={user.number}
+                                                //   onChange={getUserData}
                                                 />
                                               </fieldset>
                                             </Col>
