@@ -71,8 +71,11 @@ export const FreelanceProfileView = () => {
   const [isAchievement, setIsAchievement] = useState({});
   const [isLanguage, setIsLanguage] = useState({});
   const [isEducationData, setIsEducationData] = useState({});
+  const [isAchievementData, setIsAchievementData] = useState({});
+  const [isExperienceData, setIsExperienceData] = useState({});
 
-  console.log(isEducationData, "isEducationData");
+
+  console.log(isExperienceData, "isExperienceData");
 
   useEffect(() => {
     let id = localStorage.getItem("id");
@@ -80,6 +83,7 @@ export const FreelanceProfileView = () => {
     initialFun(id);
     ProfileExpData(id);
     educationData();
+    achievementData()
     setProfileData({ ...profileData, uid: id });
     setProfileExp({ ...profileExp, uid: id });
     setIsEducation({ ...isEducation, uid: id });
@@ -129,7 +133,9 @@ export const FreelanceProfileView = () => {
     axios
       .get(`http://localhost:3000/v1/freelancerExp/`)
       .then((res) => {
-        console.log(res, "ProfileExpData");
+        // console.log(res, "ProfileExpData");
+        let data = Object.values(res.data.data)
+        setIsExperienceData(data)
       })
       .catch((err) => {
         console.log(err);
@@ -178,8 +184,12 @@ export const FreelanceProfileView = () => {
   };
 
   const achievementFunc = () => {
+    let formdata = new FormData();
+    Object.entries(isAchievement).map(([key, value]) => {
+      formdata.append(key, value);
+    });
     axios
-      .post(`http://localhost:3000/v1/achievement`, isAchievement)
+      .post(`http://localhost:3000/v1/achievement`, formdata)
       .then((res) => {
         console.log(res, "profile data successfully added");
       })
@@ -187,6 +197,18 @@ export const FreelanceProfileView = () => {
         console.log(err);
       });
   };
+
+  const achievementData = () => {
+    axios
+    .get(`http://localhost:3000/v1/achievement/`)
+    .then((res) => {
+      let data = Object.values(res.data.data)
+      setIsAchievementData(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   const LanguageFunc = () => {
     axios
@@ -399,9 +421,7 @@ export const FreelanceProfileView = () => {
                                 }
                                 //   value={user.number}
                                 //   onChange={getUserData}
-                                placeholder="Gia 
-
-                "
+                                placeholder="Gia"
                               />
                             </fieldset>
                           </Col>
@@ -554,9 +574,7 @@ export const FreelanceProfileView = () => {
                                   }
                                   //   value={user.name}
                                   //   onChange={getUserData}
-                                  placeholder="Gia (PVT) LTD
-
-                "
+                                  placeholder="Gia (PVT) LTD"
                                   required
                                 />
                               </fieldset>
@@ -584,8 +602,7 @@ export const FreelanceProfileView = () => {
                                       city: e.target.value,
                                     })
                                   }
-                                  placeholder="IT Industry
-                "
+                                  placeholder="IT Industry"
                                   required
                                 />
                               </fieldset>
@@ -612,8 +629,7 @@ export const FreelanceProfileView = () => {
                                   }
                                   //   value={user.number}
                                   //   onChange={getUserData}
-                                  placeholder="https://www.me2work.com/
-                "
+                                  placeholder="https://www.me2work.com/"
                                 />
                               </fieldset>
                             </Col>
@@ -640,8 +656,7 @@ export const FreelanceProfileView = () => {
                                     }
                                     //   value={user.number}
                                     //   onChange={getUserData}
-                                    placeholder="USA
-                "
+                                    placeholder="USA"
                                   />
                                 </div>
                               </fieldset>
@@ -1224,7 +1239,10 @@ export const FreelanceProfileView = () => {
                   <Row className="align-items-center row">
                     <Col>
                       <Row>
-                        <Col lg="8" style={{ display: "flex" }}>
+                        {isExperienceData.length > 0 && isExperienceData.map((event, index) => {
+                          return (
+                            <>
+                             <Col lg="8" style={{ display: "flex" }}>
                           <div className="MuiTimelineSeparator-root css-11tgw8h">
                             <span className="MuiTimelineDot-root MuiTimelineDot-filled MuiTimelineDot-filledGrey timeline-dot css-a7d0u7"></span>
                             <span className="MuiTimelineConnector-root css-idv8vo"></span>
@@ -1235,7 +1253,7 @@ export const FreelanceProfileView = () => {
                                 <Col lg="6">
                                   <div className="p3">
                                     <h2 className="text-xl font-semibold">
-                                      Codesk
+                                      {event?.profession}
                                     </h2>
 
                                     <h2
@@ -1252,14 +1270,14 @@ export const FreelanceProfileView = () => {
                                       className="text-xl"
                                       style={{ color: "#6A489C" }}
                                     >
-                                      Banking and Finance
+                                      {event?.jobFunction}
                                     </h2>
 
                                     <h2
                                       className="text-lg"
                                       style={{ color: "#7A7979" }}
                                     >
-                                      Jan 2023 - Jan 2023
+                                       {event?.startingDate + ' - ' + event?.endingDate}
                                     </h2>
                                   </div>
                                 </Col>
@@ -1269,12 +1287,7 @@ export const FreelanceProfileView = () => {
                                 className="text-lg pt-2"
                                 style={{ color: "#7A7979" }}
                               >
-                                Managers ensure that their assigned department,
-                                store, or district is well staffed and
-                                provisioned, adheres to quality and service
-                                standards, increases revenue and market share,
-                                and helps the business accomplish its goals.
-                                They hire and train employees.
+                           {event?.description}
                               </h2>
                             </div>
                           </div>
@@ -1583,7 +1596,11 @@ export const FreelanceProfileView = () => {
                             </div>
                           </div>
                         </Col>
-                        <hr className="my-2" />
+                       
+                            </>
+                          )
+                        })}
+                        {/* <hr className="my-2" />
                         <Row>
                           <Col lg="8" style={{ display: "flex" }}>
                             <div className="MuiTimelineSeparator-root css-11tgw8h">
@@ -1664,7 +1681,7 @@ export const FreelanceProfileView = () => {
                               </div>
                             </div>
                           </Col>
-                        </Row>
+                        </Row> */}
                       </Row>
                     </Col>
                   </Row>
@@ -1886,7 +1903,7 @@ export const FreelanceProfileView = () => {
                 <hr className="mt-2" />
                 {isEducationData.length > 0 &&
                   isEducationData.map((event, index) => {
-                    console.log(event, 'eveeeeeeent');
+                    // console.log(event, 'eveeeeeeent');
                     return (
                       <>
                         <Container>
@@ -2626,6 +2643,12 @@ export const FreelanceProfileView = () => {
                               </label>
                               <input
                                 type="file"
+                                onChange={(e) => {
+                                  setIsAchievement({
+                                    ...isAchievement,
+                                    achievement: e.target.files[0],
+                                  });
+                                }}
                                 class="form-control"
                                 id="customFile"
                               />
@@ -2661,16 +2684,15 @@ export const FreelanceProfileView = () => {
                   <Row className="align-items-center row">
                     <Col>
                       <Row className="align-items-center">
-                        <Col lg="6">
+                {isAchievementData.length > 0 && isAchievementData.map((event, index) => {
+                  return (
+                  <> 
+                   <Col lg="6">
                           <div className="p3">
-                            <h2 className="text-xl font-semibold">PHD</h2>
+                            <h2 className="text-xl font-semibold">{event?.title}</h2>
 
                             <p className="text-lg" style={{ color: "#7A7979" }}>
-                              It has survived t is a long established fact that
-                              a reader will be distracted by the readable
-                              content of a page when looking at its layout. The
-                              point of using Lorem Ipsum is that it has a
-                              more-or-less normal distribution of letters.
+                             {event?.description}
                             </p>
                           </div>
                         </Col>
@@ -2802,8 +2824,13 @@ export const FreelanceProfileView = () => {
                             </div>
                           </div>
                         </Col>
-                        <hr className="my-2" />
-                        <Col lg="6">
+                  </> 
+                  )
+                })}
+               
+                       
+                        {/* <hr className="my-2" /> */}
+                        {/* <Col lg="6">
                           <div className="p3">
                             <h2 className="text-xl font-semibold">EXCEL</h2>
 
@@ -2847,7 +2874,7 @@ export const FreelanceProfileView = () => {
                               </div>
                             </div>
                           </div>
-                        </Col>
+                        </Col> */}
                       </Row>
                     </Col>
                   </Row>
