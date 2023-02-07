@@ -828,7 +828,36 @@ function MyVerticallyCenteredModal(props) {
     </Modal>
   );
 }
+
+const ReadMore = ({ children }) => {
+  const text = children;
+  const [isReadMore, setIsReadMore] = useState(true);
+  const toggleReadMore = () => {
+    setIsReadMore(!isReadMore);
+  };
+  return (
+    <p className="text">
+      {isReadMore ? text.slice(0, 450) : text}
+      <span
+        onClick={toggleReadMore}
+        className="read-or-hide font-semibold cursor-pointer"
+        style={{ color: "rgb(57, 190, 193)" }}
+      >
+        {isReadMore ? "...read more" : " show less"}
+      </span>
+    </p>
+  );
+};
+
 export const MainProfile = () => {
+  const [seeMore, setSeeMore] = useState("false");
+  const checkSeeMore = () => {
+    if (seeMore == "false") {
+      setSeeMore("true");
+    } else {
+      setSeeMore("false");
+    }
+  };
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -882,6 +911,26 @@ export const MainProfile = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const Content = () => {
+    return (
+      <div className="container">
+        <h2>
+          <ReadMore>
+            {profileData?.description
+              ? profileData.description
+              : `A .It has survived t is a long established fact that
+                            a reader will be distracted by the readable content of
+                            a page when looking at its layout. The point of using
+                            Lorem Ipsum is that it has a more-or-less normal
+                            distribution of letters, as opposed to using 'Content
+                            here, content here', making it look like readable
+                            English.`}
+          </ReadMore>
+        </h2>
+      </div>
+    );
   };
 
   return (
@@ -1570,7 +1619,7 @@ export const MainProfile = () => {
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.description
+                          {/* {profileData?.description
                             ? profileData.description
                             : `A .It has survived t is a long established fact that
                           a reader will be distracted by the readable content of
@@ -1578,26 +1627,13 @@ export const MainProfile = () => {
                           Lorem Ipsum is that it has a more-or-less normal
                           distribution of letters, as opposed to using 'Content
                           here, content here', making it look like readable
-                          English.`}
+                          English.`} */}
+                          <Content />
                         </h2>
                       </div>
                     </Col>
                   </Row>
                 </Container>
-                <hr style={{ border: "1px solid" }} />
-                <div className="webkit pt-3">
-                  <Button
-                    className="mx-2 px-3 font-semibold"
-                    style={{
-                      background: "none",
-                      fontSize: "20px",
-                      border: "none",
-                      color: "#39BEC1",
-                    }}
-                  >
-                    SEE MORE DETAIL
-                  </Button>
-                </div>
               </div>
             </div>
           </Col>

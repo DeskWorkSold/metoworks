@@ -689,6 +689,45 @@ function MyVerticallyCenteredModal(props) {
     </Modal>
   );
 }
+
+const ReadMore = ({ children }) => {
+  const text = children;
+  const [isReadMore, setIsReadMore] = useState(true);
+  const toggleReadMore = () => {
+    setIsReadMore(!isReadMore);
+  };
+  return (
+    <p className="text">
+      {isReadMore ? text.slice(0, 450) : text}
+      <span
+        onClick={toggleReadMore}
+        className="read-or-hide font-semibold cursor-pointer"
+        style={{ color: "rgb(57, 190, 193)" }}
+      >
+        {isReadMore ? "...read more" : " show less"}
+      </span>
+    </p>
+  );
+};
+const ReadMore1 = ({ children }) => {
+  const text = children;
+  const [isReadMore1, setIsReadMore1] = useState(true);
+  const toggleReadMore1 = () => {
+    setIsReadMore1(!isReadMore1);
+  };
+  return (
+    <p className="text">
+      {isReadMore1 ? text.slice(0, 450) : text}
+      <span
+        onClick={toggleReadMore1}
+        className="read-or-hide font-semibold cursor-pointer"
+        style={{ color: "rgb(57, 190, 193)" }}
+      >
+        {isReadMore1 ? "...read more" : " show less"}
+      </span>
+    </p>
+  );
+};
 export const PublishedJob = () => {
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
@@ -707,6 +746,33 @@ export const PublishedJob = () => {
   const handleClose3 = () => setShow3(false);
   const handleShow3 = () => setShow3(true);
   const [modalShow, setModalShow] = React.useState(false);
+
+  const Content = () => {
+    return (
+      <div className="container">
+        <h2>
+          <ReadMore>
+            simply dummy text of the printing and typesetting industry. Lorem
+            Ipsum has been the industry's standard dummy text ever since the
+            1500s, when avn unknown printer took a galley of type and scramble.
+          </ReadMore>
+        </h2>
+      </div>
+    );
+  };
+  const Content1 = () => {
+    return (
+      <div className="container">
+        <h2>
+          <ReadMore1>
+            simply dummy text of the printing and typesetting industry. Lorem
+            Ipsum has been the industry's standard dummy text ever since the
+            1500s, when avn unknown printer took a galley of type and scramble.
+          </ReadMore1>
+        </h2>
+      </div>
+    );
+  };
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -1239,14 +1305,7 @@ export const PublishedJob = () => {
                                   className="text-lg font-semibold"
                                   style={{ color: "#7A7979" }}
                                 >
-                                  simply dummy text of the printing and
-                                  typesetting industry. Lorem Ipsum has been the
-                                  industry's standard dummy text ever since the
-                                  1500s, when avn unknown printer took a galley
-                                  of type and scramble.
-                                  <span style={{ color: "#39BEC1" }}>
-                                    SEE MORE
-                                  </span>
+                                  <Content />
                                 </h2>
                               </div>
                             </Col>
@@ -2222,14 +2281,7 @@ export const PublishedJob = () => {
                                   className="text-lg font-semibold"
                                   style={{ color: "#7A7979" }}
                                 >
-                                  simply dummy text of the printing and
-                                  typesetting industry. Lorem Ipsum has been the
-                                  industry's standard dummy text ever since the
-                                  1500s, when avn unknown printer took a galley
-                                  of type and scramble.
-                                  <span style={{ color: "#39BEC1" }}>
-                                    SEE MORE
-                                  </span>
+                                  <Content1 />
                                 </h2>
                               </div>
                             </Col>

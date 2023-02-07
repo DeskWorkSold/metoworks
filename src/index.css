@@ -121,6 +121,39 @@ fieldset input ,textarea{
     padding: 14px;
     font-size: 14px;
   }
+  .dzu-previewContainer {
+    padding: 0px !important;
+    display: contents !important;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    width: 100%;
+    min-height: 60px;
+    z-index: 1;
+    border-bottom: none !important;
+    box-sizing: border-box;
+}
+.dzu-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 120px;
+  overflow: hidden !important;
+  margin: 0 auto;
+  position: relative;
+  box-sizing: border-box;
+  transition: all .15s linear;
+  border: none !important;
+  border-radius: 4px;
+}
+.dzu-previewImage {
+  width: auto;
+  max-height: 122px !important;
+  max-width: 163px !important;
+  border-radius: 4px;
+}
   .About_main_images_search button{
     border: 1px solid gray;
     /* background-color: gray; */
@@ -130,6 +163,10 @@ fieldset input ,textarea{
   
   }
   
+  .dzu-previewStatusContainer {
+    display: none !important;
+    align-items: center;
+}
   .About_main_images_search p{
     font-size: 22px;
   }

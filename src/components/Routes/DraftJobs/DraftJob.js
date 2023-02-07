@@ -694,6 +694,25 @@ function MyVerticallyCenteredModal(props) {
     </Modal>
   );
 }
+const ReadMore = ({ children }) => {
+  const text = children;
+  const [isReadMore, setIsReadMore] = useState(true);
+  const toggleReadMore = () => {
+    setIsReadMore(!isReadMore);
+  };
+  return (
+    <p className="text">
+      {isReadMore ? text.slice(0, 450) : text}
+      <span
+        onClick={toggleReadMore}
+        className="read-or-hide font-semibold cursor-pointer"
+        style={{ color: "rgb(57, 190, 193)" }}
+      >
+        {isReadMore ? "...read more" : " show less"}
+      </span>
+    </p>
+  );
+};
 
 export const DraftJob = () => {
   const [show, setShow] = useState(false);
@@ -710,6 +729,20 @@ export const DraftJob = () => {
   const handleClose3 = () => setShow3(false);
   const handleShow3 = () => setShow3(true);
   const [modalShow, setModalShow] = React.useState(false);
+
+  const Content = () => {
+    return (
+      <div className="container">
+        <h2>
+          <ReadMore>
+            simply dummy text of the printing and typesetting industry. Lorem
+            Ipsum has been the industry's standard dummy text ever since the
+            1500s, when avn unknown printer took a galley of type and scramble.
+          </ReadMore>
+        </h2>
+      </div>
+    );
+  };
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -1224,11 +1257,7 @@ export const DraftJob = () => {
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          simply dummy text of the printing and typesetting
-                          industry. Lorem Ipsum has been the industry's standard
-                          dummy text ever since the 1500s, when avn unknown
-                          printer took a galley of type and scramble.
-                          <span style={{ color: "#39BEC1" }}>SEE MORE</span>
+                          <Content />
                         </h2>
                       </div>
                     </Col>

@@ -1,4 +1,7 @@
 import React, { useState, Component, useEffect } from "react";
+import "react-dropzone-uploader/dist/styles.css";
+import Dropzone from "react-dropzone-uploader";
+import { getDroppedOrSelectedFiles } from "html5-file-selector";
 import {
   Container,
   Button,
@@ -74,7 +77,6 @@ export const FreelanceProfileView = () => {
   const [isAchievementData, setIsAchievementData] = useState({});
   const [isExperienceData, setIsExperienceData] = useState({});
 
-
   console.log(isExperienceData, "isExperienceData");
 
   useEffect(() => {
@@ -83,7 +85,7 @@ export const FreelanceProfileView = () => {
     initialFun(id);
     ProfileExpData(id);
     educationData();
-    achievementData()
+    achievementData();
     setProfileData({ ...profileData, uid: id });
     setProfileExp({ ...profileExp, uid: id });
     setIsEducation({ ...isEducation, uid: id });
@@ -134,8 +136,8 @@ export const FreelanceProfileView = () => {
       .get(`http://localhost:3000/v1/freelancerExp/`)
       .then((res) => {
         // console.log(res, "ProfileExpData");
-        let data = Object.values(res.data.data)
-        setIsExperienceData(data)
+        let data = Object.values(res.data.data);
+        setIsExperienceData(data);
       })
       .catch((err) => {
         console.log(err);
@@ -175,7 +177,7 @@ export const FreelanceProfileView = () => {
     axios
       .get(`http://localhost:3000/v1/education/`)
       .then((res) => {
-        let data = Object.values(res.data.data)
+        let data = Object.values(res.data.data);
         setIsEducationData(data);
       })
       .catch((err) => {
@@ -200,15 +202,15 @@ export const FreelanceProfileView = () => {
 
   const achievementData = () => {
     axios
-    .get(`http://localhost:3000/v1/achievement/`)
-    .then((res) => {
-      let data = Object.values(res.data.data)
-      setIsAchievementData(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
+      .get(`http://localhost:3000/v1/achievement/`)
+      .then((res) => {
+        let data = Object.values(res.data.data);
+        setIsAchievementData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const LanguageFunc = () => {
     axios
@@ -221,6 +223,55 @@ export const FreelanceProfileView = () => {
       });
   };
 
+  const FileUploadComponent = () => {
+    const fileParams = ({ meta }) => {
+      return { url: "https://httpbin.org/post" };
+    };
+    const onFileChange = ({ meta, file }, status) => {
+      console.log(status, meta, file);
+    };
+    const onSubmit = (files, allFiles) => {
+      allFiles.forEach((f) => f.remove());
+    };
+    const getFilesFromEvent = (e) => {
+      return new Promise((resolve) => {
+        getDroppedOrSelectedFiles(e).then((chosenFiles) => {
+          resolve(chosenFiles.map((f) => f.fileObject));
+        });
+      });
+    };
+    const selectFileInput = ({ accept, onFiles, files, getFilesFromEvent }) => {
+      const textMsg = files.length > 0 ? "Upload Again" : "Select Files";
+      return (
+        <label className="btn btn-danger mt-4">
+          {textMsg}
+          <input
+            style={{ display: "none" }}
+            type="file"
+            accept={accept}
+            multiple
+            onChange={(e) => {
+              getFilesFromEvent(e).then((chosenFiles) => {
+                onFiles(chosenFiles);
+              });
+            }}
+          />
+        </label>
+      );
+    };
+    return (
+      <Dropzone
+        onSubmit={onSubmit}
+        onChangeStatus={onFileChange}
+        InputComponent={selectFileInput}
+        getUploadParams={fileParams}
+        getFilesFromEvent={getFilesFromEvent}
+        accept="image/*,audio/*,video/*"
+        maxFiles={1}
+        inputContent="Drop A File"
+      />
+    );
+  };
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -247,10 +298,7 @@ export const FreelanceProfileView = () => {
               <div className="boxshad py-5">
                 <Row className="align-items-center">
                   <Col lg="2" className="webkit">
-                    <Image
-                      style={{ width: "100%" }}
-                      src={require("../../../assets/Ella.png")}
-                    />
+                    <FileUploadComponent />
                   </Col>
                   <Col lg="4">
                     <h2 className="text-3xl py-3 robot">
@@ -1239,367 +1287,399 @@ export const FreelanceProfileView = () => {
                   <Row className="align-items-center row">
                     <Col>
                       <Row>
-                        {isExperienceData.length > 0 && isExperienceData.map((event, index) => {
-                          return (
-                            <>
-                             <Col lg="8" style={{ display: "flex" }}>
-                          <div className="MuiTimelineSeparator-root css-11tgw8h">
-                            <span className="MuiTimelineDot-root MuiTimelineDot-filled MuiTimelineDot-filledGrey timeline-dot css-a7d0u7"></span>
-                            <span className="MuiTimelineConnector-root css-idv8vo"></span>
-                          </div>
-                          <div className="MuiTypography-root MuiTypography-body1 MuiTimelineContent-root MuiTimelineContent-positionRight css-18ki27g">
-                            <div className="CV-job">
-                              <Row className="align-items-center pt-2">
-                                <Col lg="6">
-                                  <div className="p3">
-                                    <h2 className="text-xl font-semibold">
-                                      {event?.profession}
-                                    </h2>
+                        {isExperienceData.length > 0 &&
+                          isExperienceData.map((event, index) => {
+                            return (
+                              <>
+                                <Col lg="8" style={{ display: "flex" }}>
+                                  <div className="MuiTimelineSeparator-root css-11tgw8h">
+                                    <span className="MuiTimelineDot-root MuiTimelineDot-filled MuiTimelineDot-filledGrey timeline-dot css-a7d0u7"></span>
+                                    <span className="MuiTimelineConnector-root css-idv8vo"></span>
+                                  </div>
+                                  <div className="MuiTypography-root MuiTypography-body1 MuiTimelineContent-root MuiTimelineContent-positionRight css-18ki27g">
+                                    <div className="CV-job">
+                                      <Row className="align-items-center pt-2">
+                                        <Col lg="6">
+                                          <div className="p3">
+                                            <h2 className="text-xl font-semibold">
+                                              {event?.profession}
+                                            </h2>
 
-                                    <h2
-                                      className="text-lg"
-                                      style={{ color: "#7A7979" }}
-                                    >
-                                      7A7979
-                                    </h2>
+                                            <h2
+                                              className="text-lg"
+                                              style={{ color: "#7A7979" }}
+                                            >
+                                              7A7979
+                                            </h2>
+                                          </div>
+                                        </Col>
+                                        <Col lg="6">
+                                          <div className="p3">
+                                            <h2
+                                              className="text-xl"
+                                              style={{ color: "#6A489C" }}
+                                            >
+                                              {event?.jobFunction}
+                                            </h2>
+
+                                            <h2
+                                              className="text-lg"
+                                              style={{ color: "#7A7979" }}
+                                            >
+                                              {event?.startingDate +
+                                                " - " +
+                                                event?.endingDate}
+                                            </h2>
+                                          </div>
+                                        </Col>
+                                      </Row>
+
+                                      <h2
+                                        className="text-lg pt-2"
+                                        style={{ color: "#7A7979" }}
+                                      >
+                                        {event?.description}
+                                      </h2>
+                                    </div>
                                   </div>
                                 </Col>
-                                <Col lg="6">
-                                  <div className="p3">
-                                    <h2
-                                      className="text-xl"
-                                      style={{ color: "#6A489C" }}
-                                    >
-                                      {event?.jobFunction}
-                                    </h2>
-
-                                    <h2
-                                      className="text-lg"
-                                      style={{ color: "#7A7979" }}
-                                    >
-                                       {event?.startingDate + ' - ' + event?.endingDate}
-                                    </h2>
-                                  </div>
-                                </Col>
-                              </Row>
-
-                              <h2
-                                className="text-lg pt-2"
-                                style={{ color: "#7A7979" }}
-                              >
-                           {event?.description}
-                              </h2>
-                            </div>
-                          </div>
-                        </Col>
-                        <Col lg="4">
-                          <div className="p-3 webkit">
-                            <div className="inline-flex">
-                              <div className="w-10">
-                                <button
-                                  onClick={handleShow5}
-                                  className="text-white border-rounded"
-                                  style={{
-                                    background: "none",
-                                    border: "none",
-                                  }}
-                                >
-                                  <BiEdit
-                                    style={{
-                                      color: "#39BEC1",
-                                      fontSize: "30px",
-                                    }}
-                                  />
-                                </button>
-                                <Modal
-                                  show={show5}
-                                  onHide={handleClose5}
-                                  backdrop="static"
-                                  keyboard={false}
-                                >
-                                  <Modal.Header closeButton>
-                                    <Modal.Title style={{ color: "black" }}>
-                                      Edit Experience
-                                    </Modal.Title>
-                                  </Modal.Header>
-                                  <Modal.Body>
-                                    <Row>
-                                      <div className="p-3">
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
+                                <Col lg="4">
+                                  <div className="p-3 webkit">
+                                    <div className="inline-flex">
+                                      <div className="w-10">
+                                        <button
+                                          onClick={handleShow5}
+                                          className="text-white border-rounded"
+                                          style={{
+                                            background: "none",
+                                            border: "none",
+                                          }}
+                                        >
+                                          <BiEdit
+                                            style={{
+                                              color: "#39BEC1",
+                                              fontSize: "30px",
+                                            }}
+                                          />
+                                        </button>
+                                        <Modal
+                                          show={show5}
+                                          onHide={handleClose5}
+                                          backdrop="static"
+                                          keyboard={false}
+                                        >
+                                          <Modal.Header closeButton>
+                                            <Modal.Title
+                                              style={{ color: "black" }}
                                             >
-                                              Profession
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="fname"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="Gia 
+                                              Edit Experience
+                                            </Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            <Row>
+                                              <div className="p-3">
+                                                <Col lg="12">
+                                                  <fieldset>
+                                                    <label
+                                                      className="text-lg"
+                                                      style={{ width: "100%" }}
+                                                    >
+                                                      Profession
+                                                    </label>
+                                                    <input
+                                                      style={{ width: "100%" }}
+                                                      className="form-control"
+                                                      name="fname"
+                                                      type={"text"}
+                                                      //   value={user.number}
+                                                      //   onChange={getUserData}
+                                                      placeholder="Gia 
 
                 "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Company Name
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="lname"
-                                              type={"number"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="Jay 
+                                                    />
+                                                  </fieldset>
+                                                </Col>
+                                                <Col lg="12">
+                                                  <fieldset>
+                                                    <label
+                                                      className="text-lg"
+                                                      style={{ width: "100%" }}
+                                                    >
+                                                      Company Name
+                                                    </label>
+                                                    <input
+                                                      style={{ width: "100%" }}
+                                                      className="form-control"
+                                                      name="lname"
+                                                      type={"number"}
+                                                      //   value={user.number}
+                                                      //   onChange={getUserData}
+                                                      placeholder="Jay 
 
                 "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Job Industry
-                                            </label>
-                                            <Form.Select aria-label="Default select example">
-                                              <option hidden="">
-                                                Job Industry
-                                              </option>
-                                              <option>
-                                                Universities / Education
-                                              </option>
-                                              <option>Manufacturing</option>
-                                              <option>Security</option>
-                                              <option>Real Estate</option>
-                                              <option>
-                                                Professional Consultings (Legal,
-                                                HR, Finance etc.)
-                                              </option>
-                                              <option>
-                                                Banking and Finance
-                                              </option>
-                                              <option>
-                                                Beauty Care and Health / Welness
-                                                / Fitness
-                                              </option>
-                                              <option>
-                                                Government / Public Utilities
-                                              </option>
-                                              <option>
-                                                Hospitality / Travel / Airlines
-                                                / Clubhouse
-                                              </option>
-                                              <option>
-                                                IT / R&amp;D / Cyber Security /
-                                                Telecommunication / Science
-                                              </option>
-                                              <option>Retail</option>
-                                              <option>Insurance</option>
-                                              <option>
-                                                Logistics / Transportaton /
-                                                Supply Chain
-                                              </option>
-                                              <option>
-                                                F&amp;B / Wine &amp; Spriits
-                                              </option>
-                                              <option>
-                                                Logistics / Transportaton /
-                                                Supply Chain
-                                              </option>
-                                              <option>
-                                                Medical / Pharmacy / Hospital
-                                              </option>
-                                              <option>Engineerings</option>
-                                              <option>Others</option>
-                                            </Form.Select>
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Job Function
-                                            </label>
-                                            <Form.Select aria-label="Default select example">
-                                              <option hidden="">
-                                                Job Function
-                                              </option>
-                                              <option>HR &amp; Admin</option>
-                                              <option>
-                                                General Management
-                                              </option>
-                                              <option>
-                                                Finance and Accounting
-                                              </option>
-                                              <option>
-                                                Sales and Marketing
-                                              </option>
-                                              <option>
-                                                Banking and Financial Institue
-                                                Professionals
-                                              </option>
-                                              <option>
-                                                Insurance Professionals
-                                                (back-end functions)
-                                              </option>
-                                              <option>
-                                                IT Professionals (Specific
-                                                Fields)
-                                              </option>
-                                              <option>Manufacturing</option>
-                                              <option>
-                                                Real Estate (Surveyers /
-                                                reasearchers etc.)
-                                              </option>
-                                              <option>
-                                                Finance and Accounting
-                                              </option>
-                                              <option>
-                                                Professional Designers
-                                              </option>
-                                              <option>
-                                                Lecturers / Teachers
-                                              </option>
-                                              <option>
-                                                Engineering / Architect
-                                              </option>
-                                              <option>Others</option>
-                                            </Form.Select>
-                                          </fieldset>
-                                        </Col>
-                                        <Row>
-                                          <Col lg="12" className="pt-3">
-                                            <span
+                                                    />
+                                                  </fieldset>
+                                                </Col>
+                                                <Col lg="12">
+                                                  <fieldset>
+                                                    <label
+                                                      className="text-lg"
+                                                      style={{ width: "100%" }}
+                                                    >
+                                                      Job Industry
+                                                    </label>
+                                                    <Form.Select aria-label="Default select example">
+                                                      <option hidden="">
+                                                        Job Industry
+                                                      </option>
+                                                      <option>
+                                                        Universities / Education
+                                                      </option>
+                                                      <option>
+                                                        Manufacturing
+                                                      </option>
+                                                      <option>Security</option>
+                                                      <option>
+                                                        Real Estate
+                                                      </option>
+                                                      <option>
+                                                        Professional Consultings
+                                                        (Legal, HR, Finance
+                                                        etc.)
+                                                      </option>
+                                                      <option>
+                                                        Banking and Finance
+                                                      </option>
+                                                      <option>
+                                                        Beauty Care and Health /
+                                                        Welness / Fitness
+                                                      </option>
+                                                      <option>
+                                                        Government / Public
+                                                        Utilities
+                                                      </option>
+                                                      <option>
+                                                        Hospitality / Travel /
+                                                        Airlines / Clubhouse
+                                                      </option>
+                                                      <option>
+                                                        IT / R&amp;D / Cyber
+                                                        Security /
+                                                        Telecommunication /
+                                                        Science
+                                                      </option>
+                                                      <option>Retail</option>
+                                                      <option>Insurance</option>
+                                                      <option>
+                                                        Logistics /
+                                                        Transportaton / Supply
+                                                        Chain
+                                                      </option>
+                                                      <option>
+                                                        F&amp;B / Wine &amp;
+                                                        Spriits
+                                                      </option>
+                                                      <option>
+                                                        Logistics /
+                                                        Transportaton / Supply
+                                                        Chain
+                                                      </option>
+                                                      <option>
+                                                        Medical / Pharmacy /
+                                                        Hospital
+                                                      </option>
+                                                      <option>
+                                                        Engineerings
+                                                      </option>
+                                                      <option>Others</option>
+                                                    </Form.Select>
+                                                  </fieldset>
+                                                </Col>
+                                                <Col lg="12">
+                                                  <fieldset>
+                                                    <label
+                                                      className="text-lg"
+                                                      style={{ width: "100%" }}
+                                                    >
+                                                      Job Function
+                                                    </label>
+                                                    <Form.Select aria-label="Default select example">
+                                                      <option hidden="">
+                                                        Job Function
+                                                      </option>
+                                                      <option>
+                                                        HR &amp; Admin
+                                                      </option>
+                                                      <option>
+                                                        General Management
+                                                      </option>
+                                                      <option>
+                                                        Finance and Accounting
+                                                      </option>
+                                                      <option>
+                                                        Sales and Marketing
+                                                      </option>
+                                                      <option>
+                                                        Banking and Financial
+                                                        Institue Professionals
+                                                      </option>
+                                                      <option>
+                                                        Insurance Professionals
+                                                        (back-end functions)
+                                                      </option>
+                                                      <option>
+                                                        IT Professionals
+                                                        (Specific Fields)
+                                                      </option>
+                                                      <option>
+                                                        Manufacturing
+                                                      </option>
+                                                      <option>
+                                                        Real Estate (Surveyers /
+                                                        reasearchers etc.)
+                                                      </option>
+                                                      <option>
+                                                        Finance and Accounting
+                                                      </option>
+                                                      <option>
+                                                        Professional Designers
+                                                      </option>
+                                                      <option>
+                                                        Lecturers / Teachers
+                                                      </option>
+                                                      <option>
+                                                        Engineering / Architect
+                                                      </option>
+                                                      <option>Others</option>
+                                                    </Form.Select>
+                                                  </fieldset>
+                                                </Col>
+                                                <Row>
+                                                  <Col lg="12" className="pt-3">
+                                                    <span
+                                                      style={{
+                                                        display: "inline-flex",
+                                                        color: "#7A7979",
+                                                      }}
+                                                    >
+                                                      <FormCheck
+                                                        id="check"
+                                                        color="blue"
+                                                      />
+                                                      &#160;&#160;I am currently
+                                                      working in this role
+                                                    </span>
+                                                  </Col>
+                                                  <Col lg="6">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Start Date
+                                                      </label>
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        name="email"
+                                                        type={"date"}
+                                                        //   value={user.number}
+                                                        //   onChange={getUserData}
+                                                        placeholder="A Service Like No Other
+                "
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="6">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        End Date
+                                                      </label>
+
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        type={"date"}
+                                                        name="firstname"
+                                                        //   value={user.name}
+                                                        //   onChange={getUserData}
+                                                        placeholder="Gia (PVT) LTD
+
+                "
+                                                        required
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Description
+                                                      </label>
+
+                                                      <textarea
+                                                        placeholder="Description"
+                                                        className="form-control"
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                </Row>
+                                              </div>
+                                            </Row>
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button
+                                              variant="secondary"
+                                              onClick={handleClose5}
                                               style={{
-                                                display: "inline-flex",
-                                                color: "#7A7979",
+                                                background: "none",
+                                                color: "#C1C1C1",
                                               }}
                                             >
-                                              <FormCheck
-                                                id="check"
-                                                color="blue"
-                                              />
-                                              &#160;&#160;I am currently working
-                                              in this role
-                                            </span>
-                                          </Col>
-                                          <Col lg="6">
-                                            <fieldset>
-                                              <label
-                                                className="text-lg"
-                                                style={{ width: "100%" }}
-                                              >
-                                                Start Date
-                                              </label>
-                                              <input
-                                                style={{ width: "100%" }}
-                                                className="form-control"
-                                                name="email"
-                                                type={"date"}
-                                                //   value={user.number}
-                                                //   onChange={getUserData}
-                                                placeholder="A Service Like No Other
-                "
-                                              />
-                                            </fieldset>
-                                          </Col>
-                                          <Col lg="6">
-                                            <fieldset>
-                                              <label
-                                                className="text-lg"
-                                                style={{ width: "100%" }}
-                                              >
-                                                End Date
-                                              </label>
-
-                                              <input
-                                                style={{ width: "100%" }}
-                                                className="form-control"
-                                                type={"date"}
-                                                name="firstname"
-                                                //   value={user.name}
-                                                //   onChange={getUserData}
-                                                placeholder="Gia (PVT) LTD
-
-                "
-                                                required
-                                              />
-                                            </fieldset>
-                                          </Col>
-                                          <Col lg="12">
-                                            <fieldset>
-                                              <label
-                                                className="text-lg"
-                                                style={{ width: "100%" }}
-                                              >
-                                                Description
-                                              </label>
-
-                                              <textarea
-                                                placeholder="Description"
-                                                className="form-control"
-                                              />
-                                            </fieldset>
-                                          </Col>
-                                        </Row>
+                                              Cancel
+                                            </Button>
+                                            <Button
+                                              onClick={ProfileExp}
+                                              variant="primary"
+                                              style={{
+                                                background: "none",
+                                                color: "#39BEC1",
+                                              }}
+                                            >
+                                              Save
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
                                       </div>
-                                    </Row>
-                                  </Modal.Body>
-                                  <Modal.Footer>
-                                    <Button
-                                      variant="secondary"
-                                      onClick={handleClose5}
-                                      style={{
-                                        background: "none",
-                                        color: "#C1C1C1",
-                                      }}
-                                    >
-                                      Cancel
-                                    </Button>
-                                    <Button
-                                      onClick={ProfileExp}
-                                      variant="primary"
-                                      style={{
-                                        background: "none",
-                                        color: "#39BEC1",
-                                      }}
-                                    >
-                                      Save
-                                    </Button>
-                                  </Modal.Footer>
-                                </Modal>
-                              </div>
-                              <div className="w-10">
-                                <ImBin
-                                  style={{
-                                    color: "#39BEC1",
-                                    fontSize: "30px",
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </Col>
-                       
-                            </>
-                          )
-                        })}
+                                      <div className="w-10">
+                                        <ImBin
+                                          style={{
+                                            color: "#39BEC1",
+                                            fontSize: "30px",
+                                          }}
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Col>
+                              </>
+                            );
+                          })}
                         {/* <hr className="my-2" />
                         <Row>
                           <Col lg="8" style={{ display: "flex" }}>
@@ -1937,27 +2017,30 @@ export const FreelanceProfileView = () => {
                                       className="text-lg"
                                       style={{ color: "#7A7979" }}
                                     >
-                                      {event.startingDate + ' - ' + event.endingDate}
+                                      {event.startingDate +
+                                        " - " +
+                                        event.endingDate}
                                     </h2>
                                   </div>
                                 </Col>
                                 <Col lg="3">
-                                  {event?.certificate ? 
-                                <div className="p-3 webkit">
-                                <Link to={`${event.certificate}`}>
-                                <Button
-                                  className="text-white border-rounded px-3 py-2"
-                                  style={{
-                                    background: "#39BEC1",
-                                    border: "none",
-                                  }}
-                                >
-                                  see certificate
-                                </Button>
-                                </Link>
-                              </div> : ''  
-                                }
-                                  
+                                  {event?.certificate ? (
+                                    <div className="p-3 webkit">
+                                      <Link to={`${event.certificate}`}>
+                                        <Button
+                                          className="text-white border-rounded px-3 py-2"
+                                          style={{
+                                            background: "#39BEC1",
+                                            border: "none",
+                                          }}
+                                        >
+                                          see certificate
+                                        </Button>
+                                      </Link>
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
                                 </Col>
                                 <Col lg="3">
                                   <div className="p-3 webkit">
@@ -2684,151 +2767,161 @@ export const FreelanceProfileView = () => {
                   <Row className="align-items-center row">
                     <Col>
                       <Row className="align-items-center">
-                {isAchievementData.length > 0 && isAchievementData.map((event, index) => {
-                  return (
-                  <> 
-                   <Col lg="6">
-                          <div className="p3">
-                            <h2 className="text-xl font-semibold">{event?.title}</h2>
+                        {isAchievementData.length > 0 &&
+                          isAchievementData.map((event, index) => {
+                            return (
+                              <>
+                                <Col lg="6">
+                                  <div className="p3">
+                                    <h2 className="text-xl font-semibold">
+                                      {event?.title}
+                                    </h2>
 
-                            <p className="text-lg" style={{ color: "#7A7979" }}>
-                             {event?.description}
-                            </p>
-                          </div>
-                        </Col>
-                        <Col lg="3">
-                          <div className="p-3 webkit">
-                            <Button
-                              className="text-white border-rounded px-3 py-2"
-                              style={{ background: "#39BEC1", border: "none" }}
-                            >
-                              see certificate
-                            </Button>
-                          </div>
-                        </Col>
-                        <Col lg="3">
-                          <div className="p-3 webkit">
-                            <div className="inline-flex">
-                              <div className="w-10">
-                                <button
-                                  onClick={handleShow7}
-                                  className="text-white border-rounded"
-                                  style={{
-                                    background: "none",
-                                    border: "none",
-                                  }}
-                                >
-                                  <BiEdit
-                                    style={{
-                                      color: "#39BEC1",
-                                      fontSize: "30px",
-                                    }}
-                                  />
-                                </button>
-                                <Modal
-                                  show={show7}
-                                  onHide={handleClose7}
-                                  backdrop="static"
-                                  keyboard={false}
-                                >
-                                  <Modal.Header closeButton>
-                                    <Modal.Title style={{ color: "black" }}>
-                                      Edit Achievements
-                                    </Modal.Title>
-                                  </Modal.Header>
-                                  <Modal.Body>
-                                    <Row>
-                                      <div className="p-3">
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
+                                    <p
+                                      className="text-lg"
+                                      style={{ color: "#7A7979" }}
+                                    >
+                                      {event?.description}
+                                    </p>
+                                  </div>
+                                </Col>
+                                <Col lg="3">
+                                  <div className="p-3 webkit">
+                                    <Button
+                                      className="text-white border-rounded px-3 py-2"
+                                      style={{
+                                        background: "#39BEC1",
+                                        border: "none",
+                                      }}
+                                    >
+                                      see certificate
+                                    </Button>
+                                  </div>
+                                </Col>
+                                <Col lg="3">
+                                  <div className="p-3 webkit">
+                                    <div className="inline-flex">
+                                      <div className="w-10">
+                                        <button
+                                          onClick={handleShow7}
+                                          className="text-white border-rounded"
+                                          style={{
+                                            background: "none",
+                                            border: "none",
+                                          }}
+                                        >
+                                          <BiEdit
+                                            style={{
+                                              color: "#39BEC1",
+                                              fontSize: "30px",
+                                            }}
+                                          />
+                                        </button>
+                                        <Modal
+                                          show={show7}
+                                          onHide={handleClose7}
+                                          backdrop="static"
+                                          keyboard={false}
+                                        >
+                                          <Modal.Header closeButton>
+                                            <Modal.Title
+                                              style={{ color: "black" }}
                                             >
-                                              Title
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="fname"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="Gia"
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
+                                              Edit Achievements
+                                            </Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            <Row>
+                                              <div className="p-3">
+                                                <Col lg="12">
+                                                  <fieldset>
+                                                    <label
+                                                      className="text-lg"
+                                                      style={{ width: "100%" }}
+                                                    >
+                                                      Title
+                                                    </label>
+                                                    <input
+                                                      style={{ width: "100%" }}
+                                                      className="form-control"
+                                                      name="fname"
+                                                      type={"text"}
+                                                      //   value={user.number}
+                                                      //   onChange={getUserData}
+                                                      placeholder="Gia"
+                                                    />
+                                                  </fieldset>
+                                                </Col>
+                                                <Col lg="12">
+                                                  <fieldset>
+                                                    <label
+                                                      className="text-lg"
+                                                      style={{ width: "100%" }}
+                                                    >
+                                                      Description
+                                                    </label>
+                                                    <textarea
+                                                      placeholder="Description"
+                                                      className="form-control"
+                                                    />
+                                                  </fieldset>
+                                                </Col>
+                                                <Col lg="12">
+                                                  <fieldset>
+                                                    <label
+                                                      className="text-lg"
+                                                      style={{ width: "100%" }}
+                                                    >
+                                                      Upload Certification
+                                                    </label>
+                                                    <input
+                                                      type="file"
+                                                      class="form-control"
+                                                      id="customFile"
+                                                    />
+                                                  </fieldset>
+                                                </Col>
+                                              </div>
+                                            </Row>
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button
+                                              variant="secondary"
+                                              onClick={handleClose7}
+                                              style={{
+                                                background: "none",
+                                                color: "#C1C1C1",
+                                              }}
                                             >
-                                              Description
-                                            </label>
-                                            <textarea
-                                              placeholder="Description"
-                                              className="form-control"
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
+                                              Cancel
+                                            </Button>
+                                            <Button
+                                              variant="primary"
+                                              style={{
+                                                background: "none",
+                                                color: "#39BEC1",
+                                              }}
                                             >
-                                              Upload Certification
-                                            </label>
-                                            <input
-                                              type="file"
-                                              class="form-control"
-                                              id="customFile"
-                                            />
-                                          </fieldset>
-                                        </Col>
+                                              Save
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
                                       </div>
-                                    </Row>
-                                  </Modal.Body>
-                                  <Modal.Footer>
-                                    <Button
-                                      variant="secondary"
-                                      onClick={handleClose7}
-                                      style={{
-                                        background: "none",
-                                        color: "#C1C1C1",
-                                      }}
-                                    >
-                                      Cancel
-                                    </Button>
-                                    <Button
-                                      variant="primary"
-                                      style={{
-                                        background: "none",
-                                        color: "#39BEC1",
-                                      }}
-                                    >
-                                      Save
-                                    </Button>
-                                  </Modal.Footer>
-                                </Modal>
-                              </div>
-                              <div className="w-10">
-                                <ImBin
-                                  style={{
-                                    color: "#39BEC1",
-                                    fontSize: "30px",
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </Col>
-                  </> 
-                  )
-                })}
-               
-                       
+                                      <div className="w-10">
+                                        <ImBin
+                                          style={{
+                                            color: "#39BEC1",
+                                            fontSize: "30px",
+                                          }}
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                </Col>
+                              </>
+                            );
+                          })}
+
                         {/* <hr className="my-2" /> */}
                         {/* <Col lg="6">
                           <div className="p3">
