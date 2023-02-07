@@ -70,22 +70,28 @@ export const FreelanceProfileView = () => {
   const [isCheckBox, setIsCheckBox] = useState("false");
   const [profileData, setProfileData] = useState({});
   const [profileExp, setProfileExp] = useState({});
+  const [editProfileExp, setEditProfileExp] = useState({})
   const [isEducation, setIsEducation] = useState({});
   const [isAchievement, setIsAchievement] = useState({});
   const [isLanguage, setIsLanguage] = useState({});
   const [isEducationData, setIsEducationData] = useState({});
   const [isAchievementData, setIsAchievementData] = useState({});
   const [isExperienceData, setIsExperienceData] = useState({});
+  const [isLanguageData, setIsLanguageData] = useState({});
+  
 
   console.log(isExperienceData, "isExperienceData");
+  console.log(profileExp, "profileExp");
+
 
   useEffect(() => {
     let id = localStorage.getItem("id");
     setUserId(id);
     initialFun(id);
-    ProfileExpData(id);
+    ProfileExpData();
     educationData();
     achievementData();
+    LanguageData();
     setProfileData({ ...profileData, uid: id });
     setProfileExp({ ...profileExp, uid: id });
     setIsEducation({ ...isEducation, uid: id });
@@ -123,13 +129,25 @@ export const FreelanceProfileView = () => {
       .post(`http://localhost:3000/v1/freelancerExp`, profileExp)
       .then((res) => {
         console.log(res, "profile data successfully added");
-        setProfileExp(res.data, "ProfileExp");
+        // setProfileExp(res.data, "ProfileExp");
         ProfileExpData();
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  const updateProfileExp = () => {
+    axios
+    .patch(`http://localhost:3000/v1/freelancerExp`, profileExp)
+    .then((res) => {
+      console.log(res, "profile data successfully added");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+  
 
   const ProfileExpData = (id) => {
     axios
@@ -223,7 +241,20 @@ export const FreelanceProfileView = () => {
       });
   };
 
+  const LanguageData = () => {
+    axios
+      .get(`http://localhost:3000/v1/language/`)
+      .then((res) => {
+        let data = Object.values(res.data.data);
+        setIsLanguageData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   const FileUploadComponent = () => {
+    alert('clicked')
     const fileParams = ({ meta }) => {
       return { url: "https://httpbin.org/post" };
     };
@@ -266,7 +297,7 @@ export const FreelanceProfileView = () => {
         InputComponent={selectFileInput}
         getUploadParams={fileParams}
         getFilesFromEvent={getFilesFromEvent}
-        accept="image/*,audio/*,video/*"
+        accept="image/*"
         maxFiles={1}
         inputContent="Drop A File"
       />
@@ -298,12 +329,19 @@ export const FreelanceProfileView = () => {
               <div className="boxshad py-5">
                 <Row className="align-items-center">
                   <Col lg="2" className="webkit">
-                    <FileUploadComponent />
+                    <button>
+                      {/* <FileUploadComponent /> */}
+                      <Image
+                        onClick={FileUploadComponent}
+                        style={{ width: "100%" }}
+                        src={require("../../../assets/Profile.png")}
+                      />
+                    </button>
                   </Col>
                   <Col lg="4">
                     <h2 className="text-3xl py-3 robot">
-                      {profileData?.firstName + " " + profileData?.lastName ||
-                        "Ella jay"}{" "}
+                      {profileData?.firstName && profileData?.lastName ? profileData?.firstName + " " + profileData?.lastName :
+                        "Ella jay"}
                       <br />
                       <span className="text-xl" style={{ color: "#6A489C" }}>
                         Web Developer
@@ -343,7 +381,7 @@ export const FreelanceProfileView = () => {
                               fontWeight: "bolder",
                             }}
                           />
-                          Nugegoda, Sri Lanka
+                          {profileData?.city && profileData?.countryTimeZone ? profileData?.city+','+profileData?.countryTimeZone : 'Nugegada, Srilanka'}
                         </li>
                       </ul>
                     </div>
@@ -362,7 +400,7 @@ export const FreelanceProfileView = () => {
                       /> */}
 
                       <h2 style={{ color: "#7A7979" }} className="text-xl">
-                        HKD $50000 - $100000
+                        HKD ${profileData?.min} - ${profileData?.max}
                       </h2>
                     </div>
                   </Col>
@@ -458,8 +496,8 @@ export const FreelanceProfileView = () => {
                                 type={"text"}
                                 value={
                                   profileData?.firstName +
-                                    " " +
-                                    profileData?.lastName || ""
+                                  " " +
+                                  profileData?.lastName || ""
                                 }
                                 onChange={(e) =>
                                   setProfileData({
@@ -864,8 +902,8 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
                           {profileData?.fullName ||
                             profileData?.firstName +
-                              " " +
-                              profileData.lastName ||
+                            " " +
+                            profileData.lastName ||
                             "Ella Jay"}
                         </h2>
                       </div>
@@ -1291,7 +1329,7 @@ export const FreelanceProfileView = () => {
                           isExperienceData.map((event, index) => {
                             return (
                               <>
-                                <Col lg="8" style={{ display: "flex" }}>
+                                <Col lg="8" style={{ display: "flex" }} key={index}>
                                   <div className="MuiTimelineSeparator-root css-11tgw8h">
                                     <span className="MuiTimelineDot-root MuiTimelineDot-filled MuiTimelineDot-filledGrey timeline-dot css-a7d0u7"></span>
                                     <span className="MuiTimelineConnector-root css-idv8vo"></span>
@@ -1391,11 +1429,10 @@ export const FreelanceProfileView = () => {
                                                       className="form-control"
                                                       name="fname"
                                                       type={"text"}
+                                                      placeholder={event?.profession}
+                                                      onChange={(e) => setProfileExp({...profileData, profession : e.target.value})}
                                                       //   value={user.number}
                                                       //   onChange={getUserData}
-                                                      placeholder="Gia 
-
-                "
                                                     />
                                                   </fieldset>
                                                 </Col>
@@ -1411,12 +1448,9 @@ export const FreelanceProfileView = () => {
                                                       style={{ width: "100%" }}
                                                       className="form-control"
                                                       name="lname"
-                                                      type={"number"}
-                                                      //   value={user.number}
+                                                        value={event?.companyName}
+                                                        onChange={(e) => setProfileExp({...profileData, companyName : e.target.value})}
                                                       //   onChange={getUserData}
-                                                      placeholder="Jay 
-
-                "
                                                     />
                                                   </fieldset>
                                                 </Col>
@@ -1428,7 +1462,10 @@ export const FreelanceProfileView = () => {
                                                     >
                                                       Job Industry
                                                     </label>
-                                                    <Form.Select aria-label="Default select example">
+                                                    <Form.Select aria-label="Default select example"
+                                                    value={event?.jobIndustry}
+                                                    onChange={(e) => setProfileExp({...profileData, jobIndustry : e.target.value})}
+                                                    >
                                                       <option hidden="">
                                                         Job Industry
                                                       </option>
@@ -1503,7 +1540,10 @@ export const FreelanceProfileView = () => {
                                                     >
                                                       Job Function
                                                     </label>
-                                                    <Form.Select aria-label="Default select example">
+                                                    <Form.Select aria-label="Default select example"
+                                                    value={event?.jobFunction}
+                                                    onChange={(e) => setProfileExp({...profileData, jobFunction : e.target.value})}
+                                                    >
                                                       <option hidden="">
                                                         Job Function
                                                       </option>
@@ -1565,6 +1605,8 @@ export const FreelanceProfileView = () => {
                                                       <FormCheck
                                                         id="check"
                                                         color="blue"
+                                                        onChange={checkBoxHandleChange}
+                                                        checked={event?.currentlyWorking === 'on' ? true : false }
                                                       />
                                                       &#160;&#160;I am currently
                                                       working in this role
@@ -1584,9 +1626,11 @@ export const FreelanceProfileView = () => {
                                                         style={{
                                                           width: "100%",
                                                         }}
+                                                        value={event?.startDate}
                                                         className="form-control"
                                                         name="email"
                                                         type={"date"}
+                                                        onChange={(e) => setProfileExp({...profileData, startDate : e.target.value})}
                                                         //   value={user.number}
                                                         //   onChange={getUserData}
                                                         placeholder="A Service Like No Other
@@ -1612,6 +1656,8 @@ export const FreelanceProfileView = () => {
                                                         className="form-control"
                                                         type={"date"}
                                                         name="firstname"
+                                                        value={event?.endDate}
+                                                        onChange={(e) => setProfileExp({...profileData, endDate : e.target.value})}
                                                         //   value={user.name}
                                                         //   onChange={getUserData}
                                                         placeholder="Gia (PVT) LTD
@@ -1635,6 +1681,8 @@ export const FreelanceProfileView = () => {
                                                       <textarea
                                                         placeholder="Description"
                                                         className="form-control"
+                                                        value={event?.description}
+                                                        onChange={(e) => setProfileExp({...profileData, description : e.target.value})}
                                                       />
                                                     </fieldset>
                                                   </Col>
@@ -1654,7 +1702,7 @@ export const FreelanceProfileView = () => {
                                               Cancel
                                             </Button>
                                             <Button
-                                              onClick={ProfileExp}
+                                              onClick={updateProfileExp}
                                               variant="primary"
                                               style={{
                                                 background: "none",
@@ -1986,7 +2034,7 @@ export const FreelanceProfileView = () => {
                     // console.log(event, 'eveeeeeeent');
                     return (
                       <>
-                        <Container>
+                        <Container key={index}>
                           <Row className="align-items-center row">
                             <Col>
                               <Row className="align-items-center">
@@ -2771,7 +2819,7 @@ export const FreelanceProfileView = () => {
                           isAchievementData.map((event, index) => {
                             return (
                               <>
-                                <Col lg="6">
+                                <Col lg="6" key={index}>
                                   <div className="p3">
                                     <h2 className="text-xl font-semibold">
                                       {event?.title}
@@ -3106,8 +3154,8 @@ export const FreelanceProfileView = () => {
                                     gradingLevel: e.target.value,
                                   })
                                 }
-                                //   value={user.number}
-                                //   onChange={getUserData}
+                              //   value={user.number}
+                              //   onChange={getUserData}
                               />
                             </fieldset>
                           </Col>
@@ -3150,229 +3198,236 @@ export const FreelanceProfileView = () => {
                           </tr>
                         </thead>
                         <tbody className="webkit text-l">
-                          <tr>
-                            <td>Spanish</td>
-                            <td style={{ color: "#7A7979" }}>B2</td>
-                            <td style={{ color: "#7A7979" }}>70</td>
-                            <td>
-                              <div className="p-3 webkit">
-                                <div className="inline-flex">
-                                  <div className="w-10">
-                                    <button
-                                      onClick={handleShow8}
-                                      className="text-white border-rounded"
-                                      style={{
-                                        background: "none",
-                                        border: "none",
-                                      }}
-                                    >
-                                      <BiEdit
-                                        style={{
-                                          color: "#39BEC1",
-                                          fontSize: "30px",
-                                        }}
-                                      />
-                                    </button>
-                                    <Modal
-                                      show={show8}
-                                      onHide={handleClose8}
-                                      backdrop="static"
-                                      keyboard={false}
-                                    >
-                                      <Modal.Header closeButton>
-                                        <Modal.Title style={{ color: "black" }}>
-                                          Edit Languages
-                                        </Modal.Title>
-                                      </Modal.Header>
-                                      <Modal.Body>
-                                        <Row>
-                                          <div className="p-3">
-                                            <Col lg="12">
-                                              <fieldset>
-                                                <label
-                                                  className="text-lg"
-                                                  style={{ width: "100%" }}
-                                                >
-                                                  Language Type
-                                                </label>
-                                                <Form.Select aria-label="Default select example">
-                                                  <option hidden="">
-                                                    Language Type
-                                                  </option>
-                                                  <option value="English">
-                                                    English
-                                                  </option>
-                                                  <option value="Arabic">
-                                                    Arabic
-                                                  </option>
-                                                  <option value="Spanish">
-                                                    Spanish
-                                                  </option>
-                                                  <option value="Hindi">
-                                                    Hindi
-                                                  </option>
-                                                  <option value="Cantonese">
-                                                    Cantonese
-                                                  </option>
-                                                  <option value="French">
-                                                    French
-                                                  </option>
-                                                  <option value="German">
-                                                    German
-                                                  </option>
-                                                  <option value="Italian">
-                                                    Italian
-                                                  </option>
-                                                  <option value="Japanese">
-                                                    Japanese
-                                                  </option>
-                                                  <option value="Korean">
-                                                    Korean
-                                                  </option>
-                                                  <option value="Mandarin">
-                                                    Mandarin
-                                                  </option>
-                                                  <option value="Bengali">
-                                                    Bengali
-                                                  </option>
-                                                  <option value="Burmese">
-                                                    Burmese
-                                                  </option>
-                                                  <option value="Czech">
-                                                    Czech
-                                                  </option>
-                                                  <option value="Dutch">
-                                                    Dutch
-                                                  </option>
-                                                  <option value="Greek">
-                                                    Greek
-                                                  </option>
-                                                  <option value="Hakka">
-                                                    Hakka
-                                                  </option>
-                                                  <option value="Hungarian">
-                                                    Hungarian
-                                                  </option>
-                                                  <option value="Hunnanese">
-                                                    Hunnanese
-                                                  </option>
-                                                  <option value="Malay/Indonesian">
-                                                    Malay/Indonesian
-                                                  </option>
-                                                  <option value="Nepali">
-                                                    Nepali
-                                                  </option>
-                                                  <option value="Portuguese">
-                                                    Portuguese
-                                                  </option>
-                                                  <option value="Russian">
-                                                    Russian
-                                                  </option>
-                                                  <option value="Shanghainese">
-                                                    Shanghainese
-                                                  </option>
-                                                  <option value="Swedish">
-                                                    Swedish
-                                                  </option>
-                                                  <option value="Tagalog">
-                                                    Tagalog
-                                                  </option>
-                                                  <option value="Telugu">
-                                                    Telugu
-                                                  </option>
-                                                  <option value="Thai">
-                                                    Thai
-                                                  </option>
-                                                  <option value="Turkish">
-                                                    Turkish
-                                                  </option>
-                                                  <option value="Vietnamese">
-                                                    Vietnamese
-                                                  </option>
-                                                  <option value="Others">
-                                                    Others
-                                                  </option>
-                                                </Form.Select>
-                                              </fieldset>
-                                            </Col>
-                                            <Col lg="12">
-                                              <fieldset>
-                                                <label
-                                                  className="text-lg"
-                                                  style={{ width: "100%" }}
-                                                >
-                                                  Exam Level
-                                                </label>
-                                                <input
-                                                  style={{ width: "100%" }}
-                                                  className="form-control"
-                                                  name="lname"
-                                                  type={"text"}
-                                                  //   value={user.number}
-                                                  //   onChange={getUserData}
-                                                  placeholder="Jay 
+                          {isLanguageData.length > 0 && isLanguageData.map((event, index) => {
+                            return (
+                              <>
+                                <tr key={index}>
+                                  <td>{event?.languageType}</td>
+                                  <td style={{ color: "#7A7979" }}>{event?.examLevel}</td>
+                                  <td style={{ color: "#7A7979" }}>{event?.gradingLevel}</td>
+                                  <td>
+                                    <div className="p-3 webkit">
+                                      <div className="inline-flex">
+                                        <div className="w-10">
+                                          <button
+                                            onClick={handleShow8}
+                                            className="text-white border-rounded"
+                                            style={{
+                                              background: "none",
+                                              border: "none",
+                                            }}
+                                          >
+                                            <BiEdit
+                                              style={{
+                                                color: "#39BEC1",
+                                                fontSize: "30px",
+                                              }}
+                                            />
+                                          </button>
+                                          <Modal
+                                            show={show8}
+                                            onHide={handleClose8}
+                                            backdrop="static"
+                                            keyboard={false}
+                                          >
+                                            <Modal.Header closeButton>
+                                              <Modal.Title style={{ color: "black" }}>
+                                                Edit Languages
+                                              </Modal.Title>
+                                            </Modal.Header>
+                                            <Modal.Body>
+                                              <Row>
+                                                <div className="p-3">
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{ width: "100%" }}
+                                                      >
+                                                        Language Type
+                                                      </label>
+                                                      <Form.Select aria-label="Default select example">
+                                                        <option hidden="">
+                                                          Language Type
+                                                        </option>
+                                                        <option value="English">
+                                                          English
+                                                        </option>
+                                                        <option value="Arabic">
+                                                          Arabic
+                                                        </option>
+                                                        <option value="Spanish">
+                                                          Spanish
+                                                        </option>
+                                                        <option value="Hindi">
+                                                          Hindi
+                                                        </option>
+                                                        <option value="Cantonese">
+                                                          Cantonese
+                                                        </option>
+                                                        <option value="French">
+                                                          French
+                                                        </option>
+                                                        <option value="German">
+                                                          German
+                                                        </option>
+                                                        <option value="Italian">
+                                                          Italian
+                                                        </option>
+                                                        <option value="Japanese">
+                                                          Japanese
+                                                        </option>
+                                                        <option value="Korean">
+                                                          Korean
+                                                        </option>
+                                                        <option value="Mandarin">
+                                                          Mandarin
+                                                        </option>
+                                                        <option value="Bengali">
+                                                          Bengali
+                                                        </option>
+                                                        <option value="Burmese">
+                                                          Burmese
+                                                        </option>
+                                                        <option value="Czech">
+                                                          Czech
+                                                        </option>
+                                                        <option value="Dutch">
+                                                          Dutch
+                                                        </option>
+                                                        <option value="Greek">
+                                                          Greek
+                                                        </option>
+                                                        <option value="Hakka">
+                                                          Hakka
+                                                        </option>
+                                                        <option value="Hungarian">
+                                                          Hungarian
+                                                        </option>
+                                                        <option value="Hunnanese">
+                                                          Hunnanese
+                                                        </option>
+                                                        <option value="Malay/Indonesian">
+                                                          Malay/Indonesian
+                                                        </option>
+                                                        <option value="Nepali">
+                                                          Nepali
+                                                        </option>
+                                                        <option value="Portuguese">
+                                                          Portuguese
+                                                        </option>
+                                                        <option value="Russian">
+                                                          Russian
+                                                        </option>
+                                                        <option value="Shanghainese">
+                                                          Shanghainese
+                                                        </option>
+                                                        <option value="Swedish">
+                                                          Swedish
+                                                        </option>
+                                                        <option value="Tagalog">
+                                                          Tagalog
+                                                        </option>
+                                                        <option value="Telugu">
+                                                          Telugu
+                                                        </option>
+                                                        <option value="Thai">
+                                                          Thai
+                                                        </option>
+                                                        <option value="Turkish">
+                                                          Turkish
+                                                        </option>
+                                                        <option value="Vietnamese">
+                                                          Vietnamese
+                                                        </option>
+                                                        <option value="Others">
+                                                          Others
+                                                        </option>
+                                                      </Form.Select>
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{ width: "100%" }}
+                                                      >
+                                                        Exam Level
+                                                      </label>
+                                                      <input
+                                                        style={{ width: "100%" }}
+                                                        className="form-control"
+                                                        name="lname"
+                                                        type={"text"}
+                                                        //   value={user.number}
+                                                        //   onChange={getUserData}
+                                                        placeholder="Jay 
 
                 "
-                                                />
-                                              </fieldset>
-                                            </Col>
-                                            <Col lg="12">
-                                              <fieldset>
-                                                <label
-                                                  className="text-lg"
-                                                  style={{ width: "100%" }}
-                                                >
-                                                  Grading Level
-                                                </label>
-                                                <input
-                                                  style={{ width: "100%" }}
-                                                  className="form-control"
-                                                  name="lname"
-                                                  type={"text"}
-                                                  //   value={user.number}
-                                                  //   onChange={getUserData}
-                                                />
-                                              </fieldset>
-                                            </Col>
-                                          </div>
-                                        </Row>
-                                      </Modal.Body>
-                                      <Modal.Footer>
-                                        <Button
-                                          variant="secondary"
-                                          onClick={handleClose8}
-                                          style={{
-                                            background: "none",
-                                            color: "#C1C1C1",
-                                          }}
-                                        >
-                                          Cancel
-                                        </Button>
-                                        <Button
-                                          variant="primary"
-                                          style={{
-                                            background: "none",
-                                            color: "#39BEC1",
-                                          }}
-                                        >
-                                          Save
-                                        </Button>
-                                      </Modal.Footer>
-                                    </Modal>
-                                  </div>
-                                  <div className="w-10">
-                                    <ImBin
-                                      style={{
-                                        color: "#39BEC1",
-                                        fontSize: "30px",
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </td>
-                          </tr>
-                          <tr>
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{ width: "100%" }}
+                                                      >
+                                                        Grading Level
+                                                      </label>
+                                                      <input
+                                                        style={{ width: "100%" }}
+                                                        className="form-control"
+                                                        name="lname"
+                                                        type={"text"}
+                                                      //   value={user.number}
+                                                      //   onChange={getUserData}
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                </div>
+                                              </Row>
+                                            </Modal.Body>
+                                            <Modal.Footer>
+                                              <Button
+                                                variant="secondary"
+                                                onClick={handleClose8}
+                                                style={{
+                                                  background: "none",
+                                                  color: "#C1C1C1",
+                                                }}
+                                              >
+                                                Cancel
+                                              </Button>
+                                              <Button
+                                                variant="primary"
+                                                style={{
+                                                  background: "none",
+                                                  color: "#39BEC1",
+                                                }}
+                                              >
+                                                Save
+                                              </Button>
+                                            </Modal.Footer>
+                                          </Modal>
+                                        </div>
+                                        <div className="w-10">
+                                          <ImBin
+                                            style={{
+                                              color: "#39BEC1",
+                                              fontSize: "30px",
+                                            }}
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </>
+                            )
+                          })}
+
+                          {/* <tr>
                             <td>Hindi</td>
                             <td style={{ color: "#7A7979" }}>fgfg</td>
                             <td style={{ color: "#7A7979" }}>65</td>
@@ -3426,7 +3481,7 @@ export const FreelanceProfileView = () => {
                                 </div>
                               </div>
                             </td>
-                          </tr>
+                          </tr> */}
                         </tbody>
                       </Table>
                     </Col>
