@@ -77,11 +77,15 @@ export const FreelanceProfileView = () => {
   const [isEducationData, setIsEducationData] = useState({});
   const [isAchievementData, setIsAchievementData] = useState({});
   const [isExperienceData, setIsExperienceData] = useState({});
+  const [isEditExperienceData, setEditIsExperienceData] = useState({});
+  const [isEditEducationData, setEditIsEducationeData] = useState({});
   const [isLanguageData, setIsLanguageData] = useState({});
+  const [isEditAchievementData, setIsEditAchievementData] = useState({})
+  const [isEditLanguageData, setIsEditLangugeData] = useState({})
 
-  console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
-  console.log(isEducationData, "isEducationData");
-  // console.log(profileExp, "profileExp");
+  // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
+  console.log(profileData, "profileData");
+  // console.log(isEditLanguageData, "isEditLanguageData");
 
   useEffect(() => {
     let id = localStorage.getItem("id");
@@ -98,6 +102,32 @@ export const FreelanceProfileView = () => {
     setIsLanguage({ ...isLanguage, uid: id });
   }, []);
 
+
+  useEffect(()=>{
+
+    isEducationData && isEducationData.length>0 && setEditIsEducationeData(isEducationData)
+
+  },[isEducationData])
+
+  useEffect(()=>{
+
+    isExperienceData && isExperienceData.length>0 && setEditIsExperienceData(isExperienceData)
+
+},[isExperienceData])
+
+useEffect(()=>{
+
+  isAchievementData && isAchievementData.length>0 && setIsEditAchievementData(isAchievementData)
+
+},[isAchievementData])
+
+
+useEffect(()=>{
+
+  isLanguageData && isLanguageData.length>0 && setIsEditLangugeData(isLanguageData)
+
+},[isLanguageData])
+
   const initialFun = (id) => {
     axios
       .get(`http://localhost:3000/v1/users/${id}`)
@@ -113,9 +143,14 @@ export const FreelanceProfileView = () => {
   };
 
   const profileFunc = () => {
+    let formdata = new FormData();
+  Object.entries(profileData).map(([key, value]) => {
+    formdata.append(key, value);
+  });
     axios
-      .patch(`http://localhost:3000/v1/users/${userId}`, profileData)
+      .patch(`http://localhost:3000/v1/users/${userId}`, formdata)
       .then((res) => {
+        console.log(formdata);
         console.log(res, "profile data successfully added");
       })
       .catch((err) => {
@@ -136,24 +171,33 @@ export const FreelanceProfileView = () => {
       });
   };
 
-  const updateProfileExp = (id) => {
+  const ProfileExpData = () => {
     axios
-      .put(`http://localhost:3000/v1/freelancerExp/${id}`, profileExp)
+      .get(`http://localhost:3000/v1/freelancerExp/`)
       .then((res) => {
-        console.log(res, "profile data successfully added");
+        console.log(res.data.data,"res")
+        // console.log(res, "ProfileExpData");
+        let data = Object.values(res.data.data);
+        
+        console.log(data,"dataaa")
+
+
+        setIsExperienceData(data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const ProfileExpData = () => {
+
+
+
+  const updateProfileExp = (id) => {
     axios
-      .get(`http://localhost:3000/v1/freelancerExp/`)
+      .put(`http://localhost:3000/v1/freelancerExp/${id}`, isEditExperienceData)
       .then((res) => {
-        // console.log(res, "ProfileExpData");
-        let data = Object.values(res.data.data);
-        setIsExperienceData(data);
+        // alert(isEditExperienceData.profession)
+        console.log(res, "profile edit data successfully added");
       })
       .catch((err) => {
         console.log(err);
@@ -201,6 +245,34 @@ export const FreelanceProfileView = () => {
       });
   };
 
+ const updateEducationData = (id) => {
+  if(!isEditEducationData.file) {
+  let formdata = new FormData();
+  Object.entries(isEditEducationData).map(([key, value]) => {
+    formdata.append(key, value);
+  });
+  axios
+  .put(`http://localhost:3000/v1/education/${id}`, formdata)
+  .then((res) => {
+    // alert(isEditExperienceData.profession)
+    console.log(res, "education edit data successfully added");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+} else {
+  axios
+      .put(`http://localhost:3000/v1/education/${id}`, isEditEducationData)
+      .then((res) => {
+        // alert(isEditExperienceData.profession)
+        console.log(res, "education edit data successfully added");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+ }
+
   const achievementFunc = () => {
     let formdata = new FormData();
     Object.entries(isAchievement).map(([key, value]) => {
@@ -228,6 +300,37 @@ export const FreelanceProfileView = () => {
       });
   };
 
+  const updateAchievementData = (id) => {
+    if(!isEditAchievementData.file) {
+      let formdata = new FormData();
+      Object.entries(isEditAchievementData).map(([key, value]) => {
+        formdata.append(key, value);
+      });
+      axios
+      .put(`http://localhost:3000/v1/education/${id}`, formdata)
+      .then((res) => {
+        // alert(isEditExperienceData.profession)
+        console.log(res, "education edit data successfully added");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    } else {
+      axios
+          .put(`http://localhost:3000/v1/education/${id}`, isEditAchievementData)
+          .then((res) => {
+            // alert(isEditExperienceData.profession)
+            console.log(res, "education edit data successfully added");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        }
+  }
+
+  // console.log(isEditExperienceData,"edit")
+
+
   const LanguageFunc = () => {
     axios
       .post(`http://localhost:3000/v1/language`, isLanguage)
@@ -250,6 +353,30 @@ export const FreelanceProfileView = () => {
         console.log(err);
       });
   };
+
+  const updateLanguageData = (id) => {
+    axios
+    .put(`http://localhost:3000/v1/language/${id}`, isEditLanguageData)
+    .then((res) => {
+      // alert(isEditExperienceData.profession)
+      console.log(res, "profile edit data successfully added");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  const deleteLanguageData = (id) => {
+    axios
+    .delete(`http://localhost:3000/v1/language/${id}`)
+    .then((res) => {
+      let data = Object.values(res.data.data);
+      setIsLanguageData(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   const FileUploadComponent = () => {
     // alert('clicked')s
@@ -852,6 +979,12 @@ export const FreelanceProfileView = () => {
                                 type="file"
                                 className="form-control"
                                 id="customFile"
+                                onChange={(e) => {
+                                  setProfileData({
+                                    ...profileData,
+                                    cv: e.target.files[0],
+                                  });
+                                }}
                               />
                               {/* <input
                                       style={{ width: "100%" }}
@@ -1325,6 +1458,7 @@ export const FreelanceProfileView = () => {
                       <Row>
                         {isExperienceData.length > 0 &&
                           isExperienceData.map((event, index) => {
+                            // console.log(event,"event")
                             return (
                               <>
                                 <Col
@@ -1400,6 +1534,7 @@ export const FreelanceProfileView = () => {
                                               color: "#39BEC1",
                                               fontSize: "30px",
                                             }}
+                                            onClick={()=>setEditIsExperienceData(event)}
                                           />
                                         </button>
                                         <Modal
@@ -1411,6 +1546,7 @@ export const FreelanceProfileView = () => {
                                           <Modal.Header closeButton>
                                             <Modal.Title
                                               style={{ color: "black" }}
+                                              
                                             >
                                               Edit Experience
                                             </Modal.Title>
@@ -1432,11 +1568,11 @@ export const FreelanceProfileView = () => {
                                                       name="fname"
                                                       type={"text"}
                                                       placeholder={
-                                                        event?.profession
+                                                        isEditExperienceData.profession
                                                       }
                                                       onChange={(e) =>
-                                                        setProfileExp({
-                                                          ...profileExp,
+                                                        setEditIsExperienceData({
+                                                          ...isEditExperienceData,
                                                           profession:
                                                             e.target.value,
                                                         })
@@ -1458,10 +1594,10 @@ export const FreelanceProfileView = () => {
                                                       style={{ width: "100%" }}
                                                       className="form-control"
                                                       name="lname"
-                                                      value={event?.companyName}
+                                                      placeholder={isEditExperienceData.companyName}
                                                       onChange={(e) =>
-                                                        setProfileExp({
-                                                          ...profileExp,
+                                                        setEditIsExperienceData({
+                                                          ...isEditExperienceData,
                                                           companyName:
                                                             e.target.value,
                                                         })
@@ -1480,10 +1616,10 @@ export const FreelanceProfileView = () => {
                                                     </label>
                                                     <Form.Select
                                                       aria-label="Default select example"
-                                                      value={event?.jobIndustry}
+                                                      placeholder={isEditExperienceData.jobIndustry}
                                                       onChange={(e) =>
-                                                        setProfileExp({
-                                                          ...profileExp,
+                                                        setEditIsExperienceData({
+                                                          ...isEditExperienceData,
                                                           jobIndustry:
                                                             e.target.value,
                                                         })
@@ -1565,10 +1701,10 @@ export const FreelanceProfileView = () => {
                                                     </label>
                                                     <Form.Select
                                                       aria-label="Default select example"
-                                                      value={event?.jobFunction}
+                                                      placeholder={isEditExperienceData.jobFunction}
                                                       onChange={(e) =>
-                                                        setProfileExp({
-                                                          ...profileExp,
+                                                        setEditIsExperienceData({
+                                                          ...isEditExperienceData,
                                                           jobFunction:
                                                             e.target.value,
                                                         })
@@ -1663,13 +1799,13 @@ export const FreelanceProfileView = () => {
                                                         style={{
                                                           width: "100%",
                                                         }}
-                                                        value={event?.startDate}
+                                                        value={isEditExperienceData.startDate}
                                                         className="form-control"
                                                         name="email"
                                                         type={"date"}
                                                         onChange={(e) =>
-                                                          setProfileExp({
-                                                            ...profileExp,
+                                                          setEditIsExperienceData({
+                                                            ...isEditExperienceData,
                                                             startDate:
                                                               e.target.value,
                                                           })
@@ -1699,10 +1835,10 @@ export const FreelanceProfileView = () => {
                                                         className="form-control"
                                                         type={"date"}
                                                         name="firstname"
-                                                        value={event?.endDate}
+                                                        value={isEditExperienceData.endDate}
                                                         onChange={(e) =>
-                                                          setProfileExp({
-                                                            ...profileExp,
+                                                          setEditIsExperienceData({
+                                                            ...isEditExperienceData,
                                                             endDate:
                                                               e.target.value,
                                                           })
@@ -1728,14 +1864,14 @@ export const FreelanceProfileView = () => {
                                                       </label>
 
                                                       <textarea
-                                                        placeholder="Description"
+                                                        // placeholder="Description"
                                                         className="form-control"
-                                                        value={
+                                                        placeholder={
                                                           event?.description
                                                         }
                                                         onChange={(e) =>
-                                                          setProfileExp({
-                                                            ...profileExp,
+                                                          setEditIsExperienceData({
+                                                            ...isEditExperienceData,
                                                             description:
                                                               e.target.value,
                                                           })
@@ -1760,7 +1896,7 @@ export const FreelanceProfileView = () => {
                                             </Button>
                                             <Button
                                               onClick={() =>
-                                                updateProfileExp(event.id)
+                                                updateProfileExp(isEditExperienceData.id)
                                               }
                                               variant="primary"
                                               style={{
@@ -1955,9 +2091,7 @@ export const FreelanceProfileView = () => {
                                 }
                                 //   value={user.number}
                                 //   onChange={getUserData}
-                                placeholder="Jay 
-
-                "
+                                placeholder="Jay "
                               />
                             </fieldset>
                           </Col>
@@ -2167,6 +2301,7 @@ export const FreelanceProfileView = () => {
                                               color: "#39BEC1",
                                               fontSize: "30px",
                                             }}
+                                            onClick={()=>setEditIsEducationeData(event)}
                                           />
                                         </button>
                                         <Modal
@@ -2193,24 +2328,32 @@ export const FreelanceProfileView = () => {
                                                     >
                                                       Education Level
                                                     </label>
-                                                    <Form.Select aria-label="Default select example">
-                                                      <option hidden="">
+                                                    <Form.Select aria-label='please select education level'
+                                                    onChange={(e) =>
+                                                      setEditIsEducationeData({
+                                                        ...isEditEducationData,
+                                                        educationLevel :
+                                                          e.target.value,
+                                                      })
+                                                    }
+                                                    >
+                                                      <option selected={isEditEducationData?.educationLevel === 'Education Level' ? true : false}>
                                                         Education Level
                                                       </option>
-                                                      <option>
+                                                      <option selected={isEditEducationData?.educationLevel === 'Associate Degree' ? true : false}>
                                                         Associate Degree
-                                                      </option>
-                                                      <option>
+                                                      </option> 
+                                                      <option selected={isEditEducationData?.educationLevel === 'Bachelor Degree' ? true : false}>
                                                         Bachelor Degree
                                                       </option>
-                                                      <option>
+                                                      <option selected={isEditEducationData?.educationLevel === 'Master Degree' ? true : false}>
                                                         Master Degree
                                                       </option>
-                                                      <option>
+                                                      <option selected={isEditEducationData?.educationLevel === 'Doctorate Degree' ? true : false}>
                                                         Doctorate Degree
                                                       </option>
-                                                      <option>PhD</option>
-                                                      <option>Others</option>
+                                                      <option selected={isEditEducationData?.educationLevel === 'PhD' ? true : false}>PhD</option>
+                                                      <option selected={isEditEducationData?.educationLevel === 'Others' ? true : false}>Others</option>
                                                     </Form.Select>
                                                   </fieldset>
                                                 </Col>
@@ -2227,11 +2370,16 @@ export const FreelanceProfileView = () => {
                                                       className="form-control"
                                                       name="institute"
                                                       type={"text"}
+                                                      onChange={(e) =>
+                                                        setEditIsEducationeData({
+                                                          ...isEditEducationData,
+                                                          institute:
+                                                            e.target.value,
+                                                        })
+                                                      }
                                                       //   value={user.number}
                                                       //   onChange={getUserData}
-                                                      placeholder="Jay 
-
-                "
+                                                      placeholder={isEditEducationData?.institute}
                                                     />
                                                   </fieldset>
                                                 </Col>
@@ -2243,17 +2391,25 @@ export const FreelanceProfileView = () => {
                                                     >
                                                       Major
                                                     </label>
-                                                    <Form.Select aria-label="Default select example">
-                                                      <option hidden="">
+                                                    <Form.Select aria-label="Default select example"
+                                                     onChange={(e) =>
+                                                      setEditIsEducationeData({
+                                                        ...isEditEducationData,
+                                                        major:
+                                                          e.target.value,
+                                                      })
+                                                    }
+                                                    >
+                                                      <option selected={isEditEducationData?.major === 'Major' ? true : false}>
                                                         Major
                                                       </option>
-                                                      <option>
+                                                      <option selected={isEditEducationData?.major === 'Masters of Law' ? true : false}>
                                                         Masters of Law
                                                       </option>
-                                                      <option>
+                                                      <option selected={isEditEducationData?.major === 'Computer Science' ? true : false}>
                                                         Computer Science
                                                       </option>
-                                                      <option>
+                                                      <option selected={isEditEducationData?.major === 'Phsycology' ? true : false}>
                                                         Phsycology
                                                       </option>
                                                     </Form.Select>
@@ -2278,6 +2434,14 @@ export const FreelanceProfileView = () => {
                                                         className="form-control"
                                                         name="email"
                                                         type={"date"}
+                                                        value={isEditEducationData?.startingDate}
+                                                        onChange={(e) =>
+                                                          setEditIsEducationeData({
+                                                            ...isEditEducationData,
+                                                            startingDate:
+                                                              e.target.value,
+                                                          })
+                                                        }
                                                         //   value={user.number}
                                                         //   onChange={getUserData}
                                                         placeholder="A Service Like No Other
@@ -2303,6 +2467,14 @@ export const FreelanceProfileView = () => {
                                                         className="form-control"
                                                         type={"date"}
                                                         name="firstname"
+                                                        value={isEditEducationData?.endingDate}
+                                                        onChange={(e) =>
+                                                          setEditIsEducationeData({
+                                                            ...isEditEducationData,
+                                                            endingDate:
+                                                              e.target.value,
+                                                          })
+                                                        }
                                                         //   value={user.name}
                                                         //   onChange={getUserData}
                                                         placeholder="Gia (PVT) LTD
@@ -2327,6 +2499,12 @@ export const FreelanceProfileView = () => {
                                                         type="file"
                                                         class="form-control"
                                                         id="customFile"
+                                                        onChange={(e) => {
+                                                          setEditIsEducationeData({
+                                                            ...isEditEducationData,
+                                                            certificate: e.target.files[0],
+                                                          });
+                                                        }}
                                                       />
                                                     </fieldset>
                                                   </Col>
@@ -2351,6 +2529,7 @@ export const FreelanceProfileView = () => {
                                                 background: "none",
                                                 color: "#39BEC1",
                                               }}
+                                              onClick={() => updateEducationData(isEditEducationData.id)}
                                             >
                                               Save
                                             </Button>
@@ -2926,6 +3105,7 @@ export const FreelanceProfileView = () => {
                                               color: "#39BEC1",
                                               fontSize: "30px",
                                             }}
+                                            onClick={() => setIsEditAchievementData(event)}
                                           />
                                         </button>
                                         <Modal
@@ -2959,7 +3139,8 @@ export const FreelanceProfileView = () => {
                                                       type={"text"}
                                                       //   value={user.number}
                                                       //   onChange={getUserData}
-                                                      placeholder="Gia"
+                                                      placeholder={isEditAchievementData?.title}
+                                                      onClick={(e) => setIsEditAchievementData({...isEditAchievementData, title : e.target.value})}
                                                     />
                                                   </fieldset>
                                                 </Col>
@@ -2972,8 +3153,9 @@ export const FreelanceProfileView = () => {
                                                       Description
                                                     </label>
                                                     <textarea
-                                                      placeholder="Description"
+                                                     placeholder={isEditAchievementData?.description}
                                                       className="form-control"
+                                                      onClick={(e) => setIsEditAchievementData({...isEditAchievementData, description : e.target.value})}
                                                     />
                                                   </fieldset>
                                                 </Col>
@@ -2989,6 +3171,8 @@ export const FreelanceProfileView = () => {
                                                       type="file"
                                                       class="form-control"
                                                       id="customFile"
+                                                      value={isEditAchievementData?.achievement}
+                                                      onClick={(e) => setIsEditAchievementData({...isEditAchievementData, achievement : e.target.file[0]})}
                                                     />
                                                   </fieldset>
                                                 </Col>
@@ -3012,6 +3196,7 @@ export const FreelanceProfileView = () => {
                                                 background: "none",
                                                 color: "#39BEC1",
                                               }}
+                                              onClick={() => updateAchievementData(event.id)}
                                             >
                                               Save
                                             </Button>
@@ -3290,6 +3475,7 @@ export const FreelanceProfileView = () => {
                                                   color: "#39BEC1",
                                                   fontSize: "30px",
                                                 }}
+                                                onClick={() => setIsEditLangugeData(event)}
                                               />
                                             </button>
                                             <Modal
@@ -3319,100 +3505,97 @@ export const FreelanceProfileView = () => {
                                                           Language Type
                                                         </label>
                                                         <Form.Select aria-label="Default select example">
-                                                          <option hidden="">
-                                                            Language Type
-                                                          </option>
-                                                          <option value="English">
+                                                          <option value="English" selected={isEditLanguageData.languageType === 'English' ? true : false}>
                                                             English
                                                           </option>
-                                                          <option value="Arabic">
+                                                          <option value="Arabic" selected={isEditLanguageData.languageType === 'Arabic' ? true : false}>
                                                             Arabic
                                                           </option>
-                                                          <option value="Spanish">
+                                                          <option value="Spanish" selected={isEditLanguageData.languageType === 'Spanish' ? true : false}>
                                                             Spanish
                                                           </option>
-                                                          <option value="Hindi">
+                                                          <option value="Hindi"selected={isEditLanguageData.languageType === 'Hindi' ? true : false} >
                                                             Hindi
                                                           </option>
-                                                          <option value="Cantonese">
+                                                          <option value="Cantonese" selected={isEditLanguageData.languageType === 'Cantonese' ? true : false}>
                                                             Cantonese
                                                           </option>
-                                                          <option value="French">
+                                                          <option value="French" selected={isEditLanguageData.languageType === 'French' ? true : false}>
                                                             French
                                                           </option>
-                                                          <option value="German">
+                                                          <option value="German" selected={isEditLanguageData.languageType === 'German' ? true : false}>
                                                             German
                                                           </option>
-                                                          <option value="Italian">
-                                                            Italian
+                                                          <option value="Italian" selected={isEditLanguageData.languageType === 'Italian' ? true : false}>
+                                                          Italian
                                                           </option>
-                                                          <option value="Japanese">
+                                                          <option value="Japanese" selected={isEditLanguageData.languageType === 'Japanese' ? true : false}>
                                                             Japanese
                                                           </option>
-                                                          <option value="Korean">
+                                                          <option value="Korean" selected={isEditLanguageData.languageType === 'Korean' ? true : false}>
                                                             Korean
                                                           </option>
-                                                          <option value="Mandarin">
+                                                          <option value="Mandarin" selected={isEditLanguageData.languageType === 'Mandarin' ? true : false}>
                                                             Mandarin
                                                           </option>
-                                                          <option value="Bengali">
+                                                          <option value="Bengali" selected={isEditLanguageData.languageType === 'Bengali' ? true : false}>
                                                             Bengali
                                                           </option>
-                                                          <option value="Burmese">
+                                                          <option value="Burmese" selected={isEditLanguageData.languageType === 'Burmese' ? true : false}>
                                                             Burmese
                                                           </option>
-                                                          <option value="Czech">
+                                                          <option value="Czech" selected={isEditLanguageData.languageType === 'Czech' ? true : false}>
                                                             Czech
                                                           </option>
-                                                          <option value="Dutch">
+                                                          <option value="Dutch" selected={isEditLanguageData.languageType === 'Dutch' ? true : false}>
                                                             Dutch
                                                           </option>
-                                                          <option value="Greek">
+                                                          <option value="Greek" selected={isEditLanguageData.languageType === 'Greek' ? true : false}>
                                                             Greek
                                                           </option>
-                                                          <option value="Hakka">
+                                                          <option value="Hakka" selected={isEditLanguageData.languageType === 'Hakka' ? true : false}>
                                                             Hakka
                                                           </option>
-                                                          <option value="Hungarian">
+                                                          <option value="Hungarian" selected={isEditLanguageData.languageType === 'Hungarian' ? true : false}>
                                                             Hungarian
                                                           </option>
-                                                          <option value="Hunnanese">
+                                                          <option value="Hunnanese" selected={isEditLanguageData.languageType === 'Hunnanese' ? true : false}>
                                                             Hunnanese
                                                           </option>
-                                                          <option value="Malay/Indonesian">
+                                                          <option value="Malay/Indonesian" selected={isEditLanguageData.languageType === 'Malay/Indonesian' ? true : false}>
                                                             Malay/Indonesian
                                                           </option>
-                                                          <option value="Nepali">
+                                                          <option value="Nepali" selected={isEditLanguageData.languageType === 'Nepali' ? true : false}>
                                                             Nepali
                                                           </option>
-                                                          <option value="Portuguese">
+                                                          <option value="Portuguese" selected={isEditLanguageData.languageType === 'Portuguese' ? true : false}>
                                                             Portuguese
                                                           </option>
-                                                          <option value="Russian">
+                                                          <option value="Russian" selected={isEditLanguageData.languageType === 'Russian' ? true : false}>
                                                             Russian
                                                           </option>
-                                                          <option value="Shanghainese">
+                                                          <option value="Shanghainese" selected={isEditLanguageData.languageType === 'Shanghainese' ? true : false}>
                                                             Shanghainese
                                                           </option>
-                                                          <option value="Swedish">
+                                                          <option value="Swedish" selected={isEditLanguageData.languageType === 'Swedish' ? true : false}>
                                                             Swedish
                                                           </option>
-                                                          <option value="Tagalog">
+                                                          <option value="Tagalog" selected={isEditLanguageData.languageType === 'Tagalog' ? true : false}>
                                                             Tagalog
                                                           </option>
-                                                          <option value="Telugu">
+                                                          <option value="Telugu" selected={isEditLanguageData.languageType === 'Telugu' ? true : false}>
                                                             Telugu
                                                           </option>
-                                                          <option value="Thai">
+                                                          <option value="Thai" selected={isEditLanguageData.languageType === 'Thai' ? true : false}>
                                                             Thai
                                                           </option>
-                                                          <option value="Turkish">
+                                                          <option value="Turkish" selected={isEditLanguageData.languageType === 'Turkish' ? true : false}>
                                                             Turkish
                                                           </option>
-                                                          <option value="Vietnamese">
+                                                          <option value="Vietnamese" selected={isEditLanguageData.languageType === 'Vietnamese' ? true : false}>
                                                             Vietnamese
                                                           </option>
-                                                          <option value="Others">
+                                                          <option value="Others" selected={isEditLanguageData.languageType === 'Others' ? true : false}>
                                                             Others
                                                           </option>
                                                         </Form.Select>
@@ -3437,9 +3620,7 @@ export const FreelanceProfileView = () => {
                                                           type={"text"}
                                                           //   value={user.number}
                                                           //   onChange={getUserData}
-                                                          placeholder="Jay 
-
-                "
+                                                          placeholder={isEditLanguageData?.examLevel}
                                                         />
                                                       </fieldset>
                                                     </Col>
@@ -3460,6 +3641,7 @@ export const FreelanceProfileView = () => {
                                                           className="form-control"
                                                           name="lname"
                                                           type={"text"}
+                                                          placeholder={isEditLanguageData?.gradingLevel}
                                                           //   value={user.number}
                                                           //   onChange={getUserData}
                                                         />
@@ -3485,6 +3667,7 @@ export const FreelanceProfileView = () => {
                                                     background: "none",
                                                     color: "#39BEC1",
                                                   }}
+                                                  onClick={() => updateLanguageData(event.id)}
                                                 >
                                                   Save
                                                 </Button>
@@ -3497,6 +3680,7 @@ export const FreelanceProfileView = () => {
                                                 color: "#39BEC1",
                                                 fontSize: "30px",
                                               }}
+                                              onClick={() => deleteLanguageData(event.id)}
                                             />
                                           </div>
                                         </div>
