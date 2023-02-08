@@ -68,8 +68,10 @@ export const FreelanceProfileView = () => {
   const [userId, setUserId] = useState("");
   // console.log(userId, "ID");
   const [isCheckBox, setIsCheckBox] = useState("false");
-  const [profileData, setProfileData] = useState({});
-  const [profileExp, setProfileExp] = useState({});
+  const [profileData, setProfileData] = useState({
+  });
+  const [profileExp, setProfileExp] = useState({
+  });
   const [editProfileExp, setEditProfileExp] = useState({});
   const [isEducation, setIsEducation] = useState({});
   const [isAchievement, setIsAchievement] = useState({});
@@ -81,7 +83,7 @@ export const FreelanceProfileView = () => {
   const [isEditEducationData, setEditIsEducationeData] = useState({});
   const [isLanguageData, setIsLanguageData] = useState({});
   const [isEditAchievementData, setIsEditAchievementData] = useState({})
-  const [isEditLanguageData, setIsEditLangugeData] = useState({})
+  const [isEditLanguageData, setIsEditLanguageData] = useState({})
 
   // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
   console.log(profileData, "profileData");
@@ -91,10 +93,10 @@ export const FreelanceProfileView = () => {
     let id = localStorage.getItem("id");
     setUserId(id);
     initialFun(id);
-    ProfileExpData();
-    educationData();
-    achievementData();
-    LanguageData();
+    ProfileExpData(id);
+    educationData(id);
+    achievementData(id);
+    LanguageData(id);
     setProfileData({ ...profileData, uid: id });
     setProfileExp({ ...profileExp, uid: id });
     setIsEducation({ ...isEducation, uid: id });
@@ -124,7 +126,7 @@ useEffect(()=>{
 
 useEffect(()=>{
 
-  isLanguageData && isLanguageData.length>0 && setIsEditLangugeData(isLanguageData)
+  isLanguageData && isLanguageData.length>0 && setIsEditLanguageData(isLanguageData)
 
 },[isLanguageData])
 
@@ -160,7 +162,7 @@ useEffect(()=>{
 
   const ProfileExp = () => {
     axios
-      .post(`http://localhost:3000/v1/freelancerExp`, profileExp)
+      .post(`http://localhost:3000/v1/freelancerExp`, {...profileExp, uid : userId})
       .then((res) => {
         console.log(res, "profile data successfully added");
         // setProfileExp(res.data, "ProfileExp");
@@ -171,9 +173,9 @@ useEffect(()=>{
       });
   };
 
-  const ProfileExpData = () => {
+  const ProfileExpData = (id) => {
     axios
-      .get(`http://localhost:3000/v1/freelancerExp/`)
+      .get(`http://localhost:3000/v1/freelancerExp/${id}`)
       .then((res) => {
         console.log(res.data.data,"res")
         // console.log(res, "ProfileExpData");
@@ -204,6 +206,18 @@ useEffect(()=>{
       });
   };
 
+  const deleteExperienceData = (id) => {
+    axios
+    .delete(`http://localhost:3000/v1/freelancerExp/${id}`)
+    .then((res) => {
+      let data = Object.values(res.data.data);
+      // setIsLanguageData(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
   const checkBoxHandleChange = () => {
     if (isCheckBox === "true") {
       // alert('checkbox is false')
@@ -233,9 +247,9 @@ useEffect(()=>{
       });
   };
 
-  const educationData = () => {
+  const educationData = (id) => {
     axios
-      .get(`http://localhost:3000/v1/education/`)
+      .get(`http://localhost:3000/v1/education/${id}`)
       .then((res) => {
         let data = Object.values(res.data.data);
         setIsEducationData(data);
@@ -273,6 +287,20 @@ useEffect(()=>{
     }
  }
 
+ 
+ const deleteEducationData = (id) => {
+  axios
+  .delete(`http://localhost:3000/v1/education/${id}`)
+  .then((res) => {
+    let data = Object.values(res.data.data);
+    // setIsLanguageData(data);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+}
+
+
   const achievementFunc = () => {
     let formdata = new FormData();
     Object.entries(isAchievement).map(([key, value]) => {
@@ -288,9 +316,9 @@ useEffect(()=>{
       });
   };
 
-  const achievementData = () => {
+  const achievementData = (id) => {
     axios
-      .get(`http://localhost:3000/v1/achievement/`)
+      .get(`http://localhost:3000/v1/achievement/${id}`)
       .then((res) => {
         let data = Object.values(res.data.data);
         setIsAchievementData(data);
@@ -307,7 +335,7 @@ useEffect(()=>{
         formdata.append(key, value);
       });
       axios
-      .put(`http://localhost:3000/v1/education/${id}`, formdata)
+      .put(`http://localhost:3000/v1/achievement/${id}`, formdata)
       .then((res) => {
         // alert(isEditExperienceData.profession)
         console.log(res, "education edit data successfully added");
@@ -317,7 +345,7 @@ useEffect(()=>{
       });
     } else {
       axios
-          .put(`http://localhost:3000/v1/education/${id}`, isEditAchievementData)
+          .put(`http://localhost:3000/v1/achievement/${id}`, isEditAchievementData)
           .then((res) => {
             // alert(isEditExperienceData.profession)
             console.log(res, "education edit data successfully added");
@@ -327,6 +355,19 @@ useEffect(()=>{
           });
         }
   }
+
+  const deleteAchievementData = (id) => {
+    axios
+    .delete(`http://localhost:3000/v1/achievement/${id}`)
+    .then((res) => {
+      let data = Object.values(res.data.data);
+      // setIsLanguageData(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
 
   // console.log(isEditExperienceData,"edit")
 
@@ -342,9 +383,9 @@ useEffect(()=>{
       });
   };
 
-  const LanguageData = () => {
+  const LanguageData = (id) => {
     axios
-      .get(`http://localhost:3000/v1/language/`)
+      .get(`http://localhost:3000/v1/language/${id}`)
       .then((res) => {
         let data = Object.values(res.data.data);
         setIsLanguageData(data);
@@ -371,7 +412,7 @@ useEffect(()=>{
     .delete(`http://localhost:3000/v1/language/${id}`)
     .then((res) => {
       let data = Object.values(res.data.data);
-      setIsLanguageData(data);
+      // setIsLanguageData(data);
     })
     .catch((err) => {
       console.log(err);
@@ -475,6 +516,10 @@ useEffect(()=>{
                     <Button
                       // variant="primary"
                       // onClick={() => setModalShow(true)}
+                      onClick={() =>
+                        (window.location.href = `http://localhost:3000${profileData?.cv}`)
+                      }
+                    
                       className="text-white border-rounded px-3"
                       style={{ background: "#39BEC1", border: "none" }}
                     >
@@ -1915,6 +1960,7 @@ useEffect(()=>{
                                             color: "#39BEC1",
                                             fontSize: "30px",
                                           }}
+                                          onClick={() => deleteExperienceData(event.id)}
                                         />
                                       </div>
                                     </div>
@@ -2542,6 +2588,7 @@ useEffect(()=>{
                                             color: "#39BEC1",
                                             fontSize: "30px",
                                           }}
+                                          onClick={() => deleteEducationData(event.id)}
                                         />
                                       </div>
                                     </div>
@@ -3171,8 +3218,8 @@ useEffect(()=>{
                                                       type="file"
                                                       class="form-control"
                                                       id="customFile"
-                                                      value={isEditAchievementData?.achievement}
-                                                      onClick={(e) => setIsEditAchievementData({...isEditAchievementData, achievement : e.target.file[0]})}
+                                                      // value={isEditAchievementData?.achievement}
+                                                      onClick={(e) => setIsEditAchievementData({...isEditAchievementData, achievement : e.target.files[0]})}
                                                     />
                                                   </fieldset>
                                                 </Col>
@@ -3209,6 +3256,7 @@ useEffect(()=>{
                                             color: "#39BEC1",
                                             fontSize: "30px",
                                           }}
+                                          onClick={() => deleteAchievementData(event.id)}
                                         />
                                       </div>
                                     </div>
@@ -3475,7 +3523,7 @@ useEffect(()=>{
                                                   color: "#39BEC1",
                                                   fontSize: "30px",
                                                 }}
-                                                onClick={() => setIsEditLangugeData(event)}
+                                                onClick={() => setIsEditLanguageData(event)}
                                               />
                                             </button>
                                             <Modal
@@ -3504,7 +3552,9 @@ useEffect(()=>{
                                                         >
                                                           Language Type
                                                         </label>
-                                                        <Form.Select aria-label="Default select example">
+                                                        <Form.Select aria-label="Default select example"
+                                                        onClick={(e) => setIsEditLanguageData({...isEditLanguageData, languageType : e.target.value})}
+                                                        >
                                                           <option value="English" selected={isEditLanguageData.languageType === 'English' ? true : false}>
                                                             English
                                                           </option>
@@ -3620,6 +3670,7 @@ useEffect(()=>{
                                                           type={"text"}
                                                           //   value={user.number}
                                                           //   onChange={getUserData}
+                                                          onClick={(e) => setIsEditLanguageData({...isEditLanguageData, examLevel : e.target.value})}
                                                           placeholder={isEditLanguageData?.examLevel}
                                                         />
                                                       </fieldset>
@@ -3642,6 +3693,7 @@ useEffect(()=>{
                                                           name="lname"
                                                           type={"text"}
                                                           placeholder={isEditLanguageData?.gradingLevel}
+                                                          onClick={(e) => setIsEditLanguageData({...isEditLanguageData, gradingLevel : e.target.value})}
                                                           //   value={user.number}
                                                           //   onChange={getUserData}
                                                         />
