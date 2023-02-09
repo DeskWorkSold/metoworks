@@ -103,6 +103,11 @@ fieldset input ,textarea{
     margin-right: 10px !important;
     margin-left: 10px !important;
   }
+  #modalmm {
+    max-width: max-content;
+    margin-right: auto !important;
+    margin-left: auto !important;
+  }
   .navbar-nav .nav-link.active, .navbar-nav .show>.nav-link{
     color: white !important;
   }

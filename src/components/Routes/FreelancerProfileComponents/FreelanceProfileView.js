@@ -34,6 +34,8 @@ import axios from "../../../utils/axios.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Language } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import ModelComponents from "../ModelComponents/ModelComponents";
+
 export const FreelanceProfileView = () => {
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
@@ -45,6 +47,7 @@ export const FreelanceProfileView = () => {
   const [show7, setShow7] = useState(false);
   const [show8, setShow8] = useState(false);
   const [show9, setShow9] = useState(false);
+  const [show10, setShow10] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const handleClose1 = () => setShow1(false);
@@ -65,7 +68,10 @@ export const FreelanceProfileView = () => {
   const handleShow8 = () => setShow8(true);
   const handleClose9 = () => setShow9(false);
   const handleShow9 = () => setShow9(true);
+  const handleClose10 = () => setShow10(false);
+  const handleShow10 = () => setShow10(true);
   const [userId, setUserId] = useState("");
+  const [isModel, setIsModel] = useState('false')
   // console.log(userId, "ID");
   const [isCheckBox, setIsCheckBox] = useState("false");
   const [profileData, setProfileData] = useState({
@@ -152,8 +158,12 @@ useEffect(()=>{
     axios
       .patch(`http://localhost:3000/v1/users/${userId}`, formdata)
       .then((res) => {
-        console.log(formdata);
-        console.log(res, "profile data successfully added");
+        // console.log(formdata);
+        // console.log(res, "profile data successfully added");
+        setProfileData(res.data);
+        if(res.data){
+          setShow(false);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -174,17 +184,15 @@ useEffect(()=>{
   };
 
   const ProfileExpData = (id) => {
+    console.log(id,"iddd")
     axios
       .get(`http://localhost:3000/v1/freelancerExp/${id}`)
       .then((res) => {
-        console.log(res.data.data,"res")
+        // console.log(res.data.data,"res")
         // console.log(res, "ProfileExpData");
         let data = Object.values(res.data.data);
-        
-        console.log(data,"dataaa")
-
-
         setIsExperienceData(data);
+        
       })
       .catch((err) => {
         console.log(err);
@@ -198,13 +206,20 @@ useEffect(()=>{
     axios
       .put(`http://localhost:3000/v1/freelancerExp/${id}`, isEditExperienceData)
       .then((res) => {
-        // alert(isEditExperienceData.profession)
+        console.log(res.data, 'eeeeeeeeeeeeee');
+        let data = res.data
         console.log(res, "profile edit data successfully added");
+        ProfileExpData(userId)
+        if(data) {
+          setShow5(false);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  console.log(isExperienceData, 'isExperienceData');
 
   const deleteExperienceData = (id) => {
     axios
@@ -212,6 +227,9 @@ useEffect(()=>{
     .then((res) => {
       let data = Object.values(res.data.data);
       // setIsLanguageData(data);
+      if(data) {
+        ProfileExpData(userId)
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -270,6 +288,10 @@ useEffect(()=>{
   .then((res) => {
     // alert(isEditExperienceData.profession)
     console.log(res, "education edit data successfully added");
+    if(res) {
+      setShow6(false)
+      educationData(userId)
+    }
   })
   .catch((err) => {
     console.log(err);
@@ -280,6 +302,10 @@ useEffect(()=>{
       .then((res) => {
         // alert(isEditExperienceData.profession)
         console.log(res, "education edit data successfully added");
+        if(res) {
+          setShow6(false)
+          educationData(userId)
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -294,6 +320,9 @@ useEffect(()=>{
   .then((res) => {
     let data = Object.values(res.data.data);
     // setIsLanguageData(data);
+    if(data) {
+      educationData(userId)
+    }
   })
   .catch((err) => {
     console.log(err);
@@ -339,6 +368,10 @@ useEffect(()=>{
       .then((res) => {
         // alert(isEditExperienceData.profession)
         console.log(res, "education edit data successfully added");
+        if(res) {
+          setShow7(false)
+          achievementData(userId)
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -349,6 +382,10 @@ useEffect(()=>{
           .then((res) => {
             // alert(isEditExperienceData.profession)
             console.log(res, "education edit data successfully added");
+            if(res) {
+              setShow7(false)
+              achievementData(userId)
+            }
           })
           .catch((err) => {
             console.log(err);
@@ -361,6 +398,9 @@ useEffect(()=>{
     .delete(`http://localhost:3000/v1/achievement/${id}`)
     .then((res) => {
       let data = Object.values(res.data.data);
+      if(data) {
+        achievementData(userId)
+      }
       // setIsLanguageData(data);
     })
     .catch((err) => {
@@ -401,6 +441,10 @@ useEffect(()=>{
     .then((res) => {
       // alert(isEditExperienceData.profession)
       console.log(res, "profile edit data successfully added");
+      if(res) {
+        setShow8(true);
+        LanguageData(userId)
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -411,8 +455,11 @@ useEffect(()=>{
     axios
     .delete(`http://localhost:3000/v1/language/${id}`)
     .then((res) => {
-      let data = Object.values(res.data.data);
+      // let data = Object.values(res.data.data);
       // setIsLanguageData(data);
+      if(res) {
+        LanguageData(userId)
+      }
     })
     .catch((err) => {
       console.log(err);
@@ -473,6 +520,7 @@ useEffect(()=>{
       />
     );
   };
+
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -1244,9 +1292,7 @@ useEffect(()=>{
                                 }
                                 //   value={user.number}
                                 //   onChange={getUserData}
-                                placeholder="Gia 
-
-                "
+                                placeholder="Gia"
                               />
                             </fieldset>
                           </Col>
@@ -1503,7 +1549,7 @@ useEffect(()=>{
                       <Row>
                         {isExperienceData.length > 0 &&
                           isExperienceData.map((event, index) => {
-                            // console.log(event,"event")
+                            console.log(event,"event")
                             return (
                               <>
                                 <Col
@@ -1528,7 +1574,8 @@ useEffect(()=>{
                                               className="text-lg"
                                               style={{ color: "#7A7979" }}
                                             >
-                                              7A7979
+                                                 {event?.jobIndustry}
+                                            
                                             </h2>
                                           </div>
                                         </Col>
@@ -1538,16 +1585,15 @@ useEffect(()=>{
                                               className="text-xl"
                                               style={{ color: "#6A489C" }}
                                             >
-                                              {event?.jobFunction}
+                                            {event?.jobFunction}
                                             </h2>
 
                                             <h2
                                               className="text-lg"
                                               style={{ color: "#7A7979" }}
                                             >
-                                              {event?.startingDate +
-                                                " - " +
-                                                event?.endingDate}
+                                              {event?.startDate}{' - '}
+                                                {event?.currentlyWorking === 'on' ?  'Present' : event?.endDate}
                                             </h2>
                                           </div>
                                         </Col>
@@ -1955,13 +2001,74 @@ useEffect(()=>{
                                         </Modal>
                                       </div>
                                       <div className="w-10">
+                                      <button
+                                          onClick={handleShow10}
+                                          className="text-white border-rounded"
+                                          style={{
+                                            background: "none",
+                                            border: "none",
+                                          }}
+                                        >
                                         <ImBin
                                           style={{
+                                            cursor : 'pointer',
                                             color: "#39BEC1",
                                             fontSize: "30px",
                                           }}
-                                          onClick={() => deleteExperienceData(event.id)}
+                                          data-toggle="modal"
+                                          onClick={() => setIsModel(true)}
                                         />
+      </button>
+      <div >
+      <Modal id="modalmm"
+ size="lg"       aria-labelledby="contained-modal-title-vcenter"
+       centered
+                                          show={show10}
+                                          onHide={handleClose10}
+                                          backdrop="static"
+                                          keyboard={false}
+                                        >
+                                          <Modal.Header closeButton>
+                                            <Modal.Title
+                                              style={{ color: "black" }}
+                                              
+                                            >
+                                              Edit Experience
+                                            </Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            <Row>
+                                              <div className="p-3">
+jhggff
+                                              </div>
+                                            </Row>
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button
+                                              variant="secondary"
+                                              onClick={handleClose10}
+                                              style={{
+                                                background: "none",
+                                                color: "#C1C1C1",
+                                              }}
+                                            >
+                                              Cancel
+                                            </Button>
+                                            <Button
+                                              onClick={() =>
+                                                updateProfileExp(isEditExperienceData.id)
+                                              }
+                                              variant="primary"
+                                              style={{
+                                                background: "none",
+                                                color: "#39BEC1",
+                                              }}
+                                            >
+                                              Save
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -2523,9 +2630,7 @@ useEffect(()=>{
                                                         }
                                                         //   value={user.name}
                                                         //   onChange={getUserData}
-                                                        placeholder="Gia (PVT) LTD
-
-                "
+                                                        placeholder="Gia (PVT) LTD"
                                                         required
                                                       />
                                                     </fieldset>
@@ -2585,6 +2690,7 @@ useEffect(()=>{
                                       <div className="w-10">
                                         <ImBin
                                           style={{
+                                            cursor : 'pointer',
                                             color: "#39BEC1",
                                             fontSize: "30px",
                                           }}
@@ -3085,7 +3191,7 @@ useEffect(()=>{
                       <Button
                         variant="primary"
                         style={{ background: "none", color: "#39BEC1" }}
-                        onClick={achievementFunc}
+                        onClick={() => achievementFunc()}
                       >
                         Save
                       </Button>
@@ -3187,7 +3293,13 @@ useEffect(()=>{
                                                       //   value={user.number}
                                                       //   onChange={getUserData}
                                                       placeholder={isEditAchievementData?.title}
-                                                      onClick={(e) => setIsEditAchievementData({...isEditAchievementData, title : e.target.value})}
+                                                      // onClick={(e) => setIsEditAchievementData({...isEditAchievementData, title : e.target.value})}
+                                                      onChange={(e) =>
+                                                        setIsEditAchievementData({
+                                                          ...isEditAchievementData,
+                                                          title: e.target.value,
+                                                        })
+                                                      }
                                                     />
                                                   </fieldset>
                                                 </Col>
@@ -3253,6 +3365,7 @@ useEffect(()=>{
                                       <div className="w-10">
                                         <ImBin
                                           style={{
+                                            cursor : 'pointer',
                                             color: "#39BEC1",
                                             fontSize: "30px",
                                           }}
@@ -3469,7 +3582,7 @@ useEffect(()=>{
                       <Button
                         variant="primary"
                         style={{ background: "none", color: "#39BEC1" }}
-                        onClick={LanguageFunc}
+                        onClick={() => LanguageFunc()}
                       >
                         Save
                       </Button>
@@ -3729,6 +3842,7 @@ useEffect(()=>{
                                           <div className="w-10">
                                             <ImBin
                                               style={{
+                                                cursor : 'pointer',
                                                 color: "#39BEC1",
                                                 fontSize: "30px",
                                               }}

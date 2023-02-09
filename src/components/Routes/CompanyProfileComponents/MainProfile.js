@@ -1,5 +1,9 @@
 // import React from "react";
 import React, { useState, Component } from "react";
+
+import "react-dropzone-uploader/dist/styles.css";
+import Dropzone from "react-dropzone-uploader";
+import { getDroppedOrSelectedFiles } from "html5-file-selector";
 import { Container, Button, Row, Col, Image, Form } from "react-bootstrap";
 import { BsBookmark, BsCoin, BsPencilSquare, BsReceipt } from "react-icons/bs";
 import {
@@ -15,46 +19,43 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useNavigate } from "react-router-dom/dist";
 import { useEffect } from "react";
-import axios from "../../../utils/axios.api";
+import axios from '../../../utils/axios.api'
 
 function MyVerticallyCenteredModal(props) {
-  const [jobData, setJobData] = useState({
-    jobTitle: "",
-    jobIndustry: "",
-    jobFunction: "",
-    subJobFunction: "damy",
-    jobLocation: "",
-    jobDiscription: "",
-    jobRequirements: "",
-    profession: "",
-    educationLevel: "",
-    employementType: "",
-    startDate: "",
-    endDate: "",
-    madeOfWork: "",
-    noOfOpenings: "",
-    salaryInfo: "",
-    minSalary: "",
-    maxSalary: "",
-    salaryType: "",
-    salaryFreq: "",
-    postedDate: "",
-    additionalEmails: "",
-    role: "companyJob",
-  });
+  const [jobData, setJobData] = useState ({
+    jobTitle : '',
+    jobIndustry : '',
+    jobFunction : '',
+    subJobFunction : 'damy',
+    jobLocation : '',
+    jobDiscription : '',
+    jobRequirements : '',
+    profession : '',
+    educationLevel : '',
+    employementType : '',
+    startDate : '',
+    endDate : '',
+    madeOfWork : '',
+    noOfOpenings : '',
+    salaryInfo : '',
+    minSalary : '',
+    maxSalary : '',
+    salaryType : '',
+    salaryFreq : '',
+    postedDate : '',
+    additionalEmails : '',
+    role : 'companyJob'
+  })
   // console.log(jobData, 'Dataa');
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const postFun = () => {
-    axios
-      .post("http://localhost:3000/v1/job-post", jobData)
-      .then((res) => {
-        console.log(res, "data sended successfully");
-        // navigate('/CompanyProfile')
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    axios.post('http://localhost:3000/v1/job-post', jobData).then((res) => {
+      console.log(res, 'data sended successfully');
+      // navigate('/CompanyProfile')
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
 
   return (
     <Modal
@@ -82,9 +83,7 @@ function MyVerticallyCenteredModal(props) {
                     className="form-control"
                     name="fname"
                     type={"text"}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, jobTitle: e.target.value })
-                    }
+                    onChange={(e) => setJobData({...jobData, jobTitle : e.target.value})}
                     //   value={user.number}
                     //   onChange={getUserData}
                     placeholder="Doctor for Child
@@ -97,11 +96,8 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Industry
                   </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, jobIndustry: e.target.value })
-                    }
+                  <Form.Select aria-label="Default select example"  
+                  onChange={(e) => setJobData({...jobData, jobIndustry : e.target.value})}
                   >
                     <option value="DEFAULT" disabled="">
                       Select Job Industry
@@ -148,11 +144,8 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Function
                   </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, jobFunction: e.target.value })
-                    }
+                  <Form.Select aria-label="Default select example" 
+                  onChange={(e) => setJobData({...jobData, jobFunction : e.target.value})}
                   >
                     <option value="DEFAULT" disabled="">
                       Select Job Function
@@ -191,12 +184,7 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Sub Job Function
                   </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, subJobFunction: e.target.value })
-                    }
-                  >
+                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, subJobFunction : e.target.value})}>
                     <option value="DEFAULT" disabled="">
                       Sub Job Function
                     </option>
@@ -219,12 +207,7 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Location
                   </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, jobLocation: e.target.value })
-                    }
-                  >
+                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, jobLocation : e.target.value})}>
                     <option value="DEFAULT" disabled="">
                       Select Job Location
                     </option>
@@ -266,7 +249,7 @@ function MyVerticallyCenteredModal(props) {
               </Col>
               <Col lg="12">
                 <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
+                  <label className="text-lg" style={{ width: "100%" }} >
                     Job Description
                   </label>
                   <CKEditor
@@ -280,7 +263,8 @@ function MyVerticallyCenteredModal(props) {
                     }}
                     onChange={(event, editor) => {
                       const data = editor.getData();
-                      setJobData({ ...jobData, jobDiscription: data });
+                      setJobData({...jobData, jobDiscription : data})
+                      ;
                     }}
                     onBlur={(event, editor) => {
                       console.log("Blur.", editor);
@@ -308,7 +292,7 @@ function MyVerticallyCenteredModal(props) {
                     onChange={(event, editor) => {
                       const data = editor.getData();
                       // console.log({ event, editor, data });
-                      setJobData({ ...jobData, jobRequirements: data });
+                      setJobData({...jobData, jobRequirements : data})
                     }}
                     onBlur={(event, editor) => {
                       console.log("Blur.", editor);
@@ -335,9 +319,7 @@ function MyVerticallyCenteredModal(props) {
                     placeholder="Enter Profession
                 "
                     required
-                    onChange={(e) =>
-                      setJobData({ ...jobData, profession: e.target.value })
-                    }
+                    onChange={(e) => setJobData({...jobData, profession : e.target.value})}
                   />
                 </fieldset>
               </Col>
@@ -346,12 +328,7 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Education Level
                   </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, educationLevel: e.target.value })
-                    }
-                  >
+                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, educationLevel : e.target.value})}>
                     <option>Select Education level</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -375,15 +352,7 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Employment Type
                   </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({
-                        ...jobData,
-                        employementType: e.target.value,
-                      })
-                    }
-                  >
+                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, employementType : e.target.value})}>
                     <option>Select Employement Type</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -404,7 +373,7 @@ function MyVerticallyCenteredModal(props) {
               </Col>
               <Col lg="12">
                 <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
+                  <label className="text-lg" style={{ width: "100%" }} >
                     Profession
                   </label>
                 </fieldset>
@@ -447,9 +416,7 @@ function MyVerticallyCenteredModal(props) {
                       Start :
                     </label>
                     <input
-                      onChange={(e) =>
-                        setJobData({ ...jobData, startDate: e.target.value })
-                      }
+                    onChange={(e) => setJobData({...jobData, startDate : e.target.value})}
                       style={{ width: "100%" }}
                       className="form-control"
                       type={"date"}
@@ -465,9 +432,7 @@ function MyVerticallyCenteredModal(props) {
                       End :
                     </label>
                     <input
-                      onChange={(e) =>
-                        setJobData({ ...jobData, endDate: e.target.value })
-                      }
+                    onChange={(e) => setJobData({...jobData, endDate : e.target.value})}
                       style={{ width: "100%" }}
                       className="form-control mx-2"
                       type={"date"}
@@ -486,12 +451,9 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Mode of Work
                   </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, madeOfWork: e.target.value })
-                    }
-                  >
+                  <Form.Select aria-label="Default select example" 
+                    onChange={(e) => setJobData({...jobData, madeOfWork : e.target.value})}
+                    >
                     <option>Select Mode of Work</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -521,9 +483,7 @@ function MyVerticallyCenteredModal(props) {
                     className="form-control"
                     type={"number"}
                     name="firstname"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, noOfOpenings: e.target.value })
-                    }
+                    onChange={(e) => setJobData({...jobData, noOfOpenings : e.target.value})}
                     //   value={user.name}
                     //   onChange={getUserData}
                     placeholder="Enter No. of Openings
@@ -537,12 +497,9 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Salary Info
                   </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryInfo: e.target.value })
-                    }
-                  >
+                  <Form.Select aria-label="Default select example" 
+                    onChange={(e) => setJobData({...jobData, salaryInfo : e.target.value})}
+                    >
                     <option value="DEFAULT" disabled="">
                       Currency
                     </option>
@@ -579,9 +536,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control"
                       type={"number"}
                       name="firstname"
-                      onChange={(e) =>
-                        setJobData({ ...jobData, minSalary: e.target.value })
-                      }
+                    onChange={(e) => setJobData({...jobData, minSalary : e.target.value})}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Minimum Salary"
@@ -597,9 +552,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control mx-2"
                       type={"number"}
                       name="firstname"
-                      onChange={(e) =>
-                        setJobData({ ...jobData, maxSalary: e.target.value })
-                      }
+                    onChange={(e) => setJobData({...jobData, maxSalary : e.target.value})}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Maximum Salary
@@ -619,9 +572,7 @@ function MyVerticallyCenteredModal(props) {
                     id="exampleRadio1"
                     value="Salary Negotiable"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
+                    onChange={(e) => setJobData({...jobData, salaryType : e.target.value})}
                   />
                   <label
                     class="form-check-label"
@@ -637,9 +588,7 @@ function MyVerticallyCenteredModal(props) {
                     id="exampleRadio2"
                     value="Project Based"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
+                    onChange={(e) => setJobData({...jobData, salaryType : e.target.value})}
                   />
                   <label
                     class="form-check-label"
@@ -655,9 +604,7 @@ function MyVerticallyCenteredModal(props) {
                     id="exampleRadio3"
                     style={{ marginLeft: "60px" }}
                     value="Others"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
+                    onChange={(e) => setJobData({...jobData, salaryType : e.target.value})}
                   />
                   <label
                     class="form-check-label"
@@ -678,9 +625,7 @@ function MyVerticallyCenteredModal(props) {
                     id="radio1"
                     value="Per Day"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryFreq: e.target.value })
-                    }
+                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
                   />
                   <label
                     for="radio1"
@@ -696,9 +641,7 @@ function MyVerticallyCenteredModal(props) {
                     id="radio2"
                     value="per Week"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryFreq: e.target.value })
-                    }
+                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
                   />
                   <label
                     for="radio2"
@@ -714,9 +657,7 @@ function MyVerticallyCenteredModal(props) {
                     id="radio3"
                     value="per Month"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryFreq: e.target.value })
-                    }
+                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
                   />
                   <label
                     for="radio3"
@@ -732,9 +673,7 @@ function MyVerticallyCenteredModal(props) {
                     id="radio4"
                     value="others"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryFreq: e.target.value })
-                    }
+                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
                   />
                   <label
                     for="radio4"
@@ -761,9 +700,7 @@ function MyVerticallyCenteredModal(props) {
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Enter No. of Openings"
-                      onChange={(e) =>
-                        setJobData({ ...jobData, postedDate: e.target.value })
-                      }
+                    onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
                     />
                   </fieldset>
@@ -780,12 +717,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control"
                       type={"email"}
                       name="firstname"
-                      onChange={(e) =>
-                        setJobData({
-                          ...jobData,
-                          additionalEmails: e.target.value,
-                        })
-                      }
+                    onChange={(e) => setJobData({...jobData, additionalEmails : e.target.value})}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Enter Additional Emails
@@ -828,111 +760,174 @@ function MyVerticallyCenteredModal(props) {
     </Modal>
   );
 }
-
-const ReadMore = ({ children }) => {
-  const text = children;
-  const [isReadMore, setIsReadMore] = useState(true);
-  const toggleReadMore = () => {
-    setIsReadMore(!isReadMore);
-  };
-  return (
-    <p className="text">
-      {isReadMore ? text.slice(0, 450) : text}
-      <span
-        onClick={toggleReadMore}
-        className="read-or-hide font-semibold cursor-pointer"
-        style={{ color: "rgb(57, 190, 193)" }}
-      >
-        {isReadMore ? "...read more" : " show less"}
-      </span>
-    </p>
-  );
-};
-
 export const MainProfile = () => {
-  const [seeMore, setSeeMore] = useState("false");
-  const checkSeeMore = () => {
-    if (seeMore == "false") {
-      setSeeMore("true");
-    } else {
-      setSeeMore("false");
-    }
-  };
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [modalShow, setModalShow] = React.useState(false);
-  const [userId, setUserId] = useState("");
-  console.log(userId, "user ID");
-  // const [isProfileData, setIsProfileData] = useState({})
+  const [userId, setUserId] = useState('')
+  // console.log(userId, 'user ID');
+  const [isProfileData, setIsProfileData] = useState({})
+
 
   const [profileData, setProfileData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phoneNumber: "",
-    foundedIn: "",
-    whatsMakesUsSpecial: "",
-    companyName: "",
-    companyScope: "",
-    salaryRange: "",
-    headquarters: "",
-    companyLocation: "",
-    description: "",
-  });
-  console.log(profileData, "profile Data");
+    firstName : '',
+    lastName : '',
+    email : '',
+    phoneNumber : '',
+    foundedIn : '',
+    whatsMakesUsSpecial : '',
+    companyName : '',
+    companyScope : '',
+    salaryRange : '',
+    headquarters : '',
+    companyLocation : '',
+    description : '',
+  })
+
+  // const [profilePicture, setProfilePicture] = useState('')
+ 
+  // console.log(profilePicture, 'profilePicture');
+  console.log(isProfileData, 'isProfileData');
+  
+  
+  // console.log(profileData, 'profile Data');
   useEffect(() => {
-    let id = localStorage.getItem("id");
-    setUserId(id);
-    initialFun(id);
-  }, []);
+  let id = localStorage.getItem('id')
+  setUserId(id)
+  initialFun(id)
+  },[])
 
   const initialFun = (id) => {
-    axios
-      .get(`http://localhost:3000/v1/users/${id}`)
-      .then((res) => {
-        console.log(res, "Initial Data");
-        let data = res.data;
-        // setIsProfileData(data)
-        setProfileData(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    axios.get(`http://localhost:3000/v1/users/${id}`).then((res)=> {
+      console.log(res, 'Initial Data');
+      let data = res.data
+      // setIsProfileData(data)
+      setProfileData(data)
+    }).catch((err)=> {
+      console.log(err);
+    })
+  }
 
-  const profileFunc = () => {
-    axios
-      .patch(`http://localhost:3000/v1/users/${userId}`, profileData)
-      .then((res) => {
-        console.log(res, "profile data successfully added");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  useEffect(() => {
+    profileData && setIsProfileData(profileData)
+    // profileData && setProfilePicture(profileData)
+  }, [profileData])
 
-  const Content = () => {
+
+const profileFunc = () => {
+  console.log(isProfileData, 'eeeeeeeeeeeeeeeeeeeeeeee');
+  axios.patch(`http://localhost:3000/v1/users/${userId}`, isProfileData).then((res) => {
+    console.log(res, 'profile data successfully added');
+    setProfileData(res.data)
+    if(res) {
+      setShow(false);
+    }
+  }).catch((err) => {
+    console.log(err);
+  })
+}
+
+const profilePictureUpdate = () => {
+  let formdata = new FormData();
+  Object.entries(profileData).map(([key, value]) => {
+    formdata.append(key, value);
+  });
+  axios.patch(`http://localhost:3000/v1/users/${userId}`, formdata)
+  .then((res) => {
+    console.log(res, "profile data successfully added");
+    // setProfileExp(res.data, "ProfileExp");
+    // ProfileExpData();
+    setProfileData(res.data)
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+}
+
+
+
+const FileUploadComponent = () => {
+  // alert('clicked')s
+  const fileParams = ({ meta }) => {
+    return { url: "https://httpbin.org/post" };
+  };
+  const onFileChange = ({ meta, file }, status) => {
+    console.log(status, meta, file);
+  };
+  const onSubmit = (files, allFiles) => {
+    allFiles.forEach((f) => f.remove());
+  };
+  const getFilesFromEvent = (e) => {
+    return new Promise((resolve) => {
+      getDroppedOrSelectedFiles(e).then((chosenFiles) => {
+        resolve(chosenFiles.map((f) => f.fileObject));
+      });
+    });
+  };
+  const selectFileInput = ({ accept, onFiles, files, getFilesFromEvent }) => {
+    const textMsg = files.length > 0 ? "Upload Again" : "Select Files";
     return (
-      <div className="container">
-        <h2>
-          <ReadMore>
-            {profileData?.description
-              ? profileData.description
-              : `A .It has survived t is a long established fact that
-                            a reader will be distracted by the readable content of
-                            a page when looking at its layout. The point of using
-                            Lorem Ipsum is that it has a more-or-less normal
-                            distribution of letters, as opposed to using 'Content
-                            here, content here', making it look like readable
-                            English.`}
-          </ReadMore>
-        </h2>
-      </div>
+      <label>
+        <Image
+          onClick={() => FileUploadComponent()}
+          style={{ width: "100%" }}
+          src={require("../../../assets/Profile.png")}
+        />
+        
+        <input
+          style={{ display: "none" }}
+          type="file"
+          accept={accept}
+          // onClick={}
+          multiple
+          onChange={(e) => {getFilesFromEvent(e).then((chosenFiles) => {
+            let data = chosenFiles
+            // console.log(data, 'daaaaaaataaaaa');
+            // console.log(chosenFiles, 'choaaaaaaaaaaaaasen File');
+            setTimeout(() => {
+              setProfileData({...profileData, image : data})
+              alert(data)
+            }, 5000)
+        
+            if(data.image) {
+              profilePictureUpdate()
+            }
+          })}}
+        />
+      </label>
     );
+  
   };
 
+  // const profileImageUploadHandle = (e) => {
+  //   getFilesFromEvent(e).then((chosenFiles) => {
+  //     let data = chosenFiles
+  //     // console.log(data, 'daaaaaaataaaaa');
+  //     // console.log(chosenFiles, 'choaaaaaaaaaaaaasen File');
+  //     setProfileData({...profileData, image : data})
+  //     if(data) {
+  //       profilePictureUpdate()
+  //     }
+  //   });
+  // }
+
+  // console.log(isProfileData, 'aaaaaaaaa')
+
+  return (
+    <Dropzone
+      onSubmit={onSubmit}
+      onChangeStatus={onFileChange}
+      InputComponent={selectFileInput}
+      getUploadParams={fileParams}
+      getFilesFromEvent={getFilesFromEvent}
+      accept="image/*"
+      maxFiles={1}
+      inputContent="Drop A File"
+    />
+  );
+};
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -980,21 +975,15 @@ export const MainProfile = () => {
               <div className="boxshad py-5">
                 <Row className="align-items-center">
                   <Col lg="2" className="webkit">
-                    <Image
-                      style={{ width: "100%" }}
-                      src={require("../../../assets/Profile.png")}
-                    />
+                  <button>
+                      <FileUploadComponent />
+                    </button>
                   </Col>
                   <Col lg="4">
                     <h2 className="text-3xl py-3 robot">
-                      {profileData?.companyName
-                        ? profileData.companyName
-                        : "Gia (PVT) LTD"}{" "}
-                      <br />
+                      {profileData?.companyName ? profileData.companyName : 'Gia (PVT) LTD'} <br />
                       <span className="text-xl" style={{ color: "#6A489C" }}>
-                        {profileData?.whatsMakesUsSpecial
-                          ? profileData.whatsMakesUsSpecial
-                          : "A Service Like No Other"}
+                        {profileData?.whatsMakesUsSpecial ? profileData.whatsMakesUsSpecial : 'A Service Like No Other'}
                       </span>
                     </h2>
                   </Col>
@@ -1010,10 +999,7 @@ export const MainProfile = () => {
                               fontWeight: "bolder",
                             }}
                           />
-                          Founded in{" "}
-                          {profileData?.foundedIn
-                            ? profileData.foundedIn
-                            : "2000"}
+                          Founded in {profileData?.foundedIn ? profileData.foundedIn : '2000'}
                         </li>
                         <li>
                           <FontAwesomeIcon
@@ -1023,9 +1009,7 @@ export const MainProfile = () => {
                               fontWeight: "bolder",
                             }}
                           />
-                          {profileData?.headquarters
-                            ? profileData.headquarters
-                            : "USA"}
+                          {profileData?.headquarters ? profileData.headquarters : 'USA'}
                         </li>
                         <li>
                           {" "}
@@ -1112,17 +1096,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="fname"
                                       type={"text"}
-                                      value={profileData?.firstName || ""}
-                                      onChange={(e) =>
-                                        setProfileData({
-                                          ...profileData,
-                                          firstName: e.target.value,
-                                        })
-                                      }
+                                      onChange={(e) => setIsProfileData({...isProfileData, firstName : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder="Gia 
-                "
+                                      placeholder={profileData?.firstName || ''}
                                     />
                                   </fieldset>
                                 </Col>
@@ -1139,17 +1116,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="lname"
                                       type={"text"}
-                                      value={profileData?.lastName || ""}
-                                      onChange={(e) =>
-                                        setProfileData({
-                                          ...profileData,
-                                          lastName: e.target.value,
-                                        })
-                                      }
+                                      onChange={(e) => setIsProfileData({...isProfileData, lastName : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder="Jay 
-                "
+                                      placeholder={profileData?.lastName || ''}
                                     />
                                   </fieldset>
                                 </Col>
@@ -1167,13 +1137,8 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="email"
                                       type={"email"}
-                                      value={profileData?.email || ""}
-                                      onChange={(e) =>
-                                        setProfileData({
-                                          ...profileData,
-                                          email: e.target.value,
-                                        })
-                                      }
+                                      value={profileData?.email || ''}
+                                      onChange={(e) => setIsProfileData({...isProfileData, email : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
                                       placeholder="gaiaewreeytyrt@gmail.com 
@@ -1194,17 +1159,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
-                                      value={profileData?.phoneNumber || ""}
-                                      onChange={(e) =>
-                                        setProfileData({
-                                          ...profileData,
-                                          phoneNumber: e.target.value,
-                                        })
-                                      }
+                                      onChange={(e) => setIsProfileData({...isProfileData, phoneNumber : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder="61453472
-                "
+                                      placeholder={profileData?.phoneNumber || ''}
                                     />
                                   </fieldset>
                                 </Col>
@@ -1221,16 +1179,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
-                                      value={profileData?.foundedIn || ""}
-                                      onChange={(e) =>
-                                        setProfileData({
-                                          ...profileData,
-                                          foundedIn: e.target.value,
-                                        })
-                                      }
+                                      onChange={(e) => setIsProfileData({...isProfileData, foundedIn : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder="2000"
+                                      placeholder={profileData?.foundedIn || ''}
                                     />
                                   </fieldset>
                                 </Col>
@@ -1247,19 +1199,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
-                                      value={
-                                        profileData?.whatsMakesUsSpecial || ""
-                                      }
-                                      onChange={(e) =>
-                                        setProfileData({
-                                          ...profileData,
-                                          whatsMakesUsSpecial: e.target.value,
-                                        })
-                                      }
+                                      onChange={(e) => setIsProfileData({...isProfileData, whatsMakesUsSpecial : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder="A Service Like No Other
-                "
+                                      placeholder={profileData?.whatsMakesUsSpecial || ''}
                                     />
                                   </fieldset>
                                 </Col>
@@ -1287,17 +1230,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       type={"text"}
                                       name="firstname"
-                                      value={profileData?.companyName || ""}
-                                      onChange={(e) =>
-                                        setProfileData({
-                                          ...profileData,
-                                          companyName: e.target.value,
-                                        })
-                                      }
+                                      onChange={(e) => setIsProfileData({...isProfileData, companyName : e.target.value})}
                                       //   value={user.name}
                                       //   onChange={getUserData}
-                                      placeholder="Gia (PVT) LTD
-                "
+                                      placeholder={profileData?.companyName || ''}
                                       required
                                     />
                                   </fieldset>
@@ -1316,17 +1252,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       type={"text"}
                                       name="lastname"
-                                      value={profileData?.companyScope || ""}
-                                      onChange={(e) =>
-                                        setProfileData({
-                                          ...profileData,
-                                          companyScope: e.target.value,
-                                        })
-                                      }
+                                      onChange={(e) => setIsProfileData({...isProfileData, companyScope : e.target.value})}
                                       //   value={user.email}
                                       //   onChange={getUserData}
-                                      placeholder="IT Industry
-                "
+                                      placeholder={profileData?.companyScope || ''}
                                       required
                                     />
                                   </fieldset>
@@ -1344,17 +1273,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="Email"
                                       type={"text"}
-                                      value={profileData?.salaryRange || ""}
-                                      onChange={(e) =>
-                                        setProfileData({
-                                          ...profileData,
-                                          salaryRange: e.target.value,
-                                        })
-                                      }
+                                      onChange={(e) => setIsProfileData({...isProfileData, salaryRange : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder="https://www.me2work.com/
-                "
+                                      placeholder={profileData?.salaryRange || ''}
                                     />
                                   </fieldset>
                                 </Col>
@@ -1372,17 +1294,10 @@ export const MainProfile = () => {
                                         className="form-control"
                                         name="minwork"
                                         type={"text"}
-                                        value={profileData?.headquarters || ""}
-                                        onChange={(e) =>
-                                          setProfileData({
-                                            ...profileData,
-                                            headquarters: e.target.value,
-                                          })
-                                        }
+                                        onChange={(e) => setIsProfileData({...isProfileData, headquarters : e.target.value})}
                                         //   value={user.number}
                                         //   onChange={getUserData}
-                                        placeholder="USA
-                "
+                                        placeholder={profileData?.headquarters || ''}
                                       />
                                     </div>
                                   </fieldset>
@@ -1400,17 +1315,10 @@ export const MainProfile = () => {
                                       className="form-control"
                                       name="Email"
                                       type={"text"}
-                                      value={profileData?.companyLocation || ""}
-                                      onChange={(e) =>
-                                        setProfileData({
-                                          ...profileData,
-                                          companyLocation: e.target.value,
-                                        })
-                                      }
+                                      onChange={(e) => setIsProfileData({...isProfileData, companyLocation : e.target.value})}
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder="Huston
-                "
+                                      placeholder={profileData?.companyLocation || ''}
                                     />
                                   </fieldset>
                                 </Col>
@@ -1423,15 +1331,9 @@ export const MainProfile = () => {
                                       Description
                                     </label>
                                     <textarea
-                                      onChange={(e) =>
-                                        setProfileData({
-                                          ...profileData,
-                                          description: e.target.value,
-                                        })
-                                      }
-                                      placeholder="Description"
+                                    onChange={(e) => setIsProfileData({...isProfileData, description : e.target.value})}
+                                      placeholder={profileData?.description || ''}
                                       className="form-control"
-                                      value={profileData?.description || ""}
                                     />
                                     {/* <input
                                       style={{ width: "100%" }}
@@ -1530,9 +1432,7 @@ export const MainProfile = () => {
                         <h2 className="text-xl font-semibold">Full Name</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.firstName && profileData?.lastName
-                            ? profileData.firstName + " " + profileData.lastName
-                            : "Gia Jay"}
+                          {profileData?.firstName && profileData?.lastName ? profileData.firstName + ' ' + profileData.lastName : 'Gia Jay'} 
                         </h2>
                       </div>
                     </Col>
@@ -1541,9 +1441,7 @@ export const MainProfile = () => {
                         <h2 className="text-xl font-semibold">Email</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.email
-                            ? profileData.email
-                            : "gaiaewreeytyrt@gmail.com"}
+                          {profileData?.email ? profileData.email : 'gaiaewreeytyrt@gmail.com'}
                         </h2>
                       </div>
                     </Col>
@@ -1552,9 +1450,7 @@ export const MainProfile = () => {
                         <h2 className="text-xl font-semibold">Phone Number</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.phoneNumber
-                            ? profileData.phoneNumber
-                            : "61453472"}
+                          {profileData?.phoneNumber ? profileData.phoneNumber : '61453472'}
                         </h2>
                       </div>
                     </Col>
@@ -1571,9 +1467,7 @@ export const MainProfile = () => {
                         <h2 className="text-xl font-semibold">Company Name</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.companyName
-                            ? profileData.companyName
-                            : "Gia (PVT) LTD"}
+                          {profileData?.companyName ? profileData.companyName : 'Gia (PVT) LTD'}
                         </h2>
                       </div>
                     </Col>
@@ -1582,9 +1476,7 @@ export const MainProfile = () => {
                         <h2 className="text-xl font-semibold">Company Scope</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.companyScope
-                            ? profileData.companyScope
-                            : "IT Industry"}
+                          {profileData?.companyScope ? profileData.companyScope : 'IT Industry'}
                         </h2>
                       </div>
                     </Col>
@@ -1606,9 +1498,7 @@ export const MainProfile = () => {
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.companyLocation
-                            ? profileData.companyLocation
-                            : "Huston"}
+                          {profileData?.companyLocation ? profileData.companyLocation :'Huston'}
                         </h2>
                       </div>
                     </Col>
@@ -1619,21 +1509,33 @@ export const MainProfile = () => {
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {/* {profileData?.description
-                            ? profileData.description
-                            : `A .It has survived t is a long established fact that
+                       {profileData?.description ? profileData.description : 
+                       `A .It has survived t is a long established fact that
                           a reader will be distracted by the readable content of
                           a page when looking at its layout. The point of using
                           Lorem Ipsum is that it has a more-or-less normal
                           distribution of letters, as opposed to using 'Content
                           here, content here', making it look like readable
-                          English.`} */}
-                          <Content />
+                          English.`}
                         </h2>
                       </div>
                     </Col>
                   </Row>
                 </Container>
+                <hr style={{ border: "1px solid" }} />
+                <div className="webkit pt-3">
+                  <Button
+                    className="mx-2 px-3 font-semibold"
+                    style={{
+                      background: "none",
+                      fontSize: "20px",
+                      border: "none",
+                      color: "#39BEC1",
+                    }}
+                  >
+                    SEE MORE DETAIL
+                  </Button>
+                </div>
               </div>
             </div>
           </Col>
