@@ -145,6 +145,10 @@ useEffect(()=>{
         console.log(data, 'daaaaaaaaataaaaaaaaaaaa');
         // setIsProfileData(data)
         setProfileData(data);
+        setIsExperienceData(data.data.experience)
+        setIsAchievementData(data.data.achievement)
+        setIsEducationData(data.data.education)
+        setIsLanguageData(data.data.language)
       })
       .catch((err) => {
         console.log(err);
@@ -291,7 +295,7 @@ useEffect(()=>{
     formdata.append(key, value);
   });
   axios
-  .put(`http://localhost:3000/v1/education/${id}`, formdata)
+  .put(`/api/v1/user/freelancer/asset/education-cert/${id}`, formdata)
   .then((res) => {
     // alert(isEditExperienceData.profession)
     console.log(res, "education edit data successfully added");
@@ -305,7 +309,7 @@ useEffect(()=>{
   });
 } else {
   axios
-      .put(`http://localhost:3000/v1/education/${id}`, isEditEducationData)
+      .put(`/api/v1/user/freelancer/asset/education-cert/${id}`, isEditEducationData)
       .then((res) => {
         // alert(isEditExperienceData.profession)
         console.log(res, "education edit data successfully added");
@@ -371,7 +375,7 @@ useEffect(()=>{
         formdata.append(key, value);
       });
       axios
-      .put(`http://localhost:3000/v1/achievement/${id}`, formdata)
+      .put(`/api/v1/user/freelancer/asset/achievement-cert/${id}`, formdata)
       .then((res) => {
         // alert(isEditExperienceData.profession)
         console.log(res, "education edit data successfully added");
@@ -385,7 +389,7 @@ useEffect(()=>{
       });
     } else {
       axios
-          .put(`http://localhost:3000/v1/achievement/${id}`, isEditAchievementData)
+          .put(`/api/v1/user/freelancer/asset/achievement-cert/${id}`, isEditAchievementData)
           .then((res) => {
             // alert(isEditExperienceData.profession)
             console.log(res, "education edit data successfully added");
@@ -1574,7 +1578,7 @@ useEffect(()=>{
                                         <Col lg="6">
                                           <div className="p3">
                                             <h2 className="text-xl font-semibold">
-                                              {event?.profession}
+                                              {event?.title}
                                             </h2>
 
                                             <h2
@@ -2434,7 +2438,7 @@ jhggff
                                           border: "none",
                                         }}
                                         onClick={() =>
-                                          (window.location.href = `http://localhost:3000${event.certificate}`)
+                                          (window.location.href = `http://103.1.179.231:3000/${event.certificate}`)
                                         }
                                       >
                                         see certificate

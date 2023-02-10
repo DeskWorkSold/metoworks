@@ -47,6 +47,8 @@ function MyVerticallyCenteredModal(props) {
     role : 'companyJob'
   })
   // console.log(jobData, 'Dataa');
+
+
   const navigate = useNavigate()
   const postFun = () => {
     axios.post('http://localhost:3000/v1/job-post', jobData).then((res) => {
@@ -770,7 +772,8 @@ export const MainProfile = () => {
   // console.log(userId, 'user ID');
   const [isProfileData, setIsProfileData] = useState({})
 
-
+ const [isToken, setIsToken] = useState({})
+ console.log(isToken, 'TOKKKKKKKKKKEN');
   const [profileData, setProfileData] = useState({
     firstName : '',
     lastName : '',
@@ -791,16 +794,16 @@ export const MainProfile = () => {
   // console.log(profilePicture, 'profilePicture');
   console.log(isProfileData, 'isProfileData');
   
-  
   // console.log(profileData, 'profile Data');
   useEffect(() => {
-  let id = localStorage.getItem('id')
-  setUserId(id)
-  initialFun(id)
+    setIsToken(localStorage.getItem("access-token"))
+  // let id = localStorage.getItem('id')
+  setUserId()
+  initialFun()
   },[])
 
   const initialFun = (id) => {
-    axios.get(`http://localhost:3000/v1/users/${id}`).then((res)=> {
+    axios.get(`/v1/recruiter/profiledata`).then((res)=> {
       console.log(res, 'Initial Data');
       let data = res.data
       // setIsProfileData(data)

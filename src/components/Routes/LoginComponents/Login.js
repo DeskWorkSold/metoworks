@@ -61,14 +61,14 @@ export const Login = () => {
     let isValidate = validatorLoginAuth(recruiterData)
     if(isValidate === true) {
     axios
-      .post("http://localhost:3000/v1/auth/login", recruiterData)
+      .post("/api/v1/user/login", recruiterData)
       .then((res) => {
         console.log(res);
-        const { role, id } = res.data.user;
-        localStorage.setItem("id", id);
-        localStorage.setItem("access-token", res.data.tokens.access.token);
-        // console.log(data, 'daata');
-        if (role === "recuriter") {
+        const {type, token} = res.data.data;
+        // localStorage.setItem("id", token);
+        localStorage.setItem("access-token", token);
+        console.log(token, 'daata');
+        if (type === 'recruiter') {
           navigate("/CompanyProfile");
         }
       })
