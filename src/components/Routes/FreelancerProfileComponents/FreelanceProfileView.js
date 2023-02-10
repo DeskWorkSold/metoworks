@@ -50,7 +50,7 @@ export const FreelanceProfileView = () => {
   const [show10, setShow10] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const handleClose1 = () => setShow1(false);
+  const handleClose1 = () => setShow1(false); 
   const handleShow1 = () => setShow1(true);
   const handleClose2 = () => setShow2(false);
   const handleShow2 = () => setShow2(true);
@@ -138,10 +138,11 @@ useEffect(()=>{
 
   const initialFun = (id) => {
     axios
-      .get(`http://localhost:3000/v1/users/${id}`)
+      .get(`/api/v1/user/freelancer`)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data;
+        console.log(data, 'daaaaaaaaataaaaaaaaaaaa');
         // setIsProfileData(data)
         setProfileData(data);
       })
@@ -176,7 +177,10 @@ useEffect(()=>{
       .then((res) => {
         console.log(res, "profile data successfully added");
         // setProfileExp(res.data, "ProfileExp");
-        ProfileExpData();
+        ProfileExpData(userId);
+        if(res) {
+          setShow1(false)
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -257,7 +261,10 @@ useEffect(()=>{
       .post(`http://localhost:3000/v1/education`, formdata)
       .then((res) => {
         console.log(res, "profile data successfully added");
-        setProfileExp(res.data, "ProfileExp");
+        setProfileExp(res.data);
+        if(res) {
+          setShow2(false)
+        }
         // ProfileExpData()
       })
       .catch((err) => {
@@ -1531,7 +1538,7 @@ useEffect(()=>{
                       <Button
                         variant="primary"
                         style={{ background: "none", color: "#39BEC1" }}
-                        onClick={ProfileExp}
+                        onClick={() => ProfileExp()}
                       >
                         Save
                       </Button>
@@ -2364,7 +2371,7 @@ jhggff
                       <Button
                         variant="primary"
                         style={{ background: "none", color: "#39BEC1" }}
-                        onClick={educationFunc}
+                        onClick={() => educationFunc()}
                       >
                         Save
                       </Button>

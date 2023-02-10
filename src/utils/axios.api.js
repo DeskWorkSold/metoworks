@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: "http://103.1.179.231:3000/",
 });
 
 instance.interceptors.request.use(
@@ -20,7 +20,7 @@ export default {
     return instance.get(url, { params });
   },
   post(url, data, headers) {
-    if (headers) return instance.post(url, data, {headers});
+    if (headers) return instance.post(url, data, { headers });
     return instance.post(url, data);
   },
   put(url, data) {

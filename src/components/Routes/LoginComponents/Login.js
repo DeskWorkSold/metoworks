@@ -5,10 +5,9 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { BrowserRouter as Route, Router, Link, Switch } from "react-router-dom";
 
 import "react-tabs/style/react-tabs.css";
-import axios from "axios";
 import { Navigation } from "swiper";
 import { useNavigate } from "react-router-dom/dist";
-
+import axios from "../../../utils/axios.api";
 export const Login = () => {
   const [freelancerData, setFreelancerData] = useState({
     email: "",
@@ -39,14 +38,14 @@ export const Login = () => {
     let isValidate = validatorLoginAuth(freelancerData);
     if (isValidate == true) {
       axios
-        .post("http://localhost:3000/v1/auth/login", freelancerData)
+        .post("api/v1/user/login", freelancerData)
         .then((res) => {
           console.log(res);
-          const {role, id} = res.data.user
-          localStorage.setItem("id", id);
-          localStorage.setItem("access-token", res.data.tokens.access.token);
+          const {token, type} = res.data.data
+          // localStorage.setItem("id", id);
+          localStorage.setItem("access-token", token);
           // console.log(data, 'daata');
-          if (role === "freelancer") {
+          if (type === "freelancer") {
             navigate("/FreelancerProfile");
           }
         })
