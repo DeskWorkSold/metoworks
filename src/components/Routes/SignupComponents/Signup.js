@@ -5,7 +5,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { BrowserRouter as Route, Router, Link, Switch } from "react-router-dom";
 
 import "react-tabs/style/react-tabs.css";
-import axios from "axios";
+import axios from "../../../utils/axios.api";
 
 export const Signup = () => {
   const [freelancerSignupData, setFreelancerSignUpData] = useState({
@@ -34,9 +34,10 @@ export const Signup = () => {
         lastName: freelancerSignupData.lastName,
         email: freelancerSignupData.email,
         password: freelancerSignupData.password,
+        type : 'freelancer'
       };
       axios
-        .post("http://localhost:3000/v1/auth/register", obj)
+        .post(`api/v1/user/register?type=${obj.type}`, obj)
         .then((res) => {
           console.log(res);
           let id = res.data.user.id
@@ -55,12 +56,17 @@ export const Signup = () => {
         lastName: recruiterSignupData.lastName,
         email: recruiterSignupData.email,
         password: recruiterSignupData.password,
-        role : "recuriter"
+        type : "recruiter",
+        companyName : 'Codesk'
       };
+      // const {firstName, lastName, email, password } = module 
+      console.log(obj1, 'model');
+      console.log(obj1.type, 'type');
       axios
-        .post("http://localhost:3000/v1/auth/register", obj1)
+        .post(`api/v1/user/register?type=${obj1.type}`, obj1)
         .then((res) => {
           console.log(res);
+
         })
         .catch((error) => {
           console.log(error);

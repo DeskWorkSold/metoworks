@@ -294,8 +294,9 @@ useEffect(()=>{
   Object.entries(isEditEducationData).map(([key, value]) => {
     formdata.append(key, value);
   });
+  console.log(formdata, 'dataaaaaaaaaaaaaaaaaaa');
   axios
-  .put(`/api/v1/user/freelancer/asset/education-cert/${id}`, formdata)
+  .put(`api/v1/user/freelancer/asset/education-cert?id=${id}`, formdata)
   .then((res) => {
     // alert(isEditExperienceData.profession)
     console.log(res, "education edit data successfully added");
@@ -308,8 +309,9 @@ useEffect(()=>{
     console.log(err);
   });
 } else {
+  console.log(isEditEducationData, 'dataaaaaaaaaaaaaaaaaaa');
   axios
-      .put(`/api/v1/user/freelancer/asset/education-cert/${id}`, isEditEducationData)
+      .put(`api/v1/user/freelancer/asset/education-cert?id=${id}`, isEditEducationData)
       .then((res) => {
         // alert(isEditExperienceData.profession)
         console.log(res, "education edit data successfully added");
@@ -375,7 +377,7 @@ useEffect(()=>{
         formdata.append(key, value);
       });
       axios
-      .put(`/api/v1/user/freelancer/asset/achievement-cert/${id}`, formdata)
+      .put(`api/v1/user/freelancer/asset/achievement-cert?id=${id}`, formdata)
       .then((res) => {
         // alert(isEditExperienceData.profession)
         console.log(res, "education edit data successfully added");
@@ -389,7 +391,7 @@ useEffect(()=>{
       });
     } else {
       axios
-          .put(`/api/v1/user/freelancer/asset/achievement-cert/${id}`, isEditAchievementData)
+          .put(`api/v1/user/freelancer/asset/achievement-cert?id=${id}`, isEditAchievementData)
           .then((res) => {
             // alert(isEditExperienceData.profession)
             console.log(res, "education edit data successfully added");
@@ -502,7 +504,7 @@ useEffect(()=>{
           <Image
             onClick={() => FileUploadComponent()}
             style={{ width: "100%" }}
-            src={require("../../../assets/Profile.png")}
+            src={{uri : profileData?.data?.files?.thumbnail}}
           />
           <input
             style={{ display: "none" }}
@@ -576,7 +578,7 @@ useEffect(()=>{
                       // variant="primary"
                       // onClick={() => setModalShow(true)}
                       onClick={() =>
-                        (window.location.href = `http://localhost:3000${profileData?.cv}`)
+                        (window.location.href = `http://103.1.179.231:3000/${profileData?.data?.files.cv}`)
                       }
                     
                       className="text-white border-rounded px-3"
@@ -633,7 +635,7 @@ useEffect(()=>{
                       /> */}
 
                       <h2 style={{ color: "#7A7979" }} className="text-xl">
-                        HKD ${profileData?.min} - ${profileData?.max}
+                        HKD ${profileData?.data?.salaryRange?.gte} - ${profileData?.data?.salaryRange?.lte}
                       </h2>
                     </div>
                   </Col>
@@ -1135,11 +1137,8 @@ useEffect(()=>{
                         <h2 className="text-xl font-semibold">Full Name</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.fullName ||
-                            profileData?.firstName +
-                              " " +
-                              profileData.lastName ||
-                            "Ella Jay"}
+                          {profileData?.data?.firstName + ' ' +
+                            profileData?.data?.lastName }
                         </h2>
                       </div>
                     </Col>
@@ -1150,7 +1149,7 @@ useEffect(()=>{
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.visaHkPermit === "Yes" ? "90065" : "-"}
+                          {profileData?.data?.visaPermit}
                         </h2>
                       </div>
                     </Col>
@@ -1159,7 +1158,7 @@ useEffect(()=>{
                         <h2 className="text-xl font-semibold">Phone</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.phoneNumber || "088676534"}
+                          {profileData?.data?.phoneNumber}
                         </h2>
                       </div>
                     </Col>
@@ -1168,7 +1167,7 @@ useEffect(()=>{
                         <h2 className="text-xl font-semibold">Date of Birth</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.dob || "2004-01-05"}
+                          {profileData?.data?.dob}
                         </h2>
                       </div>
                     </Col>
@@ -1179,7 +1178,7 @@ useEffect(()=>{
                         <h2 className="text-xl font-semibold">Gender</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.gender || "female"}
+                          {profileData?.data?.gender}
                         </h2>
                       </div>
                     </Col>
@@ -1188,7 +1187,7 @@ useEffect(()=>{
                         <h2 className="text-xl font-semibold">Country</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.countryTimeZone || "Sri Lanka"}
+                          {profileData?.data?.country}
                         </h2>
                       </div>
                     </Col>
@@ -1197,7 +1196,7 @@ useEffect(()=>{
                         <h2 className="text-xl font-semibold">City</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.city || "Nugegoda"}
+                          {profileData?.data?.city}
                         </h2>
                       </div>
                     </Col>
@@ -1206,8 +1205,7 @@ useEffect(()=>{
                         <h2 className="text-xl font-semibold">Address</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.address ||
-                            "45, Nugegoda Road, Hill street"}
+                          {profileData?.data?.address}
                         </h2>
                       </div>
                     </Col>
@@ -1216,7 +1214,7 @@ useEffect(()=>{
                         <h2 className="text-xl font-semibold">State</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.state || "Western"}
+                          {profileData?.data?.state}
                         </h2>
                       </div>
                     </Col>
@@ -1229,7 +1227,7 @@ useEffect(()=>{
                         <h2 className="text-xl font-semibold">About Me</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.aboutMe ||
+                          {profileData?.data?.aboutMe ||
                             `It has survived t is a long established fact that a
                           reader will be distracted by the readable content of a
                           page when looking at its layout. The point of using
@@ -2299,8 +2297,8 @@ jhggff
                                   name="email"
                                   onChange={(e) =>
                                     setIsEducation({
-                                      ...isEducation,
-                                      startingDate: e.target.value,
+                                      ...isEducation.duration,
+                                      gte: e.target.value,
                                     })
                                   }
                                   type={"date"}
@@ -2327,8 +2325,8 @@ jhggff
                                   name="firstname"
                                   onChange={(e) =>
                                     setIsEducation({
-                                      ...isEducation,
-                                      endingDate: e.target.value,
+                                      ...isEducation.duration,
+                                      lte: e.target.value,
                                     })
                                   }
                                   //   value={user.name}
