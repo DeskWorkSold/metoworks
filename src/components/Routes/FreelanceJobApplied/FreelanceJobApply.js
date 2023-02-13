@@ -1,8 +1,37 @@
 import React from "react";
+import { useState } from "react";
+import { useEffect } from "react";
 import { Container, Button, Row, Col, Image, Form } from "react-bootstrap";
 import { BsArrowBarDown, BsBookmark } from "react-icons/bs";
+import axios from "../../../utils/axios.api";
 
 export const FreelanceJobApply = () => {
+  const [searchData, setSearchData] = useState({})
+
+  useEffect(() => {
+    initialFun()
+  },[])
+
+  const initialFun = () => {
+  //   const response = applyJob(
+  //     token,
+  //     props?.id
+  // )
+    axios
+      .get(`api/v1/user/freelancer/applied-jobs`)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data;
+        console.log(data, 'daaaaaaaaataaaaaaaaaaaa');
+        // setIsProfileData(data)
+        setSearchData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -23,107 +52,112 @@ export const FreelanceJobApply = () => {
       </Container>
       <hr className="my-2" />
       <Container>
-        <Row>
-          <Col lg="12">
-            <div className="p-3">
-              <div className="boxshad">
-                <Row>
-                  <Col lg="7">
-                    <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                      Doctor for Child
-                    </h2>
-                    <p style={{ color: "#7A7979" }} className="text-l">
-                      Full Time
-                    </p>
-                  </Col>
-                  <Col lg="5" className="webkit-right">
-                    <p style={{ color: "#7A7979" }} className="text-lg">
-                      Posted Date : Jan 2023 &nbsp;&nbsp; &nbsp;&nbsp;
-                      <span>Expiry Date : Feb 2023</span>
-                    </p>
-                  </Col>
-                </Row>
-                <Row className="align-items-center block-for-res">
-                  <Col>
-                    <div className="p3 py-3">
-                      <h2 className="text-lg font-semibold">Company Name</h2>
-                      <h2 className="text-l" style={{ color: "#7A7979" }}>
-                        Gia (PVT) LTD
+        {searchData.length > 0 && searchData.map((items, keys) => {
+          return (
+            <Row>
+            <Col lg="12">
+              <div className="p-3">
+                <div className="boxshad">
+                  <Row>
+                    <Col lg="7">
+                      <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
+                      {items.title}
                       </h2>
-                    </div>
-                  </Col>
-                  <Col>
-                    <div className="p3 py-3">
-                      <h2 className="text-lg font-semibold">Job Industry</h2>
-                      <h2 className="text-l" style={{ color: "#7A7979" }}>
-                        Hospital
-                      </h2>
-                    </div>
-                  </Col>
-                  <Col>
-                    <div className="p3 py-3">
-                      <h2 className="text-lg font-semibold">Salary Range</h2>
-                      <h2 className="text-l" style={{ color: "#7A7979" }}>
-                        HKD 3 - HKD 6
-                      </h2>
-                    </div>
-                  </Col>
-                  <Col>
-                    <div className="p3 py-3">
-                      <h2 className="text-lg font-semibold">Location</h2>
-                      <h2 className="text-l" style={{ color: "#7A7979" }}>
-                        Central and Western
-                      </h2>
-                    </div>
-                  </Col>
-                  <Col>
-                    <div className="p3 py-3">
-                      <h2 className="text-lg font-semibold">
-                        No. of candidates
-                      </h2>
-                      <h2 className="text-l" style={{ color: "#7A7979" }}>
-                        4
-                      </h2>
-                    </div>
-                  </Col>
-                </Row>
-                <hr className="my-2" />
-                <Row className="align-items-center">
-                  <Col lg="12">
-                    <div
-                      className="py-2"
-                      style={{
-                        float: "right",
-                        color: "#7A7979",
-                        fontSize: "25px",
-                        display: "flex",
-                      }}
-                    >
-                      <Button
-                        className="rounded-full px-3 py-3 w-48 mx-2"
+                      <p style={{ color: "#7A7979" }} className="text-l">
+                        Full Time
+                      </p>
+                    </Col>
+                    <Col lg="5" className="webkit-right">
+                      <p style={{ color: "#7A7979" }} className="text-lg">
+                        Posted Date : {items?.postedDate} &nbsp;&nbsp; &nbsp;&nbsp;
+                        <span>Expiry Date : Feb 2023</span>
+                      </p>
+                    </Col>
+                  </Row>
+                  <Row className="align-items-center block-for-res">
+                    <Col>
+                      <div className="p3 py-3">
+                        <h2 className="text-lg font-semibold">Company Name</h2>
+                        <h2 className="text-l" style={{ color: "#7A7979" }}>
+                        {items?.companyName}
+                        </h2>
+                      </div>
+                    </Col>
+                    <Col>
+                      <div className="p3 py-3">
+                        <h2 className="text-lg font-semibold">Job Industry</h2>
+                        <h2 className="text-l" style={{ color: "#7A7979" }}>
+                        {items?.industry}
+                        </h2>
+                      </div>
+                    </Col>
+                    <Col>
+                      <div className="p3 py-3">
+                        <h2 className="text-lg font-semibold">Salary Range</h2>
+                        <h2 className="text-l" style={{ color: "#7A7979" }}>
+                        KD{items?.salaryRange.gte} - HDK{items?.salaryRange.lte}
+                        </h2>
+                      </div>
+                    </Col>
+                    <Col>
+                      <div className="p3 py-3">
+                        <h2 className="text-lg font-semibold">Location</h2>
+                        <h2 className="text-l" style={{ color: "#7A7979" }}>
+                        {items?.location}
+                        </h2>
+                      </div>
+                    </Col>
+                    <Col>
+                      <div className="p3 py-3">
+                        <h2 className="text-lg font-semibold">
+                          No. of candidates
+                        </h2>
+                        <h2 className="text-l" style={{ color: "#7A7979" }}>
+                        {items?.noOfOpenings}
+                        </h2>
+                      </div>
+                    </Col>
+                  </Row>
+                  <hr className="my-2" />
+                  <Row className="align-items-center">
+                    <Col lg="12">
+                      <div
+                        className="py-2"
                         style={{
-                          background: "none",
-                          border: "1px solid #39BEC1",
-                          color: "#39BEC1",
+                          float: "right",
+                          color: "#7A7979",
+                          fontSize: "25px",
+                          display: "flex",
                         }}
                       >
-                        completed
-                      </Button>
-                    </div>
-                    {/* <Button
-                      className="text-white border-rounded px-3"
-                      style={{ background: "#39BEC1", border: "none" }}
-                    >
-                      View Profile
-                    </Button> */}
-                  </Col>
-                </Row>
+                        <Button
+                          className="rounded-full px-3 py-3 w-48 mx-2"
+                          style={{
+                            background: "none",
+                            border: "1px solid #39BEC1",
+                            color: "#39BEC1",
+                          }}
+                        >
+                          completed
+                        </Button>
+                      </div>
+                      {/* <Button
+                        className="text-white border-rounded px-3"
+                        style={{ background: "#39BEC1", border: "none" }}
+                      >
+                        View Profile
+                      </Button> */}
+                    </Col>
+                  </Row>
+                </div>
               </div>
-            </div>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+          )
+        })}
+      
 
-        <Row>
+        {/* <Row>
           <Col lg="12">
             <div className="p-3">
               <div className="boxshad">
@@ -216,14 +250,14 @@ export const FreelanceJobApply = () => {
                     >
                       View Profile
                     </Button> */}
-                  </Col>
+                  {/* </Col>
                 </Row>
               </div>
             </div>
           </Col>
-        </Row>
+        </Row> */} 
 
-        <Row>
+        {/* <Row>
           <Col lg="12">
             <div className="p-3">
               <div className="boxshad">
@@ -316,12 +350,12 @@ export const FreelanceJobApply = () => {
                     >
                       View Profile
                     </Button> */}
-                  </Col>
+                  {/* </Col>
                 </Row>
               </div>
             </div>
           </Col>
-        </Row>
+        </Row> */} 
       </Container>
     </Container>
   );

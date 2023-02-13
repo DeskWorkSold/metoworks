@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -7,6 +7,8 @@ import { A11y, Navigation } from "swiper";
 import { Container, Col, Row, Button, Form, Image } from "react-bootstrap";
 
 import { BsArrowBarDown, BsBookmark } from "react-icons/bs";
+import { useState } from "react";
+import axios from "../../../utils/axios.api";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -18,6 +20,28 @@ import { BsArrowBarDown, BsBookmark } from "react-icons/bs";
 // import "swiper/css/scrollbar";
 
 export const MainProfession = () => {
+
+  const [isSearch, setIsSearch] = useState({
+    keyword : '',
+    filter : []
+  })
+  const [searchData, setSearchData] = useState({})
+
+  const searchFun = () => {
+    axios
+      .post(`/api/v1/search/freelancer?from=0&size=4`, isSearch)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data;
+        console.log(data, 'daaaaaaaaataaaaaaaaaaaa');
+        // setIsProfileData(data)
+        setSearchData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -33,11 +57,13 @@ export const MainProfession = () => {
               <Row>
                 <Col>
                   <div className="About_main_images_search">
-                    <input placeholder="Enter Profession, Company Name or Keywords."></input>
+                    <input placeholder="Enter Profession, Company Name or Keywords." onChange={(e) => setIsSearch({...isSearch, keyword : e.target.value})} >
+                    </input>
 
                     <Button
                       className="text-white border-rounded px-3"
                       style={{ background: "#39BEC1", border: "none" }}
+                      onClick={() => searchFun()}
                     >
                       Search
                     </Button>

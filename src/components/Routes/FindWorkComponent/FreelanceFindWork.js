@@ -41,6 +41,10 @@ export const FreelanceFindWork = () => {
       });
   };
 
+  
+  const resetFun = () => {
+    setSearchData(null)
+  }
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -66,6 +70,7 @@ export const FreelanceFindWork = () => {
                     <Button
                       className="text-white border-rounded mx-2"
                       style={{ background: "#39BEC1", border: "none" }}
+                      onClick={() => resetFun()}
                     >
                       Reset
                     </Button>
@@ -119,16 +124,16 @@ export const FreelanceFindWork = () => {
                               <Button
                                 className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
                                 style={{ background: "#39BEC1", border: "none" }}
-                                onClick={() => navigate("/FreelancerProfile", { state: { values } })}
+                                // onClick={() => navigate("/FreelancerProfile", { state: { values } })}
                               >
-                                View Profile
+                               APPLY
                               </Button>
                               <Button
                                 onClick={handleShow}
                                 className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
                                 style={{ background: "#C1C1C1", border: "none" }}
                               >
-                                view more details
+                               VIEW MORE DETAIL
                               </Button>
                               <Modal
                                 show={show}

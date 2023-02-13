@@ -23,35 +23,52 @@ import axios from '../../../utils/axios.api'
 
 function MyVerticallyCenteredModal(props) {
   const [jobData, setJobData] = useState ({
-    jobTitle : '',
-    jobIndustry : '',
+    title : '',
+    industry : '',
     jobFunction : '',
-    subJobFunction : 'damy',
-    jobLocation : '',
-    jobDiscription : '',
-    jobRequirements : '',
+    // subJobFunction : 'damy',
+    location : '',
+    description : '',
+    requirements : '',
     profession : '',
     educationLevel : '',
-    employementType : '',
-    startDate : '',
-    endDate : '',
+    empType : '',
+    postedDate : '',
+    expiryDate : '',
     madeOfWork : '',
     noOfOpenings : '',
-    salaryInfo : '',
-    minSalary : '',
-    maxSalary : '',
-    salaryType : '',
-    salaryFreq : '',
+    salaryCurrency : '',
+    salaryRange : { gte : '',
+  lte : ''},
+    salaryType : '', /// look after
+    salaryPayFreq : '',
     postedDate : '',
-    additionalEmails : '',
-    role : 'companyJob'
+    additionalEmails : [],
   })
-  // console.log(jobData, 'Dataa');
-
+  
 
   const navigate = useNavigate()
-  const postFun = () => {
-    axios.post('http://localhost:3000/v1/job-post', jobData).then((res) => {
+  const postFunc = () => {
+    axios.post('api/v1/job-post', jobData).then((res) => {
+      console.log(res, 'data sended successfully');
+      // navigate('/CompanyProfile')
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  const draftFunc = () => {
+    axios.post('api/v1/job-post', jobData).then((res) => {
+      console.log(res, 'data sended successfully');
+      // navigate('/CompanyProfile')
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
+
+  
+  const previewFunc = () => {
+    axios.post('api/v1/job-post', jobData).then((res) => {
       console.log(res, 'data sended successfully');
       // navigate('/CompanyProfile')
     }).catch((err) => {
@@ -85,7 +102,7 @@ function MyVerticallyCenteredModal(props) {
                     className="form-control"
                     name="fname"
                     type={"text"}
-                    onChange={(e) => setJobData({...jobData, jobTitle : e.target.value})}
+                    onChange={(e) => setJobData({...jobData, title : e.target.value})}
                     //   value={user.number}
                     //   onChange={getUserData}
                     placeholder="Doctor for Child
@@ -99,7 +116,7 @@ function MyVerticallyCenteredModal(props) {
                     Job Industry
                   </label>
                   <Form.Select aria-label="Default select example"  
-                  onChange={(e) => setJobData({...jobData, jobIndustry : e.target.value})}
+                  onChange={(e) => setJobData({...jobData, industry : e.target.value})}
                   >
                     <option value="DEFAULT" disabled="">
                       Select Job Industry
@@ -209,7 +226,7 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Location
                   </label>
-                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, jobLocation : e.target.value})}>
+                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, location : e.target.value})}>
                     <option value="DEFAULT" disabled="">
                       Select Job Location
                     </option>
@@ -265,7 +282,7 @@ function MyVerticallyCenteredModal(props) {
                     }}
                     onChange={(event, editor) => {
                       const data = editor.getData();
-                      setJobData({...jobData, jobDiscription : data})
+                      setJobData({...jobData, description : data})
                       ;
                     }}
                     onBlur={(event, editor) => {
@@ -354,7 +371,7 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Employment Type
                   </label>
-                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, employementType : e.target.value})}>
+                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, empType : e.target.value})}>
                     <option>Select Employement Type</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -418,7 +435,7 @@ function MyVerticallyCenteredModal(props) {
                       Start :
                     </label>
                     <input
-                    onChange={(e) => setJobData({...jobData, startDate : e.target.value})}
+                    onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       style={{ width: "100%" }}
                       className="form-control"
                       type={"date"}
@@ -434,7 +451,7 @@ function MyVerticallyCenteredModal(props) {
                       End :
                     </label>
                     <input
-                    onChange={(e) => setJobData({...jobData, endDate : e.target.value})}
+                    onChange={(e) => setJobData({...jobData, expiryDate : e.target.value})}
                       style={{ width: "100%" }}
                       className="form-control mx-2"
                       type={"date"}
@@ -500,7 +517,7 @@ function MyVerticallyCenteredModal(props) {
                     Salary Info
                   </label>
                   <Form.Select aria-label="Default select example" 
-                    onChange={(e) => setJobData({...jobData, salaryInfo : e.target.value})}
+                    onChange={(e) => setJobData({...jobData, salaryCurrency : e.target.value})}
                     >
                     <option value="DEFAULT" disabled="">
                       Currency
@@ -538,7 +555,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control"
                       type={"number"}
                       name="firstname"
-                    onChange={(e) => setJobData({...jobData, minSalary : e.target.value})}
+                    onChange={(e) => setJobData({...jobData.salaryRange, gte : e.target.value})}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Minimum Salary"
@@ -554,7 +571,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control mx-2"
                       type={"number"}
                       name="firstname"
-                    onChange={(e) => setJobData({...jobData, maxSalary : e.target.value})}
+                      onChange={(e) => setJobData({...jobData.salaryRange, lte : e.target.value})}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Maximum Salary
@@ -627,7 +644,7 @@ function MyVerticallyCenteredModal(props) {
                     id="radio1"
                     value="Per Day"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
+                    onChange={(e) => setJobData({...jobData, salaryPayFreq : e.target.value})}
                   />
                   <label
                     for="radio1"
@@ -643,7 +660,7 @@ function MyVerticallyCenteredModal(props) {
                     id="radio2"
                     value="per Week"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
+                    onChange={(e) => setJobData({...jobData, salaryPayFreq : e.target.value})}
                   />
                   <label
                     for="radio2"
@@ -659,7 +676,7 @@ function MyVerticallyCenteredModal(props) {
                     id="radio3"
                     value="per Month"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
+                    onChange={(e) => setJobData({...jobData, salaryPayFreq : e.target.value})}
                   />
                   <label
                     for="radio3"
@@ -675,7 +692,7 @@ function MyVerticallyCenteredModal(props) {
                     id="radio4"
                     value="others"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) => setJobData({...jobData, salaryFreq : e.target.value})}
+                    onChange={(e) => setJobData({...jobData, salaryPayFreq : e.target.value})}
                   />
                   <label
                     for="radio4"
@@ -742,19 +759,21 @@ function MyVerticallyCenteredModal(props) {
         </Button>
         <Button
           style={{ background: "none", color: "#C1C1C1" }}
-          onClick={props.onHide}
+          // onClick={props.onHide}
+          onClick={() => draftFunc()}
         >
           Save as Draft
         </Button>
         <Button
           style={{ background: "none", color: "#C1C1C1" }}
-          onClick={props.onHide}
+          // onClick={props.onHide}
+          onClick={() => previewFunc()}
         >
           Preview
         </Button>
         <Button
           style={{ background: "none", color: "#39BEC1" }}
-          onClick={postFun}
+          onClick={() => postFunc()}
         >
           Post
         </Button>
@@ -773,7 +792,7 @@ export const MainProfile = () => {
   const [isProfileData, setIsProfileData] = useState({})
 
  const [isToken, setIsToken] = useState({})
- console.log(isToken, 'TOKKKKKKKKKKEN');
+//  console.log(isToken, 'TOKKKKKKKKKKEN');
   const [profileData, setProfileData] = useState({
     firstName : '',
     lastName : '',
@@ -802,15 +821,18 @@ export const MainProfile = () => {
   initialFun()
   },[])
 
-  const initialFun = (id) => {
-    axios.get(`/v1/recruiter/profiledata`).then((res)=> {
-      console.log(res, 'Initial Data');
-      let data = res.data
-      // setIsProfileData(data)
-      setProfileData(data)
-    }).catch((err)=> {
-      console.log(err);
-    })
+  const initialFun = () => {
+    axios
+      .get(`/api/v1/user/recruiter`)
+      .then((res) => {
+        let data = res.data.data;
+        console.log(data, 'daaaaaaaaataaaaaaaaaaaa');
+        // setIsProfileData(data)
+        setProfileData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   useEffect(() => {
@@ -1023,7 +1045,7 @@ const FileUploadComponent = () => {
                               fontWeight: "bolder",
                             }}
                           />
-                          https://www.me2work.com/
+                      {profileData?.websiteLink}
                         </li>
                       </ul>
                     </div>
@@ -1512,7 +1534,9 @@ const FileUploadComponent = () => {
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                       {profileData?.description ? profileData.description : 
+                       {profileData?.companyDesc
+ ? profileData.companyDesc
+ : 
                        `A .It has survived t is a long established fact that
                           a reader will be distracted by the readable content of
                           a page when looking at its layout. The point of using

@@ -1,4 +1,4 @@
-import React, { useState, Component, useEffect } from "react";
+import React, { useState, Component, useEffect, useRef } from "react";
 import "react-dropzone-uploader/dist/styles.css";
 import Dropzone from "react-dropzone-uploader";
 import { getDroppedOrSelectedFiles } from "html5-file-selector";
@@ -35,6 +35,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Language } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import ModelComponents from "../ModelComponents/ModelComponents";
+// import { Buffer } from 'buffer' 
 
 export const FreelanceProfileView = () => {
   const [show, setShow] = useState(false);
@@ -90,10 +91,13 @@ export const FreelanceProfileView = () => {
   const [isLanguageData, setIsLanguageData] = useState({});
   const [isEditAchievementData, setIsEditAchievementData] = useState({})
   const [isEditLanguageData, setIsEditLanguageData] = useState({})
+  const [isCv, setIsCv] = useState('')
+  const profImg = useRef("");
 
   // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
-  console.log(profileData, "profileData");
+  // console.log(profileData, "profileData");
   // console.log(isEditLanguageData, "isEditLanguageData");
+  console.log(profImg, 'cvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
 
   useEffect(() => {
     let id = localStorage.getItem("id");
@@ -153,6 +157,35 @@ useEffect(()=>{
       .catch((err) => {
         console.log(err);
       });
+
+      axios
+      .get(`api/v1/user/asset/cv`)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        const file = new Blob([res]);
+        const fileURL = URL.createObjectURL(file);
+        // let data = res.data;
+        // console.log(fileURL, 'cvvvvvvvvvvvvvvvvvvvv');
+        // setIsProfileData(data)
+        setIsCv(fileURL);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+      axios
+      .get(`/api/v1/user/asset/thumbnail`)
+      .then((res) => {
+        const arraybuffer = new ArrayBuffer(res);
+        let base64ImageString = Buffer.from(arraybuffer, 'binary').toString('base64')
+        let srcValue = "data:image/png;base64,"+base64ImageString;
+        profImg.current = srcValue;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+      
   };
 
   const profileFunc = () => {
@@ -214,7 +247,7 @@ useEffect(()=>{
     axios
       .put(`http://localhost:3000/v1/freelancerExp/${id}`, isEditExperienceData)
       .then((res) => {
-        console.log(res.data, 'eeeeeeeeeeeeee');
+        // console.log(res.data, 'eeeeeeeeeeeeee');
         let data = res.data
         console.log(res, "profile edit data successfully added");
         ProfileExpData(userId)
@@ -264,7 +297,7 @@ useEffect(()=>{
     axios
       .post(`http://localhost:3000/v1/education`, formdata)
       .then((res) => {
-        console.log(res, "profile data successfully added");
+        // console.log(res, "profile data successfully added");
         setProfileExp(res.data);
         if(res) {
           setShow2(false)
@@ -294,7 +327,7 @@ useEffect(()=>{
   Object.entries(isEditEducationData).map(([key, value]) => {
     formdata.append(key, value);
   });
-  console.log(formdata, 'dataaaaaaaaaaaaaaaaaaa');
+  // console.log(formdata, 'dataaaaaaaaaaaaaaaaaaa');
   axios
   .put(`api/v1/user/freelancer/asset/education-cert?id=${id}`, formdata)
   .then((res) => {
@@ -309,7 +342,7 @@ useEffect(()=>{
     console.log(err);
   });
 } else {
-  console.log(isEditEducationData, 'dataaaaaaaaaaaaaaaaaaa');
+  // console.log(isEditEducationData, 'dataaaaaaaaaaaaaaaaaaa');
   axios
       .put(`api/v1/user/freelancer/asset/education-cert?id=${id}`, isEditEducationData)
       .then((res) => {
@@ -380,7 +413,7 @@ useEffect(()=>{
       .put(`api/v1/user/freelancer/asset/achievement-cert?id=${id}`, formdata)
       .then((res) => {
         // alert(isEditExperienceData.profession)
-        console.log(res, "education edit data successfully added");
+        // console.log(res, "education edit data successfully added");
         if(res) {
           setShow7(false)
           achievementData(userId)
@@ -504,7 +537,7 @@ useEffect(()=>{
           <Image
             onClick={() => FileUploadComponent()}
             style={{ width: "100%" }}
-            src={{uri : profileData?.data?.files?.thumbnail}}
+            src={{uri : profImg.current}}
           />
           <input
             style={{ display: "none" }}
@@ -574,12 +607,13 @@ useEffect(()=>{
                         Web Developer
                       </span>
                     </h2>
+                    <a href={`${isCv}`} target="_blank" rel="noreferrer">
                     <Button
                       // variant="primary"
                       // onClick={() => setModalShow(true)}
-                      onClick={() =>
-                        (window.location.href = `http://103.1.179.231:3000/${profileData?.data?.files.cv}`)
-                      }
+                      // onClick={() =>
+                      //   (window.location.href = `http://103.1.179.231:3000/${isCv}`)
+                      // }
                     
                       className="text-white border-rounded px-3"
                       style={{ background: "#39BEC1", border: "none" }}
@@ -589,6 +623,7 @@ useEffect(()=>{
                         &nbsp; VIEW CV
                       </div>
                     </Button>
+                    </a>
                   </Col>
                   <Col lg="3">
                     <div className="text-left">
