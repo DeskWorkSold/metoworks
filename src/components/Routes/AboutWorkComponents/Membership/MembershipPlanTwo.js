@@ -1,7 +1,44 @@
 import React from "react";
+import { useState } from "react";
 import { Col, Container, Row, Image, Button } from "react-bootstrap";
 
 export const MembershipPlanTwo = () => {
+  const [isSelect, setIsSelect] = useState(false);
+  const [isSelect1, setIsSelect1] = useState(false);
+  const [isSelect2, setIsSelect2] = useState(false);
+  const [isSelect3, setIsSelect3] = useState(false);
+
+  const selectFunc = () => {
+    if (isSelect === true) {
+      setIsSelect(false);
+    } else {
+      setIsSelect(true);
+    }
+  };
+
+  const selectFunc1 = () => {
+    if (isSelect1 === true) {
+      setIsSelect1(false);
+    } else {
+      setIsSelect1(true);
+    }
+  };
+  const selectFunc2 = () => {
+    if (isSelect2 === true) {
+      setIsSelect2(false);
+    } else {
+      setIsSelect2(true);
+    }
+  };
+
+  const selectFunc3 = () => {
+    if (isSelect3 === true) {
+      setIsSelect3(false);
+    } else {
+      setIsSelect3(true);
+    }
+  };
+
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -34,13 +71,28 @@ export const MembershipPlanTwo = () => {
                 <Button
                   className="text-white border-rounded text-lg w-2/3 px-5"
                   style={{
-                    background: "#39BEC1",
+                    background: "#6A489C",
                     border: "none",
                     fontSize: "13px",
                   }}
+                  onClick={() => selectFunc()}
                 >
                   SELECT
                 </Button>
+                {isSelect === true ? (
+                  <Button
+                    className="text-white border-rounded text-lg w-2/3 px-5 mt-2"
+                    style={{
+                      background: "#313131",
+                      border: "none",
+                      fontSize: "13px",
+                    }}
+                  >
+                    BUY NOW
+                  </Button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </Col>
@@ -76,19 +128,24 @@ export const MembershipPlanTwo = () => {
                     border: "none",
                     fontSize: "13px",
                   }}
+                  onClick={() => selectFunc1()}
                 >
                   SELECT
                 </Button>
-                <Button
-                  className="text-white border-rounded text-lg w-2/3 px-5 mt-2"
-                  style={{
-                    background: "#313131",
-                    border: "none",
-                    fontSize: "13px",
-                  }}
-                >
-                  BUY NOW
-                </Button>
+                {isSelect1 === true ? (
+                  <Button
+                    className="text-white border-rounded text-lg w-2/3 px-5 mt-2"
+                    style={{
+                      background: "#313131",
+                      border: "none",
+                      fontSize: "13px",
+                    }}
+                  >
+                    BUY NOW
+                  </Button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </Col>
@@ -120,13 +177,28 @@ export const MembershipPlanTwo = () => {
                 <Button
                   className="text-white border-rounded text-lg w-2/3 px-5"
                   style={{
-                    background: "#39BEC1",
+                    background: "#6A489C",
                     border: "none",
                     fontSize: "13px",
                   }}
+                  onClick={() => selectFunc2()}
                 >
                   SELECT
                 </Button>
+                {isSelect2 === true ? (
+                  <Button
+                    className="text-white border-rounded text-lg w-2/3 px-5 mt-2"
+                    style={{
+                      background: "#313131",
+                      border: "none",
+                      fontSize: "13px",
+                    }}
+                  >
+                    BUY NOW
+                  </Button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </Col>
@@ -158,13 +230,28 @@ export const MembershipPlanTwo = () => {
                 <Button
                   className="text-white border-rounded text-lg w-2/3 px-5"
                   style={{
-                    background: "#39BEC1",
+                    background: "#6A489C",
                     border: "none",
                     fontSize: "13px",
                   }}
+                  onClick={() => selectFunc3()}
                 >
                   SELECT
                 </Button>
+                {isSelect3 === true ? (
+                  <Button
+                    className="text-white border-rounded text-lg w-2/3 px-5 mt-2"
+                    style={{
+                      background: "#313131",
+                      border: "none",
+                      fontSize: "13px",
+                    }}
+                  >
+                    BUY NOW
+                  </Button>
+                ) : (
+                  ""
+                )}
               </div>
             </div>
           </Col>

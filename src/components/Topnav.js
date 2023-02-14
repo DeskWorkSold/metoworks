@@ -87,35 +87,92 @@ export const Topnav = () => {
                 <Link to="/FreeContact">Contact</Link>
               </NavDropdown.Item>
             </NavDropdown>
-            {/* <Nav.Link href="#" disabled>
+            {/* <Nav.Link  disabled>
               Link
             </Nav.Link> */}
-            <Nav.Link>
-              <Button
-                className="text-black"
-                style={{ background: "none", border: "none" }}
-              >
-                <Link to="/Login">Login</Link>
-              </Button>
-            </Nav.Link>
-            <Nav.Link>
-              <Button
-                className="text-white border-rounded"
-                style={{ background: "#39BEC1", border: "none" }}
-              >
-                <Link to="/Signup">Sign up</Link>
-              </Button>
-            </Nav.Link>
+
+            <NavDropdown
+              title="Admin"
+              id="navbarScrollingDropdown"
+              className="nnnnav rounded-full"
+              // style={{ background: "rgb(57, 190, 193)" }}
+            >
+              <NavDropdown.Item>
+                <button
+                  type="button"
+                  className=" mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                  id="user-menu-button"
+                  aria-expanded="false"
+                  data-dropdown-toggle="user-dropdown"
+                  data-dropdown-placement="bottom"
+                >
+                  {/* <span className="sr-only">Open user menu</span> */}
+                  <Image
+                    className="w-8 h-8 rounded-full"
+                    src="/docs/images/people/profile-picture-3.jpg"
+                    // alt="user photo"
+                  />
+                </button>
+              </NavDropdown.Item>
+
+              {/* <div className="px-4 py-3">
+                <span className="block text-sm text-gray-900 dark:text-white">
+                  Bonnie Green
+                </span>
+                <span className="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">
+                  name@flowbite.com
+                </span>
+              </div> */}
+              <NavDropdown.Item>
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >
+                  Dashboard
+                </a>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >
+                  Settings
+                </a>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link
+                  to="/Login"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >
+                  Sign in
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link
+                  href="/Signup"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >
+                  Sign out
+                </Link>
+              </NavDropdown.Item>
+            </NavDropdown>
           </Nav>
-          {/* <Form className="d-flex">
-            <Form.Control
-              type="search"
-              placeholder="Search"
-              className="me-2"
-              aria-label="Search"
-            />
-            <Button variant="outline-success">Search</Button>
-          </Form> */}
+          <Nav.Link>
+            <Button
+              className="text-black"
+              style={{ background: "none", border: "none" }}
+            >
+              <Link to="/Login">Login</Link>
+            </Button>
+          </Nav.Link>
+          <Nav.Link>
+            <Button
+              className="text-white border-rounded"
+              style={{ background: "#39BEC1", border: "none" }}
+            >
+              <Link to="/Signup">Sign up</Link>
+            </Button>
+          </Nav.Link>
         </Navbar.Collapse>
       </Container>
     </Navbar>

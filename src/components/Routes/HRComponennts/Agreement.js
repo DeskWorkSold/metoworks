@@ -24,7 +24,7 @@ export const Agreement = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-1/4"
                     src={require("../../../assets/agreement1.png")}
@@ -54,7 +54,7 @@ export const Agreement = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-2/5"
                     src={require("../../../assets/agreement2.png")}
@@ -84,7 +84,7 @@ export const Agreement = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-1/4"
                     src={require("../../../assets/agreement3.png")}

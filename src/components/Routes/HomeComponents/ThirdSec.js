@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Container, Row, Image } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import { Link } from "react-router-dom";
 
 export const ThirdSec = () => {
   return (
@@ -57,9 +58,11 @@ export const ThirdSec = () => {
             </div>
           </Col>
           <Col lg="12" className="text-center">
-            <Button className="text-white border-rounded px-6 py-3">
-              JOIN US NOW
-            </Button>
+            <Link to="/Login">
+              <Button className="text-white border-rounded px-6 py-3">
+                JOIN US NOW
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Container>

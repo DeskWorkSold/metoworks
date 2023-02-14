@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Row, Col, Image, Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export const EnterpriceSolution = () => {
   return (
@@ -43,9 +44,11 @@ export const EnterpriceSolution = () => {
               want you to find what you’re looking for. For any query, please
               contact HireCo experts for the best solution.
             </p>
-            <Button className="text-white border-rounded px-5 mt-4">
-              Contact Me2Works
-            </Button>
+            <Link to="/Login">
+              <Button className="text-white border-rounded px-5 mt-4">
+                Contact Me2Works
+              </Button>
+            </Link>
           </Col>
           <Col lg="6" className="webkit">
             <div className="py-3">

@@ -9,6 +9,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import { Link } from "react-router-dom";
 // import { TabOne } from "./HelpSupportTabs/TabOne";
 
 function TabPanel(props) {
@@ -315,9 +316,11 @@ export const TabOne = () => {
             <p className="text-2xl" style={{ color: "#7A7979" }}>
               We’re here for help
             </p>
-            <Button className="text-white border-rounded px-5 mt-4">
-              Contact support
-            </Button>
+            <Link to="/FreeContact">
+              <Button className="text-white border-rounded px-5 mt-4">
+                Contact support
+              </Button>
+            </Link>
           </Col>
           <Col lg="4"></Col>
           <Col lg="4" className="webkit">

@@ -981,55 +981,51 @@ export const Interview = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [modalShow, setModalShow] = React.useState(false);
-  const [interviewData, setInterviewData] = useState({})
-  const [filteredCategory, setFilteredCategory] = useState('')
-  console.log(filteredCategory, 'filterrrrrrrrrred');
+  const [interviewData, setInterviewData] = useState({});
+  const [filteredCategory, setFilteredCategory] = useState("");
+  console.log(filteredCategory, "filterrrrrrrrrred");
   const [isSearch, setIsSearch] = useState({
-    keyword : '',
-    filter :[
-      {"term": {"internalState": "PENDING"}}
-  ]
-  })
-
+    keyword: "",
+    filter: [{ term: { internalState: "PENDING" } }],
+  });
 
   useEffect(() => {
     axios
-    .get(`api/v1/interview?stage=schedule&size=2&from=0`)
-    .then((res) => {
-      // console.log(res, "Initial Data");
-      let data = res.data.data;
-      console.log(data, 'daaaaaaaaataaaaaaaaaaaa');
-      // setIsProfileData(data)
-      setInterviewData(data);
-      let filteredData = data.map((items => {
-        return items.job.title
-      }))
-      setFilteredCategory([...new Set(filteredData)])
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  },[])
+      .get(`api/v1/interview?stage=schedule&size=2&from=0`)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data.data;
+        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+        // setIsProfileData(data)
+        setInterviewData(data);
+        let filteredData = data.map((items) => {
+          return items.job.title;
+        });
+        setFilteredCategory([...new Set(filteredData)]);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const searchFunc = () => {
     axios
-    .post(`api/v1/interview/offer/history/search?size=3&from=0`, isSearch)
-    .then((res) => {
-      // console.log(res, "Initial Data");
-      let data = res.data;
-      console.log(data, 'daaaaaaaaataaaaaaaaaaaa');
-      // setIsProfileData(data)
-      // setInterviewData(data);
-      // let filteredData = data.map((items => {
-      //   return items.job.title
-      // }))
-      // setFilteredCategory([...new Set(filteredData)])
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
- 
+      .post(`api/v1/interview/offer/history/search?size=3&from=0`, isSearch)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data;
+        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+        // setIsProfileData(data)
+        // setInterviewData(data);
+        // let filteredData = data.map((items => {
+        //   return items.job.title
+        // }))
+        // setFilteredCategory([...new Set(filteredData)])
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -1105,10 +1101,35 @@ export const Interview = () => {
             className="font-semibold"
           >
             <Row>
-              <Col>
-                <div>
-                  <h2 className="text-2xl">20 Total Candidates</h2>
-                </div>
+              <Col lg="6">
+                <fieldset>
+                  <label
+                    className="text-lg"
+                    style={{ width: "100%", color: "rgb(148, 147, 147)" }}
+                  >
+                    Filter By
+                  </label>
+                  <Form.Select aria-label="Default select example">
+                    <option value="DEFAULT" disabled="">
+                      Choose State
+                    </option>
+                    <option value="PENDING">Pending</option>
+                    <option value="CONFIRMED">Accepted</option>
+                    <option value="REJECT">Declined</option>
+                    <option value="REVISION">In Revision</option>
+                  </Form.Select>
+                  {/* <input
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="firstname"
+                //   value={user.name}
+                //   onChange={getUserData}
+                placeholder="Select Job Industry
+                "
+                required
+              /> */}
+                </fieldset>
               </Col>
             </Row>
           </Col>
@@ -1116,7 +1137,12 @@ export const Interview = () => {
             <Row>
               <Col>
                 <div className="About_main_images_search">
-                  <input placeholder="Enter Profession, Company Name or Keywords." onChange={(e) => setIsSearch({...isSearch, keyword : e.target.value})}></input>
+                  <input
+                    placeholder="Enter Profession, Company Name or Keywords."
+                    onChange={(e) =>
+                      setIsSearch({ ...isSearch, keyword: e.target.value })
+                    }
+                  ></input>
 
                   <Button
                     className="text-white border-rounded px-3"
@@ -1138,95 +1164,104 @@ export const Interview = () => {
         </Row>
       </Container>
       <Container>
+        <div>
+          <h2 className="text-2xl">20 Total Candidates</h2>
+        </div>
         <Accordion defaultActiveKey="0" flush>
-          {filteredCategory.length > 0 && filteredCategory.map((items, keys) => {
-            return (
-          <Accordion.Item eventKey="0" key={keys}>
-            <Accordion.Header>
-              {items} &#160;&#160;&#160;
-              <span
-                className="fontpxx"
-                style={{ color: "rgb(148,147,147)", float: "right" }}
-              >
-                (02 Candidates)
-              </span>
-            </Accordion.Header>
-            <Accordion.Body>
-              {interviewData.filter(filter => {
-                return filter.job.title === items
-              }).map((events, key) => {
-                return (
-                  <Container key={key}>
-                  <Row className="align-items-center">
-                    <Col lg="12">
-                      <div className="m-3">
-                        <div className="boxshad py-3">
-                          <Row className="align-items-center">
-                            <Col lg="12" style={{ textAlign: "-webkit-right" }}>
-                              <div
-                                style={{
-                                  textAlign: "-webkit-right",
-                                  float: "right",
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                                className="webkit"
-                              >
-                                <Button
-                                  className="border-rounded text-2xl"
-                                  style={{
-                                    background: "none",
-                                    color: "#C1C1C1",
-                                  }}
-                                >
-                                  <BsBookmark />
-                                </Button>
-                              </div>
-                              <div
-                                style={{
-                                  float: "right",
-                                  display: "flex",
-                                  alignItems: "center",
-                                }}
-                                className="webkit"
-                              >
-                                <div style={{ display: "block" }}>
-                                  <Button
-                                    // onClick={handleShow}
-                                    className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                    style={{
-                                      background: "rgb(58,182,73)",
-                                      border: "none",
-                                      marginTop: "10px",
-                                      marginBottom: "10px",
-                                    }}
-                                  >
-                                    Good Fit
-                                  </Button>
-                                  <Button
-                                    // onClick={handleShow}
-                                    className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                    style={{
-                                      background: "rgb(255,0,0)",
-                                      border: "none",
-                                      marginTop: "10px",
-                                      marginBottom: "10px",
-                                    }}
-                                  >
-                                    Not Quite
-                                  </Button>
-                                  <Button
-                                    className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                    style={{
-                                      background: "rgb(41,172,226)",
-                                      border: "none",
-                                      marginTop: "10px",
-                                      marginBottom: "10px",
-                                    }}
-                                  >
-                                    Good to Keep
-                                  </Button>
-                                  {/* <Button
+          {filteredCategory.length > 0 &&
+            filteredCategory.map((items, keys) => {
+              return (
+                <Accordion.Item eventKey="0" key={keys}>
+                  <Accordion.Header>
+                    {items} &#160;&#160;&#160;
+                    <span
+                      className="fontpxx"
+                      style={{ color: "rgb(148,147,147)", float: "right" }}
+                    >
+                      (02 Candidates)
+                    </span>
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    {interviewData
+                      .filter((filter) => {
+                        return filter.job.title === items;
+                      })
+                      .map((events, key) => {
+                        return (
+                          <Container key={key}>
+                            <Row className="align-items-center">
+                              <Col lg="12">
+                                <div className="m-3">
+                                  <div className="boxshad py-3">
+                                    <Row className="align-items-center">
+                                      <Col
+                                        lg="12"
+                                        style={{ textAlign: "-webkit-right" }}
+                                      >
+                                        <div
+                                          style={{
+                                            textAlign: "-webkit-right",
+                                            float: "right",
+                                            display: "flex",
+                                            alignItems: "center",
+                                          }}
+                                          className="webkit"
+                                        >
+                                          <Button
+                                            className="border-rounded text-2xl"
+                                            style={{
+                                              background: "none",
+                                              color: "#C1C1C1",
+                                            }}
+                                          >
+                                            <BsBookmark />
+                                          </Button>
+                                        </div>
+                                        <div
+                                          style={{
+                                            float: "right",
+                                            display: "flex",
+                                            alignItems: "center",
+                                          }}
+                                          className="webkit"
+                                        >
+                                          <div style={{ display: "block" }}>
+                                            <Button
+                                              // onClick={handleShow}
+                                              className="text-white border-rounded px-3 mx-3 py-3 w-40"
+                                              style={{
+                                                background: "rgb(58,182,73)",
+                                                border: "none",
+                                                marginTop: "10px",
+                                                marginBottom: "10px",
+                                              }}
+                                            >
+                                              Good Fit
+                                            </Button>
+                                            <Button
+                                              // onClick={handleShow}
+                                              className="text-white border-rounded px-3 mx-3 py-3 w-40"
+                                              style={{
+                                                background: "rgb(255,0,0)",
+                                                border: "none",
+                                                marginTop: "10px",
+                                                marginBottom: "10px",
+                                              }}
+                                            >
+                                              Not Quite
+                                            </Button>
+                                            <Button
+                                              className="text-white border-rounded px-3 mx-3 py-3 w-40"
+                                              style={{
+                                                background: "rgb(41,172,226)",
+                                                border: "none",
+                                                marginTop: "10px",
+                                                marginBottom: "10px",
+                                              }}
+                                            >
+                                              Good to Keep
+                                            </Button>
+                                            {/* <Button
                                     className="border-rounded text-2xl"
                                     style={{
                                       background: "none",
@@ -1235,149 +1270,162 @@ export const Interview = () => {
                                   >
                                     <BsBookmark />
                                   </Button> */}
-                                </div>
-                              </div>
-                            </Col>
-                            <Col lg="2" className="webkit">
-                              <Image
-                                style={{ width: "100%" }}
-                                src={require("../../../assets/Profile.png")}
-                              />
-                            </Col>
-                            <Col lg="7">
-                              <h2 className="py-3">
-                                <span
-                                  style={{ color: "#39bec1" }}
-                                  className="text-2xl font-bold robot"
-                                >
-                                 {events.freelancer.firstName + ' ' + events.freelancer.lastName}
-                                </span>{" "}
-                                <br />
-                                <span
-                                  className="text-2xl"
-                                  style={{ color: "black" }}
-                                >
-                                  Doctor
-                                </span>
-                                <br />
-                                <br />
-                                <span style={{ color: "rgb(148,147,147)" }}>
-                        {events.freelancer.aboutMe}
-                                </span>
-                              </h2>
-                            </Col>
-  
-                            <Col lg="3">
-                              <div className="webkit" style={{ display: "grid" }}>
-                                <Button
-                                  variant="primary"
-                                  onClick={() => setModalShow(true)}
-                                  className="text-white border-rounded px-3 py-3 mx-2"
-                                  style={{
-                                    background: "#39BEC1",
-                                    border: "none",
-                                  }}
-                                >
-                                  VIEW PROFILE
-                                </Button>
-                                <MyVerticallyCenteredModal
-                                  show={modalShow}
-                                  onHide={() => setModalShow(false)}
-                                />
-                              </div>
-                            </Col>
-                          </Row>
-                          <Container>
-                            <Row className="align-items-center block-for-res">
-                              <Col>
-                                <div className="p3">
-                                  <h2 className="text-xl font-semibold">
-                                    Experience
-                                  </h2>
-  
-                                  <h2
-                                    className="text-lg"
-                                    style={{ color: "#7A7979" }}
-                                  >
-                                    4 Year
-                                  </h2>
-                                </div>
-                              </Col>
-                              <Col>
-                                <div className="p3">
-                                  <h2 className="text-xl font-semibold">
-                                    Salary Range
-                                  </h2>
-  
-                                  <h2
-                                    className="text-lg "
-                                    style={{ color: "#7A7979" }}
-                                  >
-                                    $15000 - $20,000
-                                  </h2>
-                                </div>
-                              </Col>
-                              <Col>
-                                <div className="p3">
-                                  <h2 className="text-xl font-semibold">
-                                    Location
-                                  </h2>
-  
-                                  <h2
-                                    className="text-lg "
-                                    style={{ color: "#7A7979" }}
-                                  >  {events.location}
-                                  </h2>
-                                </div>
-                              </Col>
-                              <Col>
-                                <div className="p3">
-                                  <Button
-                                    onClick={() => setLgShow(true)}
-                                    className=" border-rounded py-3 w-44"
-                                    style={{
-                                      background: "none",
-                                      fontSize: "15px",
-                                      border: "1px solid rgb(57, 190, 193)",
-                                      color: "rgb(57, 190, 193)",
-                                      marginTop: "10px",
-                                      marginBottom: "10px",
-                                    }}
-                                  >
-                                    ARRANGE INTERVIEW
-                                  </Button>
-  
-                                  <MyVerticallyCenteredModal1
-                                    show={lgShow}
-                                    onHide={() => setLgShow(false)}
-                                  />
-                                </div>
-                              </Col>
-                              <Col>
-                                <div className="p3">
-                                  <Button
-                                    onClick={() => setOfferShow(true)}
-                                    className=" border-rounded py-3 w-44"
-                                    style={{
-                                      background: "none",
-                                      fontSize: "15px",
-                                      border: "1px solid rgb(57, 190, 193)",
-                                      color: "rgb(57, 190, 193)",
-                                      marginTop: "10px",
-                                      marginBottom: "10px",
-                                    }}
-                                  >
-                                    OFFER
-                                  </Button>
-                                  <MyVerticallyCenteredModal3
-                                    show={OfferShow}
-                                    onHide={() => setOfferShow(false)}
-                                  />
-                                </div>
-                              </Col>
-                            </Row>
-                          </Container>
-                          {/* <hr className="my-2" />
+                                          </div>
+                                        </div>
+                                      </Col>
+                                      <Col lg="2" className="webkit">
+                                        <Image
+                                          style={{ width: "100%" }}
+                                          src={require("../../../assets/Profile.png")}
+                                        />
+                                      </Col>
+                                      <Col lg="7">
+                                        <h2 className="py-3">
+                                          <span
+                                            style={{ color: "#39bec1" }}
+                                            className="text-2xl font-bold robot"
+                                          >
+                                            {events.freelancer.firstName +
+                                              " " +
+                                              events.freelancer.lastName}
+                                          </span>{" "}
+                                          <br />
+                                          <span
+                                            className="text-2xl"
+                                            style={{ color: "black" }}
+                                          >
+                                            Doctor
+                                          </span>
+                                          <br />
+                                          <br />
+                                          <span
+                                            style={{
+                                              color: "rgb(148,147,147)",
+                                            }}
+                                          >
+                                            {events.freelancer.aboutMe}
+                                          </span>
+                                        </h2>
+                                      </Col>
+
+                                      <Col lg="3">
+                                        <div
+                                          className="webkit"
+                                          style={{ display: "grid" }}
+                                        >
+                                          <Button
+                                            variant="primary"
+                                            onClick={() => setModalShow(true)}
+                                            className="text-white border-rounded px-3 py-3 mx-2"
+                                            style={{
+                                              background: "#39BEC1",
+                                              border: "none",
+                                            }}
+                                          >
+                                            VIEW PROFILE
+                                          </Button>
+                                          <MyVerticallyCenteredModal
+                                            show={modalShow}
+                                            onHide={() => setModalShow(false)}
+                                          />
+                                        </div>
+                                      </Col>
+                                    </Row>
+                                    <Container>
+                                      <Row className="align-items-center block-for-res">
+                                        <Col>
+                                          <div className="p3">
+                                            <h2 className="text-xl font-semibold">
+                                              Experience
+                                            </h2>
+
+                                            <h2
+                                              className="text-lg"
+                                              style={{ color: "#7A7979" }}
+                                            >
+                                              4 Year
+                                            </h2>
+                                          </div>
+                                        </Col>
+                                        <Col>
+                                          <div className="p3">
+                                            <h2 className="text-xl font-semibold">
+                                              Salary Range
+                                            </h2>
+
+                                            <h2
+                                              className="text-lg "
+                                              style={{ color: "#7A7979" }}
+                                            >
+                                              $15000 - $20,000
+                                            </h2>
+                                          </div>
+                                        </Col>
+                                        <Col>
+                                          <div className="p3">
+                                            <h2 className="text-xl font-semibold">
+                                              Location
+                                            </h2>
+
+                                            <h2
+                                              className="text-lg "
+                                              style={{ color: "#7A7979" }}
+                                            >
+                                              {" "}
+                                              {events.location}
+                                            </h2>
+                                          </div>
+                                        </Col>
+                                        <Col>
+                                          <div className="p3">
+                                            <Button
+                                              onClick={() => setLgShow(true)}
+                                              className=" border-rounded py-3 w-44"
+                                              style={{
+                                                background: "none",
+                                                fontSize: "15px",
+                                                border:
+                                                  "1px solid rgb(57, 190, 193)",
+                                                color: "rgb(57, 190, 193)",
+                                                marginTop: "10px",
+                                                marginBottom: "10px",
+                                              }}
+                                            >
+                                              ARRANGE INTERVIEW
+                                            </Button>
+
+                                            <MyVerticallyCenteredModal1
+                                              show={lgShow}
+                                              onHide={() => setLgShow(false)}
+                                            />
+                                          </div>
+                                        </Col>
+                                        <Col>
+                                          <div className="p3">
+                                            <Button
+                                              onClick={() => setOfferShow(true)}
+                                              className=" border-rounded py-3 w-44"
+                                              style={{
+                                                background: "none",
+                                                fontSize: "15px",
+                                                border:
+                                                  "1px solid rgb(57, 190, 193)",
+                                                color: "rgb(57, 190, 193)",
+                                                marginTop: "10px",
+                                                marginBottom: "10px",
+                                              }}
+                                            >
+                                              OFFER
+                                            </Button>
+                                            <MyVerticallyCenteredModal3
+                                              show={OfferShow}
+                                              onHide={() => setOfferShow(false)}
+                                            />
+                                          </div>
+                                        </Col>
+                                      </Row>
+                                    </Container>
+                                    {/* <hr className="my-2" />
                 <Row className="align-items-center pl-4">
                   <Col lg="3">
                     <div className="p3 py-3">
@@ -1421,21 +1469,18 @@ export const Interview = () => {
                     </Button>
                   </Col>
                 </Row> */}
-                        </div>
-                      </div>
-                    </Col>
-                  </Row>
-                </Container>
-                )
-              })}
-             
-          
-            </Accordion.Body>
-          </Accordion.Item>
-            )
-          })}
-    
-                 </Accordion>
+                                  </div>
+                                </div>
+                              </Col>
+                            </Row>
+                          </Container>
+                        );
+                      })}
+                  </Accordion.Body>
+                </Accordion.Item>
+              );
+            })}
+        </Accordion>
       </Container>
     </Container>
   );

@@ -11,6 +11,7 @@ import { Row, Image } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
 import { BsFacebook, BsInstagram, BsTwitter } from "react-icons/bs";
+import { Link } from "react-router-dom";
 
 export const Footer = () => {
   return (
@@ -49,116 +50,116 @@ export const Footer = () => {
             <MDBCol md="2" lg="2" xl="2" className="mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Navigate</h6>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/" className="text-reset">
                   Home
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/FindProfessions" className="text-reset">
                   Find Professionals
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/Opportunities" className="text-reset">
                   Opportunities
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/CompanyProfile" className="text-reset">
                   Post a Job
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/Enterprice" className="text-reset">
                   Enterprise Solution{" "}
-                </a>
+                </Link>
               </p>
             </MDBCol>
 
             <MDBCol md="3" lg="2" xl="2" className="mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Company Info</h6>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/AboutMe" className="text-reset">
                   About Me2Works
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/HowWork" className="text-reset">
                   How Me2Works Works
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/Opportunities" className="text-reset">
                   Opportunities
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/WhyMeWorks" className="text-reset">
                   Why Me2Works
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/MemberPlans" className="text-reset">
                   Pricing{" "}
-                </a>
+                </Link>
               </p>
             </MDBCol>
 
             <MDBCol md="3" lg="2" xl="2" className="mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Resources</h6>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/HelpSupport" className="text-reset">
                   Help & FAQ{" "}
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/FreeContact" className="text-reset">
                   Contact Us{" "}
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/Opportunities" className="text-reset">
                   Opportunities
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/WhyMeWorks" className="text-reset">
                   Why Me2Works
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link to="/Enterprice" className="text-reset">
                   Pricing{" "}
-                </a>
+                </Link>
               </p>
             </MDBCol>
 
             <MDBCol md="3" lg="2" xl="2" className="mb-4">
               <h6 className="text-uppercase fw-bold mb-4">Policies</h6>
               <p>
-                <a href="#!" className="text-reset">
+                <Link href="#" className="text-reset">
                   IP Policy{" "}
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link href="#" className="text-reset">
                   Privacy Policy{" "}
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link href="#" className="text-reset">
                   Terms of Service
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link href="/WhyMeWorks" className="text-reset">
                   Why Me2Works
-                </a>
+                </Link>
               </p>
               <p>
-                <a href="#!" className="text-reset">
+                <Link href="/Enterprice" className="text-reset">
                   Pricing{" "}
-                </a>
+                </Link>
               </p>
             </MDBCol>
           </MDBRow>
