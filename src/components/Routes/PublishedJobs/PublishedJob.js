@@ -717,27 +717,27 @@ export const PublishedJob = () => {
   const [searchData, setSearchData] = useState({})
 
   const date = new Date()
-  date.setDate(date.getDate() + 30)
-  console.log(date, 'daaaaaaaaaaaaaaaaaaaaateeeeeeeeeeeeeee');
   console.log(searchData, 'daaaaaaaaataaaaaaaaaaaa');
   useEffect(() => {
     axios
-      .get(`api/v1/job-post?from=0&size=4&submitted=true`)
-      .then((res) => {
-        let data = res.data.data.data;
-        let expdata = data.filter((e, i) => {
-  return (
-    e._source.createdAt === new Date().getDate()
-  )
+    .get(`api/v1/job-post?from=0&size=4&submitted=true`)
+    .then((res) => {
+      let data = res.data.data.data;
+      let expdata = data.filter((e, i) => {
+        return (
+          e._source.createdAt === new Date().getDate()
+          )
         })
         setSearchData(data);
       })
       .catch((err) => {
         console.log(err);
       })
- }, [])
-
-  
+    }, [])
+    
+    const isDate = (searchData[0]?._source?.createdAt).ZonedDateTime
+    console.log(isDate, 'daaaaaaaaaaaaaaaaaaaaateeeeeeeeeeeeeee');
+    
 
 
   const Content = (props) => {

@@ -7,6 +7,8 @@ import Modal from "react-bootstrap/Modal";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Accordion from "react-bootstrap/Accordion";
+import { useEffect } from "react";
+import axios from "../../../utils/axios.api";
 
 function MyVerticallyCenteredModal(props) {
   return (
@@ -979,6 +981,56 @@ export const Interview = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [modalShow, setModalShow] = React.useState(false);
+  const [interviewData, setInterviewData] = useState({})
+  const [filteredCategory, setFilteredCategory] = useState('')
+  console.log(filteredCategory, 'filterrrrrrrrrred');
+  const [isSearch, setIsSearch] = useState({
+    keyword : '',
+    filter :[
+      {"term": {"internalState": "PENDING"}}
+  ]
+  })
+
+
+  useEffect(() => {
+    axios
+    .get(`api/v1/interview?stage=schedule&size=2&from=0`)
+    .then((res) => {
+      // console.log(res, "Initial Data");
+      let data = res.data.data;
+      console.log(data, 'daaaaaaaaataaaaaaaaaaaa');
+      // setIsProfileData(data)
+      setInterviewData(data);
+      let filteredData = data.map((items => {
+        return items.job.title
+      }))
+      setFilteredCategory([...new Set(filteredData)])
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  },[])
+
+  const searchFunc = () => {
+    axios
+    .post(`api/v1/interview/offer/history/search?size=3&from=0`, isSearch)
+    .then((res) => {
+      // console.log(res, "Initial Data");
+      let data = res.data;
+      console.log(data, 'daaaaaaaaataaaaaaaaaaaa');
+      // setIsProfileData(data)
+      // setInterviewData(data);
+      // let filteredData = data.map((items => {
+      //   return items.job.title
+      // }))
+      // setFilteredCategory([...new Set(filteredData)])
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+ 
+
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -1064,11 +1116,12 @@ export const Interview = () => {
             <Row>
               <Col>
                 <div className="About_main_images_search">
-                  <input placeholder="Enter Profession, Company Name or Keywords."></input>
+                  <input placeholder="Enter Profession, Company Name or Keywords." onChange={(e) => setIsSearch({...isSearch, keyword : e.target.value})}></input>
 
                   <Button
                     className="text-white border-rounded px-3"
                     style={{ background: "#39BEC1", border: "none" }}
+                    onClick={() => searchFunc()}
                   >
                     Search
                   </Button>
@@ -1086,9 +1139,11 @@ export const Interview = () => {
       </Container>
       <Container>
         <Accordion defaultActiveKey="0" flush>
-          <Accordion.Item eventKey="0">
+          {filteredCategory.length > 0 && filteredCategory.map((items, keys) => {
+            return (
+          <Accordion.Item eventKey="0" key={keys}>
             <Accordion.Header>
-              Doctor for Child &#160;&#160;&#160;
+              {items} &#160;&#160;&#160;
               <span
                 className="fontpxx"
                 style={{ color: "rgb(148,147,147)", float: "right" }}
@@ -1097,77 +1152,27 @@ export const Interview = () => {
               </span>
             </Accordion.Header>
             <Accordion.Body>
-              <Container>
-                <Row className="align-items-center">
-                  <Col lg="12">
-                    <div className="m-3">
-                      <div className="boxshad py-3">
-                        <Row className="align-items-center">
-                          <Col lg="12" style={{ textAlign: "-webkit-right" }}>
-                            <div
-                              style={{
-                                textAlign: "-webkit-right",
-                                float: "right",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                              className="webkit"
-                            >
-                              <Button
-                                className="border-rounded text-2xl"
+              {interviewData.filter(filter => {
+                return filter.job.title === items
+              }).map((events, key) => {
+                return (
+                  <Container key={key}>
+                  <Row className="align-items-center">
+                    <Col lg="12">
+                      <div className="m-3">
+                        <div className="boxshad py-3">
+                          <Row className="align-items-center">
+                            <Col lg="12" style={{ textAlign: "-webkit-right" }}>
+                              <div
                                 style={{
-                                  background: "none",
-                                  color: "#C1C1C1",
+                                  textAlign: "-webkit-right",
+                                  float: "right",
+                                  display: "flex",
+                                  alignItems: "center",
                                 }}
+                                className="webkit"
                               >
-                                <BsBookmark />
-                              </Button>
-                            </div>
-                            <div
-                              style={{
-                                float: "right",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                              className="webkit"
-                            >
-                              <div style={{ display: "block" }}>
                                 <Button
-                                  // onClick={handleShow}
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(58,182,73)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Good Fit
-                                </Button>
-                                <Button
-                                  // onClick={handleShow}
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(255,0,0)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Not Quite
-                                </Button>
-                                <Button
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(41,172,226)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Good to Keep
-                                </Button>
-                                {/* <Button
                                   className="border-rounded text-2xl"
                                   style={{
                                     background: "none",
@@ -1175,1052 +1180,262 @@ export const Interview = () => {
                                   }}
                                 >
                                   <BsBookmark />
-                                </Button> */}
+                                </Button>
                               </div>
-                            </div>
-                          </Col>
-                          <Col lg="2" className="webkit">
-                            <Image
-                              style={{ width: "100%" }}
-                              src={require("../../../assets/Profile.png")}
-                            />
-                          </Col>
-                          <Col lg="7">
-                            <h2 className="py-3">
-                              <span
-                                style={{ color: "#39bec1" }}
-                                className="text-2xl font-bold robot"
-                              >
-                                Zeeshan Siddique
-                              </span>{" "}
-                              <br />
-                              <span
-                                className="text-2xl"
-                                style={{ color: "black" }}
-                              >
-                                Doctor
-                              </span>
-                              <br />
-                              <br />
-                              <span style={{ color: "rgb(148,147,147)" }}>
-                                It has survived t is a long established fact
-                                that a reader will be distracted by the readable
-                                content of a page when looking at its layout.
-                                The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as
-                                opposed to using 'Content here, content here',
-                                making it look like readable English.
-                              </span>
-                            </h2>
-                          </Col>
-
-                          <Col lg="3">
-                            <div className="webkit" style={{ display: "grid" }}>
-                              <Button
-                                variant="primary"
-                                onClick={() => setModalShow(true)}
-                                className="text-white border-rounded px-3 py-3 mx-2"
+                              <div
                                 style={{
-                                  background: "#39BEC1",
-                                  border: "none",
+                                  float: "right",
+                                  display: "flex",
+                                  alignItems: "center",
                                 }}
+                                className="webkit"
                               >
-                                VIEW PROFILE
-                              </Button>
-                              <MyVerticallyCenteredModal
-                                show={modalShow}
-                                onHide={() => setModalShow(false)}
+                                <div style={{ display: "block" }}>
+                                  <Button
+                                    // onClick={handleShow}
+                                    className="text-white border-rounded px-3 mx-3 py-3 w-40"
+                                    style={{
+                                      background: "rgb(58,182,73)",
+                                      border: "none",
+                                      marginTop: "10px",
+                                      marginBottom: "10px",
+                                    }}
+                                  >
+                                    Good Fit
+                                  </Button>
+                                  <Button
+                                    // onClick={handleShow}
+                                    className="text-white border-rounded px-3 mx-3 py-3 w-40"
+                                    style={{
+                                      background: "rgb(255,0,0)",
+                                      border: "none",
+                                      marginTop: "10px",
+                                      marginBottom: "10px",
+                                    }}
+                                  >
+                                    Not Quite
+                                  </Button>
+                                  <Button
+                                    className="text-white border-rounded px-3 mx-3 py-3 w-40"
+                                    style={{
+                                      background: "rgb(41,172,226)",
+                                      border: "none",
+                                      marginTop: "10px",
+                                      marginBottom: "10px",
+                                    }}
+                                  >
+                                    Good to Keep
+                                  </Button>
+                                  {/* <Button
+                                    className="border-rounded text-2xl"
+                                    style={{
+                                      background: "none",
+                                      color: "#C1C1C1",
+                                    }}
+                                  >
+                                    <BsBookmark />
+                                  </Button> */}
+                                </div>
+                              </div>
+                            </Col>
+                            <Col lg="2" className="webkit">
+                              <Image
+                                style={{ width: "100%" }}
+                                src={require("../../../assets/Profile.png")}
                               />
-                            </div>
-                          </Col>
-                        </Row>
-                        <Container>
-                          <Row className="align-items-center block-for-res">
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Experience
-                                </h2>
-
-                                <h2
-                                  className="text-lg"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  4 Year
-                                </h2>
-                              </div>
                             </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Salary Range
-                                </h2>
-
-                                <h2
-                                  className="text-lg "
-                                  style={{ color: "#7A7979" }}
+                            <Col lg="7">
+                              <h2 className="py-3">
+                                <span
+                                  style={{ color: "#39bec1" }}
+                                  className="text-2xl font-bold robot"
                                 >
-                                  $15000 - $20,000
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Location
-                                </h2>
-
-                                <h2
-                                  className="text-lg "
-                                  style={{ color: "#7A7979" }}
+                                 {events.freelancer.firstName + ' ' + events.freelancer.lastName}
+                                </span>{" "}
+                                <br />
+                                <span
+                                  className="text-2xl"
+                                  style={{ color: "black" }}
                                 >
-                                  Panam
-                                </h2>
-                              </div>
+                                  Doctor
+                                </span>
+                                <br />
+                                <br />
+                                <span style={{ color: "rgb(148,147,147)" }}>
+                        {events.freelancer.aboutMe}
+                                </span>
+                              </h2>
                             </Col>
-                            <Col>
-                              <div className="p3">
+  
+                            <Col lg="3">
+                              <div className="webkit" style={{ display: "grid" }}>
                                 <Button
-                                  onClick={() => setLgShow(true)}
-                                  className=" border-rounded py-3 w-44"
+                                  variant="primary"
+                                  onClick={() => setModalShow(true)}
+                                  className="text-white border-rounded px-3 py-3 mx-2"
                                   style={{
-                                    background: "none",
-                                    fontSize: "15px",
-                                    border: "1px solid rgb(57, 190, 193)",
-                                    color: "rgb(57, 190, 193)",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
+                                    background: "#39BEC1",
+                                    border: "none",
                                   }}
                                 >
-                                  ARRANGE INTERVIEW
+                                  VIEW PROFILE
                                 </Button>
-
-                                <MyVerticallyCenteredModal1
-                                  show={lgShow}
-                                  onHide={() => setLgShow(false)}
-                                />
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <Button
-                                  onClick={() => setOfferShow(true)}
-                                  className=" border-rounded py-3 w-44"
-                                  style={{
-                                    background: "none",
-                                    fontSize: "15px",
-                                    border: "1px solid rgb(57, 190, 193)",
-                                    color: "rgb(57, 190, 193)",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  OFFER
-                                </Button>
-                                <MyVerticallyCenteredModal3
-                                  show={OfferShow}
-                                  onHide={() => setOfferShow(false)}
+                                <MyVerticallyCenteredModal
+                                  show={modalShow}
+                                  onHide={() => setModalShow(false)}
                                 />
                               </div>
                             </Col>
                           </Row>
-                        </Container>
-                        {/* <hr className="my-2" />
-              <Row className="align-items-center pl-4">
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Experience</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      4
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Salary Range</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      $15000 - $20,000
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Location</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        style={{
-                          fontWeight: "bolder",
-                        }}
-                      />{" "}
-                      Panam
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <Button
-                    className="text-white border-rounded px-3"
-                    style={{ background: "#39BEC1", border: "none" }}
-                  >
-                    View Profile
-                  </Button>
-                </Col>
-              </Row> */}
-                      </div>
+                          <Container>
+                            <Row className="align-items-center block-for-res">
+                              <Col>
+                                <div className="p3">
+                                  <h2 className="text-xl font-semibold">
+                                    Experience
+                                  </h2>
+  
+                                  <h2
+                                    className="text-lg"
+                                    style={{ color: "#7A7979" }}
+                                  >
+                                    4 Year
+                                  </h2>
+                                </div>
+                              </Col>
+                              <Col>
+                                <div className="p3">
+                                  <h2 className="text-xl font-semibold">
+                                    Salary Range
+                                  </h2>
+  
+                                  <h2
+                                    className="text-lg "
+                                    style={{ color: "#7A7979" }}
+                                  >
+                                    $15000 - $20,000
+                                  </h2>
+                                </div>
+                              </Col>
+                              <Col>
+                                <div className="p3">
+                                  <h2 className="text-xl font-semibold">
+                                    Location
+                                  </h2>
+  
+                                  <h2
+                                    className="text-lg "
+                                    style={{ color: "#7A7979" }}
+                                  >  {events.location}
+                                  </h2>
+                                </div>
+                              </Col>
+                              <Col>
+                                <div className="p3">
+                                  <Button
+                                    onClick={() => setLgShow(true)}
+                                    className=" border-rounded py-3 w-44"
+                                    style={{
+                                      background: "none",
+                                      fontSize: "15px",
+                                      border: "1px solid rgb(57, 190, 193)",
+                                      color: "rgb(57, 190, 193)",
+                                      marginTop: "10px",
+                                      marginBottom: "10px",
+                                    }}
+                                  >
+                                    ARRANGE INTERVIEW
+                                  </Button>
+  
+                                  <MyVerticallyCenteredModal1
+                                    show={lgShow}
+                                    onHide={() => setLgShow(false)}
+                                  />
+                                </div>
+                              </Col>
+                              <Col>
+                                <div className="p3">
+                                  <Button
+                                    onClick={() => setOfferShow(true)}
+                                    className=" border-rounded py-3 w-44"
+                                    style={{
+                                      background: "none",
+                                      fontSize: "15px",
+                                      border: "1px solid rgb(57, 190, 193)",
+                                      color: "rgb(57, 190, 193)",
+                                      marginTop: "10px",
+                                      marginBottom: "10px",
+                                    }}
+                                  >
+                                    OFFER
+                                  </Button>
+                                  <MyVerticallyCenteredModal3
+                                    show={OfferShow}
+                                    onHide={() => setOfferShow(false)}
+                                  />
+                                </div>
+                              </Col>
+                            </Row>
+                          </Container>
+                          {/* <hr className="my-2" />
+                <Row className="align-items-center pl-4">
+                  <Col lg="3">
+                    <div className="p3 py-3">
+                      <h2 className="text-2xl">Experience</h2>
+                      <br />
+                      <h2 className="text-xl" style={{ color: "#7A7979" }}>
+                        4
+                      </h2>
                     </div>
                   </Col>
-                </Row>
-              </Container>
-              <Container>
-                <Row className="align-items-center">
-                  <Col lg="12">
-                    <div className="m-3">
-                      <div className="boxshad py-3">
-                        <Row className="align-items-center">
-                          <Col lg="12" style={{ textAlign: "-webkit-right" }}>
-                            <div
-                              style={{
-                                textAlign: "-webkit-right",
-                                float: "right",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                              className="webkit"
-                            >
-                              <Button
-                                className="border-rounded text-2xl"
-                                style={{
-                                  background: "none",
-                                  color: "#C1C1C1",
-                                }}
-                              >
-                                <BsBookmark />
-                              </Button>
-                            </div>
-                            <div
-                              style={{
-                                float: "right",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                              className="webkit"
-                            >
-                              <div style={{ display: "block" }}>
-                                <Button
-                                  // onClick={handleShow}
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(58,182,73)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Good Fit
-                                </Button>
-                                <Button
-                                  // onClick={handleShow}
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(255,0,0)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Not Quite
-                                </Button>
-                                <Button
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(41,172,226)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Good to Keep
-                                </Button>
-                                {/* <Button
-                                  className="border-rounded text-2xl"
-                                  style={{
-                                    background: "none",
-                                    color: "#C1C1C1",
-                                  }}
-                                >
-                                  <BsBookmark />
-                                </Button> */}
-                              </div>
-                            </div>
-                          </Col>
-                          <Col lg="2" className="webkit">
-                            <Image
-                              style={{ width: "100%" }}
-                              src={require("../../../assets/Profile.png")}
-                            />
-                          </Col>
-                          <Col lg="7">
-                            <h2 className="py-3">
-                              <span
-                                style={{ color: "#39bec1" }}
-                                className="text-2xl font-bold robot"
-                              >
-                                Zeeshan Siddique
-                              </span>{" "}
-                              <br />
-                              <span
-                                className="text-2xl"
-                                style={{ color: "black" }}
-                              >
-                                Doctor
-                              </span>
-                              <br />
-                              <br />
-                              <span style={{ color: "rgb(148,147,147)" }}>
-                                It has survived t is a long established fact
-                                that a reader will be distracted by the readable
-                                content of a page when looking at its layout.
-                                The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as
-                                opposed to using 'Content here, content here',
-                                making it look like readable English.
-                              </span>
-                            </h2>
-                          </Col>
-
-                          <Col lg="3">
-                            <div className="webkit" style={{ display: "grid" }}>
-                              <Button
-                                variant="primary"
-                                onClick={() => setModalShow(true)}
-                                className="text-white border-rounded px-3 py-3 mx-2"
-                                style={{
-                                  background: "#39BEC1",
-                                  border: "none",
-                                }}
-                              >
-                                VIEW PROFILE
-                              </Button>
-                              <MyVerticallyCenteredModal
-                                show={modalShow}
-                                onHide={() => setModalShow(false)}
-                              />
-                            </div>
-                          </Col>
-                        </Row>
-                        <Container>
-                          <Row className="align-items-center block-for-res">
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Experience
-                                </h2>
-
-                                <h2
-                                  className="text-lg"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  4 Year
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Salary Range
-                                </h2>
-
-                                <h2
-                                  className="text-lg "
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  $15000 - $20,000
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Location
-                                </h2>
-
-                                <h2
-                                  className="text-lg "
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  Panam
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <Button
-                                  onClick={() => setLgShow(true)}
-                                  className=" border-rounded py-3 w-44"
-                                  style={{
-                                    background: "none",
-                                    fontSize: "15px",
-                                    border: "1px solid rgb(57, 190, 193)",
-                                    color: "rgb(57, 190, 193)",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  ARRANGE INTERVIEW
-                                </Button>
-
-                                <MyVerticallyCenteredModal1
-                                  show={lgShow}
-                                  onHide={() => setLgShow(false)}
-                                />
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <Button
-                                  onClick={() => setOfferShow(true)}
-                                  className=" border-rounded py-3 w-44"
-                                  style={{
-                                    background: "none",
-                                    fontSize: "15px",
-                                    border: "1px solid rgb(57, 190, 193)",
-                                    color: "rgb(57, 190, 193)",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  OFFER
-                                </Button>
-                                <MyVerticallyCenteredModal3
-                                  show={OfferShow}
-                                  onHide={() => setOfferShow(false)}
-                                />
-                              </div>
-                            </Col>
-                          </Row>
-                        </Container>
-                        {/* <hr className="my-2" />
-              <Row className="align-items-center pl-4">
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Experience</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      4
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Salary Range</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      $15000 - $20,000
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Location</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        style={{
-                          fontWeight: "bolder",
-                        }}
-                      />{" "}
-                      Panam
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <Button
-                    className="text-white border-rounded px-3"
-                    style={{ background: "#39BEC1", border: "none" }}
-                  >
-                    View Profile
-                  </Button>
-                </Col>
-              </Row> */}
-                      </div>
+                  <Col lg="3">
+                    <div className="p3 py-3">
+                      <h2 className="text-2xl">Salary Range</h2>
+                      <br />
+                      <h2 className="text-xl" style={{ color: "#7A7979" }}>
+                        $15000 - $20,000
+                      </h2>
                     </div>
                   </Col>
-                </Row>
-              </Container>
+                  <Col lg="3">
+                    <div className="p3 py-3">
+                      <h2 className="text-2xl">Location</h2>
+                      <br />
+                      <h2 className="text-xl" style={{ color: "#7A7979" }}>
+                        <FontAwesomeIcon
+                          icon={faLocationDot}
+                          style={{
+                            fontWeight: "bolder",
+                          }}
+                        />{" "}
+                        Panam
+                      </h2>
+                    </div>
+                  </Col>
+                  <Col lg="3">
+                    <Button
+                      className="text-white border-rounded px-3"
+                      style={{ background: "#39BEC1", border: "none" }}
+                    >
+                      View Profile
+                    </Button>
+                  </Col>
+                </Row> */}
+                        </div>
+                      </div>
+                    </Col>
+                  </Row>
+                </Container>
+                )
+              })}
+             
+          
             </Accordion.Body>
           </Accordion.Item>
-          <Accordion.Item eventKey="1">
-            <Accordion.Header>
-              Web Developer &#160;&#160;&#160;
-              <span
-                className="fontpxx"
-                style={{ color: "rgb(148,147,147)", float: "right" }}
-              >
-                (18 Candidates)
-              </span>
-            </Accordion.Header>
-            <Accordion.Body>
-              <Container>
-                <Row className="align-items-center">
-                  <Col lg="12">
-                    <div className="m-3">
-                      <div className="boxshad py-3">
-                        <Row className="align-items-center">
-                          <Col lg="12" style={{ textAlign: "-webkit-right" }}>
-                            <div
-                              style={{
-                                textAlign: "-webkit-right",
-                                float: "right",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                              className="webkit"
-                            >
-                              <Button
-                                className="border-rounded text-2xl"
-                                style={{
-                                  background: "none",
-                                  color: "#C1C1C1",
-                                }}
-                              >
-                                <BsBookmark />
-                              </Button>
-                            </div>
-                            <div
-                              style={{
-                                float: "right",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                              className="webkit"
-                            >
-                              <div style={{ display: "block" }}>
-                                <Button
-                                  // onClick={handleShow}
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(58,182,73)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Good Fit
-                                </Button>
-                                <Button
-                                  // onClick={handleShow}
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(255,0,0)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Not Quite
-                                </Button>
-                                <Button
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(41,172,226)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Good to Keep
-                                </Button>
-                                {/* <Button
-                                  className="border-rounded text-2xl"
-                                  style={{
-                                    background: "none",
-                                    color: "#C1C1C1",
-                                  }}
-                                >
-                                  <BsBookmark />
-                                </Button> */}
-                              </div>
-                            </div>
-                          </Col>
-                          <Col lg="2" className="webkit">
-                            <Image
-                              style={{ width: "100%" }}
-                              src={require("../../../assets/Profile.png")}
-                            />
-                          </Col>
-                          <Col lg="7">
-                            <h2 className="py-3">
-                              <span
-                                style={{ color: "#39bec1" }}
-                                className="text-2xl font-bold robot"
-                              >
-                                Zeeshan Siddique
-                              </span>{" "}
-                              <br />
-                              <span
-                                className="text-2xl"
-                                style={{ color: "black" }}
-                              >
-                                Doctor
-                              </span>
-                              <br />
-                              <br />
-                              <span style={{ color: "rgb(148,147,147)" }}>
-                                It has survived t is a long established fact
-                                that a reader will be distracted by the readable
-                                content of a page when looking at its layout.
-                                The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as
-                                opposed to using 'Content here, content here',
-                                making it look like readable English.
-                              </span>
-                            </h2>
-                          </Col>
-
-                          <Col lg="3">
-                            <div className="webkit" style={{ display: "grid" }}>
-                              <Button
-                                variant="primary"
-                                onClick={() => setModalShow(true)}
-                                className="text-white border-rounded px-3 py-3 mx-2"
-                                style={{
-                                  background: "#39BEC1",
-                                  border: "none",
-                                }}
-                              >
-                                VIEW PROFILE
-                              </Button>
-                              <MyVerticallyCenteredModal
-                                show={modalShow}
-                                onHide={() => setModalShow(false)}
-                              />
-                            </div>
-                          </Col>
-                        </Row>
-                        <Container>
-                          <Row className="align-items-center block-for-res">
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Experience
-                                </h2>
-
-                                <h2
-                                  className="text-lg"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  4 Year
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Salary Range
-                                </h2>
-
-                                <h2
-                                  className="text-lg "
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  $15000 - $20,000
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Location
-                                </h2>
-
-                                <h2
-                                  className="text-lg "
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  Panam
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <Button
-                                  onClick={() => setLgShow(true)}
-                                  className=" border-rounded py-3 w-44"
-                                  style={{
-                                    background: "none",
-                                    fontSize: "15px",
-                                    border: "1px solid rgb(57, 190, 193)",
-                                    color: "rgb(57, 190, 193)",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  ARRANGE INTERVIEW
-                                </Button>
-
-                                <MyVerticallyCenteredModal1
-                                  show={lgShow}
-                                  onHide={() => setLgShow(false)}
-                                />
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <Button
-                                  onClick={() => setOfferShow(true)}
-                                  className=" border-rounded py-3 w-44"
-                                  style={{
-                                    background: "none",
-                                    fontSize: "15px",
-                                    border: "1px solid rgb(57, 190, 193)",
-                                    color: "rgb(57, 190, 193)",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  OFFER
-                                </Button>
-                                <MyVerticallyCenteredModal3
-                                  show={OfferShow}
-                                  onHide={() => setOfferShow(false)}
-                                />
-                              </div>
-                            </Col>
-                          </Row>
-                        </Container>
-                        {/* <hr className="my-2" />
-              <Row className="align-items-center pl-4">
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Experience</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      4
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Salary Range</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      $15000 - $20,000
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Location</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        style={{
-                          fontWeight: "bolder",
-                        }}
-                      />{" "}
-                      Panam
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <Button
-                    className="text-white border-rounded px-3"
-                    style={{ background: "#39BEC1", border: "none" }}
-                  >
-                    View Profile
-                  </Button>
-                </Col>
-              </Row> */}
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-              </Container>
-              <Container>
-                <Row className="align-items-center">
-                  <Col lg="12">
-                    <div className="m-3">
-                      <div className="boxshad py-3">
-                        <Row className="align-items-center">
-                          <Col lg="12" style={{ textAlign: "-webkit-right" }}>
-                            <div
-                              style={{
-                                textAlign: "-webkit-right",
-                                float: "right",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                              className="webkit"
-                            >
-                              <Button
-                                className="border-rounded text-2xl"
-                                style={{
-                                  background: "none",
-                                  color: "#C1C1C1",
-                                }}
-                              >
-                                <BsBookmark />
-                              </Button>
-                            </div>
-                            <div
-                              style={{
-                                float: "right",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                              className="webkit"
-                            >
-                              <div style={{ display: "block" }}>
-                                <Button
-                                  // onClick={handleShow}
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(58,182,73)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Good Fit
-                                </Button>
-                                <Button
-                                  // onClick={handleShow}
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(255,0,0)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Not Quite
-                                </Button>
-                                <Button
-                                  className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                  style={{
-                                    background: "rgb(41,172,226)",
-                                    border: "none",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  Good to Keep
-                                </Button>
-                                {/* <Button
-                                  className="border-rounded text-2xl"
-                                  style={{
-                                    background: "none",
-                                    color: "#C1C1C1",
-                                  }}
-                                >
-                                  <BsBookmark />
-                                </Button> */}
-                              </div>
-                            </div>
-                          </Col>
-                          <Col lg="2" className="webkit">
-                            <Image
-                              style={{ width: "100%" }}
-                              src={require("../../../assets/Profile.png")}
-                            />
-                          </Col>
-                          <Col lg="7">
-                            <h2 className="py-3">
-                              <span
-                                style={{ color: "#39bec1" }}
-                                className="text-2xl font-bold robot"
-                              >
-                                Zeeshan Siddique
-                              </span>{" "}
-                              <br />
-                              <span
-                                className="text-2xl"
-                                style={{ color: "black" }}
-                              >
-                                Doctor
-                              </span>
-                              <br />
-                              <br />
-                              <span style={{ color: "rgb(148,147,147)" }}>
-                                It has survived t is a long established fact
-                                that a reader will be distracted by the readable
-                                content of a page when looking at its layout.
-                                The point of using Lorem Ipsum is that it has a
-                                more-or-less normal distribution of letters, as
-                                opposed to using 'Content here, content here',
-                                making it look like readable English.
-                              </span>
-                            </h2>
-                          </Col>
-
-                          <Col lg="3">
-                            <div className="webkit" style={{ display: "grid" }}>
-                              <Button
-                                variant="primary"
-                                onClick={() => setModalShow(true)}
-                                className="text-white border-rounded px-3 py-3 mx-2"
-                                style={{
-                                  background: "#39BEC1",
-                                  border: "none",
-                                }}
-                              >
-                                VIEW PROFILE
-                              </Button>
-                              <MyVerticallyCenteredModal
-                                show={modalShow}
-                                onHide={() => setModalShow(false)}
-                              />
-                            </div>
-                          </Col>
-                        </Row>
-                        <Container>
-                          <Row className="align-items-center block-for-res">
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Experience
-                                </h2>
-
-                                <h2
-                                  className="text-lg"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  4 Year
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Salary Range
-                                </h2>
-
-                                <h2
-                                  className="text-lg "
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  $15000 - $20,000
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Location
-                                </h2>
-
-                                <h2
-                                  className="text-lg "
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  Panam
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <Button
-                                  onClick={() => setLgShow(true)}
-                                  className=" border-rounded py-3 w-44"
-                                  style={{
-                                    background: "none",
-                                    fontSize: "15px",
-                                    border: "1px solid rgb(57, 190, 193)",
-                                    color: "rgb(57, 190, 193)",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  ARRANGE INTERVIEW
-                                </Button>
-
-                                <MyVerticallyCenteredModal1
-                                  show={lgShow}
-                                  onHide={() => setLgShow(false)}
-                                />
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <Button
-                                  onClick={() => setOfferShow(true)}
-                                  className=" border-rounded py-3 w-44"
-                                  style={{
-                                    background: "none",
-                                    fontSize: "15px",
-                                    border: "1px solid rgb(57, 190, 193)",
-                                    color: "rgb(57, 190, 193)",
-                                    marginTop: "10px",
-                                    marginBottom: "10px",
-                                  }}
-                                >
-                                  OFFER
-                                </Button>
-                                <MyVerticallyCenteredModal3
-                                  show={OfferShow}
-                                  onHide={() => setOfferShow(false)}
-                                />
-                              </div>
-                            </Col>
-                          </Row>
-                        </Container>
-                        {/* <hr className="my-2" />
-              <Row className="align-items-center pl-4">
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Experience</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      4
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Salary Range</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      $15000 - $20,000
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Location</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        style={{
-                          fontWeight: "bolder",
-                        }}
-                      />{" "}
-                      Panam
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <Button
-                    className="text-white border-rounded px-3"
-                    style={{ background: "#39BEC1", border: "none" }}
-                  >
-                    View Profile
-                  </Button>
-                </Col>
-              </Row> */}
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
-              </Container>
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
+            )
+          })}
+    
+                 </Accordion>
       </Container>
     </Container>
   );
