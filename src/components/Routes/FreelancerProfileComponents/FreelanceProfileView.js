@@ -35,6 +35,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Language } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import ModelComponents from "../ModelComponents/ModelComponents";
+import { FormGroup, Stack, Switch, Typography } from "@mui/material";
+import { styled } from "@mui/material";
 // import { Buffer } from 'buffer' 
 
 export const FreelanceProfileView = () => {
@@ -82,6 +84,7 @@ export const FreelanceProfileView = () => {
     lte : '',
     gte : ''
   })
+  const [checked,setChecked] = useState(false)
   // console.log(userId, "ID");
   const [isCheckBox, setIsCheckBox] = useState("false");
   const [profileData, setProfileData] = useState({
@@ -103,6 +106,7 @@ export const FreelanceProfileView = () => {
       lte: '',
     },
   });
+  const [isIdPublic, setIdPublic] = useState(profileData?.isIdCardPublic);
   const [profileExp, setProfileExp] = useState({
   });
   const [editProfileExp, setEditProfileExp] = useState({});
@@ -128,6 +132,47 @@ export const FreelanceProfileView = () => {
   // console.log(profImg, 'cvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
   // console.log(profImg, "cvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
 // >>>>>>> 68b259780b29502607921aefd10965f6add7a1ed
+
+const AntSwitch = styled(Switch)(({ theme }) => ({
+  width: 28,
+  height: 16,
+  padding: 0,
+  display: "flex",
+  "&:active": {
+    "& .MuiSwitch-thumb": {
+      width: 15,
+    },
+    "& .MuiSwitch-switchBase.Mui-checked": {
+      transform: "translateX(9px)",
+    },
+  },
+  "& .MuiSwitch-switchBase": {
+    padding: 2,
+    "&.Mui-checked": {
+      transform: "translateX(12px)",
+      color: "#fff",
+      "& + .MuiSwitch-track": {
+        opacity: 1,
+        backgroundColor: theme.palette.mode === "dark" ? "#39BEC1" : "#4dd5d8",
+      },
+    },
+  },
+  "& .MuiSwitch-thumb": {
+    boxShadow: "0 2px 4px 0 rgb(0 35 11 / 20%)",
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    transition: theme.transitions.create(["width"], {
+      duration: 200,
+    }),
+  },
+  "& .MuiSwitch-track": {
+    borderRadius: 16 / 2,
+    opacity: 1,
+    backgroundColor: theme.palette.mode === "dark" ? "rgba(255,255,255,.35)" : "rgba(0,0,0,.25)",
+    boxSizing: "border-box",
+  },
+}));
 
   useEffect(() => {
     let id = localStorage.getItem("id");
@@ -243,6 +288,7 @@ useEffect(()=>{
       lte: isSalaryRange.lte,
     }
   }
+  console.log(isData, 'Dataaaaaaaaaaaaa');
    if(isData) {
     let formdata = new FormData();
   Object.entries(profileData).map(([key, value]) => {
@@ -622,6 +668,23 @@ useEffect(()=>{
       />
     );
   };
+
+  const HandleVisaPermitChange = (event) => {
+    console.log(event, 'chekeeeeeeeeeeeed');
+    setChecked(checked ? false : true)
+  };
+
+
+useEffect(()=>{
+
+  if(checked){
+    setProfileData({...profileData,isIdCardPublic : true})
+  }
+  else{
+    setProfileData({...profileData,isIdCardPublic : false})
+  }
+
+},[checked])
   // experience edit & delete
 
   // edit
@@ -1579,7 +1642,34 @@ useEffect(()=>{
                             </fieldset>
                           </Col>
                           </Row>
-                          <Col lg="12">
+                          <Row>
+                          <Col lg="6">
+                            <fieldset>
+                              <label
+                                className="text-lg"
+                                style={{ width: "100%" }}
+                              >
+                               Identity Card
+                              </label>
+                              <input
+                                style={{ width: "100%" }}
+                                className="form-control"
+                                name="fname"
+                                type={"Number"}
+                                value={profileData?.idCard || ""}
+                                onChange={(e) =>
+                                  setProfileData({
+                                    ...profileData,
+                                    idCard: e.target.value,
+                                  })
+                                }
+                                //   value={user.number}
+                                //   onChange={getUserData}
+                                placeholder="Identity Card"
+                              />
+                            </fieldset>
+                          </Col>
+                          <Col lg="6">
                             <fieldset>
                               <label
                                 className="text-lg"
@@ -1603,6 +1693,19 @@ useEffect(()=>{
                               </Form.Select>
                             </fieldset>
                           </Col>
+                          </Row>
+                          <Row>
+                          <Col lg="12">
+                          <FormGroup style={{ float: "left" }}>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <Typography style={{ color: "#000000", fontSize: "14px" }}>
+                          <b>Make Identity Public</b>
+                        </Typography>
+                        <AntSwitch checked={checked} onClick={(event) => HandleVisaPermitChange(event)} defaultChecked={isIdPublic} inputProps={{ "aria-label": "ant design" }} />
+                      </Stack>
+                    </FormGroup>
+                          </Col>
+                          </Row>
                           <Col lg="12">
                             <fieldset>
                               <label

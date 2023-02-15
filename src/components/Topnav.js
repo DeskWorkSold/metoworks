@@ -1,3 +1,4 @@
+import React, { useState, Component, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -5,15 +6,32 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "../components/Navbar.css";
-import { Image } from "react-bootstrap";
-import { BrowserRouter as Route, Router, Link, Switch, useLocation } from "react-router-dom";
-import { logo } from "../assets/logo.png";
-import { useEffect, useState } from "react";
+import { Image, NavItem } from "react-bootstrap";
+import {
+  BrowserRouter as Route,
+  Router,
+  Link,
+  Switch,
+  useLocation,
+} from "react-router-dom";
+import IconButton from "@mui/material/IconButton";
+import MenuItem from "@mui/material/MenuItem";
+import Menu from "@mui/material/Menu";
 export const Topnav = () => {
+  const [auth, setAuth] = React.useState(true);
+  const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const location = useLocation()
-  const [isToken, setIsToken] = useState('')
-  console.log(isToken, 'toooooooooooookkkkkkkkken');
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const location = useLocation();
+  const [isToken, setIsToken] = useState("");
+  console.log(isToken, "toooooooooooookkkkkkkkken");
 
   //   const logout = async () => {
   //     await signOut(auth);
@@ -40,18 +58,18 @@ export const Topnav = () => {
   //   window.addEventListener("scroll", changeNavbarColor);
 
   useEffect(() => {
-    intitialFunc()
-  },[location.state])
+    intitialFunc();
+  }, [location.state]);
 
-  const  intitialFunc = async () => {
-    const token =  await localStorage.getItem("access-token");
-    setIsToken(token)
-  }
+  const intitialFunc = async () => {
+    const token = await localStorage.getItem("access-token");
+    setIsToken(token);
+  };
 
   const logutFunc = () => {
     const token = localStorage.removeItem("access-token");
-    setIsToken(token)
-  }
+    setIsToken(token);
+  };
   return (
     // <Router>
     <Navbar bg="light" expand="lg">
@@ -110,30 +128,11 @@ export const Topnav = () => {
             {/* <Nav.Link  disabled>
               Link
             </Nav.Link> */}
-            </Nav>
-{!isToken && !isToken?.length > 0 ?  <> 
-             <Nav.Link>
-            <Button
-              className="text-black"
-              style={{ background: "none", border: "none" }}
-            >
-              <Link to="/Login">Login</Link>
-            </Button>
-          </Nav.Link>
-          <Nav.Link>
-            <Button
-              className="text-white border-rounded"
-              style={{ background: "#39BEC1", border: "none" }}
-            >
-              <Link to="/Signup">Sign up</Link>
-            </Button>
-          </Nav.Link>
-            </> : <NavDropdown
+
+            {/* <NavDropdown
               title="Admin"
-              
               id="navbarScrollingDropdown"
               className="nnnnav rounded-full"
-              // style={{ background: "rgb(57, 190, 193)" }}
             >
               <NavDropdown.Item>
                 <button
@@ -144,44 +143,113 @@ export const Topnav = () => {
                   data-dropdown-toggle="user-dropdown"
                   data-dropdown-placement="bottom"
                 >
-                  {/* <span className="sr-only">Open user menu</span> */}
                   <Image
                     className="w-8 h-8 rounded-full"
                     src="/docs/images/people/profile-picture-3.jpg"
-                    // alt="user photo"
                   />
                 </button>
               </NavDropdown.Item>
 
-              {/* <div className="px-4 py-3">
-                <span className="block text-sm text-gray-900 dark:text-white">
-                  Bonnie Green
-                </span>
-                <span className="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">
-                  name@flowbite.com
-                </span>
-              </div> */}
               <NavDropdown.Item>
                 <a
                   href="#"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
-                  Profile
+                  Dashboard
+                </a>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <a
+                  href="#"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >
+                  Settings
                 </a>
               </NavDropdown.Item>
               <NavDropdown.Item>
                 <Link
-                to={isToken && `/Login`}
+                  to="/Login"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                >
+                  Sign in
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link
                   href="/Signup"
-                  onClick={() => logutFunc()}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
                   Sign out
                 </Link>
               </NavDropdown.Item>
-            </NavDropdown>   
-             }
-
+            </NavDropdown> */}
+          </Nav>
+          {!isToken && !isToken?.length > 0 ? (
+            <>
+              <Nav.Link>
+                <Button
+                  className="text-black"
+                  style={{ background: "none", border: "none" }}
+                >
+                  <Link to="/Login">Login</Link>
+                </Button>
+              </Nav.Link>
+              <Nav.Link>
+                <Button
+                  className="text-white border-rounded"
+                  style={{ background: "#39BEC1", border: "none" }}
+                >
+                  <Link to="/Signup">Sign up</Link>
+                </Button>
+              </Nav.Link>
+            </>
+          ) : (
+            <Nav.Link style={{ width: "6%" }}>
+              {auth && (
+                <div>
+                  <IconButton
+                    size="large"
+                    aria-label="account of current user"
+                    aria-controls="menu-appbar"
+                    aria-haspopup="true"
+                    onClick={handleMenu}
+                    color="inherit"
+                  >
+                    <Image
+                      style={{ width: "100%", objectFit: "cover" }}
+                      src={require("../assets/freelancer.png")}
+                    />
+                    {/* <AccountCircle /> */}
+                  </IconButton>
+                  <Menu
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right",
+                    }}
+                    open={Boolean(anchorEl)}
+                    onClose={handleClose}
+                  >
+                    {" "}
+                    <Link
+                      to={isToken && `/Login`}
+                      href="/Signup"
+                      onClick={() => logutFunc()}
+                    >
+                      <MenuItem>SignOut</MenuItem>
+                    </Link>
+                    <MenuItem onClick={handleClose}>My account</MenuItem>
+                  </Menu>
+                </div>
+              )}
+            </Nav.Link>
+          )}
         </Navbar.Collapse>
       </Container>
     </Navbar>
