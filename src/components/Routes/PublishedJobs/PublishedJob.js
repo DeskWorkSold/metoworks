@@ -735,7 +735,7 @@ export const PublishedJob = () => {
       })
     }, [])
     
-    const isDate = (searchData[0]?._source?.createdAt).ZonedDateTime
+    const isDate = (searchData[0]?._source?.createdAt)
     console.log(isDate, 'daaaaaaaaaaaaaaaaaaaaateeeeeeeeeeeeeee');
     
 
