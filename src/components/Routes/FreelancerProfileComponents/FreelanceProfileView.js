@@ -35,7 +35,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Language } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 import ModelComponents from "../ModelComponents/ModelComponents";
-import { FormGroup, Stack, Switch, Typography } from "@mui/material";
+import { duration, FormGroup, Stack, Switch, Typography } from "@mui/material";
 import { styled } from "@mui/material";
 // import { Buffer } from 'buffer' 
 
@@ -84,7 +84,12 @@ export const FreelanceProfileView = () => {
     lte : '',
     gte : ''
   })
+  const [durationData, setDurationData] = useState({
+    gte : '',
+    lte : ''
+  })
   const [checked,setChecked] = useState(false)
+  const [isChecked,setIsChecked] = useState(false)
   // console.log(userId, "ID");
   const [isCheckBox, setIsCheckBox] = useState("false");
   const [profileData, setProfileData] = useState({
@@ -123,7 +128,7 @@ export const FreelanceProfileView = () => {
   const [isEditLanguageData, setIsEditLanguageData] = useState({})
   const [isCv, setIsCv] = useState('')
 
-  const profImg = useRef("");
+  const [profileImg, setProfileImg] = useState('')
 
   // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
   console.log(profileData, "profileData");
@@ -220,6 +225,8 @@ useEffect(()=>{
 
 },[isLanguageData])
 
+console.log(profileImg);
+
   const initialFun = (id) => {
     axios
       .get(`/api/v1/user/freelancer`)
@@ -233,6 +240,7 @@ useEffect(()=>{
         setIsAchievementData(data.data.achievement)
         setIsEducationData(data.data.education)
         setIsLanguageData(data.data.language)
+        // setProfileImg(data.data.files.thumbnail)
       })
       .catch((err) => {
         console.log(err);
@@ -254,12 +262,10 @@ useEffect(()=>{
       });
 
       axios
-      .get(`/api/v1/user/asset/thumbnail`)
+      .get(`api/v1/user/asset/thumbnail`)
       .then((res) => {
-        const arraybuffer = new ArrayBuffer(res);
-        let base64ImageString = Buffer.from(arraybuffer, 'binary').toString('base64')
-        let srcValue = "data:image/png;base64,"+base64ImageString;
-        profImg.current = srcValue;
+        console.log(res.data, 'imaaaaaaaaaaaage');
+        setProfileImg(res.data)
       })
       .catch((err) => {
         console.log(err);
@@ -295,7 +301,7 @@ useEffect(()=>{
     formdata.append(key, value);
   });
     axios
-      .patch(`api/v1/user/freelancer`, formdata)
+      .post(`api/v1/user/freelancer`, formdata)
       .then((res) => {
         // console.log(formdata);
         // console.log(res, "profile data successfully added");
@@ -639,7 +645,7 @@ useEffect(()=>{
           <Image
             onClick={() => FileUploadComponent()}
             style={{ width: "100%" }}
-            src={{uri : profImg.current}}
+            src={{uri : profileImg}}
           />
           <input
             style={{ display: "none" }}
@@ -670,8 +676,14 @@ useEffect(()=>{
   };
 
   const HandleVisaPermitChange = (event) => {
-    console.log(event, 'chekeeeeeeeeeeeed');
+    // console.log(event, 'chekeeeeeeeeeeeed');
     setChecked(checked ? false : true)
+  };
+
+  
+  const HandleIsConfirm = (event) => {
+    // console.log(event, 'chekeeeeeeeeeeeed');
+    setIsChecked(isChecked ? false : true)
   };
 
 
@@ -685,6 +697,17 @@ useEffect(()=>{
   }
 
 },[checked])
+
+useEffect(()=>{
+
+  if(isChecked){
+    setProfileData({...profileData, isCurrent : true})
+  }
+  else{
+    setProfileData({...profileData, isCurrent : false})
+  }
+
+},[isChecked])
   // experience edit & delete
 
   // edit
@@ -717,11 +740,11 @@ useEffect(()=>{
                       className="form-control"
                       name="fname"
                       type={"text"}
-                      placeholder={isEditExperienceData.profession}
+                      placeholder={isEditExperienceData.title}
                       onChange={(e) =>
                         setEditIsExperienceData({
                           ...isEditExperienceData,
-                          profession: e.target.value,
+                          title: e.target.value,
                         })
                       }
                       //   value={user.number}
@@ -756,7 +779,7 @@ useEffect(()=>{
                     </label>
                     <Form.Select
                       aria-label="Default select example"
-                      placeholder={isEditExperienceData.jobIndustry}
+                      value={isEditExperienceData.jobIndustry}
                       onChange={(e) =>
                         setEditIsExperienceData({
                           ...isEditExperienceData,
@@ -802,7 +825,7 @@ useEffect(()=>{
                     </label>
                     <Form.Select
                       aria-label="Default select example"
-                      placeholder={isEditExperienceData.jobFunction}
+                      value={isEditExperienceData.jobFunction}
                       onChange={(e) =>
                         setEditIsExperienceData({
                           ...isEditExperienceData,
@@ -845,9 +868,11 @@ useEffect(()=>{
                       <FormCheck
                         id="check"
                         color="blue"
-                        onChange={checkBoxHandleChange}
-                        checked={
-                          props?.currentlyWorking === "on" ? true : false
+                        // onChange={checkBoxHandleChange}
+                        defaultChecked={isEditExperienceData.isCurrent}
+                        checked={isChecked}
+                        onClick={
+                          (event) => HandleIsConfirm(event)
                         }
                       />
                       &#160;&#160;I am currently working in this role
@@ -872,15 +897,13 @@ useEffect(()=>{
                         name="email"
                         type={"date"}
                         onChange={(e) =>
-                          setEditIsExperienceData({
-                            ...isEditExperienceData,
-                            startDate: e.target.value,
-                          })
-                        }
+                          setDurationData({
+                            ...durationData,
+                            gte: e.target.value,
+                          })}
                         //   value={user.number}
                         //   onChange={getUserData}
-                        placeholder="A Service Like No Other
-                "
+                        placeholder="A Service Like No Other"
                       />
                     </fieldset>
                   </Col>
@@ -904,16 +927,14 @@ useEffect(()=>{
                         name="firstname"
                         value={isEditExperienceData.endDate}
                         onChange={(e) =>
-                          setEditIsExperienceData({
-                            ...isEditExperienceData,
-                            endDate: e.target.value,
+                          setDurationData({
+                            ...durationData,
+                            lte: e.target.value,
                           })
                         }
                         //   value={user.name}
                         //   onChange={getUserData}
-                        placeholder="Gia (PVT) LTD
-
-                "
+                        placeholder="Gia (PVT) LTD"
                         required
                       />
                     </fieldset>
@@ -932,7 +953,7 @@ useEffect(()=>{
                       <textarea
                         // placeholder="Description"
                         className="form-control"
-                        placeholder={props?.description}
+                        placeholder={isEditExperienceData?.description}
                         onChange={(e) =>
                           setEditIsExperienceData({
                             ...isEditExperienceData,
@@ -1436,9 +1457,8 @@ useEffect(()=>{
                   </Col>
                   <Col lg="4">
                     <h2 className="text-3xl py-3 robot">
-                      {profileData?.fullName
-                        ? profileData?.fullName
-                        : "Ella jay"}
+                    {profileData?.data?.firstName + ' ' +
+                            profileData?.data?.lastName }
                       <br />
                       <span className="text-xl" style={{ color: "#6A489C" }}>
                         Web Developer
@@ -1474,7 +1494,7 @@ useEffect(()=>{
                               fontWeight: "bolder",
                             }}
                           />
-                          {profileData?.role || "Freelancer"}
+                          {profileData?.data?.role || "Freelancer"}
                         </li>
                         <li>
                           <FontAwesomeIcon
@@ -1484,10 +1504,10 @@ useEffect(()=>{
                               fontWeight: "bolder",
                             }}
                           />
-                          {profileData?.city && profileData?.countryTimeZone
-                            ? profileData?.city +
+                          {profileData?.data?.city && profileData?.data?.country
+                            ? profileData?.data?.city +
                               "," +
-                              profileData?.countryTimeZone
+                              profileData?.data?.country
                             : "Nugegada, Srilanka"}
                         </li>
                       </ul>
@@ -1496,7 +1516,7 @@ useEffect(()=>{
                   <Col lg="3">
                     <div className="webkit" style={{ display: "grid" }}>
                       <h2 className="text-l font-semibold">Open to Work :</h2>
-                      <Form.Check type="switch" id="custom-switch" />
+                      <Form.Check type="switch" id="custom-switch" defaultChecked={profileData?.data?.isOpenToWork} />
                       <h2 className="text-2xl font-semibold pt-2">
                         Salary Range
                       </h2>
@@ -1602,7 +1622,7 @@ useEffect(()=>{
                                 className="form-control"
                                 name="fname"
                                 type={"text"}
-                                value={profileData?.firstName || ""}
+                                placeholder={profileData?.data?.firstName || ""}
                                 onChange={(e) =>
                                   setProfileData({
                                     ...profileData,
@@ -1611,7 +1631,6 @@ useEffect(()=>{
                                 }
                                 //   value={user.number}
                                 //   onChange={getUserData}
-                                placeholder="Gia"
                               />
                             </fieldset>
                           </Col>
@@ -1628,7 +1647,7 @@ useEffect(()=>{
                                 className="form-control"
                                 name="fname"
                                 type={"text"}
-                                value={profileData?.lastName || ""}
+                                placeholder={profileData?.data?.lastName || ""}
                                 onChange={(e) =>
                                   setProfileData({
                                     ...profileData,
@@ -1637,7 +1656,6 @@ useEffect(()=>{
                                 }
                                 //   value={user.number}
                                 //   onChange={getUserData}
-                                placeholder="Gia"
                               />
                             </fieldset>
                           </Col>
@@ -1656,7 +1674,7 @@ useEffect(()=>{
                                 className="form-control"
                                 name="fname"
                                 type={"Number"}
-                                value={profileData?.idCard || ""}
+                                placeholder={profileData?.data?.idCard || ""}
                                 onChange={(e) =>
                                   setProfileData({
                                     ...profileData,
@@ -1665,7 +1683,6 @@ useEffect(()=>{
                                 }
                                 //   value={user.number}
                                 //   onChange={getUserData}
-                                placeholder="Identity Card"
                               />
                             </fieldset>
                           </Col>
@@ -1679,7 +1696,7 @@ useEffect(()=>{
                               </label>
                               <Form.Select
                                 aria-label="Default select example"
-                                value={profileData?.visaPermit || ""}
+                                value={profileData?.data?.visaPermit || ""}
                                 onChange={(e) =>
                                   setProfileData({
                                     ...profileData,
@@ -1687,7 +1704,7 @@ useEffect(()=>{
                                   })
                                 }
                               >
-                                <option hidden="">Choose...</option>
+                                <option>Choose...</option>
                                 <option>Yes</option>
                                 <option>No</option>
                               </Form.Select>
@@ -1716,7 +1733,7 @@ useEffect(()=>{
                               </label>
                               <Form.Select
                                 aria-label="Default select example"
-                                value={profileData?.gender || ""}
+                                value={profileData?.data?.gender || ""}
                                 onChange={(e) =>
                                   setProfileData({
                                     ...profileData,
@@ -1740,14 +1757,13 @@ useEffect(()=>{
                                 About Me
                               </label>
                               <textarea
-                                value={profileData?.aboutMe || ""}
+                                placeholder={profileData?.data?.aboutMe || ""}
                                 onChange={(e) =>
                                   setProfileData({
                                     ...profileData,
                                     aboutMe: e.target.value,
                                   })
                                 }
-                                placeholder="Description"
                                 className="form-control"
                               />
                             </fieldset>
@@ -1766,7 +1782,7 @@ useEffect(()=>{
                                   className="form-control"
                                   name="phone"
                                   type={"text"}
-                                  value={profileData?.phoneNumber || ""}
+                                  placeholder={profileData?.data?.phoneNumber || ""}
                                   onChange={(e) =>
                                     setProfileData({
                                       ...profileData,
@@ -1775,9 +1791,6 @@ useEffect(()=>{
                                   }
                                   //   value={user.number}
                                   //   onChange={getUserData}
-                                  placeholder="2000
-
-                "
                                 />
                               </fieldset>
                             </Col>
@@ -1794,7 +1807,7 @@ useEffect(()=>{
                                   className="form-control"
                                   name="email"
                                   type={"date"}
-                                  value={profileData?.dob || ""}
+                                  value={profileData?.data?.dob || ""}
                                   onChange={(e) =>
                                     setProfileData({
                                       ...profileData,
@@ -1803,8 +1816,7 @@ useEffect(()=>{
                                   }
                                   //   value={user.number}
                                   //   onChange={getUserData}
-                                  placeholder="A Service Like No Other
-                "
+                                  
                                 />
                               </fieldset>
                             </Col>
@@ -1822,7 +1834,7 @@ useEffect(()=>{
                                   className="form-control"
                                   type={"text"}
                                   name="firstname"
-                                  value={profileData?.country || ""}
+                                  placeholder={profileData?.data?.country || ""}
                                   onChange={(e) =>
                                     setProfileData({
                                       ...profileData,
@@ -1831,7 +1843,6 @@ useEffect(()=>{
                                   }
                                   //   value={user.name}
                                   //   onChange={getUserData}
-                                  placeholder="Gia (PVT) LTD"
                                   required
                                 />
                               </fieldset>
@@ -1852,14 +1863,13 @@ useEffect(()=>{
                                   name="lastname"
                                   //   value={user.email}
                                   //   onChange={getUserData}
-                                  value={profileData?.city || ""}
+                                  placeholder={profileData?.data?.city || ""}
                                   onChange={(e) =>
                                     setProfileData({
                                       ...profileData,
                                       city: e.target.value,
                                     })
                                   }
-                                  placeholder="IT Industry"
                                   required
                                 />
                               </fieldset>
@@ -1877,7 +1887,7 @@ useEffect(()=>{
                                   className="form-control"
                                   name="Email"
                                   type={"text"}
-                                  value={profileData?.address || ""}
+                                  placeholder={profileData?.data?.address || ""}
                                   onChange={(e) =>
                                     setProfileData({
                                       ...profileData,
@@ -1886,7 +1896,6 @@ useEffect(()=>{
                                   }
                                   //   value={user.number}
                                   //   onChange={getUserData}
-                                  placeholder="https://www.me2work.com/"
                                 />
                               </fieldset>
                             </Col>
@@ -1904,7 +1913,7 @@ useEffect(()=>{
                                     className="form-control"
                                     name="minwork"
                                     type={"text"}
-                                    value={profileData?.state || ""}
+                                    placeholder={profileData?.data?.state || ""}
                                     onChange={(e) =>
                                       setProfileData({
                                         ...profileData,
@@ -1913,7 +1922,6 @@ useEffect(()=>{
                                     }
                                     //   value={user.number}
                                     //   onChange={getUserData}
-                                    placeholder="USA"
                                   />
                                 </div>
                               </fieldset>
@@ -1965,7 +1973,7 @@ useEffect(()=>{
                                   Min :
                                 </label>
                                 <input
-                                  value={profileData?.min || ""}
+                                 placeholder={profileData?.data?.salaryRange.lte || ""}
                                  onChange={(e) =>
                                   setIsSalaryRange({...isSalaryRange, lte : e.target.value})
                                 }
@@ -1975,7 +1983,6 @@ useEffect(()=>{
                                   name="firstname"
                                   //   value={user.name}
                                   //   onChange={getUserData}
-                                  placeholder="Minimum Salary"
                                   required
                                 />
                               </Col>
@@ -1987,7 +1994,7 @@ useEffect(()=>{
                                   Max :
                                 </label>
                                 <input
-                                  value={profileData?.max || ""}
+                        placeholder={profileData?.data?.salaryRange.gte || ""}
                                   onChange={(e) =>
                                     setIsSalaryRange({...isSalaryRange, gte : e.target.value})
                                   }
@@ -1996,9 +2003,7 @@ useEffect(()=>{
                                   type={"number"}
                                   name="firstname"
                                   //   value={user.name}
-                                  //   onChange={getUserData}
-                                  placeholder="Maximum Salary
-                "
+                                  //   onChange={getUserData
                                   required
                                 />
                               </Col>
