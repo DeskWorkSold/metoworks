@@ -167,8 +167,9 @@ export const FreelanceSavedJobs = () => {
   }
 
   const modalshow = (values) => {
-    console.log(values, "funtion values");
+    // console.log(values, "funtion values");
     if (values.clicked == true) {
+      // alert('its work')
       values.clicked = false;
       setModalShow(false);
     } else {

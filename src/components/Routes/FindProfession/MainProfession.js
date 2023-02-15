@@ -179,7 +179,7 @@ export const MainProfession = () => {
   }
 
   const modalshow = (values) => {
-    console.log(values, "funtion values");
+    // console.log(values, "funtion values");
     if (values.clicked == true) {
       values.clicked = false;
       setModalShow(false);

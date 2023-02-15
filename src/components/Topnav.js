@@ -236,7 +236,6 @@ export const Topnav = () => {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    {" "}
                     <Link
                       to={isToken && `/Login`}
                       href="/Signup"
