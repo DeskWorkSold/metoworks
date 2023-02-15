@@ -90,7 +90,7 @@ function MyVerticallyCenteredModal(props) {
       salaryPayFreq : jobData.salaryPayFreq,
       additionalEmails : [isEmail],
        closed : false,
-       submitted : 'true'
+       submitted : true
     }
     console.log(Data, 'daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa');
     if(Data.submitted) {
