@@ -8,6 +8,7 @@ import "react-tabs/style/react-tabs.css";
 import { Navigation } from "swiper";
 import { useNavigate } from "react-router-dom/dist";
 import axios from "../../../utils/axios.api";
+
 export const Login = () => {
   const [freelancerData, setFreelancerData] = useState({
     email: "",
@@ -46,7 +47,7 @@ export const Login = () => {
           localStorage.setItem("access-token", token);
           // console.log(data, 'daata');
           if (type === "freelancer") {
-            navigate("/FreelancerProfile");
+            navigate("/FreelancerProfile", {state : token});
           }
         })
         .catch((error) => {

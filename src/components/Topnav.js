@@ -6,9 +6,15 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "../components/Navbar.css";
 import { Image } from "react-bootstrap";
-import { BrowserRouter as Route, Router, Link, Switch } from "react-router-dom";
+import { BrowserRouter as Route, Router, Link, Switch, useLocation } from "react-router-dom";
 import { logo } from "../assets/logo.png";
+import { useEffect, useState } from "react";
 export const Topnav = () => {
+
+  const location = useLocation()
+  const [isToken, setIsToken] = useState('')
+  console.log(isToken, 'toooooooooooookkkkkkkkken');
+
   //   const logout = async () => {
   //     await signOut(auth);
   //   };
@@ -32,6 +38,20 @@ export const Topnav = () => {
   //   }, []);
 
   //   window.addEventListener("scroll", changeNavbarColor);
+
+  useEffect(() => {
+    intitialFunc()
+  },[location.state])
+
+  const  intitialFunc = async () => {
+    const token =  await localStorage.getItem("access-token");
+    setIsToken(token)
+  }
+
+  const logutFunc = () => {
+    const token = localStorage.removeItem("access-token");
+    setIsToken(token)
+  }
   return (
     // <Router>
     <Navbar bg="light" expand="lg">
@@ -90,9 +110,27 @@ export const Topnav = () => {
             {/* <Nav.Link  disabled>
               Link
             </Nav.Link> */}
-
-            <NavDropdown
+            </Nav>
+{!isToken && !isToken?.length > 0 ?  <> 
+             <Nav.Link>
+            <Button
+              className="text-black"
+              style={{ background: "none", border: "none" }}
+            >
+              <Link to="/Login">Login</Link>
+            </Button>
+          </Nav.Link>
+          <Nav.Link>
+            <Button
+              className="text-white border-rounded"
+              style={{ background: "#39BEC1", border: "none" }}
+            >
+              <Link to="/Signup">Sign up</Link>
+            </Button>
+          </Nav.Link>
+            </> : <NavDropdown
               title="Admin"
+              
               id="navbarScrollingDropdown"
               className="nnnnav rounded-full"
               // style={{ background: "rgb(57, 190, 193)" }}
@@ -128,51 +166,22 @@ export const Topnav = () => {
                   href="#"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
-                  Dashboard
-                </a>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Settings
+                  Profile
                 </a>
               </NavDropdown.Item>
               <NavDropdown.Item>
                 <Link
-                  to="/Login"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Sign in
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link
+                to={isToken && `/Login`}
                   href="/Signup"
+                  onClick={() => logutFunc()}
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                 >
                   Sign out
                 </Link>
               </NavDropdown.Item>
-            </NavDropdown>
-          </Nav>
-          <Nav.Link>
-            <Button
-              className="text-black"
-              style={{ background: "none", border: "none" }}
-            >
-              <Link to="/Login">Login</Link>
-            </Button>
-          </Nav.Link>
-          <Nav.Link>
-            <Button
-              className="text-white border-rounded"
-              style={{ background: "#39BEC1", border: "none" }}
-            >
-              <Link to="/Signup">Sign up</Link>
-            </Button>
-          </Nav.Link>
+            </NavDropdown>   
+             }
+
         </Navbar.Collapse>
       </Container>
     </Navbar>

@@ -95,9 +95,9 @@ export const FreelanceProfileView = () => {
   const profImg = useRef("");
 
   // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
-  // console.log(profileData, "profileData");
+  console.log(profileData, "profileData");
   // console.log(isEditLanguageData, "isEditLanguageData");
-  console.log(profImg, 'cvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+  // console.log(profImg, 'cvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
 
   useEffect(() => {
     let id = localStorage.getItem("id");

@@ -22,39 +22,83 @@ import { useEffect } from "react";
 import axios from '../../../utils/axios.api'
 
 function MyVerticallyCenteredModal(props) {
+  const [isSalaryRange, setisSalaryRange] = useState({
+    gte : '',
+    lte : ''
+  })
+  const [isProjectTimeline, setIsProjectTimeline] = useState({
+    gte : '',
+    lte : ''
+  })
+
+  const [isEmail, setIsEmail] = useState('')
+  // console.log(isSalaryRange, 'saaaaaaaaaaaaaaaaaaaaaaaaaaalary');
   const [jobData, setJobData] = useState ({
     title : '',
     industry : '',
     jobFunction : '',
-    // subJobFunction : 'damy',
+    jobSubFunction : 'dummy',
     location : '',
     description : '',
     requirements : '',
     profession : '',
     educationLevel : '',
     empType : '',
+    projectTimeline : { gte : '', lte : ''},
     postedDate : '',
     expiryDate : '',
     madeOfWork : '',
     noOfOpenings : '',
     salaryCurrency : '',
-    salaryRange : { gte : '',
-  lte : ''},
-    salaryType : '', /// look after
+    salaryRange : { gte : isSalaryRange.gte,
+  lte : isSalaryRange.lte},
+    // salaryType : '', /// look after
     salaryPayFreq : '',
-    postedDate : '',
     additionalEmails : [],
+     closed : false
   })
-  
 
+  // console.log(jobData, 'jobDaaaaaaaataaa');
+  
+ 
+  // submitted : true when dfat post publised 
   const navigate = useNavigate()
-  const postFunc = () => {
-    axios.post('api/v1/job-post', jobData).then((res) => {
+
+  const PostFunc = () => {
+    let Data = {
+      title : jobData.title,
+      industry : jobData.industry,
+      jobFunction : jobData.jobFunction,
+      jobSubFunction : 'dummy',
+      location : jobData.location,
+      description : jobData.description,
+      requirements : jobData.requirements,
+      profession : jobData.profession,
+      educationLevel : jobData.educationLevel,
+      empType : jobData.empType,
+      projectTimeline : { gte : isProjectTimeline.gte, lte : isProjectTimeline.gte},
+      postedDate : jobData.postedDate,
+      expiryDate : jobData.expiryDate,
+      madeOfWork : jobData.madeOfWork,
+      noOfOpenings : jobData.noOfOpenings,
+      salaryCurrency : jobData.salaryCurrency,
+      salaryRange : { gte : isSalaryRange.gte,
+    lte : isSalaryRange.lte},
+      // salaryType : '', /// look after
+      salaryPayFreq : jobData.salaryPayFreq,
+      additionalEmails : [isEmail],
+       closed : false,
+       submitted : 'true'
+    }
+    console.log(Data, 'daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa');
+    if(Data.submitted) {
+    axios.post('api/v1/job-post', Data).then((res) => {
       console.log(res, 'data sended successfully');
       // navigate('/CompanyProfile')
     }).catch((err) => {
       console.log(err);
     })
+  }
   }
 
   const draftFunc = () => {
@@ -76,6 +120,19 @@ function MyVerticallyCenteredModal(props) {
     })
   }
 
+  useEffect(() => {
+    isPostedDate()
+  },[])
+
+  
+  const isPostedDate = () => {
+    let date = new Date()
+    let month = date.getMonth()
+    let isDate = date.getDate()
+    let year = date.getFullYear()
+    return `${isDate}-${month + 1}-${year}`
+  }
+  
   return (
     <Modal
       {...props}
@@ -203,7 +260,7 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Sub Job Function
                   </label>
-                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, subJobFunction : e.target.value})}>
+                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, jobSubFunction : e.target.value})}>
                     <option value="DEFAULT" disabled="">
                       Sub Job Function
                     </option>
@@ -392,9 +449,64 @@ function MyVerticallyCenteredModal(props) {
               </Col>
               <Col lg="12">
                 <fieldset>
+                  <label className="text-lg" style={{ width: "100%" }}>
+                  Project Timeline
+                  </label>
+                 
+                </fieldset>
+              </Col>
+              <Container>
+                <Row>
+                  <Col>
+                    <label className="text-l" style={{ color: "#7A7979" }}>
+                      Start :
+                    </label>
+                    <input
+                    onChange={(e) => setIsProjectTimeline({...isProjectTimeline,  gte : e.target.value})}
+                      style={{ width: "100%" }}
+                      className="form-control"
+                      type={"date"}
+                      name="firstname"
+                      //   value={user.name}
+                      //   onChange={getUserData}
+                      placeholder="Start"
+                      required
+                    />
+                  </Col>
+                  <Col>
+                    <label className="text-l" style={{ color: "#7A7979" }}>
+                      End :
+                    </label>
+                    <input
+                    onChange={(e) => setIsProjectTimeline({...isProjectTimeline,  lte : e.target.value})}
+                      style={{ width: "100%" }}
+                      className="form-control mx-2"
+                      type={"date"}
+                      name="firstname"
+                      //   value={user.name}
+                      //   onChange={getUserData}
+                      placeholder="Start
+                "
+                      required
+                    />
+                  </Col>
+                </Row>
+              </Container>
+              <Col lg="12">
+                <fieldset>
                   <label className="text-lg" style={{ width: "100%" }} >
                     Profession
                   </label>
+                  <input
+                    style={{ width: "100%" }}
+                    className="form-control"
+                    name="firstname"
+                    onChange={(e) => setJobData({...jobData, profession : e.target.value})}
+                    //   value={user.name}
+                    //   onChange={getUserData}
+                    placeholder="Enter Profession"
+                    required
+                  />
                 </fieldset>
               </Col>
               {/* <Container>
@@ -428,43 +540,7 @@ function MyVerticallyCenteredModal(props) {
                   </Col>
                 </Row>
               </Container> */}
-              <Container>
-                <Row>
-                  <Col>
-                    <label className="text-l" style={{ color: "#7A7979" }}>
-                      Start :
-                    </label>
-                    <input
-                    onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
-                      style={{ width: "100%" }}
-                      className="form-control"
-                      type={"date"}
-                      name="firstname"
-                      //   value={user.name}
-                      //   onChange={getUserData}
-                      placeholder="Start"
-                      required
-                    />
-                  </Col>
-                  <Col>
-                    <label className="text-l" style={{ color: "#7A7979" }}>
-                      End :
-                    </label>
-                    <input
-                    onChange={(e) => setJobData({...jobData, expiryDate : e.target.value})}
-                      style={{ width: "100%" }}
-                      className="form-control mx-2"
-                      type={"date"}
-                      name="firstname"
-                      //   value={user.name}
-                      //   onChange={getUserData}
-                      placeholder="Start
-                "
-                      required
-                    />
-                  </Col>
-                </Row>
-              </Container>
+         
               <Col lg="12">
                 <fieldset>
                   <label className="text-lg" style={{ width: "100%" }}>
@@ -555,7 +631,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control"
                       type={"number"}
                       name="firstname"
-                    onChange={(e) => setJobData({...jobData.salaryRange, gte : e.target.value})}
+                      onChange={(e) => setisSalaryRange({...isSalaryRange, gte : e.target.value})}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Minimum Salary"
@@ -571,7 +647,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control mx-2"
                       type={"number"}
                       name="firstname"
-                      onChange={(e) => setJobData({...jobData.salaryRange, lte : e.target.value})}
+                      onChange={(e) => setisSalaryRange({...isSalaryRange, lte : e.target.value})}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Maximum Salary
@@ -714,12 +790,12 @@ function MyVerticallyCenteredModal(props) {
                     <input
                       style={{ width: "100%" }}
                       className="form-control"
-                      type={"date"}
                       name="firstname"
                       //   value={user.name}
                       //   onChange={getUserData}
+                      value={isPostedDate}
                       placeholder="Enter No. of Openings"
-                    onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
+                    // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
                     />
                   </fieldset>
@@ -736,7 +812,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control"
                       type={"email"}
                       name="firstname"
-                    onChange={(e) => setJobData({...jobData, additionalEmails : e.target.value})}
+                    onChange={(e) => setIsEmail(e.target.value)}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Enter Additional Emails
@@ -773,7 +849,7 @@ function MyVerticallyCenteredModal(props) {
         </Button>
         <Button
           style={{ background: "none", color: "#39BEC1" }}
-          onClick={() => postFunc()}
+          onClick={() => PostFunc()}
         >
           Post
         </Button>

@@ -18,7 +18,8 @@
 .nnnnav{
     margin-left: 10px;
 }
-.nnnnav .nav-link{    text-align: center;
+.nnnnav .nav-link{
+    text-align: center;
     background-color: rgb(57, 190, 193);
     color: rgb(255, 255, 255) !important;
     border-radius: 40px;
