@@ -38,7 +38,7 @@ import { FreelanceMainOffer } from "./components/Routes/FreelanceMainOffer";
 function App() {
   return (
     <>
-      <Topnav />
+      <Topnav  />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/FindProfessions" element={<FindProfession />} />

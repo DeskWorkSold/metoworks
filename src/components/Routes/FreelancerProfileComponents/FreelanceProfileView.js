@@ -38,6 +38,11 @@ import ModelComponents from "../ModelComponents/ModelComponents";
 // import { Buffer } from 'buffer' 
 
 export const FreelanceProfileView = () => {
+  const [modalShow, setModalShow] = React.useState(false);
+  const [modalShowDelete, setModalShowDelete] = React.useState(false);
+  const [modalShowEducation, setModalShowEducation] = React.useState(false);
+  const [modalShowEducationDelete, setModalShowEducationDelete] =
+    React.useState(false);
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
@@ -73,9 +78,30 @@ export const FreelanceProfileView = () => {
   const handleShow10 = () => setShow10(true);
   const [userId, setUserId] = useState("");
   const [isModel, setIsModel] = useState('false')
+  const [isSalaryRange ,setIsSalaryRange] = useState({
+    lte : '',
+    gte : ''
+  })
   // console.log(userId, "ID");
   const [isCheckBox, setIsCheckBox] = useState("false");
   const [profileData, setProfileData] = useState({
+    firstName: '',
+    lastName: '',
+    visaPermit: '',
+    idCard: '',
+    gender: '',
+    isIdCardPublic: '',
+    aboutMe: '',
+    phoneNumber: '',
+    dob: '',
+    country: '',
+    city: '',
+    address: '',
+    state: '',
+    salaryRange: {
+      gte: '',
+      lte: '',
+    },
   });
   const [profileExp, setProfileExp] = useState({
   });
@@ -92,12 +118,16 @@ export const FreelanceProfileView = () => {
   const [isEditAchievementData, setIsEditAchievementData] = useState({})
   const [isEditLanguageData, setIsEditLanguageData] = useState({})
   const [isCv, setIsCv] = useState('')
+
   const profImg = useRef("");
 
   // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
   console.log(profileData, "profileData");
   // console.log(isEditLanguageData, "isEditLanguageData");
+// <<<<<<< HEAD
   // console.log(profImg, 'cvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+  // console.log(profImg, "cvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+// >>>>>>> 68b259780b29502607921aefd10965f6add7a1ed
 
   useEffect(() => {
     let id = localStorage.getItem("id");
@@ -114,6 +144,11 @@ export const FreelanceProfileView = () => {
     setIsLanguage({ ...isLanguage, uid: id });
   }, []);
 
+  useEffect(() => {
+    isEducationData &&
+      isEducationData.length > 0 &&
+      setEditIsEducationeData(isEducationData);
+  }, [isEducationData]);
 
   useEffect(()=>{
 
@@ -189,12 +224,32 @@ useEffect(()=>{
   };
 
   const profileFunc = () => {
+   let isData = {
+      firstName: profileData.firstName,
+    lastName: profileData.lastName,
+    visaPermit: profileData.visaPermit,
+    idCard: profileData.idCard,
+    gender: profileData.gender,
+    isIdCardPublic: profileData.isIdCardPublic,
+    aboutMe: profileData.aboutMe,
+    phoneNumber: profileData.phoneNumber,
+    dob: profileData.dob,
+    country: profileData.country,
+    city: profileData.city,
+    address: profileData.address,
+    state: profileData.state,
+    salaryRange: {
+      gte: isSalaryRange.gte,
+      lte: isSalaryRange.lte,
+    }
+  }
+   if(isData) {
     let formdata = new FormData();
   Object.entries(profileData).map(([key, value]) => {
     formdata.append(key, value);
   });
     axios
-      .patch(`http://localhost:3000/v1/users/${userId}`, formdata)
+      .patch(`api/v1/user/freelancer`, formdata)
       .then((res) => {
         // console.log(formdata);
         // console.log(res, "profile data successfully added");
@@ -206,6 +261,7 @@ useEffect(()=>{
       .catch((err) => {
         console.log(err);
       });
+    }
   };
 
   const ProfileExp = () => {
@@ -332,7 +388,7 @@ useEffect(()=>{
   .put(`api/v1/user/freelancer/asset/education-cert?id=${id}`, formdata)
   .then((res) => {
     // alert(isEditExperienceData.profession)
-    console.log(res, "education edit data successfully added");
+    // console.log(res, "education edit data successfully added");
     if(res) {
       setShow6(false)
       educationData(userId)
@@ -347,7 +403,7 @@ useEffect(()=>{
       .put(`api/v1/user/freelancer/asset/education-cert?id=${id}`, isEditEducationData)
       .then((res) => {
         // alert(isEditExperienceData.profession)
-        console.log(res, "education edit data successfully added");
+        // console.log(res, "education edit data successfully added");
         if(res) {
           setShow6(false)
           educationData(userId)
@@ -486,7 +542,7 @@ useEffect(()=>{
     .put(`http://localhost:3000/v1/language/${id}`, isEditLanguageData)
     .then((res) => {
       // alert(isEditExperienceData.profession)
-      console.log(res, "profile edit data successfully added");
+      // console.log(res, "profile edit data successfully added");
       if(res) {
         setShow8(true);
         LanguageData(userId)
@@ -566,7 +622,725 @@ useEffect(()=>{
       />
     );
   };
+  // experience edit & delete
 
+  // edit
+  function MyVerticallyCenteredModal(props) {
+    // console.log(props, "proooooooooops");
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>
+              Edit Experience
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">
+                <Col lg="12">
+                  <fieldset>
+                    <label className="text-lg" style={{ width: "100%" }}>
+                      Profession
+                    </label>
+                    <input
+                      style={{ width: "100%" }}
+                      className="form-control"
+                      name="fname"
+                      type={"text"}
+                      placeholder={isEditExperienceData.profession}
+                      onChange={(e) =>
+                        setEditIsExperienceData({
+                          ...isEditExperienceData,
+                          profession: e.target.value,
+                        })
+                      }
+                      //   value={user.number}
+                      //   onChange={getUserData}
+                    />
+                  </fieldset>
+                </Col>
+                <Col lg="12">
+                  <fieldset>
+                    <label className="text-lg" style={{ width: "100%" }}>
+                      Company Name
+                    </label>
+                    <input
+                      style={{ width: "100%" }}
+                      className="form-control"
+                      name="lname"
+                      placeholder={isEditExperienceData.companyName}
+                      onChange={(e) =>
+                        setEditIsExperienceData({
+                          ...isEditExperienceData,
+                          companyName: e.target.value,
+                        })
+                      }
+                      //   onChange={getUserData}
+                    />
+                  </fieldset>
+                </Col>
+                <Col lg="12">
+                  <fieldset>
+                    <label className="text-lg" style={{ width: "100%" }}>
+                      Job Industry
+                    </label>
+                    <Form.Select
+                      aria-label="Default select example"
+                      placeholder={isEditExperienceData.jobIndustry}
+                      onChange={(e) =>
+                        setEditIsExperienceData({
+                          ...isEditExperienceData,
+                          jobIndustry: e.target.value,
+                        })
+                      }
+                    >
+                      <option hidden="">Job Industry</option>
+                      <option>Universities / Education</option>
+                      <option>Manufacturing</option>
+                      <option>Security</option>
+                      <option>Real Estate</option>
+                      <option>
+                        Professional Consultings (Legal, HR, Finance etc.)
+                      </option>
+                      <option>Banking and Finance</option>
+                      <option>
+                        Beauty Care and Health / Welness / Fitness
+                      </option>
+                      <option>Government / Public Utilities</option>
+                      <option>
+                        Hospitality / Travel / Airlines / Clubhouse
+                      </option>
+                      <option>
+                        IT / R&amp;D / Cyber Security / Telecommunication /
+                        Science
+                      </option>
+                      <option>Retail</option>
+                      <option>Insurance</option>
+                      <option>Logistics / Transportaton / Supply Chain</option>
+                      <option>F&amp;B / Wine &amp; Spriits</option>
+                      <option>Logistics / Transportaton / Supply Chain</option>
+                      <option>Medical / Pharmacy / Hospital</option>
+                      <option>Engineerings</option>
+                      <option>Others</option>
+                    </Form.Select>
+                  </fieldset>
+                </Col>
+                <Col lg="12">
+                  <fieldset>
+                    <label className="text-lg" style={{ width: "100%" }}>
+                      Job Function
+                    </label>
+                    <Form.Select
+                      aria-label="Default select example"
+                      placeholder={isEditExperienceData.jobFunction}
+                      onChange={(e) =>
+                        setEditIsExperienceData({
+                          ...isEditExperienceData,
+                          jobFunction: e.target.value,
+                        })
+                      }
+                    >
+                      <option hidden="">Job Function</option>
+                      <option>HR &amp; Admin</option>
+                      <option>General Management</option>
+                      <option>Finance and Accounting</option>
+                      <option>Sales and Marketing</option>
+                      <option>
+                        Banking and Financial Institue Professionals
+                      </option>
+                      <option>
+                        Insurance Professionals (back-end functions)
+                      </option>
+                      <option>IT Professionals (Specific Fields)</option>
+                      <option>Manufacturing</option>
+                      <option>
+                        Real Estate (Surveyers / reasearchers etc.)
+                      </option>
+                      <option>Finance and Accounting</option>
+                      <option>Professional Designers</option>
+                      <option>Lecturers / Teachers</option>
+                      <option>Engineering / Architect</option>
+                      <option>Others</option>
+                    </Form.Select>
+                  </fieldset>
+                </Col>
+                <Row>
+                  <Col lg="12" className="pt-3">
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        color: "#7A7979",
+                      }}
+                    >
+                      <FormCheck
+                        id="check"
+                        color="blue"
+                        onChange={checkBoxHandleChange}
+                        checked={
+                          props?.currentlyWorking === "on" ? true : false
+                        }
+                      />
+                      &#160;&#160;I am currently working in this role
+                    </span>
+                  </Col>
+                  <Col lg="6">
+                    <fieldset>
+                      <label
+                        className="text-lg"
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        Start Date
+                      </label>
+                      <input
+                        style={{
+                          width: "100%",
+                        }}
+                        value={isEditExperienceData.startDate}
+                        className="form-control"
+                        name="email"
+                        type={"date"}
+                        onChange={(e) =>
+                          setEditIsExperienceData({
+                            ...isEditExperienceData,
+                            startDate: e.target.value,
+                          })
+                        }
+                        //   value={user.number}
+                        //   onChange={getUserData}
+                        placeholder="A Service Like No Other
+                "
+                      />
+                    </fieldset>
+                  </Col>
+                  <Col lg="6">
+                    <fieldset>
+                      <label
+                        className="text-lg"
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        End Date
+                      </label>
+
+                      <input
+                        style={{
+                          width: "100%",
+                        }}
+                        className="form-control"
+                        type={"date"}
+                        name="firstname"
+                        value={isEditExperienceData.endDate}
+                        onChange={(e) =>
+                          setEditIsExperienceData({
+                            ...isEditExperienceData,
+                            endDate: e.target.value,
+                          })
+                        }
+                        //   value={user.name}
+                        //   onChange={getUserData}
+                        placeholder="Gia (PVT) LTD
+
+                "
+                        required
+                      />
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label
+                        className="text-lg"
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        Description
+                      </label>
+
+                      <textarea
+                        // placeholder="Description"
+                        className="form-control"
+                        placeholder={props?.description}
+                        onChange={(e) =>
+                          setEditIsExperienceData({
+                            ...isEditExperienceData,
+                            description: e.target.value,
+                          })
+                        }
+                      />
+                    </fieldset>
+                  </Col>
+                </Row>
+              </div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              onClick={props.post}
+            >
+              Send
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+
+  const modalshow = (event) => {
+    console.log(event, "funtion event");
+    if (event.clicked == true) {
+      event.clicked = false;
+      setModalShow(false);
+    } else {
+      setModalShow(true);
+      event.clicked = true;
+    }
+  };
+
+  const btnEdit = (event) => {
+    modalshow(event);
+    setEditIsExperienceData(event);
+  };
+
+  // delete
+  function MyVerticallyCenteredModalDelete(props) {
+    // console.log(props, "proooooooooops");
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>
+              Delete Experience
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">jhggff</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              onClick={props.post}
+            >
+              Send
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+
+  const modalshow1 = (event) => {
+    console.log(event, "funtion event");
+    if (event.clicked == true) {
+      event.clicked = false;
+      setModalShowDelete(false);
+    } else {
+      setModalShowDelete(true);
+      event.clicked = true;
+    }
+  };
+
+  const btnDelete = (event) => {
+    modalshow1(event);
+    // setEditIsExperienceData(event);
+  };
+  // experience edit & delete End
+
+  // Education edit & delete
+  // edit
+  function MyVerticallyCenteredModalEducation(props) {
+    // console.log(props, "proooooooooops");
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Edit Education</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">
+                <Col lg="12">
+                  <fieldset>
+                    <label className="text-lg" style={{ width: "100%" }}>
+                      Education Level
+                    </label>
+                    <Form.Select
+                      aria-label="please select education level"
+                      onChange={(e) =>
+                        setEditIsEducationeData({
+                          ...isEditEducationData,
+                          educationLevel: e.target.value,
+                        })
+                      }
+                    >
+                      <option
+                        selected={
+                          isEditEducationData?.educationLevel ===
+                          "Education Level"
+                            ? true
+                            : false
+                        }
+                      >
+                        Education Level
+                      </option>
+                      <option
+                        selected={
+                          isEditEducationData?.educationLevel ===
+                          "Associate Degree"
+                            ? true
+                            : false
+                        }
+                      >
+                        Associate Degree
+                      </option>
+                      <option
+                        selected={
+                          isEditEducationData?.educationLevel ===
+                          "Bachelor Degree"
+                            ? true
+                            : false
+                        }
+                      >
+                        Bachelor Degree
+                      </option>
+                      <option
+                        selected={
+                          isEditEducationData?.educationLevel ===
+                          "Master Degree"
+                            ? true
+                            : false
+                        }
+                      >
+                        Master Degree
+                      </option>
+                      <option
+                        selected={
+                          isEditEducationData?.educationLevel ===
+                          "Doctorate Degree"
+                            ? true
+                            : false
+                        }
+                      >
+                        Doctorate Degree
+                      </option>
+                      <option
+                        selected={
+                          isEditEducationData?.educationLevel === "PhD"
+                            ? true
+                            : false
+                        }
+                      >
+                        PhD
+                      </option>
+                      <option
+                        selected={
+                          isEditEducationData?.educationLevel === "Others"
+                            ? true
+                            : false
+                        }
+                      >
+                        Others
+                      </option>
+                    </Form.Select>
+                  </fieldset>
+                </Col>
+                <Col lg="12">
+                  <fieldset>
+                    <label className="text-lg" style={{ width: "100%" }}>
+                      Institute
+                    </label>
+                    <input
+                      style={{ width: "100%" }}
+                      className="form-control"
+                      name="institute"
+                      type={"text"}
+                      onChange={(e) =>
+                        setEditIsEducationeData({
+                          ...isEditEducationData,
+                          institute: e.target.value,
+                        })
+                      }
+                      //   value={user.number}
+                      //   onChange={getUserData}
+                      placeholder={isEditEducationData?.institute}
+                    />
+                  </fieldset>
+                </Col>
+                <Col lg="12">
+                  <fieldset>
+                    <label className="text-lg" style={{ width: "100%" }}>
+                      Major
+                    </label>
+                    <Form.Select
+                      aria-label="Default select example"
+                      onChange={(e) =>
+                        setEditIsEducationeData({
+                          ...isEditEducationData,
+                          major: e.target.value,
+                        })
+                      }
+                    >
+                      <option
+                        selected={
+                          isEditEducationData?.major === "Major" ? true : false
+                        }
+                      >
+                        Major
+                      </option>
+                      <option
+                        selected={
+                          isEditEducationData?.major === "Masters of Law"
+                            ? true
+                            : false
+                        }
+                      >
+                        Masters of Law
+                      </option>
+                      <option
+                        selected={
+                          isEditEducationData?.major === "Computer Science"
+                            ? true
+                            : false
+                        }
+                      >
+                        Computer Science
+                      </option>
+                      <option
+                        selected={
+                          isEditEducationData?.major === "Phsycology"
+                            ? true
+                            : false
+                        }
+                      >
+                        Phsycology
+                      </option>
+                    </Form.Select>
+                  </fieldset>
+                </Col>
+
+                <Row>
+                  <Col lg="6">
+                    <fieldset>
+                      <label
+                        className="text-lg"
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        Start Date
+                      </label>
+                      <input
+                        style={{
+                          width: "100%",
+                        }}
+                        className="form-control"
+                        name="email"
+                        type={"date"}
+                        value={isEditEducationData?.startingDate}
+                        onChange={(e) =>
+                          setEditIsEducationeData({
+                            ...isEditEducationData,
+                            startingDate: e.target.value,
+                          })
+                        }
+                        //   value={user.number}
+                        //   onChange={getUserData}
+                        placeholder="A Service Like No Other
+                "
+                      />
+                    </fieldset>
+                  </Col>
+                  <Col lg="6">
+                    <fieldset>
+                      <label
+                        className="text-lg"
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        End Date
+                      </label>
+
+                      <input
+                        style={{
+                          width: "100%",
+                        }}
+                        className="form-control"
+                        type={"date"}
+                        name="firstname"
+                        value={isEditEducationData?.endingDate}
+                        onChange={(e) =>
+                          setEditIsEducationeData({
+                            ...isEditEducationData,
+                            endingDate: e.target.value,
+                          })
+                        }
+                        //   value={user.name}
+                        //   onChange={getUserData}
+                        placeholder="Gia (PVT) LTD"
+                        required
+                      />
+                    </fieldset>
+                  </Col>
+                  <Col lg="6">
+                    <fieldset>
+                      <label
+                        className="text-lg"
+                        style={{
+                          width: "100%",
+                        }}
+                      >
+                        Upload Certification
+                      </label>
+
+                      <input
+                        type="file"
+                        class="form-control"
+                        id="customFile"
+                        onChange={(e) => {
+                          setEditIsEducationeData({
+                            ...isEditEducationData,
+                            certificate: e.target.files[0],
+                          });
+                        }}
+                      />
+                    </fieldset>
+                  </Col>
+                </Row>
+              </div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              onClick={props.post}
+            >
+              Send
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+
+  const modalshow2 = (event) => {
+    console.log(event, "funtion event");
+    if (event.clicked == true) {
+      event.clicked = false;
+      setModalShowEducation(false);
+    } else {
+      setModalShowEducation(true);
+      event.clicked = true;
+    }
+  };
+
+  const btnEducationEdit = (event) => {
+    modalshow2(event);
+    setEditIsEducationeData(event);
+  };
+  // delete
+  function MyVerticallyCenteredModalEducationDelete(props) {
+    // console.log(props, "proooooooooops");
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>
+              Delete Education
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">jhggff</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              onClick={props.post}
+            >
+              Send
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+
+  const modalshow3 = (event) => {
+    console.log(event, "funtion event");
+    if (event.clicked == true) {
+      event.clicked = false;
+      setModalShowEducationDelete(false);
+    } else {
+      setModalShowEducationDelete(true);
+      event.clicked = true;
+    }
+  };
+
+  const btnEducationDelete = (event) => {
+    modalshow3(event);
+    // setEditIsExperienceData(event);
+  };
+  // Education edit & delete End
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -716,7 +1490,7 @@ useEffect(()=>{
                     style={{ background: "#39BEC1", border: "none" }}
                   >
                     View Profile
-                  </Button>
+                  </Button>  
                 </Col>
               </Row> */}
               </div>
@@ -751,24 +1525,25 @@ useEffect(()=>{
                     <Modal.Body>
                       <Row>
                         <div className="p-3">
-                          <Col lg="12">
+                            <Row>
+                          <Col lg="6">
                             <fieldset>
                               <label
                                 className="text-lg"
                                 style={{ width: "100%" }}
                               >
-                                Full Name
+                                First Name
                               </label>
                               <input
                                 style={{ width: "100%" }}
                                 className="form-control"
                                 name="fname"
                                 type={"text"}
-                                value={profileData?.fullName || ""}
+                                value={profileData?.firstName || ""}
                                 onChange={(e) =>
                                   setProfileData({
                                     ...profileData,
-                                    fullName: e.target.value,
+                                    firstName : e.target.value,
                                   })
                                 }
                                 //   value={user.number}
@@ -777,6 +1552,33 @@ useEffect(()=>{
                               />
                             </fieldset>
                           </Col>
+                          <Col lg="6">
+                            <fieldset>
+                              <label
+                                className="text-lg"
+                                style={{ width: "100%" }}
+                              >
+                                Last Name
+                              </label>
+                              <input
+                                style={{ width: "100%" }}
+                                className="form-control"
+                                name="fname"
+                                type={"text"}
+                                value={profileData?.lastName || ""}
+                                onChange={(e) =>
+                                  setProfileData({
+                                    ...profileData,
+                                    lastName: e.target.value,
+                                  })
+                                }
+                                //   value={user.number}
+                                //   onChange={getUserData}
+                                placeholder="Gia"
+                              />
+                            </fieldset>
+                          </Col>
+                          </Row>
                           <Col lg="12">
                             <fieldset>
                               <label
@@ -787,11 +1589,11 @@ useEffect(()=>{
                               </label>
                               <Form.Select
                                 aria-label="Default select example"
-                                value={profileData?.visaHkPermit || ""}
+                                value={profileData?.visaPermit || ""}
                                 onChange={(e) =>
                                   setProfileData({
                                     ...profileData,
-                                    visaHkPermit: e.target.value,
+                                    visaPermit: e.target.value,
                                   })
                                 }
                               >
@@ -917,11 +1719,11 @@ useEffect(()=>{
                                   className="form-control"
                                   type={"text"}
                                   name="firstname"
-                                  value={profileData?.countryTimeZone || ""}
+                                  value={profileData?.country || ""}
                                   onChange={(e) =>
                                     setProfileData({
                                       ...profileData,
-                                      countryTimeZone: e.target.value,
+                                      country: e.target.value,
                                     })
                                   }
                                   //   value={user.name}
@@ -1026,12 +1828,9 @@ useEffect(()=>{
                               <Form.Select
                                 aria-label="Default select example"
                                 value={profileData?.salaryRange || ""}
-                                onChange={(e) =>
-                                  setProfileData({
-                                    ...profileData,
-                                    salaryRange: e.target.value,
-                                  })
-                                }
+                                // onChange={(e) =>
+                                //   setIsSalaryRange({...isSalaryRange, })
+                                // }
                               >
                                 <option hidden="">Choose...</option>
                                 <option>per month basis</option>
@@ -1064,12 +1863,9 @@ useEffect(()=>{
                                 </label>
                                 <input
                                   value={profileData?.min || ""}
-                                  onChange={(e) =>
-                                    setProfileData({
-                                      ...profileData,
-                                      min: e.target.value,
-                                    })
-                                  }
+                                 onChange={(e) =>
+                                  setIsSalaryRange({...isSalaryRange, lte : e.target.value})
+                                }
                                   style={{ width: "100%" }}
                                   className="form-control"
                                   type={"number"}
@@ -1090,10 +1886,7 @@ useEffect(()=>{
                                 <input
                                   value={profileData?.max || ""}
                                   onChange={(e) =>
-                                    setProfileData({
-                                      ...profileData,
-                                      max: e.target.value,
-                                    })
+                                    setIsSalaryRange({...isSalaryRange, gte : e.target.value})
                                   }
                                   style={{ width: "100%" }}
                                   className="form-control"
@@ -1665,14 +2458,21 @@ useEffect(()=>{
                                           }}
                                         >
                                           <BiEdit
+                                            onClick={() => btnEdit(event)}
                                             style={{
                                               color: "#39BEC1",
                                               fontSize: "30px",
                                             }}
-                                            onClick={()=>setEditIsExperienceData(event)}
                                           />
                                         </button>
-                                        <Modal
+                                        {event.clicked == true && (
+                                          <MyVerticallyCenteredModal
+                                            show={modalShow}
+                                            props={event}
+                                            onHide={() => modalshow(event)}
+                                          />
+                                        )}
+                                        {/* <Modal
                                           show={show5}
                                           onHide={handleClose5}
                                           backdrop="static"
@@ -2042,7 +2842,7 @@ useEffect(()=>{
                                               Save
                                             </Button>
                                           </Modal.Footer>
-                                        </Modal>
+                                        </Modal> */}
                                       </div>
                                       <div className="w-10">
                                       <button
@@ -2060,11 +2860,18 @@ useEffect(()=>{
                                             fontSize: "30px",
                                           }}
                                           data-toggle="modal"
-                                          onClick={() => setIsModel(true)}
+                                          onClick={() => btnDelete(event)}
                                         />
       </button>
+      {event.clicked == true && (
+                                          <MyVerticallyCenteredModalDelete
+                                            show={modalShowDelete}
+                                            props={event}
+                                            onHide={() => modalshow1(event)}
+                                          />
+                                        )}
       <div >
-      <Modal id="modalmm"
+      {/* <Modal id="modalmm"
  size="lg"       aria-labelledby="contained-modal-title-vcenter"
        centered
                                           show={show10}
@@ -2111,7 +2918,7 @@ jhggff
                                               Save
                                             </Button>
                                           </Modal.Footer>
-                                        </Modal>
+                                        </Modal> */}
                                         </div>
                                       </div>
                                     </div>
@@ -2494,242 +3301,22 @@ jhggff
                                           }}
                                         >
                                           <BiEdit
+                                            onClick={() =>
+                                              btnEducationEdit(event)
+                                            }
                                             style={{
                                               color: "#39BEC1",
                                               fontSize: "30px",
                                             }}
-                                            onClick={()=>setEditIsEducationeData(event)}
                                           />
                                         </button>
-                                        <Modal
-                                          show={show6}
-                                          onHide={handleClose6}
-                                          backdrop="static"
-                                          keyboard={false}
-                                        >
-                                          <Modal.Header closeButton>
-                                            <Modal.Title
-                                              style={{ color: "black" }}
-                                            >
-                                              Edit Education
-                                            </Modal.Title>
-                                          </Modal.Header>
-                                          <Modal.Body>
-                                            <Row>
-                                              <div className="p-3">
-                                                <Col lg="12">
-                                                  <fieldset>
-                                                    <label
-                                                      className="text-lg"
-                                                      style={{ width: "100%" }}
-                                                    >
-                                                      Education Level
-                                                    </label>
-                                                    <Form.Select aria-label='please select education level'
-                                                    onChange={(e) =>
-                                                      setEditIsEducationeData({
-                                                        ...isEditEducationData,
-                                                        educationLevel :
-                                                          e.target.value,
-                                                      })
-                                                    }
-                                                    >
-                                                      <option selected={isEditEducationData?.educationLevel === 'Education Level' ? true : false}>
-                                                        Education Level
-                                                      </option>
-                                                      <option selected={isEditEducationData?.educationLevel === 'Associate Degree' ? true : false}>
-                                                        Associate Degree
-                                                      </option> 
-                                                      <option selected={isEditEducationData?.educationLevel === 'Bachelor Degree' ? true : false}>
-                                                        Bachelor Degree
-                                                      </option>
-                                                      <option selected={isEditEducationData?.educationLevel === 'Master Degree' ? true : false}>
-                                                        Master Degree
-                                                      </option>
-                                                      <option selected={isEditEducationData?.educationLevel === 'Doctorate Degree' ? true : false}>
-                                                        Doctorate Degree
-                                                      </option>
-                                                      <option selected={isEditEducationData?.educationLevel === 'PhD' ? true : false}>PhD</option>
-                                                      <option selected={isEditEducationData?.educationLevel === 'Others' ? true : false}>Others</option>
-                                                    </Form.Select>
-                                                  </fieldset>
-                                                </Col>
-                                                <Col lg="12">
-                                                  <fieldset>
-                                                    <label
-                                                      className="text-lg"
-                                                      style={{ width: "100%" }}
-                                                    >
-                                                      Institute
-                                                    </label>
-                                                    <input
-                                                      style={{ width: "100%" }}
-                                                      className="form-control"
-                                                      name="institute"
-                                                      type={"text"}
-                                                      onChange={(e) =>
-                                                        setEditIsEducationeData({
-                                                          ...isEditEducationData,
-                                                          institute:
-                                                            e.target.value,
-                                                        })
-                                                      }
-                                                      //   value={user.number}
-                                                      //   onChange={getUserData}
-                                                      placeholder={isEditEducationData?.institute}
-                                                    />
-                                                  </fieldset>
-                                                </Col>
-                                                <Col lg="12">
-                                                  <fieldset>
-                                                    <label
-                                                      className="text-lg"
-                                                      style={{ width: "100%" }}
-                                                    >
-                                                      Major
-                                                    </label>
-                                                    <Form.Select aria-label="Default select example"
-                                                     onChange={(e) =>
-                                                      setEditIsEducationeData({
-                                                        ...isEditEducationData,
-                                                        major:
-                                                          e.target.value,
-                                                      })
-                                                    }
-                                                    >
-                                                      <option selected={isEditEducationData?.major === 'Major' ? true : false}>
-                                                        Major
-                                                      </option>
-                                                      <option selected={isEditEducationData?.major === 'Masters of Law' ? true : false}>
-                                                        Masters of Law
-                                                      </option>
-                                                      <option selected={isEditEducationData?.major === 'Computer Science' ? true : false}>
-                                                        Computer Science
-                                                      </option>
-                                                      <option selected={isEditEducationData?.major === 'Phsycology' ? true : false}>
-                                                        Phsycology
-                                                      </option>
-                                                    </Form.Select>
-                                                  </fieldset>
-                                                </Col>
-
-                                                <Row>
-                                                  <Col lg="6">
-                                                    <fieldset>
-                                                      <label
-                                                        className="text-lg"
-                                                        style={{
-                                                          width: "100%",
-                                                        }}
-                                                      >
-                                                        Start Date
-                                                      </label>
-                                                      <input
-                                                        style={{
-                                                          width: "100%",
-                                                        }}
-                                                        className="form-control"
-                                                        name="email"
-                                                        type={"date"}
-                                                        value={isEditEducationData?.startingDate}
-                                                        onChange={(e) =>
-                                                          setEditIsEducationeData({
-                                                            ...isEditEducationData,
-                                                            startingDate:
-                                                              e.target.value,
-                                                          })
-                                                        }
-                                                        //   value={user.number}
-                                                        //   onChange={getUserData}
-                                                        placeholder="A Service Like No Other
-                "
-                                                      />
-                                                    </fieldset>
-                                                  </Col>
-                                                  <Col lg="6">
-                                                    <fieldset>
-                                                      <label
-                                                        className="text-lg"
-                                                        style={{
-                                                          width: "100%",
-                                                        }}
-                                                      >
-                                                        End Date
-                                                      </label>
-
-                                                      <input
-                                                        style={{
-                                                          width: "100%",
-                                                        }}
-                                                        className="form-control"
-                                                        type={"date"}
-                                                        name="firstname"
-                                                        value={isEditEducationData?.endingDate}
-                                                        onChange={(e) =>
-                                                          setEditIsEducationeData({
-                                                            ...isEditEducationData,
-                                                            endingDate:
-                                                              e.target.value,
-                                                          })
-                                                        }
-                                                        //   value={user.name}
-                                                        //   onChange={getUserData}
-                                                        placeholder="Gia (PVT) LTD"
-                                                        required
-                                                      />
-                                                    </fieldset>
-                                                  </Col>
-                                                  <Col lg="6">
-                                                    <fieldset>
-                                                      <label
-                                                        className="text-lg"
-                                                        style={{
-                                                          width: "100%",
-                                                        }}
-                                                      >
-                                                        Upload Certification
-                                                      </label>
-
-                                                      <input
-                                                        type="file"
-                                                        class="form-control"
-                                                        id="customFile"
-                                                        onChange={(e) => {
-                                                          setEditIsEducationeData({
-                                                            ...isEditEducationData,
-                                                            certificate: e.target.files[0],
-                                                          });
-                                                        }}
-                                                      />
-                                                    </fieldset>
-                                                  </Col>
-                                                </Row>
-                                              </div>
-                                            </Row>
-                                          </Modal.Body>
-                                          <Modal.Footer>
-                                            <Button
-                                              variant="secondary"
-                                              onClick={handleClose6}
-                                              style={{
-                                                background: "none",
-                                                color: "#C1C1C1",
-                                              }}
-                                            >
-                                              Cancel
-                                            </Button>
-                                            <Button
-                                              variant="primary"
-                                              style={{
-                                                background: "none",
-                                                color: "#39BEC1",
-                                              }}
-                                              onClick={() => updateEducationData(isEditEducationData.id)}
-                                            >
-                                              Save
-                                            </Button>
-                                          </Modal.Footer>
-                                        </Modal>
+                                        {event.clicked == true && (
+                                          <MyVerticallyCenteredModalEducation
+                                            show={modalShowEducation}
+                                            props={event}
+                                            onHide={() => modalshow2(event)}
+                                          />
+                                        )}
                                       </div>
                                       <div className="w-10">
                                         <ImBin
@@ -2738,8 +3325,17 @@ jhggff
                                             color: "#39BEC1",
                                             fontSize: "30px",
                                           }}
-                                          onClick={() => deleteEducationData(event.id)}
+                                          onClick={() =>
+                                            btnEducationDelete(event)
+                                          }
                                         />
+                                        {event.clicked == true && (
+                                          <MyVerticallyCenteredModalEducationDelete
+                                            show={modalShowEducationDelete}
+                                            props={event}
+                                            onHide={() => modalshow3(event)}
+                                          />
+                                        )}
                                       </div>
                                     </div>
                                   </div>

@@ -31,6 +31,7 @@ function MyVerticallyCenteredModal(props) {
     lte : ''
   })
 
+  let date = new Date()
   const [isEmail, setIsEmail] = useState('')
   // console.log(isSalaryRange, 'saaaaaaaaaaaaaaaaaaaaaaaaaaalary');
   const [jobData, setJobData] = useState ({
@@ -45,8 +46,8 @@ function MyVerticallyCenteredModal(props) {
     educationLevel : '',
     empType : '',
     projectTimeline : { gte : '', lte : ''},
-    postedDate : '',
-    expiryDate : '',
+    postedDate : `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
+    expiryDate : `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
     madeOfWork : '',
     noOfOpenings : '',
     salaryCurrency : '',
@@ -76,6 +77,7 @@ function MyVerticallyCenteredModal(props) {
       profession : jobData.profession,
       educationLevel : jobData.educationLevel,
       empType : jobData.empType,
+      expiryDate : jobData.expiryDate,
       projectTimeline : { gte : isProjectTimeline.gte, lte : isProjectTimeline.gte},
       postedDate : jobData.postedDate,
       expiryDate : jobData.expiryDate,
@@ -120,19 +122,7 @@ function MyVerticallyCenteredModal(props) {
     })
   }
 
-  useEffect(() => {
-    isPostedDate()
-  },[])
 
-  
-  const isPostedDate = () => {
-    let date = new Date()
-    let month = date.getMonth()
-    let isDate = date.getDate()
-    let year = date.getFullYear()
-    return `${isDate}-${month + 1}-${year}`
-  }
-  
   return (
     <Modal
       {...props}
@@ -368,7 +358,7 @@ function MyVerticallyCenteredModal(props) {
                     onChange={(event, editor) => {
                       const data = editor.getData();
                       // console.log({ event, editor, data });
-                      setJobData({...jobData, jobRequirements : data})
+                      setJobData({...jobData, requirements : data})
                     }}
                     onBlur={(event, editor) => {
                       console.log("Blur.", editor);
@@ -793,7 +783,8 @@ function MyVerticallyCenteredModal(props) {
                       name="firstname"
                       //   value={user.name}
                       //   onChange={getUserData}
-                      value={isPostedDate}
+                      disabled
+                      value={`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`}
                       placeholder="Enter No. of Openings"
                     // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
