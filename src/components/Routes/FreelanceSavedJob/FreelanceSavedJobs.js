@@ -13,6 +13,7 @@ import { BsArrowBarDown, BsBookmark } from "react-icons/bs";
 
 export const FreelanceSavedJobs = () => {
   const [isToken, setIsToken] = useState("");
+  const [modalShow, setModalShow] = React.useState(true);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -20,14 +21,13 @@ export const FreelanceSavedJobs = () => {
   const [searchData, setSearchData] = useState({});
 
   useEffect(() => {
-    const token = localStorage.getItem("access-token");
-    setIsToken(token);
     initialFun();
   }, []);
 
   const initialFun = () => {
     axios
-      .get(`/api/v1/user/freelancer/saved-jobs`)
+
+      .get(`api/v1/user/freelancer/saved-jobs`)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data;
@@ -38,6 +38,143 @@ export const FreelanceSavedJobs = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  function MyVerticallyCenteredModal(props) {
+    // console.log(props, "proooooooooops");
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Post A Job</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">
+                <ul style={{ listStyle: "none" }}>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Title:</span>{" "}
+                      {props?.props?.title}
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Industry:</span>{" "}
+                      {props?.props?.industry}
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Job Function : </span>{" "}
+                      General Management
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Job Location :</span>{" "}
+                      Central and Western
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Description :</span>{" "}
+                      simply dummy text of the printing and typesetting
+                      industry. Lorem Ipsum has been the industry's standard
+                      dummy text ever since the 1500s, when avn unknown printer
+                      took a galley of type and scramble.
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Requirements :</span>{" "}
+                      simply dummy text of the printing and typesetting
+                      industry. Lorem Ipsum has been the industry's standard
+                      dummy text ever since the 1500s, when avn unknown printer
+                      took a galley of type and scramble.
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Profession :</span> Doctor
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Education Level :</span>{" "}
+                      MASTER DEGREE
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Project Timeline :</span>{" "}
+                      2023-01-19 - 2023-02-03
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Mode of Work:</span>{" "}
+                      Office
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">No. of Openings :</span>
+                      04
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Salary Range:</span> HKD
+                      {props?.props?._source?.salaryRange.gte} - HDK
+                      {props?.props?._source?.salaryRange.lte}
+                    </p>
+                  </li>
+                  <li>
+                    <p className="text-lg">
+                      <span className="font-semibold">Salary Type :</span>
+                      1000-5000
+                    </p>
+                  </li>
+                </ul>
+              </div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              onClick={props.post}
+            >
+              Send
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+
+  const modalshow = (values) => {
+    console.log(values, "funtion values");
+    if (values.clicked == true) {
+      values.clicked = false;
+      setModalShow(false);
+    } else {
+      setModalShow(true);
+      values.clicked = true;
+    }
   };
 
   return (
@@ -59,12 +196,14 @@ export const FreelanceSavedJobs = () => {
         </Row>
       </Container>
       <hr className="my-2" />
+
       <Container>
         {searchData.length > 0 &&
           searchData.map((items, keys) => {
+            // console.log(items, "items");
             return (
               <Row>
-                <Col lg="12">
+                <Col lg="12" key={keys}>
                   <div className="p-3">
                     <div className="boxshad">
                       <Row>
@@ -81,10 +220,10 @@ export const FreelanceSavedJobs = () => {
                         <BsBookmark /> Bookmark
                       </p> */}
                           <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                            {items.title}
+                            {items?.title}
                           </h2>
                           <p style={{ color: "#7A7979" }} className="text-lg">
-                            Full Time
+                            {items?.empType}
                           </p>
                         </Col>
                         <Col lg="5" className="webkit-right">
@@ -95,13 +234,20 @@ export const FreelanceSavedJobs = () => {
                             APPLY
                           </Button>
                           <Button
-                            onClick={handleShow}
+                            onClick={() => modalshow(items)}
                             className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
                             style={{ background: "#C1C1C1", border: "none" }}
                           >
-                            VIEW MORE DETAILS
+                            VIEW MORE DETAIL
                           </Button>
-                          <Modal
+                          {items.clicked == true && (
+                            <MyVerticallyCenteredModal
+                              show={modalShow}
+                              props={items}
+                              onHide={() => modalshow(items)}
+                            />
+                          )}
+                          {/* <Modal
                             show={show}
                             onHide={handleClose}
                             backdrop="static"
@@ -250,7 +396,7 @@ export const FreelanceSavedJobs = () => {
                                 Save
                               </Button>
                             </Modal.Footer>
-                          </Modal>
+                          </Modal> */}
                           {/* <Button
                         className="text-white border-rounded py-2 px-3 w-48"
                         style={{ background: "#39BEC1", border: "none" }}
@@ -266,7 +412,7 @@ export const FreelanceSavedJobs = () => {
                           <p style={{ color: "#7A7979" }} className="text-lg">
                             Posted Date : {items?.postedDate} &nbsp;&nbsp;
                             &nbsp;&nbsp;
-                            <span>Expiry Date : Feb 2023</span>
+                            <span>Expiry Date : {items?.expiryDate} </span>
                           </p>
                         </Col>
                       </Row>
@@ -347,9 +493,7 @@ export const FreelanceSavedJobs = () => {
                               className="text-l py-3"
                               style={{ color: "#7A7979" }}
                             >
-                              Lorem Ipsum is simply dummy text of the printing
-                              and typesetting industry. Lorem Ipsum has been the
-                              industry's standard dummy
+                              {items?.description}
                             </h2>
                           </div>
                         </Col>
