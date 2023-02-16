@@ -39,7 +39,7 @@ import Modal from "react-bootstrap/Modal";
 import axios from "../../../utils/axios.api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Language } from "@mui/icons-material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import ModelComponents from "../ModelComponents/ModelComponents";
 import { duration, FormGroup, Stack, Switch, Typography } from "@mui/material";
 import { styled } from "@mui/material";
@@ -159,6 +159,7 @@ export const FreelanceProfileView = () => {
   const [isCv, setIsCv] = useState("");
 
   const [profileImg, setProfileImg] = useState("");
+  const navigate = useNavigate()
 
   // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
   // console.log(profileData, "profileData");
@@ -214,19 +215,21 @@ export const FreelanceProfileView = () => {
   }));
 
   useEffect(() => {
-    let id = localStorage.getItem("id");
-    setUserId(id);
-    initialFun(id);
-    ProfileExpData(id);
+    checkAuth()
+    setUserId();
+    initialFun();
+    // ProfileExpData(id);
     // educationData(id);
-    achievementData(id);
-    LanguageData(id);
-    setProfileData({ ...profileData, uid: id });
-    setProfileExp({ ...profileExp, uid: id });
-    setIsEducation({ ...isEducation, uid: id });
-    setIsAchievement({ ...isAchievement, uid: id });
-    setIsLanguage({ ...isLanguage, uid: id });
+    achievementData();
+    LanguageData();
   }, []);
+
+  const checkAuth  = async () => {
+    const token = await localStorage.getItem("access-token");
+    if(!token){
+      navigate('/login')
+    }
+  }
 
   useEffect(() => {
     isEducationData &&
@@ -356,7 +359,7 @@ export const FreelanceProfileView = () => {
       .then((res) => {
         console.log(res, "profile data successfully added");
         // setProfileExp(res.data, "ProfileExp");
-        ProfileExpData(userId);
+        // ProfileExpData(userId);
         if (res) {
           setShow1(false);
         }
@@ -366,20 +369,20 @@ export const FreelanceProfileView = () => {
       });
   };
 
-  const ProfileExpData = (id) => {
-    console.log(id, "iddd");
-    axios
-      .get(`http://localhost:3000/v1/freelancerExp/${id}`)
-      .then((res) => {
-        // console.log(res.data.data,"res")
-        // console.log(res, "ProfileExpData");
-        let data = Object.values(res.data.data);
-        setIsExperienceData(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const ProfileExpData = (id) => {
+  //   console.log(id, "iddd");
+  //   axios
+  //     .get(`http://localhost:3000/v1/freelancerExp/${id}`)
+  //     .then((res) => {
+  //       // console.log(res.data.data,"res")
+  //       // console.log(res, "ProfileExpData");
+  //       let data = Object.values(res.data.data);
+  //       setIsExperienceData(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   // console.log(editIsExperienceData1, 'editIsExperienceData1');
 
   // console.log(isExperienceData, 'isExperienceData');
@@ -391,7 +394,7 @@ export const FreelanceProfileView = () => {
         let data = Object.values(res.data.data);
         // setIsLanguageData(data);
         if (data) {
-          ProfileExpData(userId);
+          // ProfileExpData(userId);
         }
       })
       .catch((err) => {
@@ -742,7 +745,7 @@ export const FreelanceProfileView = () => {
             // console.log(res.data, 'eeeeeeeeeeeeee');
             let data = res.data;
             console.log(res, "profile edit data successfully added");
-            ProfileExpData(userId);
+            // ProfileExpData(userId);
             if (data) {
               setShow5(false);
             }
@@ -814,7 +817,7 @@ export const FreelanceProfileView = () => {
                         aria-label="Default select example"
                         value={props?.props?.jobIndustry}
                         onChange={(e) =>
-                          (editIsExperienceData1.JobIndustry = e.target.value)
+                          (editIsExperienceData1.jobIndustry = e.target.value)
                         }
                       >
                         <option hidden="">Job Industry</option>
@@ -985,7 +988,7 @@ export const FreelanceProfileView = () => {
                           className="form-control"
                           placeholder={props?.props?.description}
                           onChange={(e) =>
-                            (editIsExperienceData1.Description = e.target.value)
+                            (editIsExperienceData1.description = e.target.value)
                           }
                         />
                       </fieldset>
@@ -1035,6 +1038,25 @@ export const FreelanceProfileView = () => {
     setExperienceId(event.id);
   };
 
+  const deleteEducationsProfileData = (props) => {
+    // console.log(props?.props?.id);
+    const newData = isEducationData?.filter((x) => x?.id != props.props.id);
+    axios.post(`api/v1/user/freelancer`, { experience: newData })
+          .then((res) => {
+            // console.log(res.data, 'eeeeeeeeeeeeee');
+            let data = res.data;
+            console.log(res, "profile edit data successfully added");
+            // ProfileExpData(userId);
+            if (data) {
+              setShow5(false);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+  
+
   // delete
   function MyVerticallyCenteredModalDelete(props) {
     // console.log(props, "proooooooooops");
@@ -1054,7 +1076,7 @@ export const FreelanceProfileView = () => {
           </Modal.Header>
           <Modal.Body>
             <Row>
-              <div className="p-3">jhggff</div>
+              <div className="p-3">Are you sure you want to Delete ?</div>
             </Row>
           </Modal.Body>
           <Modal.Footer>
@@ -1067,15 +1089,15 @@ export const FreelanceProfileView = () => {
 
             <Button
               style={{ background: "none", color: "#39BEC1" }}
-              onClick={props.post}
+              onClick={() => deleteEducationsProfileData(props)}
             >
-              Send
+              Confirm
             </Button>
           </Modal.Footer>
         </Modal>
       </div>
     );
-  }
+  };
 
   const modalshow1 = (event) => {
     // console.log(event, "funtion event");
@@ -1788,53 +1810,28 @@ export const FreelanceProfileView = () => {
   const MyVerticallyCenteredModalLanguage = useCallback(
     (props) => {
       // const [isChecked,setIsChecked] = useState(false)
-      const editIsExperienceData1 = {
-        title: "",
-        companyName: "",
-        jobIndustry: "",
-        jobFunction: "",
-        isCurrent: isChecked,
-        description: "",
+      const editIsLangugeData1 = {
+        languageType: "",
+        examLevel: "",
+        gradingLevel: "",
       };
-      console.log(editIsExperienceData1, "titlllllllllllllllle");
+      console.log(editIsLangugeData1, "editIsLangugeData1");
 
       const updateProfileExp = () => {
-        let newData = [...isExperienceData];
+        let newData = [...isLanguageData];
 
-        const expData = {
-          id: experienceId,
-          title: editIsExperienceData1.title
-            ? editIsExperienceData1.title
-            : isEditExperienceData.title,
-          companyName: editIsExperienceData1.companyName
-            ? editIsExperienceData1.companyName
-            : isEditExperienceData.companyName,
-          jobIndustry: editIsExperienceData1.jobIndustry
-            ? editIsExperienceData1.jobIndustry
-            : isEditExperienceData.jobIndustry,
-          jobFunction: editIsExperienceData1.jobFunction
-            ? editIsExperienceData1.jobFunction
-            : isEditExperienceData.jobFunction,
-          isCurrent: editIsExperienceData1.isCurrent
-            ? editIsExperienceData1.isCurrent
-            : isEditExperienceData.isCurrent,
-          duration: {
-            gte: durationData.gte
-              ? durationData.gte
-              : isEditExperienceData.duration.gte,
-            lte: durationData.lte
-              ? durationData.lte
-              : isEditExperienceData.duration.gte,
-          },
-          description: editIsExperienceData1.description
-            ? editIsExperienceData1.description
-            : isEditExperienceData.description,
+        const langData = {
+          id: props?.props?.id,
+          languageType: editIsLangugeData1.languageType ? editIsLangugeData1.languageType : props.props.languageType,
+          examLevel: editIsLangugeData1.examLevel ? editIsLangugeData1.examLevel : props.props.examLevel ,
+          gradingLevel: editIsLangugeData1.gradingLevel ? editIsLangugeData1.gradingLevel : props.props.gradingLevel ,
         };
 
+        console.log(langData, 'langData');
         newData = newData.filter((e, i) => {
-          return e.id !== expData.id;
+          return e.id !== langData.id;
         });
-        newData.push(expData);
+        newData.push(langData);
         console.log(newData, "newDaataaa");
 
         // let arrayData = [isEditExperienceData]
@@ -1843,15 +1840,14 @@ export const FreelanceProfileView = () => {
         // console.log(newData,"data")
 
         axios
-          .post(`api/v1/user/freelancer`, { experience: newData })
+          .post(`api/v1/user/freelancer`, { language : newData })
           .then((res) => {
             // console.log(res.data, 'eeeeeeeeeeeeee');
             let data = res.data;
             console.log(res, "profile edit data successfully added");
-            ProfileExpData(userId);
-            if (data) {
-              setShow5(false);
-            }
+            // ProfileExpData(userId);
+              setShow7(false);
+              initialFun()
           })
           .catch((err) => {
             console.log(err);
@@ -1888,16 +1884,13 @@ export const FreelanceProfileView = () => {
                       <Form.Select
                         aria-label="Default select example"
                         onClick={(e) =>
-                          setIsEditLanguageData({
-                            ...isEditLanguageData,
-                            languageType: e.target.value,
-                          })
+                          editIsLangugeData1.languageType = e.target.value
                         }
                       >
                         <option
                           value="English"
                           selected={
-                            isEditLanguageData.languageType === "English"
+                            props?.props?.languageType === "English"
                               ? true
                               : false
                           }
@@ -1907,7 +1900,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Arabic"
                           selected={
-                            isEditLanguageData.languageType === "Arabic"
+                            props?.props?.languageType === "Arabic"
                               ? true
                               : false
                           }
@@ -1917,7 +1910,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Spanish"
                           selected={
-                            isEditLanguageData.languageType === "Spanish"
+                            props?.props?.languageType === "Spanish"
                               ? true
                               : false
                           }
@@ -1927,7 +1920,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Hindi"
                           selected={
-                            isEditLanguageData.languageType === "Hindi"
+                            props?.props?.languageType === "Hindi"
                               ? true
                               : false
                           }
@@ -1937,7 +1930,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Cantonese"
                           selected={
-                            isEditLanguageData.languageType === "Cantonese"
+                            props?.props?.languageType === "Cantonese"
                               ? true
                               : false
                           }
@@ -1947,7 +1940,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="French"
                           selected={
-                            isEditLanguageData.languageType === "French"
+                            props?.props?.languageType === "French"
                               ? true
                               : false
                           }
@@ -1957,7 +1950,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="German"
                           selected={
-                            isEditLanguageData.languageType === "German"
+                            props?.props?.languageType === "German"
                               ? true
                               : false
                           }
@@ -1967,7 +1960,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Italian"
                           selected={
-                            isEditLanguageData.languageType === "Italian"
+                            props?.props?.languageType === "Italian"
                               ? true
                               : false
                           }
@@ -1977,7 +1970,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Japanese"
                           selected={
-                            isEditLanguageData.languageType === "Japanese"
+                            props?.props?.languageType === "Japanese"
                               ? true
                               : false
                           }
@@ -1987,7 +1980,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Korean"
                           selected={
-                            isEditLanguageData.languageType === "Korean"
+                            props?.props?.languageType === "Korean"
                               ? true
                               : false
                           }
@@ -1997,7 +1990,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Mandarin"
                           selected={
-                            isEditLanguageData.languageType === "Mandarin"
+                            props?.props?.languageType === "Mandarin"
                               ? true
                               : false
                           }
@@ -2007,7 +2000,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Bengali"
                           selected={
-                            isEditLanguageData.languageType === "Bengali"
+                            props?.props?.languageType === "Bengali"
                               ? true
                               : false
                           }
@@ -2017,7 +2010,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Burmese"
                           selected={
-                            isEditLanguageData.languageType === "Burmese"
+                            props?.props?.languageType === "Burmese"
                               ? true
                               : false
                           }
@@ -2027,7 +2020,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Czech"
                           selected={
-                            isEditLanguageData.languageType === "Czech"
+                            props?.props?.languageType === "Czech"
                               ? true
                               : false
                           }
@@ -2037,7 +2030,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Dutch"
                           selected={
-                            isEditLanguageData.languageType === "Dutch"
+                            props?.props?.languageType === "Dutch"
                               ? true
                               : false
                           }
@@ -2047,7 +2040,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Greek"
                           selected={
-                            isEditLanguageData.languageType === "Greek"
+                            props?.props?.languageType === "Greek"
                               ? true
                               : false
                           }
@@ -2057,7 +2050,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Hakka"
                           selected={
-                            isEditLanguageData.languageType === "Hakka"
+                            props?.props?.languageType === "Hakka"
                               ? true
                               : false
                           }
@@ -2067,7 +2060,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Hungarian"
                           selected={
-                            isEditLanguageData.languageType === "Hungarian"
+                            props?.props?.languageType === "Hungarian"
                               ? true
                               : false
                           }
@@ -2077,7 +2070,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Hunnanese"
                           selected={
-                            isEditLanguageData.languageType === "Hunnanese"
+                            props?.props?.languageType === "Hunnanese"
                               ? true
                               : false
                           }
@@ -2087,7 +2080,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Malay/Indonesian"
                           selected={
-                            isEditLanguageData.languageType ===
+                            props?.props?.languageType ===
                             "Malay/Indonesian"
                               ? true
                               : false
@@ -2098,7 +2091,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Nepali"
                           selected={
-                            isEditLanguageData.languageType === "Nepali"
+                            props?.props?.languageType === "Nepali"
                               ? true
                               : false
                           }
@@ -2108,7 +2101,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Portuguese"
                           selected={
-                            isEditLanguageData.languageType === "Portuguese"
+                            props?.props?.languageType === "Portuguese"
                               ? true
                               : false
                           }
@@ -2118,7 +2111,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Russian"
                           selected={
-                            isEditLanguageData.languageType === "Russian"
+                            props?.props?.languageType === "Russian"
                               ? true
                               : false
                           }
@@ -2128,7 +2121,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Shanghainese"
                           selected={
-                            isEditLanguageData.languageType === "Shanghainese"
+                            props?.props?.languageType === "Shanghainese"
                               ? true
                               : false
                           }
@@ -2138,7 +2131,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Swedish"
                           selected={
-                            isEditLanguageData.languageType === "Swedish"
+                            props?.props?.languageType === "Swedish"
                               ? true
                               : false
                           }
@@ -2148,7 +2141,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Tagalog"
                           selected={
-                            isEditLanguageData.languageType === "Tagalog"
+                            props?.props?.languageType === "Tagalog"
                               ? true
                               : false
                           }
@@ -2158,7 +2151,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Telugu"
                           selected={
-                            isEditLanguageData.languageType === "Telugu"
+                            props?.props?.languageType === "Telugu"
                               ? true
                               : false
                           }
@@ -2168,7 +2161,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Thai"
                           selected={
-                            isEditLanguageData.languageType === "Thai"
+                            props?.props?.languageType === "Thai"
                               ? true
                               : false
                           }
@@ -2178,7 +2171,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Turkish"
                           selected={
-                            isEditLanguageData.languageType === "Turkish"
+                            props?.props?.languageType === "Turkish"
                               ? true
                               : false
                           }
@@ -2188,7 +2181,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Vietnamese"
                           selected={
-                            isEditLanguageData.languageType === "Vietnamese"
+                            props?.props?.languageType === "Vietnamese"
                               ? true
                               : false
                           }
@@ -2198,7 +2191,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Others"
                           selected={
-                            isEditLanguageData.languageType === "Others"
+                            props?.props?.languageType === "Others"
                               ? true
                               : false
                           }
@@ -2228,12 +2221,9 @@ export const FreelanceProfileView = () => {
                         //   value={user.number}
                         //   onChange={getUserData}
                         onClick={(e) =>
-                          setIsEditLanguageData({
-                            ...isEditLanguageData,
-                            examLevel: e.target.value,
-                          })
+                          editIsLangugeData1.examLevel = e.target.value
                         }
-                        placeholder={isEditLanguageData?.examLevel}
+                        placeholder={props?.props?.examLevel}
                       />
                     </fieldset>
                   </Col>
@@ -2254,12 +2244,9 @@ export const FreelanceProfileView = () => {
                         className="form-control"
                         name="lname"
                         type={"text"}
-                        placeholder={isEditLanguageData?.gradingLevel}
+                        placeholder={props?.props?.gradingLevel}
                         onClick={(e) =>
-                          setIsEditLanguageData({
-                            ...isEditLanguageData,
-                            gradingLevel: e.target.value,
-                          })
+                          editIsLangugeData1.gradingLevel = e.target.value
                         }
                         //   value={user.number}
                         //   onChange={getUserData}
@@ -2289,7 +2276,7 @@ export const FreelanceProfileView = () => {
         </div>
       );
     },
-    [isEditExperienceData, isChecked]
+    [isLanguageData]
   );
 
   const modalshow7 = (event) => {
@@ -4901,4 +4888,5 @@ export const FreelanceProfileView = () => {
       </Container>
     </Container>
   );
+  
 };

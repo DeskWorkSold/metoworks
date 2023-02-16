@@ -20,7 +20,7 @@ export const Login = () => {
     password: "",
   });
 
-  const [validation, setValidation] = useState('')
+  const [validation, setValidation] = useState("");
   // console.log(recruiterData, 'recruiterData dataaaaaa');
 
   // npm catch clean --force
@@ -42,12 +42,16 @@ export const Login = () => {
         .post("api/v1/user/login", freelancerData)
         .then((res) => {
           console.log(res);
-          const {token, type} = res.data.data
+          const { token, type } = res.data.data;
+          console.log(token, "token");
+          let userType = "freeLancer";
+          console.log(userType, "type");
           // localStorage.setItem("id", id);
           localStorage.setItem("access-token", token);
+          localStorage.setItem("userType", userType);
           // console.log(data, 'daata');
           if (type === "freelancer") {
-            navigate("/FreelancerProfile", {state : token});
+            navigate("/FreelancerProfile", { state: token });
           }
         })
         .catch((error) => {
@@ -59,25 +63,27 @@ export const Login = () => {
   };
 
   const RecruiteFunc = () => {
-    let isValidate = validatorLoginAuth(recruiterData)
-    if(isValidate === true) {
-    axios
-      .post("/api/v1/user/login", recruiterData)
-      .then((res) => {
-        console.log(res);
-        const {type, token} = res.data.data;
-        // localStorage.setItem("id", token);
-        localStorage.setItem("access-token", token);
-        console.log(token, 'daata');
-        if (type === 'recruiter') {
-          navigate("/CompanyProfile");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    let isValidate = validatorLoginAuth(recruiterData);
+    if (isValidate === true) {
+      axios
+        .post("/api/v1/user/login", recruiterData)
+        .then((res) => {
+          console.log(res);
+          const { type, token } = res.data.data;
+          let userType = "recruiter";
+          // localStorage.setItem("id", token);
+          localStorage.setItem("access-token", token);
+          localStorage.setItem("userType", userType);
+          console.log(token, "daata");
+          if (type === "recruiter") {
+            navigate("/CompanyProfile");
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     } else {
-      setValidation(isValidate)
+      setValidation(isValidate);
     }
   };
 
@@ -145,7 +151,7 @@ export const Login = () => {
                                 />
                               </fieldset>
                             </Col>
-                            <Col lg='12'>
+                            <Col lg="12">
                               <fieldset>
                                 {/* <label style={{ width: "100%" }}>First name</label> */}
                                 <input
@@ -166,9 +172,13 @@ export const Login = () => {
                                 />
                               </fieldset>
                             </Col>
-                            {validation && validation.length ? <Col lg="12">
-                              <p style={{color : 'red'}}> {validation} </p>
-                              </Col> : <span> </span>} 
+                            {validation && validation.length ? (
+                              <Col lg="12">
+                                <p style={{ color: "red" }}> {validation} </p>
+                              </Col>
+                            ) : (
+                              <span> </span>
+                            )}
                           </Row>
                           <h3
                             style={{
@@ -264,9 +274,13 @@ export const Login = () => {
                                 />
                               </fieldset>
                             </Col>
-                            {validation && validation.length ? <Col lg="12">
-                              <p style={{color : 'red'}}> {validation} </p>
-                              </Col> : <span> </span>} 
+                            {validation && validation.length ? (
+                              <Col lg="12">
+                                <p style={{ color: "red" }}> {validation} </p>
+                              </Col>
+                            ) : (
+                              <span> </span>
+                            )}
                           </Row>
                           <h3
                             style={{

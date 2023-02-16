@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { useState, Component, useEffect } from "react";
 import { Container, Button, Row, Col, Image, Form } from "react-bootstrap";
 import { BsBookmark, BsCoin, BsPencilSquare, BsReceipt } from "react-icons/bs";
 import {
@@ -16,6 +16,20 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useNavigate } from "react-router-dom/dist";
 import axios from "../../../utils/axios.api";
 function MyVerticallyCenteredModal(props) {
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  const checkAuth  = async () => {
+    const token = await localStorage.getItem("access-token");
+    if(!token){
+      navigate('/login')
+    }
+  }
+
   const [isSalaryRange, setisSalaryRange] = useState({
     gte: "",
     lte: "",

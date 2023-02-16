@@ -3,14 +3,26 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { Container, Button, Row, Col, Image, Form } from "react-bootstrap";
 import { BsArrowBarDown, BsBookmark } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 import axios from "../../../utils/axios.api";
 
 export const FreelanceJobApply = () => {
   const [searchData, setSearchData] = useState({});
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     initialFun();
+    checkAuth()
   }, []);
+
+  const checkAuth  = async () => {
+    const token = await localStorage.getItem("access-token");
+    if(!token){
+      navigate('/login')
+    }
+  }
+
 
   const initialFun = () => {
     //   const response = applyJob(

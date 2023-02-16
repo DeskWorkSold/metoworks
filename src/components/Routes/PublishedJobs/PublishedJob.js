@@ -38,12 +38,8 @@ function MyVerticallyCenteredModal(props) {
     educationLevel: "",
     empType: "",
     projectTimeline: { gte: "", lte: "" },
-    postedDate: `${date.getDate()}-${
-      date.getMonth() + 1
-    }-${date.getFullYear()}`,
-    expiryDate: `${date.getDate()}-${
-      date.getMonth() + 1
-    }-${date.getFullYear()}`,
+    postedDate: new Date(),
+    expiryDate: "",
     madeOfWork: "",
     noOfOpenings: "",
     salaryCurrency: "",
@@ -54,7 +50,25 @@ function MyVerticallyCenteredModal(props) {
     closed: false,
   });
 
-  // console.log(jobData, 'jobDaaaaaaaataaa');
+  useEffect(() => {
+    if (jobData && jobData.postedDate && !jobData.expiryDate) {
+      // let expiryDate = `${jobData.postedDate.getDate()}-${
+      //   Number(jobData.postedDate.getMonth()) + 1
+      // }-${jobData.postedDate.getFullYear()}`;
+      if (jobData.postedDate.getMonth() < 11) {
+        let expiryDate = `${jobData.postedDate.getDate()}-${
+          Number(jobData.postedDate.getMonth()) + 2
+        }-${jobData.postedDate.getFullYear()}`;
+        expiryDate = expiryDate;
+        setJobData({ ...jobData, expiryDate: expiryDate });
+      } else {
+        let expiryDate = `${jobData.postedDate.getDate()}-${1}-${
+          Number(jobData.postedDate.getFullYear()) + 1
+        }`;
+        setJobData({ ...jobData, expiryDate: expiryDate });
+      }
+    }
+  }, [jobData]);
 
   // submitted : true when dfat post publised
   const navigate = useNavigate();
@@ -1331,73 +1345,96 @@ export const PublishedJob = () => {
                 <Row>
                   {searchData.length > 0 &&
                     searchData.map((items, keys) => {
-                      return (
-                        <Col lg="12" key={keys}>
-                          <div className="m-3">
-                            <div className="boxshad">
-                              <div
-                                style={{
-                                  // display: "flex",
-                                  alignItems: "center",
-                                  justifyContent: "space-between",
-                                }}
-                                className="des-flex"
-                              >
-                                <div style={{ display: "block" }}>
-                                  <h2
-                                    className="text-3xl robot"
-                                    style={{ color: "#39BEC1" }}
-                                  >
-                                    {items?._source?.title}
-                                  </h2>
-                                  <p style={{ color: "#7A7979" }}>
-                                    {items?._source?.empType}
-                                  </p>
-                                </div>
+                      
+
+
+                      let expiry = items._source.expiryDate;
+
+                      expiry = new Date(expiry);
+                      let expired = "";
+                      console.log(typeof expiry, "expiry");
+                      if (expiry) {
+                        let time = expiry.getTime();
+                        let todayTime = new Date().getTime();
+                        let timeDifference = time - todayTime;
+
+                        expired = Math.floor(
+                          timeDifference / 1000 / 60 / 60 / 24
+                        );
+                      }
+                      let data = []
+                      console.log(data,'dataaaaaaaaa')
+                      console.log(expired, "exp");
+                      if (expired > 0) {
+                        
+                        return (  
+                        
+                          <Col lg="12" key={keys}>
+                            <div className="m-3">
+                              <div className="boxshad">
                                 <div
                                   style={{
-                                    float: "right",
-                                    display: "flex",
+                                    // display: "flex",
                                     alignItems: "center",
+                                    justifyContent: "space-between",
                                   }}
-                                  className="p-3 webkit"
+                                  className="des-flex"
                                 >
                                   <div style={{ display: "block" }}>
-                                    <Button
-                                      style={{
-                                        background: "none",
-                                        color: "#39BEC1",
-                                      }}
-                                      //   onClick={props.post}
+                                    <h2
+                                      className="text-3xl robot"
+                                      style={{ color: "#39BEC1" }}
                                     >
-                                      ACTIVE
-                                    </Button>
-                                    <Button
-                                      onClick={handleShow}
-                                      className="text-white border-rounded px-3"
-                                      style={{
-                                        background: "#39BEC1",
-                                        border: "none",
-                                        marginTop: "10px",
-                                        marginBottom: "10px",
-                                      }}
-                                    >
-                                      <div
-                                        className="inline-flex"
-                                        style={{ fontSize: "20px" }}
-                                        onClick={() => btnEdit(items)}
+                                      {items?._source?.title}
+                                    </h2>
+                                    <p style={{ color: "#7A7979" }}>
+                                      {items?._source?.empType}
+                                    </p>
+                                  </div>
+                                  <div
+                                    style={{
+                                      float: "right",
+                                      display: "flex",
+                                      alignItems: "center",
+                                    }}
+                                    className="p-3 webkit"
+                                  >
+                                    <div style={{ display: "block" }}>
+                                      <Button
+                                        style={{
+                                          background: "none",
+                                          color: "#39BEC1",
+                                        }}
+                                        //   onClick={props.post}
                                       >
-                                        <BsPencilSquare /> &nbsp; edit profile
-                                      </div>
-                                    </Button>
-                                    {items.clicked == true && (
-                                      <MyVerticallyCenteredModalPublish
-                                        show={modalShowPublish}
-                                        props={items}
-                                        onHide={() => modalshow(items)}
-                                      />
-                                    )}
-                                    {/* <Modal
+                                        ACTIVE
+                                      </Button>
+                                      <Button
+                                        onClick={handleShow}
+                                        className="text-white border-rounded px-3"
+                                        style={{
+                                          background: "#39BEC1",
+                                          border: "none",
+                                          marginTop: "10px",
+                                          marginBottom: "10px",
+                                        }}
+                                      >
+                                        <div
+                                          className="inline-flex"
+                                          style={{ fontSize: "20px" }}
+                                          onClick={() => btnEdit(items)}
+                                        >
+                                          <BsPencilSquare /> &nbsp; edit profile
+                                        </div>
+                                      </Button>
+                                      {items.clicked == true && (
+                                        <MyVerticallyCenteredModalPublish
+                                          show={modalShowPublish}
+                                          props={items}
+                                          onHide={() => modalshow(items)}
+                                        />
+                                      )}
+                                      {/* <Modal
                                       show={show}
                                       onHide={handleClose}
                                       backdrop="static"
@@ -1686,464 +1723,547 @@ export const PublishedJob = () => {
                                         </Button>
                                       </Modal.Footer>
                                     </Modal> */}
-                                    <p>
-                                      Posted Date : {items?._source?.createdAt}{" "}
-                                      &nbsp;&nbsp;&nbsp;Expiry Date :{" "}
-                                      {items?._source?.expiryDate}
-                                    </p>
+                                      <p>
+                                        Posted Date :{" "}
+                                        {items?._source?.createdAt}{" "}
+                                        &nbsp;&nbsp;&nbsp;Expiry Date :{" "}
+                                        {items?._source?.expiryDate}
+                                      </p>
+                                    </div>
                                   </div>
                                 </div>
+                                <Container>
+                                  <Row className="align-items-center block-for-res">
+                                    <Col>
+                                      <div className="p3">
+                                        <h2 className="text-xl font-semibold">
+                                          Company Name
+                                        </h2>
+
+                                        <h2
+                                          className="text-lg"
+                                          style={{ color: "#7A7979" }}
+                                        >
+                                          {items?._source?.companyName}
+                                        </h2>
+                                      </div>
+                                    </Col>
+                                    <Col>
+                                      <div className="p3">
+                                        <h2 className="text-xl font-semibold">
+                                          Job Industry
+                                        </h2>
+
+                                        <h2
+                                          className="text-lg"
+                                          style={{ color: "#7A7979" }}
+                                        >
+                                          {items?._source?.industry}
+                                        </h2>
+                                      </div>
+                                    </Col>
+                                    <Col>
+                                      <div className="p3">
+                                        <h2 className="text-xl font-semibold">
+                                          Salary Range
+                                        </h2>
+
+                                        <h2
+                                          className="text-lg"
+                                          style={{ color: "#7A7979" }}
+                                        >
+                                          HKD {items?._source?.salaryRange.gte}{" "}
+                                          - HKD{" "}
+                                          {items?._source?.salaryRange.lte}
+                                        </h2>
+                                      </div>
+                                    </Col>
+                                    <Col>
+                                      <div className="p3">
+                                        <h2 className="text-xl font-semibold">
+                                          Location
+                                        </h2>
+
+                                        <h2
+                                          className="text-lg"
+                                          style={{ color: "#7A7979" }}
+                                        >
+                                          {items?._source?.location}
+                                        </h2>
+                                      </div>
+                                    </Col>
+                                    <Col>
+                                      <div className="p3">
+                                        <h2 className="text-xl font-semibold">
+                                          No. of candidates
+                                        </h2>
+
+                                        <h2
+                                          className="text-lg"
+                                          style={{ color: "#7A7979" }}
+                                        >
+                                          {items?._source?.noOfOpenings}
+                                        </h2>
+                                      </div>
+                                    </Col>
+                                  </Row>
+                                </Container>
+
+                                <hr style={{ border: "1px solid" }} />
+                                <Container>
+                                  <Row className="align-items-center">
+                                    <Col lg="11">
+                                      <div className="pt-3">
+                                        <h2 className="text-xl font-semibold">
+                                          Company Description
+                                        </h2>
+
+                                        <h2
+                                          className="text-lg font-semibold"
+                                          style={{ color: "#7A7979" }}
+                                        >
+                                          <Content
+                                            data={items?._source?.description.replace(
+                                              /(<([^>]+)>)/gi,
+                                              ""
+                                            )}
+                                          />
+                                        </h2>
+                                      </div>
+                                    </Col>
+                                    <Col lg="1">
+                                      <div className="p-3">
+                                        <Button
+                                          className="text-lg mr-3"
+                                          style={{
+                                            background: "none",
+                                            color: "#FF0000",
+                                          }}
+                                        >
+                                          CLOSE
+                                        </Button>
+                                      </div>
+                                    </Col>
+                                  </Row>
+                                </Container>
                               </div>
-                              <Container>
-                                <Row className="align-items-center block-for-res">
-                                  <Col>
-                                    <div className="p3">
-                                      <h2 className="text-xl font-semibold">
-                                        Company Name
-                                      </h2>
-
-                                      <h2
-                                        className="text-lg"
-                                        style={{ color: "#7A7979" }}
-                                      >
-                                        {items?._source?.companyName}
-                                      </h2>
-                                    </div>
-                                  </Col>
-                                  <Col>
-                                    <div className="p3">
-                                      <h2 className="text-xl font-semibold">
-                                        Job Industry
-                                      </h2>
-
-                                      <h2
-                                        className="text-lg"
-                                        style={{ color: "#7A7979" }}
-                                      >
-                                        {items?._source?.industry}
-                                      </h2>
-                                    </div>
-                                  </Col>
-                                  <Col>
-                                    <div className="p3">
-                                      <h2 className="text-xl font-semibold">
-                                        Salary Range
-                                      </h2>
-
-                                      <h2
-                                        className="text-lg"
-                                        style={{ color: "#7A7979" }}
-                                      >
-                                        HKD {items?._source?.salaryRange.gte} -
-                                        HKD {items?._source?.salaryRange.lte}
-                                      </h2>
-                                    </div>
-                                  </Col>
-                                  <Col>
-                                    <div className="p3">
-                                      <h2 className="text-xl font-semibold">
-                                        Location
-                                      </h2>
-
-                                      <h2
-                                        className="text-lg"
-                                        style={{ color: "#7A7979" }}
-                                      >
-                                        {items?._source?.location}
-                                      </h2>
-                                    </div>
-                                  </Col>
-                                  <Col>
-                                    <div className="p3">
-                                      <h2 className="text-xl font-semibold">
-                                        No. of candidates
-                                      </h2>
-
-                                      <h2
-                                        className="text-lg"
-                                        style={{ color: "#7A7979" }}
-                                      >
-                                        {items?._source?.noOfOpenings}
-                                      </h2>
-                                    </div>
-                                  </Col>
-                                </Row>
-                              </Container>
-
-                              <hr style={{ border: "1px solid" }} />
-                              <Container>
-                                <Row className="align-items-center">
-                                  <Col lg="11">
-                                    <div className="pt-3">
-                                      <h2 className="text-xl font-semibold">
-                                        Company Description
-                                      </h2>
-
-                                      <h2
-                                        className="text-lg font-semibold"
-                                        style={{ color: "#7A7979" }}
-                                      >
-                                        <Content
-                                          data={items?._source?.description.replace(
-                                            /(<([^>]+)>)/gi,
-                                            ""
-                                          )}
-                                        />
-                                      </h2>
-                                    </div>
-                                  </Col>
-                                  <Col lg="1">
-                                    <div className="p-3">
-                                      <Button
-                                        className="text-lg mr-3"
-                                        style={{
-                                          background: "none",
-                                          color: "#FF0000",
-                                        }}
-                                      >
-                                        CLOSE
-                                      </Button>
-                                    </div>
-                                  </Col>
-                                </Row>
-                              </Container>
                             </div>
-                          </div>
-                        </Col>
-                      );
+                          </Col>
+                        );
+                      }
                     })}
                 </Row>
               </TabPanel>
               <TabPanel>
                 <Row>
-                  <Col lg="12">
-                    <div className="m-3">
-                      <div className="boxshad">
-                        <div
-                          style={{
-                            // display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                          }}
-                          className="des-flex"
-                        >
-                          <div style={{ display: "block" }}>
-                            <h2
-                              className="text-3xl robot"
-                              style={{ color: "#39BEC1" }}
-                            >
-                              Doctor for Child
-                            </h2>
-                            <p style={{ color: "#7A7979" }}>Full Time</p>
-                          </div>
-                          <div
-                            style={{
-                              float: "right",
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                            className="p-3 webkit"
-                          >
-                            <div style={{ display: "block" }}>
-                              <Button
-                                style={{ background: "none", color: "#39BEC1" }}
-                                //   onClick={props.post}
-                              >
-                                ACTIVE
-                              </Button>
-                              <Button
-                                onClick={handleShow2}
-                                className="text-white border-rounded px-3"
-                                style={{
-                                  background: "#39BEC1",
-                                  border: "none",
-                                  marginTop: "10px",
-                                  marginBottom: "10px",
-                                }}
-                              >
-                                <div
-                                  className="inline-flex"
-                                  style={{ fontSize: "20px" }}
-                                >
-                                  <BsPencilSquare /> &nbsp; edit profile
-                                </div>
-                              </Button>
-                              <Modal
-                                show={show2}
-                                onHide={handleClose2}
-                                backdrop="static"
-                                keyboard={false}
-                              >
-                                <Modal.Header closeButton>
-                                  <Modal.Title style={{ color: "black" }}>
-                                    Edit Recruiter Profile
-                                  </Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                  <Row>
-                                    <Col lg="6">
+                  {searchData &&
+                    searchData.length > 0 &&
+                    searchData.map((items, key) => {
+                      let expiry = items._source.expiryDate;
+
+                      expiry = new Date(expiry);
+                      let expired = "";
+                      console.log(typeof expiry, "expiry");
+                      if (expiry) {
+                        let time = expiry.getTime();
+                        let todayTime = new Date().getTime();
+                        let timeDifference = time - todayTime;
+
+                        expired = Math.floor(
+                          timeDifference / 1000 / 60 / 60 / 24
+                        );
+                      }
+                      console.log(expired, "exp");
+
+                      if (expired < 0) {
+                        return (
+                          <div>
+                            <Col lg="12">
+                              <div className="m-3">
+                                <div className="boxshad">
+                                  <div
+                                    style={{
+                                      // display: "flex",
+                                      alignItems: "center",
+                                      justifyContent: "space-between",
+                                    }}
+                                    className="des-flex"
+                                  >
+                                    <div style={{ display: "block" }}>
                                       <h2
-                                        className="text-2xl"
+                                        className="text-3xl robot"
                                         style={{ color: "#39BEC1" }}
                                       >
-                                        Personal Info
+                                        Doctor for Child
                                       </h2>
-                                      <div className="p-3">
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
+                                      <p style={{ color: "#7A7979" }}>
+                                        Full Time
+                                      </p>
+                                    </div>
+                                    <div
+                                      style={{
+                                        float: "right",
+                                        display: "flex",
+                                        alignItems: "center",
+                                      }}
+                                      className="p-3 webkit"
+                                    >
+                                      <div style={{ display: "block" }}>
+                                        <Button
+                                          style={{
+                                            background: "none",
+                                            color: "#39BEC1",
+                                          }}
+                                          //   onClick={props.post}
+                                        >
+                                          ACTIVE
+                                        </Button>
+                                        <Button
+                                          onClick={handleShow2}
+                                          className="text-white border-rounded px-3"
+                                          style={{
+                                            background: "#39BEC1",
+                                            border: "none",
+                                            marginTop: "10px",
+                                            marginBottom: "10px",
+                                          }}
+                                        >
+                                          <div
+                                            className="inline-flex"
+                                            style={{ fontSize: "20px" }}
+                                          >
+                                            <BsPencilSquare /> &nbsp; edit
+                                            profile
+                                          </div>
+                                        </Button>
+                                        <Modal
+                                          show={show2}
+                                          onHide={handleClose2}
+                                          backdrop="static"
+                                          keyboard={false}
+                                        >
+                                          <Modal.Header closeButton>
+                                            <Modal.Title
+                                              style={{ color: "black" }}
                                             >
-                                              First Name
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="fname"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="Gia 
+                                              Edit Recruiter Profile
+                                            </Modal.Title>
+                                          </Modal.Header>
+                                          <Modal.Body>
+                                            <Row>
+                                              <Col lg="6">
+                                                <h2
+                                                  className="text-2xl"
+                                                  style={{ color: "#39BEC1" }}
+                                                >
+                                                  Personal Info
+                                                </h2>
+                                                <div className="p-3">
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        First Name
+                                                      </label>
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        name="fname"
+                                                        type={"text"}
+                                                        //   value={user.number}
+                                                        //   onChange={getUserData}
+                                                        placeholder="Gia 
 
                 "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Last Name
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="lname"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="Jay 
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Last Name
+                                                      </label>
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        name="lname"
+                                                        type={"text"}
+                                                        //   value={user.number}
+                                                        //   onChange={getUserData}
+                                                        placeholder="Jay 
 
                 "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Email Address
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="email"
-                                              type={"email"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="gaiaewreeytyrt@gmail.com 
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Email Address
+                                                      </label>
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        name="email"
+                                                        type={"email"}
+                                                        //   value={user.number}
+                                                        //   onChange={getUserData}
+                                                        placeholder="gaiaewreeytyrt@gmail.com 
 
                 "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Phone Number
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="email"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="61453472
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Phone Number
+                                                      </label>
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        name="email"
+                                                        type={"text"}
+                                                        //   value={user.number}
+                                                        //   onChange={getUserData}
+                                                        placeholder="61453472
 
                 "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Founded in
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="email"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="2000
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Founded in
+                                                      </label>
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        name="email"
+                                                        type={"text"}
+                                                        //   value={user.number}
+                                                        //   onChange={getUserData}
+                                                        placeholder="2000
 
                 "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              What makes us special
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="email"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="A Service Like No Other
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        What makes us special
+                                                      </label>
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        name="email"
+                                                        type={"text"}
+                                                        //   value={user.number}
+                                                        //   onChange={getUserData}
+                                                        placeholder="A Service Like No Other
                 "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                      </div>
-                                    </Col>
-                                    <Col lg="6">
-                                      <h2
-                                        className="text-2xl"
-                                        style={{ color: "#39BEC1" }}
-                                      >
-                                        Company Info{" "}
-                                      </h2>
-                                      <div className="p-3">
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Company Name
-                                            </label>
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                </div>
+                                              </Col>
+                                              <Col lg="6">
+                                                <h2
+                                                  className="text-2xl"
+                                                  style={{ color: "#39BEC1" }}
+                                                >
+                                                  Company Info{" "}
+                                                </h2>
+                                                <div className="p-3">
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Company Name
+                                                      </label>
 
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              type={"text"}
-                                              name="firstname"
-                                              //   value={user.name}
-                                              //   onChange={getUserData}
-                                              placeholder="Gia (PVT) LTD
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        type={"text"}
+                                                        name="firstname"
+                                                        //   value={user.name}
+                                                        //   onChange={getUserData}
+                                                        placeholder="Gia (PVT) LTD
 
                 "
-                                              required
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Company Scope
-                                            </label>
+                                                        required
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Company Scope
+                                                      </label>
 
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              type={"text"}
-                                              name="lastname"
-                                              //   value={user.email}
-                                              //   onChange={getUserData}
-                                              placeholder="IT Industry
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        type={"text"}
+                                                        name="lastname"
+                                                        //   value={user.email}
+                                                        //   onChange={getUserData}
+                                                        placeholder="IT Industry
                 "
-                                              required
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Salary Range
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="Email"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="https://www.me2work.com/
+                                                        required
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Salary Range
+                                                      </label>
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        name="Email"
+                                                        type={"text"}
+                                                        //   value={user.number}
+                                                        //   onChange={getUserData}
+                                                        placeholder="https://www.me2work.com/
                 "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Headquaters
-                                            </label>
-                                            <div style={{ display: "flex" }}>
-                                              <input
-                                                style={{ width: "100%" }}
-                                                className="form-control"
-                                                name="minwork"
-                                                type={"text"}
-                                                //   value={user.number}
-                                                //   onChange={getUserData}
-                                                placeholder="USA
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Headquaters
+                                                      </label>
+                                                      <div
+                                                        style={{
+                                                          display: "flex",
+                                                        }}
+                                                      >
+                                                        <input
+                                                          style={{
+                                                            width: "100%",
+                                                          }}
+                                                          className="form-control"
+                                                          name="minwork"
+                                                          type={"text"}
+                                                          //   value={user.number}
+                                                          //   onChange={getUserData}
+                                                          placeholder="USA
                 "
-                                              />
-                                            </div>
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Company Location
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="Email"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="Huston
+                                                        />
+                                                      </div>
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Company Location
+                                                      </label>
+                                                      <input
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                        className="form-control"
+                                                        name="Email"
+                                                        type={"text"}
+                                                        //   value={user.number}
+                                                        //   onChange={getUserData}
+                                                        placeholder="Huston
                 "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Description
-                                            </label>
-                                            <textarea
-                                              placeholder="Description"
-                                              className="form-control"
-                                            />
-                                            {/* <input
+                                                      />
+                                                    </fieldset>
+                                                  </Col>
+                                                  <Col lg="12">
+                                                    <fieldset>
+                                                      <label
+                                                        className="text-lg"
+                                                        style={{
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        Description
+                                                      </label>
+                                                      <textarea
+                                                        placeholder="Description"
+                                                        className="form-control"
+                                                      />
+                                                      {/* <input
                                       style={{ width: "100%" }}
                                       className="form-control"
                                       name="Email"
@@ -2153,641 +2273,156 @@ export const PublishedJob = () => {
                                       placeholder="Huston
                 "
                                     /> */}
-                                          </fieldset>
-                                        </Col>
+                                                    </fieldset>
+                                                  </Col>
+                                                </div>
+                                              </Col>
+                                            </Row>
+                                          </Modal.Body>
+                                          <Modal.Footer>
+                                            <Button
+                                              variant="secondary"
+                                              onClick={handleClose2}
+                                              style={{
+                                                background: "none",
+                                                color: "#C1C1C1",
+                                              }}
+                                            >
+                                              Cancel
+                                            </Button>
+                                            <Button
+                                              variant="primary"
+                                              style={{
+                                                background: "none",
+                                                color: "#39BEC1",
+                                              }}
+                                            >
+                                              Save
+                                            </Button>
+                                          </Modal.Footer>
+                                        </Modal>
+                                        <p>
+                                          Posted Date : Jan 2023
+                                          &nbsp;&nbsp;&nbsp;Expiry Date : Feb
+                                          2023
+                                        </p>
                                       </div>
-                                    </Col>
-                                  </Row>
-                                </Modal.Body>
-                                <Modal.Footer>
-                                  <Button
-                                    variant="secondary"
-                                    onClick={handleClose2}
-                                    style={{
-                                      background: "none",
-                                      color: "#C1C1C1",
-                                    }}
-                                  >
-                                    Cancel
-                                  </Button>
-                                  <Button
-                                    variant="primary"
-                                    style={{
-                                      background: "none",
-                                      color: "#39BEC1",
-                                    }}
-                                  >
-                                    Save
-                                  </Button>
-                                </Modal.Footer>
-                              </Modal>
-                              <p>
-                                Posted Date : Jan 2023 &nbsp;&nbsp;&nbsp;Expiry
-                                Date : Feb 2023
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <Container>
-                          <Row className="align-items-center block-for-res">
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Company Name
-                                </h2>
+                                    </div>
+                                  </div>
+                                  <Container>
+                                    <Row className="align-items-center block-for-res">
+                                      <Col>
+                                        <div className="p3">
+                                          <h2 className="text-xl font-semibold">
+                                            Company Name
+                                          </h2>
 
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  Gia (PVT) LTD
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Job Industry
-                                </h2>
+                                          <h2
+                                            className="text-lg font-semibold"
+                                            style={{ color: "#7A7979" }}
+                                          >
+                                            Gia (PVT) LTD
+                                          </h2>
+                                        </div>
+                                      </Col>
+                                      <Col>
+                                        <div className="p3">
+                                          <h2 className="text-xl font-semibold">
+                                            Job Industry
+                                          </h2>
 
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  Hospital
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Salary Range
-                                </h2>
+                                          <h2
+                                            className="text-lg font-semibold"
+                                            style={{ color: "#7A7979" }}
+                                          >
+                                            Hospital
+                                          </h2>
+                                        </div>
+                                      </Col>
+                                      <Col>
+                                        <div className="p3">
+                                          <h2 className="text-xl font-semibold">
+                                            Salary Range
+                                          </h2>
 
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  HKD 3 - HKD 6
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Location
-                                </h2>
+                                          <h2
+                                            className="text-lg font-semibold"
+                                            style={{ color: "#7A7979" }}
+                                          >
+                                            HKD 3 - HKD 6
+                                          </h2>
+                                        </div>
+                                      </Col>
+                                      <Col>
+                                        <div className="p3">
+                                          <h2 className="text-xl font-semibold">
+                                            Location
+                                          </h2>
 
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  Central and Western
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  No. of candidates
-                                </h2>
+                                          <h2
+                                            className="text-lg font-semibold"
+                                            style={{ color: "#7A7979" }}
+                                          >
+                                            Central and Western
+                                          </h2>
+                                        </div>
+                                      </Col>
+                                      <Col>
+                                        <div className="p3">
+                                          <h2 className="text-xl font-semibold">
+                                            No. of candidates
+                                          </h2>
 
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  4
-                                </h2>
-                              </div>
-                            </Col>
-                          </Row>
-                        </Container>
+                                          <h2
+                                            className="text-lg font-semibold"
+                                            style={{ color: "#7A7979" }}
+                                          >
+                                            4
+                                          </h2>
+                                        </div>
+                                      </Col>
+                                    </Row>
+                                  </Container>
 
-                        <hr style={{ border: "1px solid" }} />
-                        <Container>
-                          <Row className="align-items-center">
-                            <Col lg="11">
-                              <div className="pt-3">
-                                <h2 className="text-xl font-semibold">
-                                  Company Description
-                                </h2>
+                                  <hr style={{ border: "1px solid" }} />
+                                  <Container>
+                                    <Row className="align-items-center">
+                                      <Col lg="11">
+                                        <div className="pt-3">
+                                          <h2 className="text-xl font-semibold">
+                                            Company Description
+                                          </h2>
 
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  <Content1 />
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col lg="1">
-                              <div className="p-3">
-                                <Button
-                                  className="text-lg mr-3"
-                                  style={{
-                                    background: "none",
-                                    color: "#FF0000",
-                                  }}
-                                >
-                                  CLOSE
-                                </Button>
-                              </div>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </div>
-                    </div>
-                  </Col>
-
-                  <Col lg="12">
-                    <div className="m-3">
-                      <div className="boxshad">
-                        <div
-                          style={{
-                            // display: "flex",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                          }}
-                          className="des-flex"
-                        >
-                          <div style={{ display: "block" }}>
-                            <h2
-                              className="text-3xl robot"
-                              style={{ color: "#39BEC1" }}
-                            >
-                              Doctor for Child
-                            </h2>
-                            <p style={{ color: "#7A7979" }}>Full Time</p>
-                          </div>
-                          <div
-                            style={{
-                              float: "right",
-                              display: "flex",
-                              alignItems: "center",
-                            }}
-                            className="p-3 webkit"
-                          >
-                            <div style={{ display: "block" }}>
-                              <Button
-                                style={{ background: "none", color: "#39BEC1" }}
-                                //   onClick={props.post}
-                              >
-                                ACTIVE
-                              </Button>
-                              <Button
-                                onClick={handleShow3}
-                                className="text-white border-rounded px-3"
-                                style={{
-                                  background: "#39BEC1",
-                                  border: "none",
-                                  marginTop: "10px",
-                                  marginBottom: "10px",
-                                }}
-                              >
-                                <div
-                                  className="inline-flex"
-                                  style={{ fontSize: "20px" }}
-                                >
-                                  <BsPencilSquare /> &nbsp; edit profile
+                                          <h2
+                                            className="text-lg font-semibold"
+                                            style={{ color: "#7A7979" }}
+                                          >
+                                            <Content1 />
+                                          </h2>
+                                        </div>
+                                      </Col>
+                                      <Col lg="1">
+                                        <div className="p-3">
+                                          <Button
+                                            className="text-lg mr-3"
+                                            style={{
+                                              background: "none",
+                                              color: "#FF0000",
+                                            }}
+                                          >
+                                            CLOSE
+                                          </Button>
+                                        </div>
+                                      </Col>
+                                    </Row>
+                                  </Container>
                                 </div>
-                              </Button>
-                              <Modal
-                                show={show3}
-                                onHide={handleClose3}
-                                backdrop="static"
-                                keyboard={false}
-                              >
-                                <Modal.Header closeButton>
-                                  <Modal.Title style={{ color: "black" }}>
-                                    Edit Recruiter Profile
-                                  </Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                  <Row>
-                                    <Col lg="6">
-                                      <h2
-                                        className="text-2xl"
-                                        style={{ color: "#39BEC1" }}
-                                      >
-                                        Personal Info
-                                      </h2>
-                                      <div className="p-3">
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              First Name
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="fname"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="Gia 
-
-                "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Last Name
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="lname"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="Jay 
-
-                "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Email Address
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="email"
-                                              type={"email"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="gaiaewreeytyrt@gmail.com 
-
-                "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Phone Number
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="email"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="61453472
-
-                "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Founded in
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="email"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="2000
-
-                "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              What makes us special
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="email"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="A Service Like No Other
-                "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                      </div>
-                                    </Col>
-                                    <Col lg="6">
-                                      <h2
-                                        className="text-2xl"
-                                        style={{ color: "#39BEC1" }}
-                                      >
-                                        Company Info{" "}
-                                      </h2>
-                                      <div className="p-3">
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Company Name
-                                            </label>
-
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              type={"text"}
-                                              name="firstname"
-                                              //   value={user.name}
-                                              //   onChange={getUserData}
-                                              placeholder="Gia (PVT) LTD
-
-                "
-                                              required
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Company Scope
-                                            </label>
-
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              type={"text"}
-                                              name="lastname"
-                                              //   value={user.email}
-                                              //   onChange={getUserData}
-                                              placeholder="IT Industry
-                "
-                                              required
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Salary Range
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="Email"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="https://www.me2work.com/
-                "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Headquaters
-                                            </label>
-                                            <div style={{ display: "flex" }}>
-                                              <input
-                                                style={{ width: "100%" }}
-                                                className="form-control"
-                                                name="minwork"
-                                                type={"text"}
-                                                //   value={user.number}
-                                                //   onChange={getUserData}
-                                                placeholder="USA
-                "
-                                              />
-                                            </div>
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Company Location
-                                            </label>
-                                            <input
-                                              style={{ width: "100%" }}
-                                              className="form-control"
-                                              name="Email"
-                                              type={"text"}
-                                              //   value={user.number}
-                                              //   onChange={getUserData}
-                                              placeholder="Huston
-                "
-                                            />
-                                          </fieldset>
-                                        </Col>
-                                        <Col lg="12">
-                                          <fieldset>
-                                            <label
-                                              className="text-lg"
-                                              style={{ width: "100%" }}
-                                            >
-                                              Description
-                                            </label>
-                                            <textarea
-                                              placeholder="Description"
-                                              className="form-control"
-                                            />
-                                            {/* <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      name="Email"
-                                      type={"text"}
-                                      //   value={user.number}
-                                      //   onChange={getUserData}
-                                      placeholder="Huston
-                "
-                                    /> */}
-                                          </fieldset>
-                                        </Col>
-                                      </div>
-                                    </Col>
-                                  </Row>
-                                </Modal.Body>
-                                <Modal.Footer>
-                                  <Button
-                                    variant="secondary"
-                                    onClick={handleClose3}
-                                    style={{
-                                      background: "none",
-                                      color: "#C1C1C1",
-                                    }}
-                                  >
-                                    Cancel
-                                  </Button>
-                                  <Button
-                                    variant="primary"
-                                    style={{
-                                      background: "none",
-                                      color: "#39BEC1",
-                                    }}
-                                  >
-                                    Save
-                                  </Button>
-                                </Modal.Footer>
-                              </Modal>
-                              <p>
-                                Posted Date : Jan 2023 &nbsp;&nbsp;&nbsp;Expiry
-                                Date : Feb 2023
-                              </p>
-                            </div>
+                              </div>
+                            </Col>
                           </div>
-                        </div>
-                        <Container>
-                          <Row className="align-items-center block-for-res">
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Company Name
-                                </h2>
-
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  Gia (PVT) LTD
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Job Industry
-                                </h2>
-
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  Hospital
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Salary Range
-                                </h2>
-
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  HKD 3 - HKD 6
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  Location
-                                </h2>
-
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  Central and Western
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col>
-                              <div className="p3">
-                                <h2 className="text-xl font-semibold">
-                                  No. of candidates
-                                </h2>
-
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  4
-                                </h2>
-                              </div>
-                            </Col>
-                          </Row>
-                        </Container>
-
-                        <hr style={{ border: "1px solid" }} />
-                        <Container>
-                          <Row className="align-items-center">
-                            <Col lg="11">
-                              <div className="pt-3">
-                                <h2 className="text-xl font-semibold">
-                                  Company Description
-                                </h2>
-
-                                <h2
-                                  className="text-lg font-semibold"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  simply dummy text of the printing and
-                                  typesetting industry. Lorem Ipsum has been the
-                                  industry's standard dummy text ever since the
-                                  1500s, when avn unknown printer took a galley
-                                  of type and scramble.
-                                  <span style={{ color: "#39BEC1" }}>
-                                    SEE MORE
-                                  </span>
-                                </h2>
-                              </div>
-                            </Col>
-                            <Col lg="1">
-                              <div className="p-3">
-                                <Button
-                                  className="text-lg mr-3"
-                                  style={{
-                                    background: "none",
-                                    color: "#FF0000",
-                                  }}
-                                >
-                                  CLOSE
-                                </Button>
-                              </div>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </div>
-                    </div>
-                  </Col>
+                        );
+                      }
+                    })}
                 </Row>
               </TabPanel>
             </Tabs>
@@ -2797,3 +2432,4 @@ export const PublishedJob = () => {
     </Container>
   );
 };
+            

@@ -22,6 +22,20 @@ import { useEffect } from "react";
 import axios from "../../../utils/axios.api";
 
 function MyVerticallyCenteredModal(props) {
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  const checkAuth  = async () => {
+    const token = await localStorage.getItem("access-token");
+    if(!token){
+      navigate('/login')
+    }
+  }
+
   const [isSalaryRange, setisSalaryRange] = useState({
     gte: "",
     lte: "",
@@ -65,7 +79,6 @@ function MyVerticallyCenteredModal(props) {
   // console.log(jobData, 'jobDaaaaaaaataaa');
 
   // submitted : true when dfat post publised
-  const navigate = useNavigate();
 
   const PostFunc = () => {
     let Data = {

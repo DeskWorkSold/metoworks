@@ -10,6 +10,7 @@ import { Container, Col, Row, Button, Form, Image } from "react-bootstrap";
 import { BsArrowBarDown, BsBookmark } from "react-icons/bs";
 import { useState } from "react";
 import axios from "../../../utils/axios.api";
+import { useNavigate } from "react-router-dom";
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -21,6 +22,20 @@ import axios from "../../../utils/axios.api";
 // import "swiper/css/scrollbar";
 
 export const MainProfession = () => {
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  const checkAuth  = async () => {
+    const token = await localStorage.getItem("access-token");
+    if(!token){
+      navigate('/login')
+    }
+  }
+
   const [isSearch, setIsSearch] = useState({
     keyword: "",
     filter: [],

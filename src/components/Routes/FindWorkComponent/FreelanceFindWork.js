@@ -23,6 +23,18 @@ export const FreelanceFindWork = () => {
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
 
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  const checkAuth  = async () => {
+    const token = await localStorage.getItem("access-token");
+    if(!token){
+      navigate('/login')
+    }
+  }
+
   const [isSearch, setIsSearch] = useState({
     keyword: "",
     filter: [],

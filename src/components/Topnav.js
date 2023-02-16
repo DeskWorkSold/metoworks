@@ -20,6 +20,7 @@ import Menu from "@mui/material/Menu";
 export const Topnav = () => {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [userType, setUserType] = React.useState("");
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -63,11 +64,14 @@ export const Topnav = () => {
 
   const intitialFunc = async () => {
     const token = await localStorage.getItem("access-token");
+    const userType = await localStorage.getItem("userType");
     setIsToken(token);
+    setUserType(userType);
   };
 
   const logutFunc = () => {
     const token = localStorage.removeItem("access-token");
+    const userType = localStorage.removeItem("userType");
     setIsToken(token);
   };
   return (
@@ -82,9 +86,11 @@ export const Topnav = () => {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2" navbarScroll>
-            <Nav.Link>
-              <Link to="/FindProfessions">Find Professionals</Link>
-            </Nav.Link>
+            {userType == "freeLancer" && (
+              <Nav.Link>
+                <Link to="/FindProfessions">Find Professionals</Link>
+              </Nav.Link>
+            )}
             <Nav.Link>
               <Link to="/Opportunities">Find Opportunities</Link>
             </Nav.Link>
