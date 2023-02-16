@@ -159,7 +159,7 @@ export const FreelanceProfileView = () => {
   const [isCv, setIsCv] = useState("");
 
   const [profileImg, setProfileImg] = useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
   // console.log(profileData, "profileData");
@@ -215,7 +215,7 @@ export const FreelanceProfileView = () => {
   }));
 
   useEffect(() => {
-    checkAuth()
+    checkAuth();
     setUserId();
     initialFun();
     // ProfileExpData(id);
@@ -224,12 +224,12 @@ export const FreelanceProfileView = () => {
     LanguageData();
   }, []);
 
-  const checkAuth  = async () => {
+  const checkAuth = async () => {
     const token = await localStorage.getItem("access-token");
-    if(!token){
-      navigate('/login')
+    if (!token) {
+      navigate("/login");
     }
-  }
+  };
 
   useEffect(() => {
     isEducationData &&
@@ -283,7 +283,7 @@ export const FreelanceProfileView = () => {
       });
 
     axios
-      .get(`api/v1/user/asset/cv`)
+      .get(`api/v1/user/asset/cv`,)
       .then((res) => {
         // console.log(res, "Initial Data");
         const file = new Blob([res]);
@@ -298,10 +298,16 @@ export const FreelanceProfileView = () => {
       });
 
     axios
-      .get(`api/v1/user/asset/thumbnail`)
+      .get(`api/v1/user/asset/thumbnail`, { responseType: "arraybuffer" })
       .then((res) => {
-        // console.log(res.data, 'imaaaaaaaaaaaage');
-        setProfileImg(res.data);
+        let buffer = require("buffer");
+        const data = `data:${
+          res.headers["content-type"]
+        };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
+        console.log("res", res);
+        console.log("imagee", data);
+        setProfileImg(data);
+         localStorage.setItem('profileImg', data)
       })
       .catch((err) => {
         console.log(err);
@@ -622,8 +628,8 @@ export const FreelanceProfileView = () => {
         <label>
           <Image
             onClick={() => FileUploadComponent()}
-            style={{ width: "100%" }}
-            src={{ uri: profileImg }}
+            style={{ width: "100%", height : '100%' , borderRadius : '100%' }}
+            src={profileImg}
           />
           <input
             style={{ display: "none" }}
@@ -1041,21 +1047,21 @@ export const FreelanceProfileView = () => {
   const deleteEducationsProfileData = (props) => {
     // console.log(props?.props?.id);
     const newData = isEducationData?.filter((x) => x?.id != props.props.id);
-    axios.post(`api/v1/user/freelancer`, { experience: newData })
-          .then((res) => {
-            // console.log(res.data, 'eeeeeeeeeeeeee');
-            let data = res.data;
-            console.log(res, "profile edit data successfully added");
-            // ProfileExpData(userId);
-            if (data) {
-              setShow5(false);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      };
-  
+    axios
+      .post(`api/v1/user/freelancer`, { experience: newData })
+      .then((res) => {
+        // console.log(res.data, 'eeeeeeeeeeeeee');
+        let data = res.data;
+        console.log(res, "profile edit data successfully added");
+        // ProfileExpData(userId);
+        if (data) {
+          setShow5(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   // delete
   function MyVerticallyCenteredModalDelete(props) {
@@ -1097,7 +1103,7 @@ export const FreelanceProfileView = () => {
         </Modal>
       </div>
     );
-  };
+  }
 
   const modalshow1 = (event) => {
     // console.log(event, "funtion event");
@@ -1822,12 +1828,18 @@ export const FreelanceProfileView = () => {
 
         const langData = {
           id: props?.props?.id,
-          languageType: editIsLangugeData1.languageType ? editIsLangugeData1.languageType : props.props.languageType,
-          examLevel: editIsLangugeData1.examLevel ? editIsLangugeData1.examLevel : props.props.examLevel ,
-          gradingLevel: editIsLangugeData1.gradingLevel ? editIsLangugeData1.gradingLevel : props.props.gradingLevel ,
+          languageType: editIsLangugeData1.languageType
+            ? editIsLangugeData1.languageType
+            : props.props.languageType,
+          examLevel: editIsLangugeData1.examLevel
+            ? editIsLangugeData1.examLevel
+            : props.props.examLevel,
+          gradingLevel: editIsLangugeData1.gradingLevel
+            ? editIsLangugeData1.gradingLevel
+            : props.props.gradingLevel,
         };
 
-        console.log(langData, 'langData');
+        console.log(langData, "langData");
         newData = newData.filter((e, i) => {
           return e.id !== langData.id;
         });
@@ -1840,14 +1852,14 @@ export const FreelanceProfileView = () => {
         // console.log(newData,"data")
 
         axios
-          .post(`api/v1/user/freelancer`, { language : newData })
+          .post(`api/v1/user/freelancer`, { language: newData })
           .then((res) => {
             // console.log(res.data, 'eeeeeeeeeeeeee');
             let data = res.data;
             console.log(res, "profile edit data successfully added");
             // ProfileExpData(userId);
-              setShow7(false);
-              initialFun()
+            setShow7(false);
+            initialFun();
           })
           .catch((err) => {
             console.log(err);
@@ -1884,7 +1896,7 @@ export const FreelanceProfileView = () => {
                       <Form.Select
                         aria-label="Default select example"
                         onClick={(e) =>
-                          editIsLangugeData1.languageType = e.target.value
+                          (editIsLangugeData1.languageType = e.target.value)
                         }
                       >
                         <option
@@ -2080,8 +2092,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Malay/Indonesian"
                           selected={
-                            props?.props?.languageType ===
-                            "Malay/Indonesian"
+                            props?.props?.languageType === "Malay/Indonesian"
                               ? true
                               : false
                           }
@@ -2161,9 +2172,7 @@ export const FreelanceProfileView = () => {
                         <option
                           value="Thai"
                           selected={
-                            props?.props?.languageType === "Thai"
-                              ? true
-                              : false
+                            props?.props?.languageType === "Thai" ? true : false
                           }
                         >
                           Thai
@@ -2221,7 +2230,7 @@ export const FreelanceProfileView = () => {
                         //   value={user.number}
                         //   onChange={getUserData}
                         onClick={(e) =>
-                          editIsLangugeData1.examLevel = e.target.value
+                          (editIsLangugeData1.examLevel = e.target.value)
                         }
                         placeholder={props?.props?.examLevel}
                       />
@@ -2246,7 +2255,7 @@ export const FreelanceProfileView = () => {
                         type={"text"}
                         placeholder={props?.props?.gradingLevel}
                         onClick={(e) =>
-                          editIsLangugeData1.gradingLevel = e.target.value
+                          (editIsLangugeData1.gradingLevel = e.target.value)
                         }
                         //   value={user.number}
                         //   onChange={getUserData}
@@ -3235,7 +3244,6 @@ export const FreelanceProfileView = () => {
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 placeholder="Jay 
-
                 "
                               />
                             </fieldset>
@@ -3405,7 +3413,6 @@ export const FreelanceProfileView = () => {
                                   //   value={user.name}
                                   //   onChange={getUserData}
                                   placeholder="Gia (PVT) LTD
-
                 "
                                   required
                                 />
@@ -3850,7 +3857,6 @@ export const FreelanceProfileView = () => {
                                                       >
                                                         End Date
                                                       </label>
-
                                                       <input
                                                         style={{
                                                           width: "100%",
@@ -3869,7 +3875,6 @@ export const FreelanceProfileView = () => {
                                                         //   value={user.name}
                                                         //   onChange={getUserData}
                                                         placeholder="Gia (PVT) LTD
-
                 "
                                                         required
                                                       />
@@ -3885,7 +3890,6 @@ export const FreelanceProfileView = () => {
                                                       >
                                                         Description
                                                       </label>
-
                                                       <textarea
                                                         // placeholder="Description"
                                                         className="form-control"
@@ -4528,7 +4532,6 @@ export const FreelanceProfileView = () => {
                         {/* <Col lg="6">
                           <div className="p3">
                             <h2 className="text-xl font-semibold">EXCEL</h2>
-
                             <p className="text-lg" style={{ color: "#7A7979" }}>
                               It has survived t is a long established fact that
                               a reader will be distracted by the readable
@@ -4888,5 +4891,4 @@ export const FreelanceProfileView = () => {
       </Container>
     </Container>
   );
-  
 };

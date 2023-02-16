@@ -16,8 +16,8 @@ instance.interceptors.request.use(
 );
 
 export default {
-  get(url, params) {
-    return instance.get(url, { params });
+  get(url, params = {}) {
+    return instance.get(url, {...params});
   },
   post(url, data, headers) {
     if (headers) return instance.post(url, data, { headers });

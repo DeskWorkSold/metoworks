@@ -1,4 +1,4 @@
-import React, { useState, Component, useEffect, useRef } from "react";
+import React, { useState, Component, useEffect, useRef,  } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -17,10 +17,12 @@ import {
 import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
+import { useNavigate } from "react-router-dom/dist";
 export const Topnav = () => {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userType, setUserType] = React.useState("");
+  const [profileImage, setProfileImage] = useState('')
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -32,7 +34,7 @@ export const Topnav = () => {
 
   const location = useLocation();
   const [isToken, setIsToken] = useState("");
-  console.log(isToken, "toooooooooooookkkkkkkkken");
+  // console.log(isToken, "toooooooooooookkkkkkkkken");
 
   //   const logout = async () => {
   //     await signOut(auth);
@@ -58,8 +60,12 @@ export const Topnav = () => {
 
   //   window.addEventListener("scroll", changeNavbarColor);
 
+  const navigate = useNavigate()
+
   useEffect(() => {
     intitialFunc();
+    let profimg = localStorage.getItem('profileImg')
+    setProfileImage(profimg)
   }, [location.state]);
 
   const intitialFunc = async () => {
@@ -222,8 +228,8 @@ export const Topnav = () => {
                     color="inherit"
                   >
                     <Image
-                      style={{ width: "100%", objectFit: "cover" }}
-                      src={require("../assets/freelancer.png")}
+                      style={{ width: "100%", objectFit: "cover", borderRadius : '100%' }}
+                      src={profileImage}
                     />
                     {/* <AccountCircle /> */}
                   </IconButton>
@@ -242,6 +248,9 @@ export const Topnav = () => {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
+                    <Link>
+                    <MenuItem >My Profile</MenuItem>
+                    </Link>
                     <Link
                       to={isToken && `/Login`}
                       href="/Signup"
@@ -249,7 +258,6 @@ export const Topnav = () => {
                     >
                       <MenuItem>SignOut</MenuItem>
                     </Link>
-                    <MenuItem onClick={handleClose}>My account</MenuItem>
                   </Menu>
                 </div>
               )}
