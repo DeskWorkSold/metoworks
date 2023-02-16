@@ -19,109 +19,120 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useNavigate } from "react-router-dom/dist";
 import { useEffect } from "react";
-import axios from '../../../utils/axios.api'
+import axios from "../../../utils/axios.api";
 
 function MyVerticallyCenteredModal(props) {
   const [isSalaryRange, setisSalaryRange] = useState({
-    gte : '',
-    lte : ''
-  })
+    gte: "",
+    lte: "",
+  });
   const [isProjectTimeline, setIsProjectTimeline] = useState({
-    gte : '',
-    lte : ''
-  })
+    gte: "",
+    lte: "",
+  });
 
-  let date = new Date()
-  const [isEmail, setIsEmail] = useState('')
+  let date = new Date();
+  const [isEmail, setIsEmail] = useState("");
   // console.log(isSalaryRange, 'saaaaaaaaaaaaaaaaaaaaaaaaaaalary');
-  const [jobData, setJobData] = useState ({
-    title : '',
-    industry : '',
-    jobFunction : '',
-    jobSubFunction : 'dummy',
-    location : '',
-    description : '',
-    requirements : '',
-    profession : '',
-    educationLevel : '',
-    empType : '',
-    projectTimeline : { gte : '', lte : ''},
-    postedDate : `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
-    expiryDate : `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`,
-    madeOfWork : '',
-    noOfOpenings : '',
-    salaryCurrency : '',
-    salaryRange : { gte : isSalaryRange.gte,
-  lte : isSalaryRange.lte},
+  const [jobData, setJobData] = useState({
+    title: "",
+    industry: "",
+    jobFunction: "",
+    // jobSubFunction: "dummy",
+    location: "",
+    description: "",
+    requirements: "",
+    profession: "",
+    educationLevel: "",
+    empType: "",
+    projectTimeline: { gte: "", lte: "" },
+    postedDate: `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}`,
+    expiryDate: `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}`,
+    madeOfWork: "",
+    noOfOpenings: "",
+    salaryCurrency: "",
+    salaryRange: { gte: isSalaryRange.gte, lte: isSalaryRange.lte },
     // salaryType : '', /// look after
-    salaryPayFreq : '',
-    additionalEmails : [],
-     closed : false
-  })
+    salaryPayFreq: "",
+    additionalEmails: [],
+    closed: false,
+  });
 
   // console.log(jobData, 'jobDaaaaaaaataaa');
-  
- 
-  // submitted : true when dfat post publised 
-  const navigate = useNavigate()
+
+  // submitted : true when dfat post publised
+  const navigate = useNavigate();
 
   const PostFunc = () => {
     let Data = {
-      title : jobData.title,
-      industry : jobData.industry,
-      jobFunction : jobData.jobFunction,
-      jobSubFunction : 'dummy',
-      location : jobData.location,
-      description : jobData.description,
-      requirements : jobData.requirements,
-      profession : jobData.profession,
-      educationLevel : jobData.educationLevel,
-      empType : jobData.empType,
-      expiryDate : jobData.expiryDate,
-      projectTimeline : { gte : isProjectTimeline.gte, lte : isProjectTimeline.gte},
-      postedDate : jobData.postedDate,
-      expiryDate : jobData.expiryDate,
-      madeOfWork : jobData.madeOfWork,
-      noOfOpenings : jobData.noOfOpenings,
-      salaryCurrency : jobData.salaryCurrency,
-      salaryRange : { gte : isSalaryRange.gte,
-    lte : isSalaryRange.lte},
-      // salaryType : '', /// look after
-      salaryPayFreq : jobData.salaryPayFreq,
-      additionalEmails : [isEmail],
-       closed : false,
-       submitted : true
-    }
-    console.log(Data, 'daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa');
-    if(Data.submitted) {
-    axios.post('api/v1/job-post', Data).then((res) => {
-      console.log(res, 'data sended successfully');
-      // navigate('/CompanyProfile')
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
-  }
+      title: jobData.title,
+      industry: jobData.industry,
+      jobFunction: jobData.jobFunction,
+      location: jobData.location,
+      description: jobData.description,
+      requirements: jobData.requirements,
+      profession: jobData.profession,
+      projectTimeline: {
+        gte: isProjectTimeline.gte,
+        lte: isProjectTimeline.lte,
+      },
+      noOfOpenings: jobData.noOfOpenings,
+      postedDate: new Date(),
+      salaryRange: {
+        gte: Number(isSalaryRange.gte),
+        lte: Number(isSalaryRange.lte),
+      },
+      expiryDate: new Date(),
+      closed: false,
+      modeOfWork: jobData.madeOfWork,
+      submitted: true,
+      educationLevel: jobData.educationLevel,
+      empType: jobData.empType,
+      salaryPayFreq: jobData.salaryPayFreq,
+      salaryCurrency: jobData.salaryCurrency,
+      additionalEmails: [isEmail],
+    };
+
+    console.log(Data, "daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa");
+    axios
+      .post("api/v1/job-post", Data)
+      .then((res) => {
+        console.log(res, "data sended successfully");
+
+        // navigate('/CompanyProfile')
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const draftFunc = () => {
-    axios.post('api/v1/job-post', jobData).then((res) => {
-      console.log(res, 'data sended successfully');
-      // navigate('/CompanyProfile')
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
+    axios
+      .post("api/v1/job-post", jobData)
+      .then((res) => {
+        console.log(res, "data sended successfully");
+        // navigate('/CompanyProfile')
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  
   const previewFunc = () => {
-    axios.post('api/v1/job-post', jobData).then((res) => {
-      console.log(res, 'data sended successfully');
-      // navigate('/CompanyProfile')
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
-
+    axios
+      .post("api/v1/job-post", jobData)
+      .then((res) => {
+        console.log(res, "data sended successfully");
+        // navigate('/CompanyProfile')
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <Modal
@@ -149,7 +160,9 @@ function MyVerticallyCenteredModal(props) {
                     className="form-control"
                     name="fname"
                     type={"text"}
-                    onChange={(e) => setJobData({...jobData, title : e.target.value})}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, title: e.target.value })
+                    }
                     //   value={user.number}
                     //   onChange={getUserData}
                     placeholder="Doctor for Child
@@ -162,8 +175,11 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Industry
                   </label>
-                  <Form.Select aria-label="Default select example"  
-                  onChange={(e) => setJobData({...jobData, industry : e.target.value})}
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, industry: e.target.value })
+                    }
                   >
                     <option value="DEFAULT" disabled="">
                       Select Job Industry
@@ -210,8 +226,11 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Function
                   </label>
-                  <Form.Select aria-label="Default select example" 
-                  onChange={(e) => setJobData({...jobData, jobFunction : e.target.value})}
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, jobFunction: e.target.value })
+                    }
                   >
                     <option value="DEFAULT" disabled="">
                       Select Job Function
@@ -250,7 +269,12 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Sub Job Function
                   </label>
-                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, jobSubFunction : e.target.value})}>
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, jobSubFunction: e.target.value })
+                    }
+                  >
                     <option value="DEFAULT" disabled="">
                       Sub Job Function
                     </option>
@@ -273,7 +297,12 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Location
                   </label>
-                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, location : e.target.value})}>
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, location: e.target.value })
+                    }
+                  >
                     <option value="DEFAULT" disabled="">
                       Select Job Location
                     </option>
@@ -315,7 +344,7 @@ function MyVerticallyCenteredModal(props) {
               </Col>
               <Col lg="12">
                 <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }} >
+                  <label className="text-lg" style={{ width: "100%" }}>
                     Job Description
                   </label>
                   <CKEditor
@@ -329,8 +358,7 @@ function MyVerticallyCenteredModal(props) {
                     }}
                     onChange={(event, editor) => {
                       const data = editor.getData();
-                      setJobData({...jobData, description : data})
-                      ;
+                      setJobData({ ...jobData, description: data });
                     }}
                     onBlur={(event, editor) => {
                       console.log("Blur.", editor);
@@ -358,7 +386,7 @@ function MyVerticallyCenteredModal(props) {
                     onChange={(event, editor) => {
                       const data = editor.getData();
                       // console.log({ event, editor, data });
-                      setJobData({...jobData, requirements : data})
+                      setJobData({ ...jobData, requirements: data });
                     }}
                     onBlur={(event, editor) => {
                       console.log("Blur.", editor);
@@ -369,7 +397,7 @@ function MyVerticallyCenteredModal(props) {
                   />
                 </fieldset>
               </Col>
-              <Col lg="12">
+              {/* <Col lg="12">
                 <fieldset>
                   <label className="text-lg" style={{ width: "100%" }}>
                     Profession
@@ -385,16 +413,23 @@ function MyVerticallyCenteredModal(props) {
                     placeholder="Enter Profession
                 "
                     required
-                    onChange={(e) => setJobData({...jobData, profession : e.target.value})}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, profession: e.target.value })
+                    }
                   />
                 </fieldset>
-              </Col>
+              </Col> */}
               <Col lg="12">
                 <fieldset>
                   <label className="text-lg" style={{ width: "100%" }}>
                     Education Level
                   </label>
-                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, educationLevel : e.target.value})}>
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, educationLevel: e.target.value })
+                    }
+                  >
                     <option>Select Education level</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -418,7 +453,12 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Employment Type
                   </label>
-                  <Form.Select aria-label="Default select example" onChange={(e) => setJobData({...jobData, empType : e.target.value})}>
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, empType: e.target.value })
+                    }
+                  >
                     <option>Select Employement Type</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -440,9 +480,8 @@ function MyVerticallyCenteredModal(props) {
               <Col lg="12">
                 <fieldset>
                   <label className="text-lg" style={{ width: "100%" }}>
-                  Project Timeline
+                    Project Timeline
                   </label>
-                 
                 </fieldset>
               </Col>
               <Container>
@@ -452,7 +491,12 @@ function MyVerticallyCenteredModal(props) {
                       Start :
                     </label>
                     <input
-                    onChange={(e) => setIsProjectTimeline({...isProjectTimeline,  gte : e.target.value})}
+                      onChange={(e) =>
+                        setIsProjectTimeline({
+                          ...isProjectTimeline,
+                          gte: e.target.value,
+                        })
+                      }
                       style={{ width: "100%" }}
                       className="form-control"
                       type={"date"}
@@ -468,7 +512,12 @@ function MyVerticallyCenteredModal(props) {
                       End :
                     </label>
                     <input
-                    onChange={(e) => setIsProjectTimeline({...isProjectTimeline,  lte : e.target.value})}
+                      onChange={(e) =>
+                        setIsProjectTimeline({
+                          ...isProjectTimeline,
+                          lte: e.target.value,
+                        })
+                      }
                       style={{ width: "100%" }}
                       className="form-control mx-2"
                       type={"date"}
@@ -484,14 +533,16 @@ function MyVerticallyCenteredModal(props) {
               </Container>
               <Col lg="12">
                 <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }} >
+                  <label className="text-lg" style={{ width: "100%" }}>
                     Profession
                   </label>
                   <input
                     style={{ width: "100%" }}
                     className="form-control"
                     name="firstname"
-                    onChange={(e) => setJobData({...jobData, profession : e.target.value})}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, profession: e.target.value })
+                    }
                     //   value={user.name}
                     //   onChange={getUserData}
                     placeholder="Enter Profession"
@@ -530,15 +581,18 @@ function MyVerticallyCenteredModal(props) {
                   </Col>
                 </Row>
               </Container> */}
-         
+
               <Col lg="12">
                 <fieldset>
                   <label className="text-lg" style={{ width: "100%" }}>
                     Mode of Work
                   </label>
-                  <Form.Select aria-label="Default select example" 
-                    onChange={(e) => setJobData({...jobData, madeOfWork : e.target.value})}
-                    >
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, madeOfWork: e.target.value })
+                    }
+                  >
                     <option>Select Mode of Work</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
@@ -568,7 +622,9 @@ function MyVerticallyCenteredModal(props) {
                     className="form-control"
                     type={"number"}
                     name="firstname"
-                    onChange={(e) => setJobData({...jobData, noOfOpenings : e.target.value})}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, noOfOpenings: e.target.value })
+                    }
                     //   value={user.name}
                     //   onChange={getUserData}
                     placeholder="Enter No. of Openings
@@ -582,9 +638,12 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Salary Info
                   </label>
-                  <Form.Select aria-label="Default select example" 
-                    onChange={(e) => setJobData({...jobData, salaryCurrency : e.target.value})}
-                    >
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryCurrency: e.target.value })
+                    }
+                  >
                     <option value="DEFAULT" disabled="">
                       Currency
                     </option>
@@ -621,7 +680,12 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control"
                       type={"number"}
                       name="firstname"
-                      onChange={(e) => setisSalaryRange({...isSalaryRange, gte : e.target.value})}
+                      onChange={(e) =>
+                        setisSalaryRange({
+                          ...isSalaryRange,
+                          gte: e.target.value,
+                        })
+                      }
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Minimum Salary"
@@ -637,7 +701,12 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control mx-2"
                       type={"number"}
                       name="firstname"
-                      onChange={(e) => setisSalaryRange({...isSalaryRange, lte : e.target.value})}
+                      onChange={(e) =>
+                        setisSalaryRange({
+                          ...isSalaryRange,
+                          lte: e.target.value,
+                        })
+                      }
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Maximum Salary
@@ -657,7 +726,9 @@ function MyVerticallyCenteredModal(props) {
                     id="exampleRadio1"
                     value="Salary Negotiable"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) => setJobData({...jobData, salaryType : e.target.value})}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryType: e.target.value })
+                    }
                   />
                   <label
                     class="form-check-label"
@@ -673,7 +744,9 @@ function MyVerticallyCenteredModal(props) {
                     id="exampleRadio2"
                     value="Project Based"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) => setJobData({...jobData, salaryType : e.target.value})}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryType: e.target.value })
+                    }
                   />
                   <label
                     class="form-check-label"
@@ -689,7 +762,9 @@ function MyVerticallyCenteredModal(props) {
                     id="exampleRadio3"
                     style={{ marginLeft: "60px" }}
                     value="Others"
-                    onChange={(e) => setJobData({...jobData, salaryType : e.target.value})}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryType: e.target.value })
+                    }
                   />
                   <label
                     class="form-check-label"
@@ -710,7 +785,9 @@ function MyVerticallyCenteredModal(props) {
                     id="radio1"
                     value="Per Day"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) => setJobData({...jobData, salaryPayFreq : e.target.value})}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                    }
                   />
                   <label
                     for="radio1"
@@ -726,7 +803,9 @@ function MyVerticallyCenteredModal(props) {
                     id="radio2"
                     value="per Week"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) => setJobData({...jobData, salaryPayFreq : e.target.value})}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                    }
                   />
                   <label
                     for="radio2"
@@ -742,7 +821,9 @@ function MyVerticallyCenteredModal(props) {
                     id="radio3"
                     value="per Month"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) => setJobData({...jobData, salaryPayFreq : e.target.value})}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                    }
                   />
                   <label
                     for="radio3"
@@ -758,7 +839,9 @@ function MyVerticallyCenteredModal(props) {
                     id="radio4"
                     value="others"
                     style={{ marginLeft: "60px" }}
-                    onChange={(e) => setJobData({...jobData, salaryPayFreq : e.target.value})}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                    }
                   />
                   <label
                     for="radio4"
@@ -784,9 +867,11 @@ function MyVerticallyCenteredModal(props) {
                       //   value={user.name}
                       //   onChange={getUserData}
                       disabled
-                      value={`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`}
+                      value={`${date.getDate()}-${
+                        date.getMonth() + 1
+                      }-${date.getFullYear()}`}
                       placeholder="Enter No. of Openings"
-                    // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
+                      // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
                     />
                   </fieldset>
@@ -803,7 +888,7 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control"
                       type={"email"}
                       name="firstname"
-                    onChange={(e) => setIsEmail(e.target.value)}
+                      onChange={(e) => setIsEmail(e.target.value)}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Enter Additional Emails
@@ -848,178 +933,181 @@ function MyVerticallyCenteredModal(props) {
     </Modal>
   );
 }
+
 export const MainProfile = () => {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [modalShow, setModalShow] = React.useState(false);
-  const [userId, setUserId] = useState('')
+  const [userId, setUserId] = useState("");
   // console.log(userId, 'user ID');
-  const [isProfileData, setIsProfileData] = useState({})
+  const [isProfileData, setIsProfileData] = useState({});
 
- const [isToken, setIsToken] = useState({})
-//  console.log(isToken, 'TOKKKKKKKKKKEN');
+  const [isToken, setIsToken] = useState({});
+  //  console.log(isToken, 'TOKKKKKKKKKKEN');
   const [profileData, setProfileData] = useState({
-    firstName : '',
-    lastName : '',
-    email : '',
-    phoneNumber : '',
-    foundedIn : '',
-    whatsMakesUsSpecial : '',
-    companyName : '',
-    companyScope : '',
-    salaryRange : '',
-    headquarters : '',
-    companyLocation : '',
-    description : '',
-  })
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    foundedIn: "",
+    whatsMakesUsSpecial: "",
+    companyName: "",
+    companyScope: "",
+    salaryRange: "",
+    headquarters: "",
+    companyLocation: "",
+    description: "",
+  });
 
   // const [profilePicture, setProfilePicture] = useState('')
- 
+
   // console.log(profilePicture, 'profilePicture');
-  console.log(isProfileData, 'isProfileData');
-  
+  console.log(isProfileData, "isProfileData");
+
   // console.log(profileData, 'profile Data');
   useEffect(() => {
-    setIsToken(localStorage.getItem("access-token"))
-  // let id = localStorage.getItem('id')
-  setUserId()
-  initialFun()
-  },[])
+    setIsToken(localStorage.getItem("access-token"));
+    // let id = localStorage.getItem('id')
+    setUserId();
+    initialFun();
+  }, []);
 
   const initialFun = () => {
     axios
       .get(`/api/v1/user/recruiter`)
       .then((res) => {
         let data = res.data.data;
-        console.log(data, 'daaaaaaaaataaaaaaaaaaaa');
+        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
         // setIsProfileData(data)
         setProfileData(data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   useEffect(() => {
-    profileData && setIsProfileData(profileData)
+    profileData && setIsProfileData(profileData);
     // profileData && setProfilePicture(profileData)
-  }, [profileData])
+  }, [profileData]);
 
-
-const profileFunc = () => {
-  console.log(isProfileData, 'eeeeeeeeeeeeeeeeeeeeeeee');
-  axios.patch(`http://localhost:3000/v1/users/${userId}`, isProfileData).then((res) => {
-    console.log(res, 'profile data successfully added');
-    setProfileData(res.data)
-    if(res) {
-      setShow(false);
-    }
-  }).catch((err) => {
-    console.log(err);
-  })
-}
-
-const profilePictureUpdate = () => {
-  let formdata = new FormData();
-  Object.entries(profileData).map(([key, value]) => {
-    formdata.append(key, value);
-  });
-  axios.patch(`http://localhost:3000/v1/users/${userId}`, formdata)
-  .then((res) => {
-    console.log(res, "profile data successfully added");
-    // setProfileExp(res.data, "ProfileExp");
-    // ProfileExpData();
-    setProfileData(res.data)
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-}
-
-
-
-const FileUploadComponent = () => {
-  // alert('clicked')s
-  const fileParams = ({ meta }) => {
-    return { url: "https://httpbin.org/post" };
-  };
-  const onFileChange = ({ meta, file }, status) => {
-    console.log(status, meta, file);
-  };
-  const onSubmit = (files, allFiles) => {
-    allFiles.forEach((f) => f.remove());
-  };
-  const getFilesFromEvent = (e) => {
-    return new Promise((resolve) => {
-      getDroppedOrSelectedFiles(e).then((chosenFiles) => {
-        resolve(chosenFiles.map((f) => f.fileObject));
+  const profileFunc = () => {
+    console.log(isProfileData, "eeeeeeeeeeeeeeeeeeeeeeee");
+    axios
+      .patch(`http://localhost:3000/v1/users/${userId}`, isProfileData)
+      .then((res) => {
+        console.log(res, "profile data successfully added");
+        setProfileData(res.data);
+        if (res) {
+          setShow(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
       });
+  };
+
+  const profilePictureUpdate = () => {
+    let formdata = new FormData();
+    Object.entries(profileData).map(([key, value]) => {
+      formdata.append(key, value);
     });
+    axios
+      .patch(`http://localhost:3000/v1/users/${userId}`, formdata)
+      .then((res) => {
+        console.log(res, "profile data successfully added");
+        // setProfileExp(res.data, "ProfileExp");
+        // ProfileExpData();
+        setProfileData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
-  const selectFileInput = ({ accept, onFiles, files, getFilesFromEvent }) => {
-    const textMsg = files.length > 0 ? "Upload Again" : "Select Files";
+
+  const FileUploadComponent = () => {
+    // alert('clicked')s
+    const fileParams = ({ meta }) => {
+      return { url: "https://httpbin.org/post" };
+    };
+    const onFileChange = ({ meta, file }, status) => {
+      console.log(status, meta, file);
+    };
+    const onSubmit = (files, allFiles) => {
+      allFiles.forEach((f) => f.remove());
+    };
+    const getFilesFromEvent = (e) => {
+      return new Promise((resolve) => {
+        getDroppedOrSelectedFiles(e).then((chosenFiles) => {
+          resolve(chosenFiles.map((f) => f.fileObject));
+        });
+      });
+    };
+    const selectFileInput = ({ accept, onFiles, files, getFilesFromEvent }) => {
+      const textMsg = files.length > 0 ? "Upload Again" : "Select Files";
+      return (
+        <label>
+          <Image
+            onClick={() => FileUploadComponent()}
+            style={{ width: "100%" }}
+            src={require("../../../assets/Profile.png")}
+          />
+
+          <input
+            style={{ display: "none" }}
+            type="file"
+            accept={accept}
+            // onClick={}
+            multiple
+            onChange={(e) => {
+              getFilesFromEvent(e).then((chosenFiles) => {
+                let data = chosenFiles;
+                // console.log(data, 'daaaaaaataaaaa');
+                // console.log(chosenFiles, 'choaaaaaaaaaaaaasen File');
+                setTimeout(() => {
+                  setProfileData({ ...profileData, image: data });
+                  alert(data);
+                }, 5000);
+
+                if (data.image) {
+                  profilePictureUpdate();
+                }
+              });
+            }}
+          />
+        </label>
+      );
+    };
+
+    // const profileImageUploadHandle = (e) => {
+    //   getFilesFromEvent(e).then((chosenFiles) => {
+    //     let data = chosenFiles
+    //     // console.log(data, 'daaaaaaataaaaa');
+    //     // console.log(chosenFiles, 'choaaaaaaaaaaaaasen File');
+    //     setProfileData({...profileData, image : data})
+    //     if(data) {
+    //       profilePictureUpdate()
+    //     }
+    //   });
+    // }
+
+    // console.log(isProfileData, 'aaaaaaaaa')
+
     return (
-      <label>
-        <Image
-          onClick={() => FileUploadComponent()}
-          style={{ width: "100%" }}
-          src={require("../../../assets/Profile.png")}
-        />
-        
-        <input
-          style={{ display: "none" }}
-          type="file"
-          accept={accept}
-          // onClick={}
-          multiple
-          onChange={(e) => {getFilesFromEvent(e).then((chosenFiles) => {
-            let data = chosenFiles
-            // console.log(data, 'daaaaaaataaaaa');
-            // console.log(chosenFiles, 'choaaaaaaaaaaaaasen File');
-            setTimeout(() => {
-              setProfileData({...profileData, image : data})
-              alert(data)
-            }, 5000)
-        
-            if(data.image) {
-              profilePictureUpdate()
-            }
-          })}}
-        />
-      </label>
+      <Dropzone
+        onSubmit={onSubmit}
+        onChangeStatus={onFileChange}
+        InputComponent={selectFileInput}
+        getUploadParams={fileParams}
+        getFilesFromEvent={getFilesFromEvent}
+        accept="image/*"
+        maxFiles={1}
+        inputContent="Drop A File"
+      />
     );
-  
   };
-
-  // const profileImageUploadHandle = (e) => {
-  //   getFilesFromEvent(e).then((chosenFiles) => {
-  //     let data = chosenFiles
-  //     // console.log(data, 'daaaaaaataaaaa');
-  //     // console.log(chosenFiles, 'choaaaaaaaaaaaaasen File');
-  //     setProfileData({...profileData, image : data})
-  //     if(data) {
-  //       profilePictureUpdate()
-  //     }
-  //   });
-  // }
-
-  // console.log(isProfileData, 'aaaaaaaaa')
-
-  return (
-    <Dropzone
-      onSubmit={onSubmit}
-      onChangeStatus={onFileChange}
-      InputComponent={selectFileInput}
-      getUploadParams={fileParams}
-      getFilesFromEvent={getFilesFromEvent}
-      accept="image/*"
-      maxFiles={1}
-      inputContent="Drop A File"
-    />
-  );
-};
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -1067,15 +1155,20 @@ const FileUploadComponent = () => {
               <div className="boxshad py-5">
                 <Row className="align-items-center">
                   <Col lg="2" className="webkit">
-                  <button>
+                    <button>
                       <FileUploadComponent />
                     </button>
                   </Col>
                   <Col lg="4">
                     <h2 className="text-3xl py-3 robot">
-                      {profileData?.companyName ? profileData.companyName : 'Gia (PVT) LTD'} <br />
+                      {profileData?.companyName
+                        ? profileData.companyName
+                        : "Gia (PVT) LTD"}{" "}
+                      <br />
                       <span className="text-xl" style={{ color: "#6A489C" }}>
-                        {profileData?.whatsMakesUsSpecial ? profileData.whatsMakesUsSpecial : 'A Service Like No Other'}
+                        {profileData?.whatsMakesUsSpecial
+                          ? profileData.whatsMakesUsSpecial
+                          : "A Service Like No Other"}
                       </span>
                     </h2>
                   </Col>
@@ -1091,7 +1184,10 @@ const FileUploadComponent = () => {
                               fontWeight: "bolder",
                             }}
                           />
-                          Founded in {profileData?.foundedIn ? profileData.foundedIn : '2000'}
+                          Founded in{" "}
+                          {profileData?.foundedIn
+                            ? profileData.foundedIn
+                            : "2000"}
                         </li>
                         <li>
                           <FontAwesomeIcon
@@ -1101,7 +1197,9 @@ const FileUploadComponent = () => {
                               fontWeight: "bolder",
                             }}
                           />
-                          {profileData?.headquarters ? profileData.headquarters : 'USA'}
+                          {profileData?.headquarters
+                            ? profileData.headquarters
+                            : "USA"}
                         </li>
                         <li>
                           {" "}
@@ -1112,7 +1210,7 @@ const FileUploadComponent = () => {
                               fontWeight: "bolder",
                             }}
                           />
-                      {profileData?.websiteLink}
+                          {profileData?.websiteLink}
                         </li>
                       </ul>
                     </div>
@@ -1188,10 +1286,15 @@ const FileUploadComponent = () => {
                                       className="form-control"
                                       name="fname"
                                       type={"text"}
-                                      onChange={(e) => setIsProfileData({...isProfileData, firstName : e.target.value})}
+                                      onChange={(e) =>
+                                        setIsProfileData({
+                                          ...isProfileData,
+                                          firstName: e.target.value,
+                                        })
+                                      }
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder={profileData?.firstName || ''}
+                                      placeholder={profileData?.firstName || ""}
                                     />
                                   </fieldset>
                                 </Col>
@@ -1208,10 +1311,15 @@ const FileUploadComponent = () => {
                                       className="form-control"
                                       name="lname"
                                       type={"text"}
-                                      onChange={(e) => setIsProfileData({...isProfileData, lastName : e.target.value})}
+                                      onChange={(e) =>
+                                        setIsProfileData({
+                                          ...isProfileData,
+                                          lastName: e.target.value,
+                                        })
+                                      }
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder={profileData?.lastName || ''}
+                                      placeholder={profileData?.lastName || ""}
                                     />
                                   </fieldset>
                                 </Col>
@@ -1229,8 +1337,13 @@ const FileUploadComponent = () => {
                                       className="form-control"
                                       name="email"
                                       type={"email"}
-                                      value={profileData?.email || ''}
-                                      onChange={(e) => setIsProfileData({...isProfileData, email : e.target.value})}
+                                      value={profileData?.email || ""}
+                                      onChange={(e) =>
+                                        setIsProfileData({
+                                          ...isProfileData,
+                                          email: e.target.value,
+                                        })
+                                      }
                                       //   value={user.number}
                                       //   onChange={getUserData}
                                       placeholder="gaiaewreeytyrt@gmail.com 
@@ -1251,10 +1364,17 @@ const FileUploadComponent = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
-                                      onChange={(e) => setIsProfileData({...isProfileData, phoneNumber : e.target.value})}
+                                      onChange={(e) =>
+                                        setIsProfileData({
+                                          ...isProfileData,
+                                          phoneNumber: e.target.value,
+                                        })
+                                      }
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder={profileData?.phoneNumber || ''}
+                                      placeholder={
+                                        profileData?.phoneNumber || ""
+                                      }
                                     />
                                   </fieldset>
                                 </Col>
@@ -1271,10 +1391,15 @@ const FileUploadComponent = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
-                                      onChange={(e) => setIsProfileData({...isProfileData, foundedIn : e.target.value})}
+                                      onChange={(e) =>
+                                        setIsProfileData({
+                                          ...isProfileData,
+                                          foundedIn: e.target.value,
+                                        })
+                                      }
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder={profileData?.foundedIn || ''}
+                                      placeholder={profileData?.foundedIn || ""}
                                     />
                                   </fieldset>
                                 </Col>
@@ -1291,10 +1416,17 @@ const FileUploadComponent = () => {
                                       className="form-control"
                                       name="email"
                                       type={"text"}
-                                      onChange={(e) => setIsProfileData({...isProfileData, whatsMakesUsSpecial : e.target.value})}
+                                      onChange={(e) =>
+                                        setIsProfileData({
+                                          ...isProfileData,
+                                          whatsMakesUsSpecial: e.target.value,
+                                        })
+                                      }
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder={profileData?.whatsMakesUsSpecial || ''}
+                                      placeholder={
+                                        profileData?.whatsMakesUsSpecial || ""
+                                      }
                                     />
                                   </fieldset>
                                 </Col>
@@ -1322,10 +1454,17 @@ const FileUploadComponent = () => {
                                       className="form-control"
                                       type={"text"}
                                       name="firstname"
-                                      onChange={(e) => setIsProfileData({...isProfileData, companyName : e.target.value})}
+                                      onChange={(e) =>
+                                        setIsProfileData({
+                                          ...isProfileData,
+                                          companyName: e.target.value,
+                                        })
+                                      }
                                       //   value={user.name}
                                       //   onChange={getUserData}
-                                      placeholder={profileData?.companyName || ''}
+                                      placeholder={
+                                        profileData?.companyName || ""
+                                      }
                                       required
                                     />
                                   </fieldset>
@@ -1344,10 +1483,17 @@ const FileUploadComponent = () => {
                                       className="form-control"
                                       type={"text"}
                                       name="lastname"
-                                      onChange={(e) => setIsProfileData({...isProfileData, companyScope : e.target.value})}
+                                      onChange={(e) =>
+                                        setIsProfileData({
+                                          ...isProfileData,
+                                          companyScope: e.target.value,
+                                        })
+                                      }
                                       //   value={user.email}
                                       //   onChange={getUserData}
-                                      placeholder={profileData?.companyScope || ''}
+                                      placeholder={
+                                        profileData?.companyScope || ""
+                                      }
                                       required
                                     />
                                   </fieldset>
@@ -1365,10 +1511,17 @@ const FileUploadComponent = () => {
                                       className="form-control"
                                       name="Email"
                                       type={"text"}
-                                      onChange={(e) => setIsProfileData({...isProfileData, salaryRange : e.target.value})}
+                                      onChange={(e) =>
+                                        setIsProfileData({
+                                          ...isProfileData,
+                                          salaryRange: e.target.value,
+                                        })
+                                      }
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder={profileData?.salaryRange || ''}
+                                      placeholder={
+                                        profileData?.salaryRange || ""
+                                      }
                                     />
                                   </fieldset>
                                 </Col>
@@ -1386,10 +1539,17 @@ const FileUploadComponent = () => {
                                         className="form-control"
                                         name="minwork"
                                         type={"text"}
-                                        onChange={(e) => setIsProfileData({...isProfileData, headquarters : e.target.value})}
+                                        onChange={(e) =>
+                                          setIsProfileData({
+                                            ...isProfileData,
+                                            headquarters: e.target.value,
+                                          })
+                                        }
                                         //   value={user.number}
                                         //   onChange={getUserData}
-                                        placeholder={profileData?.headquarters || ''}
+                                        placeholder={
+                                          profileData?.headquarters || ""
+                                        }
                                       />
                                     </div>
                                   </fieldset>
@@ -1407,10 +1567,17 @@ const FileUploadComponent = () => {
                                       className="form-control"
                                       name="Email"
                                       type={"text"}
-                                      onChange={(e) => setIsProfileData({...isProfileData, companyLocation : e.target.value})}
+                                      onChange={(e) =>
+                                        setIsProfileData({
+                                          ...isProfileData,
+                                          companyLocation: e.target.value,
+                                        })
+                                      }
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder={profileData?.companyLocation || ''}
+                                      placeholder={
+                                        profileData?.companyLocation || ""
+                                      }
                                     />
                                   </fieldset>
                                 </Col>
@@ -1423,8 +1590,15 @@ const FileUploadComponent = () => {
                                       Description
                                     </label>
                                     <textarea
-                                    onChange={(e) => setIsProfileData({...isProfileData, description : e.target.value})}
-                                      placeholder={profileData?.description || ''}
+                                      onChange={(e) =>
+                                        setIsProfileData({
+                                          ...isProfileData,
+                                          description: e.target.value,
+                                        })
+                                      }
+                                      placeholder={
+                                        profileData?.description || ""
+                                      }
                                       className="form-control"
                                     />
                                     {/* <input
@@ -1524,7 +1698,9 @@ const FileUploadComponent = () => {
                         <h2 className="text-xl font-semibold">Full Name</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.firstName && profileData?.lastName ? profileData.firstName + ' ' + profileData.lastName : 'Gia Jay'} 
+                          {profileData?.firstName && profileData?.lastName
+                            ? profileData.firstName + " " + profileData.lastName
+                            : "Gia Jay"}
                         </h2>
                       </div>
                     </Col>
@@ -1533,7 +1709,9 @@ const FileUploadComponent = () => {
                         <h2 className="text-xl font-semibold">Email</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.email ? profileData.email : 'gaiaewreeytyrt@gmail.com'}
+                          {profileData?.email
+                            ? profileData.email
+                            : "gaiaewreeytyrt@gmail.com"}
                         </h2>
                       </div>
                     </Col>
@@ -1542,7 +1720,9 @@ const FileUploadComponent = () => {
                         <h2 className="text-xl font-semibold">Phone Number</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.phoneNumber ? profileData.phoneNumber : '61453472'}
+                          {profileData?.phoneNumber
+                            ? profileData.phoneNumber
+                            : "61453472"}
                         </h2>
                       </div>
                     </Col>
@@ -1559,7 +1739,9 @@ const FileUploadComponent = () => {
                         <h2 className="text-xl font-semibold">Company Name</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.companyName ? profileData.companyName : 'Gia (PVT) LTD'}
+                          {profileData?.companyName
+                            ? profileData.companyName
+                            : "Gia (PVT) LTD"}
                         </h2>
                       </div>
                     </Col>
@@ -1568,7 +1750,9 @@ const FileUploadComponent = () => {
                         <h2 className="text-xl font-semibold">Company Scope</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.companyScope ? profileData.companyScope : 'IT Industry'}
+                          {profileData?.companyScope
+                            ? profileData.companyScope
+                            : "IT Industry"}
                         </h2>
                       </div>
                     </Col>
@@ -1590,7 +1774,9 @@ const FileUploadComponent = () => {
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.companyLocation ? profileData.companyLocation :'Huston'}
+                          {profileData?.companyLocation
+                            ? profileData.companyLocation
+                            : "Huston"}
                         </h2>
                       </div>
                     </Col>
@@ -1601,10 +1787,9 @@ const FileUploadComponent = () => {
                         </h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                       {profileData?.companyDesc
- ? profileData.companyDesc
- : 
-                       `A .It has survived t is a long established fact that
+                          {profileData?.companyDesc
+                            ? profileData.companyDesc
+                            : `A .It has survived t is a long established fact that
                           a reader will be distracted by the readable content of
                           a page when looking at its layout. The point of using
                           Lorem Ipsum is that it has a more-or-less normal

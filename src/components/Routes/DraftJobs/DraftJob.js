@@ -13,8 +13,145 @@ import Modal from "react-bootstrap/Modal";
 // import React, { Component } from 'react';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
+import { useNavigate } from "react-router-dom/dist";
+import axios from "../../../utils/axios.api";
 function MyVerticallyCenteredModal(props) {
+  const [isSalaryRange, setisSalaryRange] = useState({
+    gte: "",
+    lte: "",
+  });
+  const [isProjectTimeline, setIsProjectTimeline] = useState({});
+
+  let date = new Date();
+  const [isEmail, setIsEmail] = useState("");
+  // console.log(isSalaryRange, 'saaaaaaaaaaaaaaaaaaaaaaaaaaalary');
+  const [jobData, setJobData] = useState({
+    title: "",
+    industry: "",
+    jobFunction: "",
+    // jobSubFunction: "dummy",
+    location: "",
+    description: "",
+    requirements: "",
+    profession: "",
+    educationLevel: "",
+    empType: "",
+    projectTimeline: { gte: "", lte: "" },
+    postedDate: `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}`,
+    expiryDate: `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}`,
+    madeOfWork: "",
+    noOfOpenings: "",
+    salaryCurrency: "",
+    salaryRange: { gte: isSalaryRange.gte, lte: isSalaryRange.lte },
+    // salaryType : '', /// look after
+    salaryPayFreq: "",
+    additionalEmails: [],
+    closed: false,
+  });
+
+  // console.log(jobData, 'jobDaaaaaaaataaa');
+
+  // submitted : true when dfat post publised
+  // const navigate = useNavigate();
+
+  const PostFunc = () => {
+    let Data = {
+      title: jobData.title,
+      industry: jobData.industry,
+      jobFunction: jobData.jobFunction,
+      location: jobData.location,
+      description: jobData.description,
+      requirements: jobData.requirements,
+      profession: jobData.profession,
+      projectTimeline: {
+        gte: isProjectTimeline.gte,
+        lte: isProjectTimeline.lte,
+      },
+      noOfOpenings: Number(jobData.noOfOpenings),
+      postedDate: new Date(),
+      salaryRange: {
+        gte: Number(isSalaryRange.gte),
+        lte: Number(isSalaryRange.lte),
+      },
+      expiryDate: new Date(),
+      closed: false,
+      modeOfWork: jobData.madeOfWork,
+      submitted: true,
+      educationLevel: jobData.educationLevel,
+      empType: jobData.empType,
+      salaryPayFreq: jobData.salaryPayFreq,
+      salaryCurrency: jobData.salaryCurrency,
+      additionalEmails: [isEmail],
+    };
+    let dummyData = {
+      title: jobData.title,
+      industry: jobData.industry,
+      jobFunction: jobData.jobFunction,
+      location: jobData.location,
+      description: jobData.description,
+      requirements: jobData.requirements,
+      profession: jobData.profession,
+      projectTimeline: {
+        gte: `${isProjectTimeline.gte}`,
+        lte: `${isProjectTimeline.lte}`,
+      },
+      noOfOpenings: Number(jobData.noOfOpenings),
+      postedDate: new Date(),
+      salaryRange: {
+        gte: `${isSalaryRange.gte}`,
+        lte: `${isSalaryRange.lte}`,
+      },
+      expiryDate: new Date(),
+      closed: false,
+      modeOfWork: jobData.madeOfWork,
+      submitted: true,
+      educationLevel: jobData.educationLevel,
+      empType: jobData.empType,
+      salaryPayFreq: jobData.salaryPayFreq,
+      salaryCurrency: jobData.salaryCurrency,
+      additionalEmails: [isEmail],
+    };
+    console.log(Data, "daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa");
+    axios
+      .post("api/v1/job-post", dummyData)
+      .then((res) => {
+        console.log(res, "data sended successfully");
+
+        // navigate('/CompanyProfile')
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const draftFunc = () => {
+    axios
+      .post("api/v1/job-post", jobData)
+      .then((res) => {
+        console.log(res, "data sended successfully");
+        // navigate('/CompanyProfile')
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const previewFunc = () => {
+    axios
+      .post("api/v1/job-post", jobData)
+      .then((res) => {
+        console.log(res, "data sended successfully");
+        // navigate('/CompanyProfile')
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Modal
       {...props}
@@ -41,11 +178,13 @@ function MyVerticallyCenteredModal(props) {
                     className="form-control"
                     name="fname"
                     type={"text"}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, title: e.target.value })
+                    }
                     //   value={user.number}
                     //   onChange={getUserData}
                     placeholder="Doctor for Child
-  
-                  "
+                "
                   />
                 </fieldset>
               </Col>
@@ -54,7 +193,12 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Industry
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, industry: e.target.value })
+                    }
+                  >
                     <option value="DEFAULT" disabled="">
                       Select Job Industry
                     </option>
@@ -83,16 +227,16 @@ function MyVerticallyCenteredModal(props) {
                     <option>Others</option>
                   </Form.Select>
                   {/* <input
-                  style={{ width: "100%" }}
-                  className="form-control"
-                  type={"text"}
-                  name="firstname"
-                  //   value={user.name}
-                  //   onChange={getUserData}
-                  placeholder="Select Job Industry
-                  "
-                  required
-                /> */}
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="firstname"
+                //   value={user.name}
+                //   onChange={getUserData}
+                placeholder="Select Job Industry
+                "
+                required
+              /> */}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -100,7 +244,12 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Function
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, jobFunction: e.target.value })
+                    }
+                  >
                     <option value="DEFAULT" disabled="">
                       Select Job Function
                     </option>
@@ -121,16 +270,16 @@ function MyVerticallyCenteredModal(props) {
                     <option>Others</option>
                   </Form.Select>
                   {/* <input
-                  style={{ width: "100%" }}
-                  className="form-control"
-                  type={"text"}
-                  name="firstname"
-                  //   value={user.name}
-                  //   onChange={getUserData}
-                  placeholder="Select Job Industry
-                  "
-                  required
-                /> */}
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="firstname"
+                //   value={user.name}
+                //   onChange={getUserData}
+                placeholder="Select Job Industry
+                "
+                required
+              /> */}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -138,22 +287,27 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Sub Job Function
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, jobSubFunction: e.target.value })
+                    }
+                  >
                     <option value="DEFAULT" disabled="">
                       Sub Job Function
                     </option>
                   </Form.Select>
                   {/* <input
-                  style={{ width: "100%" }}
-                  className="form-control"
-                  type={"text"}
-                  name="firstname"
-                  //   value={user.name}
-                  //   onChange={getUserData}
-                  placeholder="Select Job Industry
-                  "
-                  required
-                /> */}
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="firstname"
+                //   value={user.name}
+                //   onChange={getUserData}
+                placeholder="Select Job Industry
+                "
+                required
+              /> */}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -161,7 +315,12 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Job Location
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, location: e.target.value })
+                    }
+                  >
                     <option value="DEFAULT" disabled="">
                       Select Job Location
                     </option>
@@ -189,16 +348,16 @@ function MyVerticallyCenteredModal(props) {
                     <option>Others</option>
                   </Form.Select>
                   {/* <input
-                  style={{ width: "100%" }}
-                  className="form-control"
-                  type={"text"}
-                  name="firstname"
-                  //   value={user.name}
-                  //   onChange={getUserData}
-                  placeholder="Select Job Industry
-                  "
-                  required
-                /> */}
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="firstname"
+                //   value={user.name}
+                //   onChange={getUserData}
+                placeholder="Select Job Industry
+                "
+                required
+              /> */}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -209,15 +368,15 @@ function MyVerticallyCenteredModal(props) {
                   <CKEditor
                     editor={ClassicEditor}
                     data="<p>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-                      standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
-                      scramble.</p>"
+                    standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
+                    scramble.</p>"
                     onReady={(editor) => {
                       // You can store the "editor" and use when it is needed.
                       console.log("Editor is ready to use!", editor);
                     }}
                     onChange={(event, editor) => {
                       const data = editor.getData();
-                      console.log({ event, editor, data });
+                      setJobData({ ...jobData, description: data });
                     }}
                     onBlur={(event, editor) => {
                       console.log("Blur.", editor);
@@ -236,15 +395,16 @@ function MyVerticallyCenteredModal(props) {
                   <CKEditor
                     editor={ClassicEditor}
                     data="<p>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-                      standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
-                      scramble.</p>"
+                    standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
+                    scramble.</p>"
                     onReady={(editor) => {
                       // You can store the "editor" and use when it is needed.
                       console.log("Editor is ready to use!", editor);
                     }}
                     onChange={(event, editor) => {
                       const data = editor.getData();
-                      console.log({ event, editor, data });
+                      // console.log({ event, editor, data });
+                      setJobData({ ...jobData, requirements: data });
                     }}
                     onBlur={(event, editor) => {
                       console.log("Blur.", editor);
@@ -255,7 +415,7 @@ function MyVerticallyCenteredModal(props) {
                   />
                 </fieldset>
               </Col>
-              <Col lg="12">
+              {/* <Col lg="12">
                 <fieldset>
                   <label className="text-lg" style={{ width: "100%" }}>
                     Profession
@@ -269,33 +429,41 @@ function MyVerticallyCenteredModal(props) {
                     //   value={user.name}
                     //   onChange={getUserData}
                     placeholder="Enter Profession
-                  "
+                "
                     required
+                    onChange={(e) =>
+                      setJobData({ ...jobData, profession: e.target.value })
+                    }
                   />
                 </fieldset>
-              </Col>
+              </Col> */}
               <Col lg="12">
                 <fieldset>
                   <label className="text-lg" style={{ width: "100%" }}>
                     Education Level
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, educationLevel: e.target.value })
+                    }
+                  >
                     <option>Select Education level</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
                   </Form.Select>
                   {/* <input
-                  style={{ width: "100%" }}
-                  className="form-control"
-                  type={"text"}
-                  name="firstname"
-                  //   value={user.name}
-                  //   onChange={getUserData}
-                  placeholder="Select Job Industry
-                  "
-                  required
-                /> */}
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="firstname"
+                //   value={user.name}
+                //   onChange={getUserData}
+                placeholder="Select Job Industry
+                "
+                required
+              /> */}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -303,70 +471,50 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Employment Type
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, empType: e.target.value })
+                    }
+                  >
                     <option>Select Employement Type</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
                   </Form.Select>
                   {/* <input
-                  style={{ width: "100%" }}
-                  className="form-control"
-                  type={"text"}
-                  name="firstname"
-                  //   value={user.name}
-                  //   onChange={getUserData}
-                  placeholder="Select Job Industry
-                  "
-                  required
-                /> */}
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="firstname"
+                //   value={user.name}
+                //   onChange={getUserData}
+                placeholder="Select Job Industry
+                "
+                required
+              /> */}
                 </fieldset>
               </Col>
               <Col lg="12">
                 <fieldset>
                   <label className="text-lg" style={{ width: "100%" }}>
-                    Profession
+                    Project Timeline
                   </label>
                 </fieldset>
               </Col>
-              {/* <Container>
-                  <Row>
-                    <Col lg="6">
-                      <label className="text-lg">Start :</label>
-                      <input
-                        style={{ width: "100%" }}
-                        className="form-control"
-                        type={"date"}
-                        name="firstname"
-                        //   value={user.name}
-                        //   onChange={getUserData}
-                        placeholder="Minimum Salary"
-                        required
-                      />
-                    </Col>
-                    <Col lg="6">
-                      <label className="text-lg">End :</label>
-                      <input
-                        style={{ width: "100%" }}
-                        className="form-control mx-2"
-                        type={"date"}
-                        name="firstname"
-                        //   value={user.name}
-                        //   onChange={getUserData}
-                        placeholder="Maximum Salary
-                  "
-                        required
-                      />
-                    </Col>
-                  </Row>
-                </Container> */}
               <Container>
                 <Row>
                   <Col>
-                    <label className="text-lg" style={{ color: "#7A7979" }}>
+                    <label className="text-l" style={{ color: "#7A7979" }}>
                       Start :
                     </label>
                     <input
+                      onChange={(e) =>
+                        setIsProjectTimeline({
+                          ...isProjectTimeline,
+                          gte: e.target.value,
+                        })
+                      }
                       style={{ width: "100%" }}
                       className="form-control"
                       type={"date"}
@@ -378,10 +526,16 @@ function MyVerticallyCenteredModal(props) {
                     />
                   </Col>
                   <Col>
-                    <label className="text-lg" style={{ color: "#7A7979" }}>
+                    <label className="text-l" style={{ color: "#7A7979" }}>
                       End :
                     </label>
                     <input
+                      onChange={(e) =>
+                        setIsProjectTimeline({
+                          ...isProjectTimeline,
+                          lte: e.target.value,
+                        })
+                      }
                       style={{ width: "100%" }}
                       className="form-control mx-2"
                       type={"date"}
@@ -389,7 +543,7 @@ function MyVerticallyCenteredModal(props) {
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Start
-                  "
+                "
                       required
                     />
                   </Col>
@@ -398,25 +552,81 @@ function MyVerticallyCenteredModal(props) {
               <Col lg="12">
                 <fieldset>
                   <label className="text-lg" style={{ width: "100%" }}>
+                    Profession
+                  </label>
+                  <input
+                    style={{ width: "100%" }}
+                    className="form-control"
+                    name="firstname"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, profession: e.target.value })
+                    }
+                    //   value={user.name}
+                    //   onChange={getUserData}
+                    placeholder="Enter Profession"
+                    required
+                  />
+                </fieldset>
+              </Col>
+              {/* <Container>
+                <Row>
+                  <Col lg="6">
+                    <label className="text-l">Start :</label>
+                    <input
+                      style={{ width: "100%" }}
+                      className="form-control"
+                      type={"date"}
+                      name="firstname"
+                      //   value={user.name}
+                      //   onChange={getUserData}
+                      placeholder="Minimum Salary"
+                      required
+                    />
+                  </Col>
+                  <Col lg="6">
+                    <label className="text-l">End :</label>
+                    <input
+                      style={{ width: "100%" }}
+                      className="form-control mx-2"
+                      type={"date"}
+                      name="firstname"
+                      //   value={user.name}
+                      //   onChange={getUserData}
+                      placeholder="Maximum Salary
+                "
+                      required
+                    />
+                  </Col>
+                </Row>
+              </Container> */}
+
+              <Col lg="12">
+                <fieldset>
+                  <label className="text-lg" style={{ width: "100%" }}>
                     Mode of Work
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, madeOfWork: e.target.value })
+                    }
+                  >
                     <option>Select Mode of Work</option>
                     <option value="1">One</option>
                     <option value="2">Two</option>
                     <option value="3">Three</option>
                   </Form.Select>
                   {/* <input
-                  style={{ width: "100%" }}
-                  className="form-control"
-                  type={"text"}
-                  name="firstname"
-                  //   value={user.name}
-                  //   onChange={getUserData}
-                  placeholder="Select Job Industry
-                  "
-                  required
-                /> */}
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="firstname"
+                //   value={user.name}
+                //   onChange={getUserData}
+                placeholder="Select Job Industry
+                "
+                required
+              /> */}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -430,10 +640,13 @@ function MyVerticallyCenteredModal(props) {
                     className="form-control"
                     type={"number"}
                     name="firstname"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, noOfOpenings: e.target.value })
+                    }
                     //   value={user.name}
                     //   onChange={getUserData}
                     placeholder="Enter No. of Openings
-                  "
+                "
                     required
                   />
                 </fieldset>
@@ -443,7 +656,12 @@ function MyVerticallyCenteredModal(props) {
                   <label className="text-lg" style={{ width: "100%" }}>
                     Salary Info
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select
+                    aria-label="Default select example"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryCurrency: e.target.value })
+                    }
+                  >
                     <option value="DEFAULT" disabled="">
                       Currency
                     </option>
@@ -457,22 +675,22 @@ function MyVerticallyCenteredModal(props) {
                   </Form.Select>
 
                   {/* <input
-                  style={{ width: "100%" }}
-                  className="form-control"
-                  type={"text"}
-                  name="firstname"
-                  //   value={user.name}
-                  //   onChange={getUserData}
-                  placeholder="Select Job Industry
-                  "
-                  required
-                /> */}
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="firstname"
+                //   value={user.name}
+                //   onChange={getUserData}
+                placeholder="Select Job Industry
+                "
+                required
+              /> */}
                 </fieldset>
               </Col>
               <Container>
                 <Row>
                   <Col lg="6">
-                    <label className="text-lg" style={{ color: "#7A7979" }}>
+                    <label className="text-l" style={{ color: "#7A7979" }}>
                       Min :
                     </label>
                     <input
@@ -480,6 +698,12 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control"
                       type={"number"}
                       name="firstname"
+                      onChange={(e) =>
+                        setisSalaryRange({
+                          ...isSalaryRange,
+                          gte: e.target.value,
+                        })
+                      }
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Minimum Salary"
@@ -487,7 +711,7 @@ function MyVerticallyCenteredModal(props) {
                     />
                   </Col>
                   <Col lg="6">
-                    <label className="text-lg" style={{ color: "#7A7979" }}>
+                    <label className="text-l" style={{ color: "#7A7979" }}>
                       Max :
                     </label>
                     <input
@@ -495,10 +719,16 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control mx-2"
                       type={"number"}
                       name="firstname"
+                      onChange={(e) =>
+                        setisSalaryRange({
+                          ...isSalaryRange,
+                          lte: e.target.value,
+                        })
+                      }
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Maximum Salary
-                  "
+                "
                       required
                     />
                   </Col>
@@ -512,14 +742,17 @@ function MyVerticallyCenteredModal(props) {
                     name="radios"
                     class="form-check-input"
                     id="exampleRadio1"
+                    value="Salary Negotiable"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryType: e.target.value })
+                    }
+                  />
                   <label
                     class="form-check-label"
                     for="exampleRadio1"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Salary Negotiable
                   </label>
                   <input
@@ -527,14 +760,17 @@ function MyVerticallyCenteredModal(props) {
                     name="radios"
                     class="form-check-input"
                     id="exampleRadio2"
+                    value="Project Based"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryType: e.target.value })
+                    }
+                  />
                   <label
                     class="form-check-label"
                     for="exampleRadio2"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Project Based
                   </label>
                   <input
@@ -543,13 +779,16 @@ function MyVerticallyCenteredModal(props) {
                     class="form-check-input"
                     id="exampleRadio3"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    value="Others"
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryType: e.target.value })
+                    }
+                  />
                   <label
                     class="form-check-label"
                     for="exampleRadio3"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Others
                   </label>
                 </fieldset>
@@ -562,14 +801,17 @@ function MyVerticallyCenteredModal(props) {
                     class="form-check-input"
                     name="bsradio"
                     id="radio1"
+                    value="Per Day"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                    }
+                  />
                   <label
                     for="radio1"
                     class="form-check-label pl-2"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Per Day
                   </label>
                   <input
@@ -577,14 +819,17 @@ function MyVerticallyCenteredModal(props) {
                     class="form-check-input"
                     name="bsradio"
                     id="radio2"
+                    value="per Week"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                    }
+                  />
                   <label
                     for="radio2"
                     class="form-check-label pl-2"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Per Week
                   </label>
                   <input
@@ -592,14 +837,17 @@ function MyVerticallyCenteredModal(props) {
                     class="form-check-input"
                     name="bsradio"
                     id="radio3"
+                    value="per Month"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                    }
+                  />
                   <label
                     for="radio3"
                     class="form-check-label pl-2"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Per Month
                   </label>
                   <input
@@ -607,14 +855,17 @@ function MyVerticallyCenteredModal(props) {
                     class="form-check-input"
                     name="bsradio"
                     id="radio4"
+                    value="others"
                     style={{ marginLeft: "60px" }}
-                  />{" "}
+                    onChange={(e) =>
+                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                    }
+                  />
                   <label
                     for="radio4"
                     class="form-check-label pl-2"
                     style={{ color: "#7A7979" }}
                   >
-                    {" "}
                     Others
                   </label>
                 </fieldset>
@@ -630,12 +881,15 @@ function MyVerticallyCenteredModal(props) {
                     <input
                       style={{ width: "100%" }}
                       className="form-control"
-                      type={"date"}
                       name="firstname"
                       //   value={user.name}
                       //   onChange={getUserData}
-                      placeholder="Enter No. of Openings
-                  "
+                      disabled
+                      value={`${date.getDate()}-${
+                        date.getMonth() + 1
+                      }-${date.getFullYear()}`}
+                      placeholder="Enter No. of Openings"
+                      // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
                     />
                   </fieldset>
@@ -652,10 +906,11 @@ function MyVerticallyCenteredModal(props) {
                       className="form-control"
                       type={"email"}
                       name="firstname"
+                      onChange={(e) => setIsEmail(e.target.value)}
                       //   value={user.name}
                       //   onChange={getUserData}
                       placeholder="Enter Additional Emails
-                  "
+                "
                       required
                     />
                   </fieldset>
@@ -674,19 +929,21 @@ function MyVerticallyCenteredModal(props) {
         </Button>
         <Button
           style={{ background: "none", color: "#C1C1C1" }}
-          onClick={props.onHide}
+          // onClick={props.onHide}
+          onClick={() => draftFunc()}
         >
           Save as Draft
         </Button>
         <Button
           style={{ background: "none", color: "#C1C1C1" }}
-          onClick={props.onHide}
+          // onClick={props.onHide}
+          onClick={() => previewFunc()}
         >
           Preview
         </Button>
         <Button
           style={{ background: "none", color: "#39BEC1" }}
-          onClick={props.post}
+          onClick={() => PostFunc()}
         >
           Post
         </Button>
@@ -694,6 +951,7 @@ function MyVerticallyCenteredModal(props) {
     </Modal>
   );
 }
+
 const ReadMore = ({ children }) => {
   const text = children;
   const [isReadMore, setIsReadMore] = useState(true);

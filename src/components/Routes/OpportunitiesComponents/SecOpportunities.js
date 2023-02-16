@@ -5,6 +5,30 @@ import { BsArrowBarDown, BsBookmark } from "react-icons/bs";
 import Modal from "react-bootstrap/Modal";
 
 export const SecOpportunities = () => {
+  const data = [
+    { id: 1, name: "Item 1" },
+    { id: 2, name: "Item 2" },
+    { id: 3, name: "Item 3" },
+    { id: 4, name: "Item 4" },
+    { id: 5, name: "Item 5" },
+    { id: 6, name: "Item 6" },
+    { id: 7, name: "Item 7" },
+    { id: 8, name: "Item 8" },
+    { id: 9, name: "Item 9" },
+    { id: 10, name: "Item 10" },
+    { id: 11, name: "Item 11" },
+    { id: 12, name: "Item 12" },
+    { id: 13, name: "Item 13" },
+    { id: 14, name: "Item 14" },
+    { id: 15, name: "Item 15" },
+  ];
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 2;
+  const totalItems = data.length;
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   const [searchShow, setSearchShow] = useState(false);
   const [modalShow, setModalShow] = React.useState(false);
 
@@ -444,7 +468,221 @@ export const SecOpportunities = () => {
             </div>
           </Col>
         </Row>{" "}
-        {searchData?.data?.length > 0 &&
+        <div>
+          {searchData?.data?.length > 0 &&
+            searchData?.data
+              ?.filter((item, index) => {
+                const startIndex = (currentPage - 1) * itemsPerPage;
+                const endIndex = startIndex + itemsPerPage;
+                return index >= startIndex && index < endIndex;
+              })
+              .map((values, keys) => (
+                <Row>
+                  <Col lg="12" key={keys}>
+                    <div className="p-3">
+                      <div className="boxshad">
+                        <Row>
+                          <Col lg="7">
+                            {/* <p
+                                    className="py-2"
+                                    style={{
+                                      float: "right",
+                                      color: "#7A7979",
+                                      fontSize: "20px",
+                                      display: "flex",
+                                    }}
+                                  >
+                                    <BsBookmark /> Bookmark
+                                  </p> */}
+                            <h2
+                              className="text-3xl"
+                              style={{ color: "#39BEC1" }}
+                            >
+                              {values?._source?.title}
+                            </h2>
+                            <p style={{ color: "#7A7979" }} className="text-lg">
+                              {values?._source?.empType}
+                            </p>
+                          </Col>
+                          <Col lg="5" className="webkit-right">
+                            <Button
+                              className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
+                              style={{ background: "#39BEC1", border: "none" }}
+                              // onClick={() => navigate("/FreelancerProfile", { state: { values } })}
+                            >
+                              APPLY
+                            </Button>
+
+                            <Button
+                              onClick={() => modalshow(values)}
+                              className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
+                              style={{ background: "#C1C1C1", border: "none" }}
+                            >
+                              VIEW MORE DETAIL
+                            </Button>
+                            {values.clicked == true && (
+                              <MyVerticallyCenteredModal
+                                show={modalShow}
+                                props={values}
+                                onHide={() => modalshow(values)}
+                              />
+                            )}
+                            {/* <Button
+                                    className="text-white border-rounded py-2 px-3 w-48"
+                                    style={{ background: "#39BEC1", border: "none" }}
+                                  >
+                                    apply
+                                  </Button>
+                                  <Button
+                                    className="text-white border-rounded py-2 px-3 w-48 mx-2"
+                                    style={{ background: "#39BEC1", border: "none" }}
+                                  >
+                                    view more details
+                                  </Button> */}
+                            <p style={{ color: "#7A7979" }} className="text-lg">
+                              Posted Date :
+                              {values?._source?.postedDate.substring(0, 10)}
+                              &nbsp;&nbsp; &nbsp;&nbsp;
+                              <span>
+                                Expiry Date :
+                                {values?._source?.expiryDate.substring(0, 10)}
+                              </span>
+                            </p>
+                          </Col>
+                        </Row>
+                        <Row className="align-items-center block-for-res">
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Company Name
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {values?._source?.companyName}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Job Industry
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {values?._source?.industry}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Salary Range
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {values?._source?.salaryRange?.gte +
+                                  " - " +
+                                  values?._source?.salaryRange?.lte}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Location
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {values?._source?.location}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                No. of candidates
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {values?._source?.noOfOpenings}
+                              </h2>
+                            </div>
+                          </Col>
+                        </Row>
+                        <hr className="my-2" />
+                        <Row className="align-items-center">
+                          <Col lg="10">
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Job Description
+                              </h2>
+                              <h2
+                                className="text-l py-3"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {values?._source?.description.replace(
+                                  /(<([^>]+)>)/gi,
+                                  ""
+                                )}
+                              </h2>
+                            </div>
+                          </Col>
+
+                          <Col lg="2">
+                            <p
+                              className="py-2"
+                              style={{
+                                float: "right",
+                                color: "#7A7979",
+                                fontSize: "25px",
+                                display: "flex",
+                              }}
+                            >
+                              <BsBookmark />
+                            </p>
+                            {/* <Button
+                                    className="text-white border-rounded px-3"
+                                    style={{ background: "#39BEC1", border: "none" }}
+                                  >
+                                    View Profile
+                                  </Button> */}
+                          </Col>
+                        </Row>
+                      </div>
+                    </div>
+                  </Col>
+                </Row>
+              ))}
+          <Row>
+            <Col>
+              <div className="dddrrr">
+                {Array.from({
+                  length: Math.ceil(totalItems / itemsPerPage),
+                }).map((_, index) => (
+                  <button
+                    className="pagination py-2 px-3"
+                    key={index}
+                    onClick={() => handlePageChange(index + 1)}
+                    disabled={currentPage === index + 1}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+            </Col>
+          </Row>
+        </div>
+        {/* {searchData?.data?.length > 0 &&
           searchData?.data?.map((values, keys) => {
             return (
               <Row>
@@ -453,17 +691,7 @@ export const SecOpportunities = () => {
                     <div className="boxshad">
                       <Row>
                         <Col lg="7">
-                          {/* <p
-                                className="py-2"
-                                style={{
-                                  float: "right",
-                                  color: "#7A7979",
-                                  fontSize: "20px",
-                                  display: "flex",
-                                }}
-                              >
-                                <BsBookmark /> Bookmark
-                              </p> */}
+                          
                           <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
                             {values?._source?.title}
                           </h2>
@@ -475,7 +703,6 @@ export const SecOpportunities = () => {
                           <Button
                             className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
                             style={{ background: "#39BEC1", border: "none" }}
-                            // onClick={() => navigate("/FreelancerProfile", { state: { values } })}
                           >
                             APPLY
                           </Button>
@@ -494,23 +721,14 @@ export const SecOpportunities = () => {
                               onHide={() => modalshow(values)}
                             />
                           )}
-                          {/* <Button
-                                className="text-white border-rounded py-2 px-3 w-48"
-                                style={{ background: "#39BEC1", border: "none" }}
-                              >
-                                apply
-                              </Button>
-                              <Button
-                                className="text-white border-rounded py-2 px-3 w-48 mx-2"
-                                style={{ background: "#39BEC1", border: "none" }}
-                              >
-                                view more details
-                              </Button> */}
+                    
                           <p style={{ color: "#7A7979" }} className="text-lg">
-                            Posted Date : {values?._source?.postedDate}{" "}
+                            Posted Date :
+                            {values?._source?.postedDate.substring(0, 10)}
                             &nbsp;&nbsp; &nbsp;&nbsp;
                             <span>
-                              Expiry Date : {values?._source?.expiryDate}{" "}
+                              Expiry Date :
+                              {values?._source?.expiryDate.substring(0, 10)}
                             </span>
                           </p>
                         </Col>
@@ -593,7 +811,10 @@ export const SecOpportunities = () => {
                               className="text-l py-3"
                               style={{ color: "#7A7979" }}
                             >
-                              {values?._source?.description}
+                              {values?._source?.description.replace(
+                                /(<([^>]+)>)/gi,
+                                ""
+                              )}
                             </h2>
                           </div>
                         </Col>
@@ -610,12 +831,6 @@ export const SecOpportunities = () => {
                           >
                             <BsBookmark />
                           </p>
-                          {/* <Button
-                                className="text-white border-rounded px-3"
-                                style={{ background: "#39BEC1", border: "none" }}
-                              >
-                                View Profile
-                              </Button> */}
                         </Col>
                       </Row>
                     </div>
@@ -623,7 +838,7 @@ export const SecOpportunities = () => {
                 </Col>
               </Row>
             );
-          })}
+          })} */}
       </Container>
     </Container>
   );
