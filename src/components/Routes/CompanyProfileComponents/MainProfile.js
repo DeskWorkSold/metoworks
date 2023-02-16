@@ -23,8 +23,7 @@ import axios from '../../../utils/axios.api'
 
 function MyVerticallyCenteredModal(props) {
   const [isSalaryRange, setisSalaryRange] = useState({
-    gte : '',
-    lte : ''
+ 
   })
   const [isProjectTimeline, setIsProjectTimeline] = useState({
     gte : '',
@@ -38,7 +37,6 @@ function MyVerticallyCenteredModal(props) {
     title : '',
     industry : '',
     jobFunction : '',
-    jobSubFunction : 'dummy',
     location : '',
     description : '',
     requirements : '',
@@ -70,7 +68,7 @@ function MyVerticallyCenteredModal(props) {
       title : jobData.title,
       industry : jobData.industry,
       jobFunction : jobData.jobFunction,
-      jobSubFunction : 'dummy',
+      // jobSubFunction : 'dummy',
       location : jobData.location,
       description : jobData.description,
       requirements : jobData.requirements,
@@ -84,23 +82,50 @@ function MyVerticallyCenteredModal(props) {
       madeOfWork : jobData.madeOfWork,
       noOfOpenings : jobData.noOfOpenings,
       salaryCurrency : jobData.salaryCurrency,
-      salaryRange : { gte : isSalaryRange.gte,
-    lte : isSalaryRange.lte},
+      salaryRange : { gte : 15000,
+    lte :1600},
       // salaryType : '', /// look after
       salaryPayFreq : jobData.salaryPayFreq,
       additionalEmails : [isEmail],
        closed : false,
        submitted : true
     }
-    console.log(Data, 'daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa');
-    if(Data.submitted) {
+    // let dummyData ={ 
+    //   "title": "Associate Software Engineer",
+    //   "industry": "Real Estate",
+    //   "jobFunction": "IT Professionals (Specific Fields)  Fin Tech",
+    //   "location": "Central and Western",
+    //   "description": "Enim nihil expedita est doloribus corporis. Consequuntur fugiat aliquam dicta non repudiandae ex. Nostrum perferendis officiis. Voluptas qui doloribus quidem id. Soluta inventore culpa et non officia occaecati. Non doloribus consectetur omnis et rerum.\n \rAspernatur delectus excepturi facilis molestiae rerum non quia. Quia molestias nihil vel id dignissimos placeat dolorum. Deserunt alias asperiores possimus quia. Enim nesciunt nam molestiae rerum occaecati quia recusandae. Distinctio quae temporibus eaque.\n \rUllam qui rem laudantium blanditiis qui voluptatem ea eum. Sint neque est non in nam rerum sit qui omnis. Aut pariatur consequuntur et magni quam consequuntur. Ea aliquam officia tempora qui qui corporis eaque necessitatibus aut. Rerum accusamus pariatur. Qui voluptatem natus laudantium sunt eaque mollitia aspernatur modi omnis.",
+    //   "requirements": "Beatae quibusdam qui rerum sapiente magni. Necessitatibus illo dolor ipsum et est veniam quidem numquam. Vel omnis minima qui et. Illo accusantium recusandae aut beatae voluptas blanditiis cupiditate. Cumque illum quo consequatur dolor velit architecto. Deserunt eius voluptas ipsa aperiam cupiditate est ratione cum.\n \rCumque aut temporibus unde provident asperiores eos dolorum deserunt. Sunt accusantium a numquam quis minus. Aut voluptatem ratione optio aut sunt adipisci consequatur quos. Eum perspiciatis cum consequatur. Non dolorem qui praesentium. Adipisci et reprehenderit perspiciatis sit.\n \rSed quod rerum nulla omnis nisi nostrum distinctio. Dolorum vel tempora. Amet quas quos tempore vel aspernatur et illum voluptates. Laboriosam et odit et. Deserunt repellat provident ut neque voluptas rem veniam dolorem dolores. Eaque voluptatibus laborum vel exercitationem iste sint dolorem ipsum.",
+    //   "profession": "Central Accounts Officer",
+    //   "projectTimeline": {
+    //     "gte": "2022-01-07T16:55:51.188Z",
+    //     "lte": "2022-01-07T16:55:51.188Z"
+    //   },
+    //   "noOfOpenings": 10,
+    //   "postedDate": "2022-01-07T16:55:51.188Z",
+    //   "salaryRange": {
+    //     "gte": 200000,
+    //     "lte": 250000
+    //   },
+    //   "expiryDate": "2022-01-07",
+    //   "closed": false,
+    //   "modeOfWork": "hybrid",
+    //   "submitted": true,
+    //   "educationLevel": "ASSOCIATE_DEGREE",
+    //   "empType": "PART_TIME",
+    //   "salaryPayFreq": "PER_MONTH",
+    //   "salaryCurrency": "HKD",
+    //   "additionalEmails": ["hello@dom.com", "freelancer@dom.com"]
+    // }
+    // console.log(Data, 'daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa');
     axios.post('api/v1/job-post', Data).then((res) => {
       console.log(res, 'data sended successfully');
       // navigate('/CompanyProfile')
     }).catch((err) => {
       console.log(err);
     })
-  }
+  
   }
 
   const draftFunc = () => {

@@ -225,7 +225,9 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Industry
                       </label>
-                      <Form.Select aria-label="Default select example">
+                      <Form.Select aria-label="Default select example"
+                      // onChange={}
+                      >
                         <option>Select Job Industry</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
