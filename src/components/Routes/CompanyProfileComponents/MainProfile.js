@@ -38,7 +38,7 @@ function MyVerticallyCenteredModal(props) {
     title: "",
     industry: "",
     jobFunction: "",
-    // jobSubFunction: "dummy",
+    jobSubFunction: "dummy",
     location: "",
     description: "",
     requirements: "",
@@ -72,42 +72,42 @@ function MyVerticallyCenteredModal(props) {
       title: jobData.title,
       industry: jobData.industry,
       jobFunction: jobData.jobFunction,
+      jobSubFunction: "dummy",
       location: jobData.location,
       description: jobData.description,
       requirements: jobData.requirements,
       profession: jobData.profession,
-      projectTimeline: {
-        gte: isProjectTimeline.gte,
-        lte: isProjectTimeline.lte,
-      },
-      noOfOpenings: jobData.noOfOpenings,
-      postedDate: new Date(),
-      salaryRange: {
-        gte: Number(isSalaryRange.gte),
-        lte: Number(isSalaryRange.lte),
-      },
-      expiryDate: new Date(),
-      closed: false,
-      modeOfWork: jobData.madeOfWork,
-      submitted: true,
       educationLevel: jobData.educationLevel,
       empType: jobData.empType,
-      salaryPayFreq: jobData.salaryPayFreq,
+      expiryDate: jobData.expiryDate,
+      projectTimeline: {
+        gte: isProjectTimeline.gte,
+        lte: isProjectTimeline.gte,
+      },
+      postedDate: jobData.postedDate,
+      expiryDate: jobData.expiryDate,
+      madeOfWork: jobData.madeOfWork,
+      noOfOpenings: jobData.noOfOpenings,
       salaryCurrency: jobData.salaryCurrency,
+      salaryRange: { gte: isSalaryRange.gte, lte: isSalaryRange.lte },
+      // salaryType : '', /// look after
+      salaryPayFreq: jobData.salaryPayFreq,
       additionalEmails: [isEmail],
+      closed: false,
+      submitted: true,
     };
-
     console.log(Data, "daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa");
-    axios
-      .post("api/v1/job-post", Data)
-      .then((res) => {
-        console.log(res, "data sended successfully");
-
-        // navigate('/CompanyProfile')
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (Data.submitted) {
+      axios
+        .post("api/v1/job-post", Data)
+        .then((res) => {
+          console.log(res, "data sended successfully");
+          // navigate('/CompanyProfile')
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const draftFunc = () => {
