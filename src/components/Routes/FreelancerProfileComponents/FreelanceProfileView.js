@@ -111,7 +111,7 @@ export const FreelanceProfileView = () => {
     visaPermit: "",
     idCard: "",
     gender: "",
-    isIdCardPublic: "",
+    isIdCardPublic: false,
     aboutMe: "",
     phoneNumber: "",
     dob: "",
@@ -124,6 +124,9 @@ export const FreelanceProfileView = () => {
       lte: "",
     },
   });
+
+  console.log(profileData, "profileeee");
+
   const [isIdPublic, setIdPublic] = useState(profileData?.isIdCardPublic);
   const [profileExp, setProfileExp] = useState({});
   const [experienceId, setExperienceId] = useState("");
@@ -133,7 +136,12 @@ export const FreelanceProfileView = () => {
   const [isLanguage, setIsLanguage] = useState({});
   const [isEducationData, setIsEducationData] = useState({});
   const [isAchievementData, setIsAchievementData] = useState({});
-  const [isExperienceData, setIsExperienceData] = useState({});
+  const [isExperienceData, setIsExperienceData] = useState({
+    duration: {
+      gte: durationData.gte,
+      lte: durationData.lte,
+    },
+  });
   const [isEditExperienceData, setEditIsExperienceData] = useState({
     id: experienceId,
     title: "",
@@ -160,8 +168,8 @@ export const FreelanceProfileView = () => {
 
   const [profileImg, setProfileImg] = useState("");
   const navigate = useNavigate();
-  const [thumbnail, setThumbnail] = useState('')
-  console.log(thumbnail, 'thumbnail');
+  const [thumbnail, setThumbnail] = useState("");
+  console.log(thumbnail, "thumbnail");
 
   // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
   // console.log(profileData, "profileData");
@@ -285,7 +293,7 @@ export const FreelanceProfileView = () => {
       });
 
     axios
-      .get(`api/v1/user/asset/cv`,)
+      .get(`api/v1/user/asset/cv`)
       .then((res) => {
         // console.log(res, "Initial Data");
         const file = new Blob([res]);
@@ -299,59 +307,90 @@ export const FreelanceProfileView = () => {
         console.log(err);
       });
 
-      profileImageFunc()
+    profileImageFunc();
   };
 
   const profileImageFunc = () => {
     axios
-    .get(`api/v1/user/asset/thumbnail`, { responseType: "arraybuffer" })
-    .then((res) => {
-      let buffer = require("buffer");
-      const data = `data:${
-        res.headers["content-type"]
-      };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
-      console.log("res", res);
-      console.log("imagee", data);
-      setProfileImg(data);
-       localStorage.setItem('profileImg', data)
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
+      .get(`api/v1/user/asset/thumbnail`, { responseType: "arraybuffer" })
+      .then((res) => {
+        let buffer = require("buffer");
+        const data = `data:${
+          res.headers["content-type"]
+        };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
+        console.log("res", res);
+        console.log("imagee", data);
+        setProfileImg(data);
+        localStorage.setItem("profileImg", data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const profileFunc = () => {
-    let isData = {
-      firstName: profileData.firstName,
-      lastName: profileData.lastName,
-      visaPermit: profileData.visaPermit,
-      idCard: profileData.idCard,
-      gender: profileData.gender,
-      isIdCardPublic: profileData.isIdCardPublic,
-      aboutMe: profileData.aboutMe,
-      phoneNumber: profileData.phoneNumber,
-      dob: profileData.dob,
-      country: profileData.country,
-      city: profileData.city,
-      address: profileData.address,
-      state: profileData.state,
-      salaryRange: {
-        gte: isSalaryRange.gte,
-        lte: isSalaryRange.lte,
-      },
+    // let isData = { data :{
+    //   firstName: profileData.data.firstName,
+    //   lastName: profileData.data.lastName,
+    //   visaPermit: profileData.data.visaPermit,
+    //   idCard: profileData.data.idCard.toString(),
+    //   gender: profileData.data.gender,
+    //   isIdCardPublic: profileData.data.isIdCardPublic,
+    //   aboutMe: profileData.data.aboutMe,
+    //   phoneNumber: profileData.data.phoneNumber,
+    //   dob: profileData.data.dob,
+    //   country: profileData.data.country,
+    //   city: profileData.data.city,
+    //   address: profileData.data.address,
+    //   state: profileData.data.state,
+    //   salaryRange: {
+    //     gte: isSalaryRange.gte,
+    //     lte: isSalaryRange.lte,
+
+    //   },
+    // },
+    // };
+    let myData = {
+      aboutMe: profileData.aboutMe ?? profileData.data.aboutMe,
+      address: profileData.address ?? profileData.data.address,
+      city: profileData.city ?? profileData.data.city,
+      country: profileData.country ?? profileData.data.country,
+      dob: profileData.dob ?? profileData.data.dob,
+      firstName: profileData.firstName ?? profileData.data.firstName,
+      gender: profileData.gender ?? profileData.data.gender,
+      idCard: profileData.idCard ?? profileData.data.idCard,
+      isIdCardPublic:
+        profileData.isIdCardPublic ?? profileData.data.isIdCardPublic,
+      lastName: profileData.lastName ?? profileData.data.lastName,
+      phoneNumber: profileData.phoneNumber ?? profileData.data.phoneNumber,
+      salaryRange:
+        isSalaryRange.gte && isSalaryRange.lte
+          ? { gte: isSalaryRange.lte, lte: isSalaryRange.gte }
+          : profileData.data.salaryRange,
+      state: profileData.state ?? profileData.data.state,
+      visaPermit: profileData.visaPermit ?? profileData.data.visaPermit,
     };
-    console.log(isData, "Dataaaaaaaaaaaaa");
-    if (isData) {
-      let formdata = new FormData();
-      Object.entries(profileData).map(([key, value]) => {
-        formdata.append(key, value);
-      });
+
+    console.log(myData, "myDataa");
+
+    // console.log(isData, "Dataaaaaaaaaaaaa");
+    // console.log(profileData, "profileData");
+    // isData.data = isData
+    // console.log(isData)
+    // let formdata = new FormData();
+    // console.log(formdata, "data");
+
+    if (myData) {
+      // Object.entries(profileData).map(([key, value]) => {
+      //   console.log(key,key)
+      //   console.log(value,"values")
+      //   formdata.append(key, value);
+      // });
+      // console.log(formdata, "formData");
       axios
-        .post(`api/v1/user/freelancer`, formdata)
+        .post(`api/v1/user/freelancer`, myData)
         .then((res) => {
-          // console.log(formdata);
-          // console.log(res, "profile data successfully added");
-          setProfileData(res.data);
+          initialFun();
           if (res.data) {
             setShow(false);
           }
@@ -363,22 +402,54 @@ export const FreelanceProfileView = () => {
   };
 
   const ProfileExp = () => {
+    console.log(profileExp, "profileExp");
+
+    console.log(isExperienceData, "experienceData");
+
+    console.log(profileData, "dataa");
+
+    profileExp.duration = durationData;
+
+    let myExperienceData = [...isExperienceData, profileExp];
+    console.log(myExperienceData, "experience");
+
+    profileData.data.experience = myExperienceData;
+
+    console.log(profileData, "profileAfter");
+    delete profileData.data.expYears;
+    delete profileData.data.createdAt;
+    delete profileData.data.updatedAt;
+    delete profileData.data.id;
+    delete profileData.data.email;
+
     axios
-      .post(`http://localhost:3000/v1/freelancerExp`, {
-        ...profileExp,
-        uid: userId,
-      })
+      .post(`api/v1/user/freelancer`, profileData.data)
       .then((res) => {
-        console.log(res, "profile data successfully added");
-        // setProfileExp(res.data, "ProfileExp");
-        // ProfileExpData(userId);
-        if (res) {
-          setShow1(false);
+        initialFun();
+        if (res.data) {
+          setShow3(false);
         }
       })
       .catch((err) => {
         console.log(err);
       });
+
+    // axios
+    //   .post(`api/v1/user/freelancer`, {
+    //     ...profileExp,
+    //     uid: userId,
+    //   })
+    //   .then((res) => {
+    //     console.log(res, "profile data successfully added");
+    //     // setProfileExp(res.data, "ProfileExp");
+    //     // ProfileExpData(userId);
+    //     if (res) {
+    //       setShow1(false);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   // const ProfileExpData = (id) => {
@@ -418,11 +489,11 @@ export const FreelanceProfileView = () => {
     if (isCheckBox === "true") {
       // alert('checkbox is false')
       setIsCheckBox("false");
-      setProfileExp({ ...profileExp, currentlyWorking: "off" });
+      setProfileExp({ ...profileExp, isCurrent: false });
     } else {
       // alert('checkbox is true')
       setIsCheckBox("true");
-      setProfileExp({ ...profileExp, currentlyWorking: "on" });
+      setProfileExp({ ...profileExp, isCurrent: true });
     }
   };
 
@@ -457,21 +528,6 @@ export const FreelanceProfileView = () => {
   //       console.log(err);
   //     });
   // };
-
-  const deleteEducationData = (id) => {
-    axios
-      .delete(`http://localhost:3000/v1/education/${id}`)
-      .then((res) => {
-        let data = Object.values(res.data.data);
-        // setIsLanguageData(data);
-        if (data) {
-          // educationData(userId)
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const achievementFunc = () => {
     let formdata = new FormData();
@@ -611,28 +667,29 @@ export const FreelanceProfileView = () => {
   };
 
   const updateProfileImage = (event) => {
-    setThumbnail(event.target.files[0])
-    if(thumbnail) {
-      onPostThumnail()
+    setThumbnail(event.target.files[0]);
+    if (thumbnail) {
+      onPostThumnail();
     }
-  }
+  };
 
   const onPostThumnail = () => {
     if (thumbnail) {
       const formData = new FormData();
       formData.append("thumbnail", thumbnail);
-      axios.post(`api/v1/user/asset/thumbnail`, formData)
-      .then((res) => {
-        console.log(res, 'img response');
-        if(res) {
-          profileImageFunc()
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-}
+      axios
+        .post(`api/v1/user/asset/thumbnail`, formData)
+        .then((res) => {
+          console.log(res, "img response");
+          if (res) {
+            profileImageFunc();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   const FileUploadComponent = () => {
     // alert('clicked')s
@@ -658,7 +715,7 @@ export const FreelanceProfileView = () => {
         <label>
           <Image
             onClick={() => FileUploadComponent()}
-            style={{ width: "100%", height : '100%' , borderRadius : '100%' }}
+            style={{ width: "100%", height: "100%", borderRadius: "100%" }}
             src={profileImg}
           />
           <input
@@ -666,9 +723,7 @@ export const FreelanceProfileView = () => {
             type="file"
             accept={accept}
             multiple
-            onChange={(e) => 
-              updateProfileImage(e)
-            }
+            onChange={(e) => updateProfileImage(e)}
           />
         </label>
       );
@@ -1072,18 +1127,22 @@ export const FreelanceProfileView = () => {
     setExperienceId(event.id);
   };
 
-  const deleteEducationsProfileData = (props) => {
+  // delete
+
+  const deleteExperienceProfileData = (props) => {
     // console.log(props?.props?.id);
-    const newData = isEducationData?.filter((x) => x?.id != props.props.id);
+    const newData = isExperienceData?.filter((x) => x?.id != props.props.id);
+    console.log(newData, "data");
     axios
       .post(`api/v1/user/freelancer`, { experience: newData })
       .then((res) => {
         // console.log(res.data, 'eeeeeeeeeeeeee');
         let data = res.data;
+        initialFun();
         console.log(res, "profile edit data successfully added");
         // ProfileExpData(userId);
         if (data) {
-          setShow5(false);
+          setShow1(false);
         }
       })
       .catch((err) => {
@@ -1091,7 +1150,6 @@ export const FreelanceProfileView = () => {
       });
   };
 
-  // delete
   function MyVerticallyCenteredModalDelete(props) {
     // console.log(props, "proooooooooops");
     return (
@@ -1123,7 +1181,7 @@ export const FreelanceProfileView = () => {
 
             <Button
               style={{ background: "none", color: "#39BEC1" }}
-              onClick={() => deleteEducationsProfileData(props)}
+              onClick={() => deleteExperienceProfileData(props)}
             >
               Confirm
             </Button>
@@ -1536,6 +1594,27 @@ export const FreelanceProfileView = () => {
     setEditIsEducationeData(event);
   };
   // delete
+  const deleteProfileEducationData = (event) => {
+    console.log(event, "event");
+    const newData = isEducationData?.filter((x) => x?.id != event.id);
+    console.log(newData, "data");
+    axios
+      .post(`api/v1/user/freelancer`, { education: newData })
+      .then((res) => {
+        // console.log(res.data, 'eeeeeeeeeeeeee');
+        let data = res.data;
+        initialFun();
+        console.log(res, "profile edit data successfully added");
+        // ProfileExpData(userId);
+        if (data) {
+          setShow3(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   function MyVerticallyCenteredModalEducationDelete(props) {
     // console.log(props, "proooooooooops");
     return (
@@ -1567,9 +1646,9 @@ export const FreelanceProfileView = () => {
 
             <Button
               style={{ background: "none", color: "#39BEC1" }}
-              onClick={props.post}
+              onClick={() => deleteProfileEducationData(props.props)}
             >
-              Send
+              Confirm
             </Button>
           </Modal.Footer>
         </Modal>
@@ -1590,6 +1669,7 @@ export const FreelanceProfileView = () => {
 
   const btnEducationDelete = (event) => {
     modalshow3(event);
+
     // setEditIsExperienceData(event);
   };
   // Education edit & delete End
@@ -1780,6 +1860,25 @@ export const FreelanceProfileView = () => {
   };
 
   // delete
+  const deleteProfileAchievementData = (event) => {
+    const newData = isAchievementData?.filter((x) => x?.id != event.id);
+    console.log(newData, "data");
+    axios
+      .post(`api/v1/user/freelancer`, { achievement: newData })
+      .then((res) => {
+        // console.log(res.data, 'eeeeeeeeeeeeee');
+        let data = res.data;
+        initialFun();
+        console.log(res, "profile edit data successfully added");
+        // ProfileExpData(userId);
+        if (data) {
+          setShow6(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   function MyVerticallyCenteredModalAchievementDelete(props) {
     // console.log(props, "proooooooooops");
     return (
@@ -1811,9 +1910,9 @@ export const FreelanceProfileView = () => {
 
             <Button
               style={{ background: "none", color: "#39BEC1" }}
-              onClick={props.post}
+              onClick={() => deleteProfileAchievementData(props.props)}
             >
-              Send
+              Confirm
             </Button>
           </Modal.Footer>
         </Modal>
@@ -1834,6 +1933,7 @@ export const FreelanceProfileView = () => {
 
   const btnAchieveDelete = (event) => {
     modalshow6(event);
+
     // setEditIsExperienceData(event);
   };
 
@@ -2335,6 +2435,27 @@ export const FreelanceProfileView = () => {
   };
 
   // delete
+
+  const deleteProfileLanguageData = (event) => {
+    const newData = isLanguageData?.filter((x) => x?.id != event.id);
+    console.log(newData, "data");
+    axios
+      .post(`api/v1/user/freelancer`, { language: newData })
+      .then((res) => {
+        // console.log(res.data, 'eeeeeeeeeeeeee');
+        let data = res.data;
+        initialFun();
+        console.log(res, "profile edit data successfully added");
+        // ProfileExpData(userId);
+        if (data) {
+          setShow8(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   function MyVerticallyCenteredModalLanguageDelete(props) {
     // console.log(props, "proooooooooops");
     return (
@@ -2366,7 +2487,7 @@ export const FreelanceProfileView = () => {
 
             <Button
               style={{ background: "none", color: "#39BEC1" }}
-              onClick={props.post}
+              onClick={() => deleteProfileLanguageData(props.props)}
             >
               Send
             </Button>
@@ -2392,35 +2513,35 @@ export const FreelanceProfileView = () => {
     // setEditIsExperienceData(event);
   };
 
-const [isOpenWork,setIsOpenToWork] = useState(false)
+  const [isOpenWork, setIsOpenToWork] = useState(false);
 
- const getOpenWork = () => {
+  useEffect(() => {
+    console.log(isOpenWork, "openWork");
+    const reqBody = {
+      isOpenToWork: isOpenWork,
+    };
 
-    setIsOpenToWork(isOpenWork ? false : true)
-    
+    reqBody.isOpenToWork = reqBody.isOpenToWork ? true : false;
 
- }
-   
-useEffect(()=>{
-  const reqBody = {
-    isOpenToWork: isOpenWork,
-  }; 
-  axios
-        .post(
-          `api/v1/user/freelancer`,
-          reqBody
-        )
-        .then((res) => {
-          // alert(isEditExperienceData.profession)
-          console.log(res, "education edit data successfully added");
-          if (res) {
-            initialFun()
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-},[isOpenWork])
+    console.log(reqBody, "req");
+
+    axios
+      .post(`api/v1/user/freelancer`, reqBody)
+      .then((res) => {
+        // alert(isEditExperienceData.profession)
+        console.log(res, "education edit data successfully added");
+        if (res) {
+          initialFun();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [isOpenWork]);
+
+  const getOpenWork = () => {
+    setIsOpenToWork(isOpenWork ? false : true);
+  };
 
   // Language edit & delete End
   return (
@@ -2522,7 +2643,7 @@ useEffect(()=>{
                         type="switch"
                         id="custom-switch"
                         defaultChecked={profileData?.data?.isOpenToWork}
-                        onClick = {()=>getOpenWork()}
+                        onClick={() => getOpenWork()}
                       />
                       <h2 className="text-2xl font-semibold pt-2">
                         Salary Range
@@ -2685,7 +2806,7 @@ useEffect(()=>{
                                   style={{ width: "100%" }}
                                   className="form-control"
                                   name="fname"
-                                  type={"Number"}
+                                  type={"text"}
                                   placeholder={profileData?.data?.idCard || ""}
                                   onChange={(e) =>
                                     setProfileData({
@@ -2706,20 +2827,29 @@ useEffect(()=>{
                                 >
                                   Visa/HK Permit
                                 </label>
-                                <Form.Select
-                                  aria-label="Default select example"
-                                  value={profileData?.data?.visaPermit || ""}
+                                <input
+                                  style={{ width: "100%" }}
+                                  className="form-control"
+                                  name="visaPermit"
+                                  type={"number"}
+                                  placeholder={profileData?.data?.idCard || ""}
                                   onChange={(e) =>
                                     setProfileData({
                                       ...profileData,
                                       visaPermit: e.target.value,
                                     })
                                   }
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
+                                />
+                                {/* <Form.Select
+                                  aria-label="Default select example"
+                                 
                                 >
                                   <option>Choose...</option>
                                   <option>Yes</option>
                                   <option>No</option>
-                                </Form.Select>
+                                </Form.Select> */}
                               </fieldset>
                             </Col>
                           </Row>
@@ -2761,7 +2891,6 @@ useEffect(()=>{
                               </label>
                               <Form.Select
                                 aria-label="Default select example"
-                                value={profileData?.data?.gender || ""}
                                 onChange={(e) =>
                                   setProfileData({
                                     ...profileData,
@@ -2837,7 +2966,6 @@ useEffect(()=>{
                                   className="form-control"
                                   name="email"
                                   type={"date"}
-                                  value={profileData?.data?.dob || ""}
                                   onChange={(e) =>
                                     setProfileData({
                                       ...profileData,
@@ -2967,7 +3095,7 @@ useEffect(()=>{
                               </label>
                               <Form.Select
                                 aria-label="Default select example"
-                                value={profileData?.salaryRange || ""}
+                                // value={profileData?.salaryRange || ""}
                                 // onChange={(e) =>
                                 //   setIsSalaryRange({...isSalaryRange, })
                                 // }
@@ -3434,11 +3562,11 @@ useEffect(()=>{
                                   className="form-control"
                                   name="email"
                                   type={"date"}
-                                  value={profileExp?.startDate || "startDate"}
+                                  // value={profileExp?.startDate || "startDate"}
                                   onChange={(e) =>
-                                    setProfileExp({
-                                      ...profileExp,
-                                      startDate: e.target.value,
+                                    setDurationData({
+                                      ...durationData,
+                                      gte: e.target.value,
                                     })
                                   }
                                   //   value={user.number}
@@ -3462,11 +3590,11 @@ useEffect(()=>{
                                   className="form-control"
                                   type={"date"}
                                   name="firstname"
-                                  value={profileExp?.endDate || "startDate"}
+                                  // value={profileExp?.endDate || "startDate"}
                                   onChange={(e) =>
-                                    setProfileExp({
-                                      ...profileExp,
-                                      endDate: e.target.value,
+                                    setDurationData({
+                                      ...durationData,
+                                      lte: e.target.value,
                                     })
                                   }
                                   //   value={user.name}
@@ -3533,6 +3661,7 @@ useEffect(()=>{
                         {isExperienceData.length > 0 &&
                           isExperienceData.map((event, index) => {
                             console.log(event, "event");
+
                             return (
                               <>
                                 <Col
@@ -3626,374 +3755,6 @@ useEffect(()=>{
                                             onHide={() => modalshow(event)}
                                           />
                                         )}
-                                        {/* <Modal
-                                          show={show5}
-                                          onHide={handleClose5}
-                                          backdrop="static"
-                                          keyboard={false}
-                                        >
-                                          <Modal.Header closeButton>
-                                            <Modal.Title
-                                              style={{ color: "black" }}
-                                              
-                                            >
-                                              Edit Experience
-                                            </Modal.Title>
-                                          </Modal.Header>
-                                          <Modal.Body>
-                                            <Row>
-                                              <div className="p-3">
-                                                <Col lg="12">
-                                                  <fieldset>
-                                                    <label
-                                                      className="text-lg"
-                                                      style={{ width: "100%" }}
-                                                    >
-                                                      Profession
-                                                    </label>
-                                                    <input
-                                                      style={{ width: "100%" }}
-                                                      className="form-control"
-                                                      name="fname"
-                                                      type={"text"}
-                                                      placeholder={
-                                                        isEditExperienceData.profession
-                                                      }
-                                                      onChange={(e) =>
-                                                        setEditIsExperienceData({
-                                                          ...isEditExperienceData,
-                                                          profession:
-                                                            e.target.value,
-                                                        })
-                                                      }
-                                                      //   value={user.number}
-                                                      //   onChange={getUserData}
-                                                    />
-                                                  </fieldset>
-                                                </Col>
-                                                <Col lg="12">
-                                                  <fieldset>
-                                                    <label
-                                                      className="text-lg"
-                                                      style={{ width: "100%" }}
-                                                    >
-                                                      Company Name
-                                                    </label>
-                                                    <input
-                                                      style={{ width: "100%" }}
-                                                      className="form-control"
-                                                      name="lname"
-                                                      placeholder={isEditExperienceData.companyName}
-                                                      onChange={(e) =>
-                                                        setEditIsExperienceData({
-                                                          ...isEditExperienceData,
-                                                          companyName:
-                                                            e.target.value,
-                                                        })
-                                                      }
-                                                      //   onChange={getUserData}
-                                                    />
-                                                  </fieldset>
-                                                </Col>
-                                                <Col lg="12">
-                                                  <fieldset>
-                                                    <label
-                                                      className="text-lg"
-                                                      style={{ width: "100%" }}
-                                                    >
-                                                      Job Industry
-                                                    </label>
-                                                    <Form.Select
-                                                      aria-label="Default select example"
-                                                      placeholder={isEditExperienceData.jobIndustry}
-                                                      onChange={(e) =>
-                                                        setEditIsExperienceData({
-                                                          ...isEditExperienceData,
-                                                          jobIndustry:
-                                                            e.target.value,
-                                                        })
-                                                      }
-                                                    >
-                                                      <option hidden="">
-                                                        Job Industry
-                                                      </option>
-                                                      <option>
-                                                        Universities / Education
-                                                      </option>
-                                                      <option>
-                                                        Manufacturing
-                                                      </option>
-                                                      <option>Security</option>
-                                                      <option>
-                                                        Real Estate
-                                                      </option>
-                                                      <option>
-                                                        Professional Consultings
-                                                        (Legal, HR, Finance
-                                                        etc.)
-                                                      </option>
-                                                      <option>
-                                                        Banking and Finance
-                                                      </option>
-                                                      <option>
-                                                        Beauty Care and Health /
-                                                        Welness / Fitness
-                                                      </option>
-                                                      <option>
-                                                        Government / Public
-                                                        Utilities
-                                                      </option>
-                                                      <option>
-                                                        Hospitality / Travel /
-                                                        Airlines / Clubhouse
-                                                      </option>
-                                                      <option>
-                                                        IT / R&amp;D / Cyber
-                                                        Security /
-                                                        Telecommunication /
-                                                        Science
-                                                      </option>
-                                                      <option>Retail</option>
-                                                      <option>Insurance</option>
-                                                      <option>
-                                                        Logistics /
-                                                        Transportaton / Supply
-                                                        Chain
-                                                      </option>
-                                                      <option>
-                                                        F&amp;B / Wine &amp;
-                                                        Spriits
-                                                      </option>
-                                                      <option>
-                                                        Logistics /
-                                                        Transportaton / Supply
-                                                        Chain
-                                                      </option>
-                                                      <option>
-                                                        Medical / Pharmacy /
-                                                        Hospital
-                                                      </option>
-                                                      <option>
-                                                        Engineerings
-                                                      </option>
-                                                      <option>Others</option>
-                                                    </Form.Select>
-                                                  </fieldset>
-                                                </Col>
-                                                <Col lg="12">
-                                                  <fieldset>
-                                                    <label
-                                                      className="text-lg"
-                                                      style={{ width: "100%" }}
-                                                    >
-                                                      Job Function
-                                                    </label>
-                                                    <Form.Select
-                                                      aria-label="Default select example"
-                                                      placeholder={isEditExperienceData.jobFunction}
-                                                      onChange={(e) =>
-                                                        setEditIsExperienceData({
-                                                          ...isEditExperienceData,
-                                                          jobFunction:
-                                                            e.target.value,
-                                                        })
-                                                      }
-                                                    >
-                                                      <option hidden="">
-                                                        Job Function
-                                                      </option>
-                                                      <option>
-                                                        HR &amp; Admin
-                                                      </option>
-                                                      <option>
-                                                        General Management
-                                                      </option>
-                                                      <option>
-                                                        Finance and Accounting
-                                                      </option>
-                                                      <option>
-                                                        Sales and Marketing
-                                                      </option>
-                                                      <option>
-                                                        Banking and Financial
-                                                        Institue Professionals
-                                                      </option>
-                                                      <option>
-                                                        Insurance Professionals
-                                                        (back-end functions)
-                                                      </option>
-                                                      <option>
-                                                        IT Professionals
-                                                        (Specific Fields)
-                                                      </option>
-                                                      <option>
-                                                        Manufacturing
-                                                      </option>
-                                                      <option>
-                                                        Real Estate (Surveyers /
-                                                        reasearchers etc.)
-                                                      </option>
-                                                      <option>
-                                                        Finance and Accounting
-                                                      </option>
-                                                      <option>
-                                                        Professional Designers
-                                                      </option>
-                                                      <option>
-                                                        Lecturers / Teachers
-                                                      </option>
-                                                      <option>
-                                                        Engineering / Architect
-                                                      </option>
-                                                      <option>Others</option>
-                                                    </Form.Select>
-                                                  </fieldset>
-                                                </Col>
-                                                <Row>
-                                                  <Col lg="12" className="pt-3">
-                                                    <span
-                                                      style={{
-                                                        display: "inline-flex",
-                                                        color: "#7A7979",
-                                                      }}
-                                                    >
-                                                      <FormCheck
-                                                        id="check"
-                                                        color="blue"
-                                                        onChange={
-                                                          checkBoxHandleChange
-                                                        }
-                                                        checked={
-                                                          event?.currentlyWorking ===
-                                                          "on"
-                                                            ? true
-                                                            : false
-                                                        }
-                                                      />
-                                                      &#160;&#160;I am currently
-                                                      working in this role
-                                                    </span>
-                                                  </Col>
-                                                  <Col lg="6">
-                                                    <fieldset>
-                                                      <label
-                                                        className="text-lg"
-                                                        style={{
-                                                          width: "100%",
-                                                        }}
-                                                      >
-                                                        Start Date
-                                                      </label>
-                                                      <input
-                                                        style={{
-                                                          width: "100%",
-                                                        }}
-                                                        value={isEditExperienceData.startDate}
-                                                        className="form-control"
-                                                        name="email"
-                                                        type={"date"}
-                                                        onChange={(e) =>
-                                                          setEditIsExperienceData({
-                                                            ...isEditExperienceData,
-                                                            startDate:
-                                                              e.target.value,
-                                                          })
-                                                        }
-                                                        //   value={user.number}
-                                                        //   onChange={getUserData}
-                                                        placeholder="A Service Like No Other
-                "
-                                                      />
-                                                    </fieldset>
-                                                  </Col>
-                                                  <Col lg="6">
-                                                    <fieldset>
-                                                      <label
-                                                        className="text-lg"
-                                                        style={{
-                                                          width: "100%",
-                                                        }}
-                                                      >
-                                                        End Date
-                                                      </label>
-                                                      <input
-                                                        style={{
-                                                          width: "100%",
-                                                        }}
-                                                        className="form-control"
-                                                        type={"date"}
-                                                        name="firstname"
-                                                        value={isEditExperienceData.endDate}
-                                                        onChange={(e) =>
-                                                          setEditIsExperienceData({
-                                                            ...isEditExperienceData,
-                                                            endDate:
-                                                              e.target.value,
-                                                          })
-                                                        }
-                                                        //   value={user.name}
-                                                        //   onChange={getUserData}
-                                                        placeholder="Gia (PVT) LTD
-                "
-                                                        required
-                                                      />
-                                                    </fieldset>
-                                                  </Col>
-                                                  <Col lg="12">
-                                                    <fieldset>
-                                                      <label
-                                                        className="text-lg"
-                                                        style={{
-                                                          width: "100%",
-                                                        }}
-                                                      >
-                                                        Description
-                                                      </label>
-                                                      <textarea
-                                                        // placeholder="Description"
-                                                        className="form-control"
-                                                        placeholder={
-                                                          event?.description
-                                                        }
-                                                        onChange={(e) =>
-                                                          setEditIsExperienceData({
-                                                            ...isEditExperienceData,
-                                                            description:
-                                                              e.target.value,
-                                                          })
-                                                        }
-                                                      />
-                                                    </fieldset>
-                                                  </Col>
-                                                </Row>
-                                              </div>
-                                            </Row>
-                                          </Modal.Body>
-                                          <Modal.Footer>
-                                            <Button
-                                              variant="secondary"
-                                              onClick={handleClose5}
-                                              style={{
-                                                background: "none",
-                                                color: "#C1C1C1",
-                                              }}
-                                            >
-                                              Cancel
-                                            </Button>
-                                            <Button
-                                              onClick={() =>
-                                                updateProfileExp(isEditExperienceData.id)
-                                              }
-                                              variant="primary"
-                                              style={{
-                                                background: "none",
-                                                color: "#39BEC1",
-                                              }}
-                                            >
-                                              Save
-                                            </Button>
-                                          </Modal.Footer>
-                                        </Modal> */}
                                       </div>
                                       <div className="w-10">
                                         <button

@@ -47,10 +47,10 @@ export const MainProfession = () => {
 
   const searchFun = () => {
     axios
-      .post(`api/v1/search/freelancer?from=0&size=1`, isSearch)
+      .post(`api/v1/job-post?from=0&size=4&submitted=true`, isSearch)
       .then((res) => {
         // console.log(res, "Initial Data");
-        let data = res.data;
+        let data = res.data.data;
         console.log(data, "daaaaaaaaataaaaaaaaaaaa");
         // setIsProfileData(data)
         setSearchData(data);
@@ -699,7 +699,7 @@ export const MainProfession = () => {
                               className="text-lg"
                               style={{ color: "#7A7979" }}
                             >
-                              {values?._source?.companyName}
+                              {values?.job?.title}
                             </h2>
                           </div>
                         </Col>

@@ -12,6 +12,7 @@ import axios from "../../../utils/axios.api";
 import { useNavigate } from "react-router-dom/dist";
 
 function MyVerticallyCenteredModal(props) {
+
   return (
     <div>
       <Modal
@@ -32,7 +33,7 @@ function MyVerticallyCenteredModal(props) {
         <Modal.Body className="webkit">
           <h2 className="text-2xl font-bold">10 Tokens</h2>
           <p className="text-lg" style={{ color: "#C1C1C1" }}>
-            10 Tokens to View Proﬁle
+            10 Tokens to View Proï¬le
           </p>
           <div style={{ display: "inline-grid" }}>
             <Button
@@ -56,8 +57,39 @@ function MyVerticallyCenteredModal(props) {
     </div>
   );
 }
-
 function MyVerticallyCenteredModal1(props) {
+  console.log(props, "props")
+  const [arrangeInterview, setArrangeInterview] = useState({
+    timestamp: "2023-02-16T17:48",
+    type: '',
+    location: '',
+    notes: '',
+  })
+  console.log('arrangeInterview', arrangeInterview);
+  const submitArrangeInterView = () => {
+
+    console.log(arrangeInterview, "arrange")
+
+    axios.post(`api/v1/interview/schedule/recruiter/reschedule?id=${props.id.id}`, arrangeInterview).then((res) => {
+      if (res.data) {
+        console.log(res, "res")
+      }
+    }).catch((error) => {
+      console.log(error, "error")
+    })
+
+
+    // onScheduleApplicant({
+    //   id: currentApplicant?.id,
+    //   timestamp: arrangeInterview.timestamp,
+    //   type: arrangeInterview.type,
+    //   location: arrangeInterview.location,
+    //   notes: arrangeInterview.notes,
+    // })
+    // console.log('currentApplicant', currentApplicant.id);
+  }
+
+
   return (
     <Modal
       {...props}
@@ -83,8 +115,7 @@ function MyVerticallyCenteredModal1(props) {
                 className="form-control"
                 name="date"
                 type={"date"}
-                //   value={user.number}
-                //   onChange={getUserData}
+                onChange={(e) => setArrangeInterview({ ...arrangeInterview, timestamp: e.target.value })}
               />
             </fieldset>
           </Col>
@@ -94,7 +125,7 @@ function MyVerticallyCenteredModal1(props) {
                 Interview Type
               </label>
 
-              <Form.Select aria-label="Default select example">
+              <Form.Select aria-label="Default select example" value={arrangeInterview.interviewType} onChange={(e) => setArrangeInterview({ ...arrangeInterview, type: e.target.value })}>
                 <option value="DEFAULT" disabled="">
                   Select Job Function
                 </option>
@@ -125,8 +156,7 @@ function MyVerticallyCenteredModal1(props) {
                 className="form-control"
                 type={"text"}
                 name="Link"
-                //   value={user.name}
-                //   onChange={getUserData}
+                onChange={(e) => setArrangeInterview({ ...arrangeInterview, location: e.target.value })}
                 placeholder="  "
                 required
               />
@@ -143,8 +173,7 @@ function MyVerticallyCenteredModal1(props) {
                 className="form-control"
                 type={"text"}
                 name="firstname"
-                //   value={user.name}
-                //   onChange={getUserData}
+                onChange={(e) => setArrangeInterview({ ...arrangeInterview, notes: e.target.value })}
                 placeholder=" "
                 required
               />
@@ -162,7 +191,9 @@ function MyVerticallyCenteredModal1(props) {
 
         <Button
           style={{ background: "none", color: "#39BEC1" }}
-          onClick={props.post}
+          onClick={() =>
+            submitArrangeInterView()
+          }
         >
           Send
         </Button>
@@ -172,11 +203,28 @@ function MyVerticallyCenteredModal1(props) {
 }
 
 function MyVerticallyCenteredModal2(props) {
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  const checkAuth = async () => {
+    const token = await localStorage.getItem("access-token");
+    if (!token) {
+      navigate('/login')
+    }
+  }
+
   const [isSalaryRange, setisSalaryRange] = useState({
     gte: "",
     lte: "",
   });
-  const [isProjectTimeline, setIsProjectTimeline] = useState({});
+  const [isProjectTimeline, setIsProjectTimeline] = useState({
+    gte: "",
+    lte: "",
+  });
 
   let date = new Date();
   const [isEmail, setIsEmail] = useState("");
@@ -185,7 +233,7 @@ function MyVerticallyCenteredModal2(props) {
     title: "",
     industry: "",
     jobFunction: "",
-    // jobSubFunction: "dummy",
+    jobSubFunction: "dummy",
     location: "",
     description: "",
     requirements: "",
@@ -193,17 +241,14 @@ function MyVerticallyCenteredModal2(props) {
     educationLevel: "",
     empType: "",
     projectTimeline: { gte: "", lte: "" },
-    postedDate: `${date.getDate()}-${
-      date.getMonth() + 1
-    }-${date.getFullYear()}`,
-    expiryDate: `${date.getDate()}-${
-      date.getMonth() + 1
-    }-${date.getFullYear()}`,
+    postedDate: new Date(),
+    expiryDate: `${date.getDate()}-${date.getMonth() + 1
+      }-${date.getFullYear()}`,
     madeOfWork: "",
     noOfOpenings: "",
     salaryCurrency: "",
     salaryRange: { gte: isSalaryRange.gte, lte: isSalaryRange.lte },
-    // salaryType : '', /// look after
+    salaryType: 'negotiable',
     salaryPayFreq: "",
     additionalEmails: [],
     closed: false,
@@ -212,9 +257,38 @@ function MyVerticallyCenteredModal2(props) {
   // console.log(jobData, 'jobDaaaaaaaataaa');
 
   // submitted : true when dfat post publised
-  // const navigate = useNavigate();
 
   const PostFunc = () => {
+    // let Data = {
+    //   title: jobData.title,
+    //   industry: jobData.industry,
+    //   jobFunction: jobData.jobFunction,
+
+    //   location: jobData.location,
+    //   description: jobData.description,
+    //   requirements: jobData.requirements,
+    //   profession: jobData.profession,
+    //   educationLevel: jobData.educationLevel,
+    //   empType: jobData.empType,
+    //   projectTimeline: {
+    //     gte: isProjectTimeline.gte,
+    //     lte: isProjectTimeline.lte,
+    //   },
+    //   postedDate: new Date().toString(),
+    //   madeOfWork: jobData.madeOfWork,
+    //   noOfOpenings: jobData.noOfOpenings.toString(),
+    //   salaryCurrency: jobData.salaryCurrency,
+    //   salaryRange: { gte: isSalaryRange.gte, lte: isSalaryRange.lte },
+    //   salaryType: 'negotiable',
+    //   salaryPayFreq: jobData.salaryPayFreq,
+    //   "additionalEmails": ["hello@dom.com", "freelancer@dom.com"],
+    //   closed: false,
+    //   submitted: true,
+    //   "expiryDate": "2022-01-07T16:55:51.188Z",
+    // };
+
+    let currentDate = new Date();
+
     let Data = {
       title: jobData.title,
       industry: jobData.industry,
@@ -227,23 +301,44 @@ function MyVerticallyCenteredModal2(props) {
         gte: isProjectTimeline.gte,
         lte: isProjectTimeline.lte,
       },
-      noOfOpenings: Number(jobData.noOfOpenings),
-      postedDate: new Date(),
-      salaryRange: {
-        gte: Number(isSalaryRange.gte),
-        lte: Number(isSalaryRange.lte),
+      noOfOpenings: jobData.noOfOpenings.toString(),
+      postedDate: new Date().toString(),
+      projectTimeline: {
+        gte: isProjectTimeline.gte,
+        lte: isProjectTimeline.lte,
       },
-      expiryDate: new Date(),
-      closed: false,
+      "closed": false,
       modeOfWork: jobData.madeOfWork,
-      submitted: true,
+      "submitted": true,
       educationLevel: jobData.educationLevel,
       empType: jobData.empType,
       salaryPayFreq: jobData.salaryPayFreq,
       salaryCurrency: jobData.salaryCurrency,
-      additionalEmails: [isEmail],
-    };
-    let dummyData = {
+      "expiryDate": new Date(currentDate.setDate(currentDate.getDate() + 30)).toString(),
+      "additionalEmails": [isEmail],
+      salaryRange: {
+        gte: isSalaryRange.gte,
+        lte: isSalaryRange.lte
+      }
+    }
+    console.log(Data, "daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa");
+    if (Data.submitted) {
+      axios
+        .post("api/v1/job-post", Data)
+        .then((res) => {
+          console.log(res, "data sended successfully");
+          // navigate('/CompanyProfile')
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const draftFunc = () => {
+    let currentDate = new Date();
+
+    let Data = {
       title: jobData.title,
       industry: jobData.industry,
       jobFunction: jobData.jobFunction,
@@ -255,38 +350,28 @@ function MyVerticallyCenteredModal2(props) {
         gte: isProjectTimeline.gte,
         lte: isProjectTimeline.lte,
       },
-      noOfOpenings: Number(jobData.noOfOpenings),
-      postedDate: new Date(),
-      salaryRange: {
-        gte: `${isSalaryRange.gte}`,
-        lte: `${isSalaryRange.lte}`,
+      noOfOpenings: jobData.noOfOpenings.toString(),
+      postedDate: new Date().toString(),
+      projectTimeline: {
+        gte: isProjectTimeline.gte,
+        lte: isProjectTimeline.lte,
       },
-      expiryDate: new Date(),
-      closed: false,
+      "closed": false,
       modeOfWork: jobData.madeOfWork,
-      submitted: true,
+      "submitted": true,
       educationLevel: jobData.educationLevel,
       empType: jobData.empType,
       salaryPayFreq: jobData.salaryPayFreq,
       salaryCurrency: jobData.salaryCurrency,
-      additionalEmails: [isEmail],
-    };
-    console.log(Data, "daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa");
+      "expiryDate": new Date(currentDate.setDate(currentDate.getDate() + 30)).toString(),
+      "additionalEmails": [isEmail],
+      salaryRange: {
+        gte: isSalaryRange.gte,
+        lte: isSalaryRange.lte
+      }
+    }
     axios
-      .post("api/v1/job-post", dummyData)
-      .then((res) => {
-        console.log(res, "data sended successfully");
-
-        // navigate('/CompanyProfile')
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const draftFunc = () => {
-    axios
-      .post("api/v1/job-post", jobData)
+      .post("api/v1/job-post", Data)
       .then((res) => {
         console.log(res, "data sended successfully");
         // navigate('/CompanyProfile')
@@ -604,10 +689,7 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, educationLevel: e.target.value })
                     }
                   >
-                    <option>Select Education level</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value="DEFAULT" disabled="">Select Education level</option><option>ASSOCIATE DEGREE</option><option>MASTER DEGREE</option><option>DOCTORATE DEGREE</option><option>PHD</option><option>OTHER</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -633,10 +715,7 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, empType: e.target.value })
                     }
                   >
-                    <option>Select Employement Type</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value="DEFAULT" disabled="">Select Employment Type</option><option>PART TIME</option><option>CASUAL–NO SET HOURS OR DAYS OF WORK</option><option>PROJECT BASED</option><option>OTHER</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -1041,9 +1120,8 @@ function MyVerticallyCenteredModal2(props) {
                       //   value={user.name}
                       //   onChange={getUserData}
                       disabled
-                      value={`${date.getDate()}-${
-                        date.getMonth() + 1
-                      }-${date.getFullYear()}`}
+                      value={`${date.getDate()}-${date.getMonth() + 1
+                        }-${date.getFullYear()}`}
                       placeholder="Enter No. of Openings"
                       // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
@@ -1134,8 +1212,8 @@ function MyVerticallyCenteredModal3(props) {
                 className="form-control"
                 name="date"
                 type={"date"}
-                //   value={user.number}
-                //   onChange={getUserData}
+              //   value={user.number}
+              //   onChange={getUserData}
               />
             </fieldset>
           </Col>
@@ -1150,8 +1228,8 @@ function MyVerticallyCenteredModal3(props) {
                 className="form-control"
                 name="date"
                 type={"text"}
-                //   value={user.number}
-                //   onChange={getUserData}
+              //   value={user.number}
+              //   onChange={getUserData}
               />
             </fieldset>
           </Col>
@@ -1221,49 +1299,42 @@ export const Interview = () => {
   const [modalShow, setModalShow] = React.useState(false);
   const [interviewData, setInterviewData] = useState({});
   const [filteredCategory, setFilteredCategory] = useState("");
-  console.log(filteredCategory, "filterrrrrrrrrred");
-  const [isSearch, setIsSearch] = useState({
-    keyword: "",
-    filter: [{ term: { internalState: "PENDING" } }],
+  const [selectedValue, setSelectedValue] = useState('')
+  const handleSelectChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+
+
+  const [isInput, setIsInput] = useState({
   });
+  console.log('interviewData', interviewData);
 
   useEffect(() => {
+    searchFunc()
+  }, [])
+
+  const searchFunc = () => {
+
+    // console.log('data', data);
     axios
-      .get(`api/v1/interview?stage=schedule&size=2&from=0`)
+      .get(`api/v1/interview?stage=schedule&size=4&from=0`)
       .then((res) => {
-        // console.log(res, "Initial Data");
+        console.log(res, "Initial Data");
         let data = res.data.data;
         console.log(data, "daaaaaaaaataaaaaaaaaaaa");
         // setIsProfileData(data)
         setInterviewData(data);
         let filteredData = data.map((items) => {
-          return items.job.title;
+          return items.job.title
         });
         setFilteredCategory([...new Set(filteredData)]);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, []);
-
-  const searchFunc = () => {
-    axios
-      .post(`api/v1/interview/offer/history/search?size=3&from=0`, isSearch)
-      .then((res) => {
-        // console.log(res, "Initial Data");
-        let data = res.data;
-        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
-        // setIsProfileData(data)
-        // setInterviewData(data);
-        // let filteredData = data.map((items => {
-        //   return items.job.title
-        // }))
-        // setFilteredCategory([...new Set(filteredData)])
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
+
+
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -1331,6 +1402,7 @@ export const Interview = () => {
         </Row>
       </Container>
       <hr className="my-3" />
+
       <Container>
         <Row>
           <Col
@@ -1347,12 +1419,12 @@ export const Interview = () => {
                   >
                     Filter By
                   </label>
-                  <Form.Select aria-label="Default select example">
+                  <Form.Select aria-label="Default select example" value={selectedValue} onChange={handleSelectChange}>
                     <option value="DEFAULT" disabled="">
                       Choose State
                     </option>
                     <option value="PENDING">Pending</option>
-                    <option value="CONFIRMED">Accepted</option>
+                    <option value="CONFIRM">Accepted</option>
                     <option value="REJECT">Declined</option>
                     <option value="REVISION">In Revision</option>
                   </Form.Select>
@@ -1378,7 +1450,7 @@ export const Interview = () => {
                   <input
                     placeholder="Enter Profession, Company Name or Keywords."
                     onChange={(e) =>
-                      setIsSearch({ ...isSearch, keyword: e.target.value })
+                      setIsInput(e.target.value)
                     }
                   ></input>
 
@@ -1403,7 +1475,7 @@ export const Interview = () => {
       </Container>
       <Container>
         <div>
-          <h2 className="text-2xl">20 Total Candidates</h2>
+          <h2 className="text-2xl">{filteredCategory && filteredCategory.length} Total Candidates</h2>
         </div>
         <Accordion defaultActiveKey="0" flush>
           {filteredCategory.length > 0 &&
@@ -1422,7 +1494,7 @@ export const Interview = () => {
                   <Accordion.Body>
                     {interviewData
                       .filter((filter) => {
-                        return filter.job.title === items;
+                        return filter.job.title === items && filter.internalState == selectedValue
                       })
                       .map((events, key) => {
                         return (
@@ -1635,6 +1707,7 @@ export const Interview = () => {
                                             <MyVerticallyCenteredModal1
                                               show={lgShow}
                                               onHide={() => setLgShow(false)}
+                                              id={events}
                                             />
                                           </div>
                                         </Col>
@@ -1720,6 +1793,7 @@ export const Interview = () => {
             })}
         </Accordion>
       </Container>
+
     </Container>
   );
 };

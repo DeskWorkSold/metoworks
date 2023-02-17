@@ -139,65 +139,7 @@ export const Topnav = () => {
                 <Link to="/FreeContact">Contact</Link>
               </NavDropdown.Item>
             </NavDropdown>
-            {/* <Nav.Link  disabled>
-              Link
-            </Nav.Link> */}
-
-            {/* <NavDropdown
-              title="Admin"
-              id="navbarScrollingDropdown"
-              className="nnnnav rounded-full"
-            >
-              <NavDropdown.Item>
-                <button
-                  type="button"
-                  className=" mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                  id="user-menu-button"
-                  aria-expanded="false"
-                  data-dropdown-toggle="user-dropdown"
-                  data-dropdown-placement="bottom"
-                >
-                  <Image
-                    className="w-8 h-8 rounded-full"
-                    src="/docs/images/people/profile-picture-3.jpg"
-                  />
-                </button>
-              </NavDropdown.Item>
-
-              <NavDropdown.Item>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Dashboard
-                </a>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Settings
-                </a>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link
-                  to="/Login"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Sign in
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link
-                  href="/Signup"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Sign out
-                </Link>
-              </NavDropdown.Item>
-            </NavDropdown> */}
-          </Nav>
+            </Nav>
           {!isToken && !isToken?.length > 0 ? (
             <>
               <Nav.Link>
@@ -218,7 +160,7 @@ export const Topnav = () => {
               </Nav.Link>
             </>
           ) : (
-            <Nav.Link style={{ width: "6%" }}>
+            <Nav.Link className="profileWidth">
               {auth && (
                 <div>
                   <IconButton
@@ -230,8 +172,8 @@ export const Topnav = () => {
                     color="inherit"
                   >
                     <Image
-                      style={{ width: "100%", objectFit: "cover", borderRadius : '100%' }}
-                      src={profileImage ? profileImage : {uri : profilePicture}}
+                      style={{ width: "100%", objectFit: "cover", borderRadius: '100%' }}
+                      src={profileImage ? profileImage : { uri: profilePicture }}
                     />
                     {/* <AccountCircle /> */}
                   </IconButton>
@@ -251,7 +193,7 @@ export const Topnav = () => {
                     onClose={handleClose}
                   >
                     <Link>
-                    <MenuItem >My Profile</MenuItem>
+                      <MenuItem >My Profile</MenuItem>
                     </Link>
                     <Link
                       to={isToken && `/Login`}

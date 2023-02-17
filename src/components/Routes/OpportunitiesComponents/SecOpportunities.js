@@ -28,7 +28,17 @@ export const SecOpportunities = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
+  const [jobIndustry, setJobIndustry] = useState('')
+  const [jobFunction, setJobFunction] = useState('')
+  const [subJobFunction, setSubJobFunction] = useState('')
+  const [profession, setProfession] = useState('')
+  const [companyName, setCompanyName] = useState('')
+  const [modeofWork, setModeOfWork] = useState('')
+  const [salaryRange, setSalaryRange] = useState({
+    gte : '',
+    lte : ''
+  })
+  const [location, setLocation] = useState('')
   const [searchShow, setSearchShow] = useState(false);
   const [modalShow, setModalShow] = React.useState(false);
 
@@ -39,11 +49,15 @@ export const SecOpportunities = () => {
     keyword: "",
     filter: [],
   });
+
   const [searchData, setSearchData] = useState({});
 
   const searchFun = () => {
+    let Data = {
+      keyword: "",
+    }
     axios
-      .post(`api/v1/search/job-post?from=0&size=4`, isSearch)
+      .post(`api/v1/search/job-post?from=0&size=4`, Data)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data;
@@ -250,12 +264,10 @@ export const SecOpportunities = () => {
                         Job Industry
                       </label>
                       <Form.Select aria-label="Default select example"
+                      onChange={(e) => setJobIndustry(e.target.value)}
                       // onChange={}
                       >
-                        <option>Select Job Industry</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                      <option hidden="">Select Job Industry</option><option>Universities / Education</option><option>Manufacturing</option><option>Security </option><option>Real Estate</option><option>Professional Consultings (Legal, HR, Finance etc.)</option><option>Banking and Finance</option><option>Beautiy Care and Health / Welness / Fitness</option><option>Building / Constructions / Surveying</option><option>Government / Public Utilities</option><option>Hospitality / Travel / Airlines / Clubhouse</option><option>IT / R&amp;D / Cyber Security / Telecommunication / Science</option><option>Retail</option><option>Insurance</option><option>Logistics / Transportaton / Supply Chain</option><option>F&amp;B / Wine &amp; Spriits</option><option>Logistics / Transportaton / Supply Chain</option><option>Medical / Pharmacy / Hospital</option><option>Engineerings</option><option>Others</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -275,11 +287,9 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Function
                       </label>
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Job Function</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                      <Form.Select aria-label="Default select example"
+                          onChange={(e) => setJobFunction(e.target.value)}>
+                      <option hidden="">Select Job Function</option><option>HR &amp; Admin</option><option>General Management</option><option>Finance and Accounting</option><option>Sales and Marketing</option><option>Banking and Financial Institue Professionals</option><option>Insurance Professionals (back-end functions)</option><option>IT Professionals (Specific Fields)</option><option>Manufacturing</option><option>Real Estate (Surveyers / reasearchers etc.)</option><option>Professional Designers</option><option>Lecturers / Teachers</option><option>Engineering / Architect</option><option>Others</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -299,11 +309,9 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Sub Job Function
                       </label>
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Sub Job Function</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setSubJobFunction(e.target.value)}>
+                      <option hidden="">Select Sub Job Function</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -322,23 +330,17 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Profession
                       </label>
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Job Title</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                      </Form.Select>
-                      {/* <input
+                     
+                      <input
                 style={{ width: "100%" }}
                 className="form-control"
-                name="Email"
-                type={"email"}
+                name="Profession"
+                type={"text"}
                 //   value={user.number}
                 //   onChange={getUserData}
-                placeholder="Select Job Title
-
-                "
-              /> */}
+                placeholder="Enter Job Title"
+                onChange={(e) => setProfession(e.target.value)}
+              />
                     </fieldset>
                   </Col>
                 </div>
@@ -353,23 +355,18 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Company Name
                       </label>
-                      <Form.Select aria-label="Default select example">
-                        <option>Enter Company Name</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                      </Form.Select>
-                      {/* <input
+                     
+                      <input
                 style={{ width: "100%" }}
                 className="form-control"
                 type={"text"}
-                name="firstname"
+                name="CompanyName"
                 //   value={user.name}
                 //   onChange={getUserData}
-                placeholder="Select Job Industry
-                "
+                placeholder="Enter Company Name"
                 required
-              /> */}
+                onChange={(e) => setCompanyName(e.target.value)}
+              />
                     </fieldset>
                   </Col>
                   <Col lg="12">
@@ -377,11 +374,9 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Mode of Work
                       </label>
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Mode of Work</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                      <Form.Select aria-label="Default select example"
+                       onChange={(e) => setModeOfWork(e.target.value)}>
+                      <option hidden="">Select Mode of Work</option><option>Eastern</option><option>Office</option><option>Work From Home</option><option>Hybrid</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -405,24 +400,22 @@ export const SecOpportunities = () => {
                         <input
                           style={{ width: "100%" }}
                           className="form-control"
-                          name="Email"
-                          type={"email"}
+                          name="SaleryMin"
+                          type={"number"}
                           //   value={user.number}
                           //   onChange={getUserData}
-                          placeholder="Enter Min Salary 
-
-                "
+                          placeholder="Enter Min Salary"
+                          onChange={(e) => setSalaryRange({...salaryRange, gte : e.target.value})}
                         />
                         <input
                           style={{ width: "100%" }}
                           className="form-control mx-2"
-                          name="Email"
-                          type={"email"}
+                          name="SaleryMax"
+                          type={"number"}
                           //   value={user.number}
                           //   onChange={getUserData}
-                          placeholder="Enter Max Salary 
-
-                "
+                          placeholder="Enter Max Salary"
+                          onChange={(e) => setSalaryRange({...salaryRange, lte : e.target.value})}
                         />
                       </div>
                     </fieldset>
@@ -432,11 +425,9 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Location
                       </label>
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Job Location</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                      <Form.Select aria-label="Default select example"
+                       onChange={(e) => setLocation(e.target.value)}>
+                      <option hidden="">Select Job Location</option><option>Central and Western</option><option>Eastern</option><option>Southern</option><option>Wan Chai</option><option>Kowloon City</option><option>Kwun Tong</option><option>Sham Shui Po</option><option>Wong Tai Sin</option><option>Yau Tsim Mong</option><option>Islands</option><option>Kwai Tsing</option><option>North</option><option>Sai Kung</option><option>Shatin</option><option>Tai Po</option><option>Tsuen Wan</option><option>Tuen Mun</option><option>Yuen Long</option><option>China</option><option>South East Asia (SEA)</option><option>Asia Pacific (APAC)</option><option>Others</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}

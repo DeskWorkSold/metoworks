@@ -7,6 +7,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 // import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Link } from "react-router-dom";
 // import "swiper/css/scrollbar";
 export const ForthSec = () => {
   return (
@@ -258,16 +259,19 @@ export const ForthSec = () => {
                   dol ipsum quia sit amet
                 </p>
                 <div className="pt-5 pb-3">
-                  <button
-                    className="text-white px-5 p-2"
-                    style={{
-                      background: "none",
-                      borderRadius: "10px",
-                      border: "1px solid white",
-                    }}
-                  >
-                    GET STARTED
-                  </button>
+                  <Link to='Login'>
+
+                    <button
+                      className="text-white px-5 p-2"
+                      style={{
+                        background: "none",
+                        borderRadius: "10px",
+                        border: "1px solid white",
+                      }}
+                    >
+                      GET STARTED
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>

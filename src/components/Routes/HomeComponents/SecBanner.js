@@ -10,8 +10,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { Link } from "react-router-dom";
 // import "swiper/css/scrollbar";
-
+const token = localStorage.getItem("access-token");
+console.log('token', token);
 export const SecBanner = () => {
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -164,9 +166,11 @@ export const SecBanner = () => {
               />{" "}
               Work-Life balance
             </p>
-            <Button className="text-white border-rounded px-3">
-              Post a Job
-            </Button>
+            <Link to={token ? 'CompanyProfile' : 'Login'}>
+              <Button className="text-white border-rounded px-3">
+                Post a Job
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Container>
@@ -209,9 +213,11 @@ export const SecBanner = () => {
               />{" "}
               Work-Life balance
             </p>
-            <Button className="text-white border-rounded px-3">
-              FIND A JOB
-            </Button>
+            <Link to={token ? 'FreelancerFindWork' : 'Login'}>
+              <Button className="text-white border-rounded px-3">
+                FIND A JOB
+              </Button>
+            </Link>
           </Col>
           <Col lg="6" className="webkit">
             <div>

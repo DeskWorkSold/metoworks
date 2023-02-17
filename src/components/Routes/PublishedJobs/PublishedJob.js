@@ -14,6 +14,20 @@ import { useEffect } from "react";
 import axios from "../../../utils/axios.api";
 
 function MyVerticallyCenteredModal(props) {
+
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    checkAuth()
+  }, [])
+
+  const checkAuth = async () => {
+    const token = await localStorage.getItem("access-token");
+    if (!token) {
+      navigate('/login')
+    }
+  }
+
   const [isSalaryRange, setisSalaryRange] = useState({
     gte: "",
     lte: "",
@@ -30,7 +44,7 @@ function MyVerticallyCenteredModal(props) {
     title: "",
     industry: "",
     jobFunction: "",
-    // jobSubFunction: "dummy",
+    jobSubFunction: "dummy",
     location: "",
     description: "",
     requirements: "",
@@ -39,41 +53,20 @@ function MyVerticallyCenteredModal(props) {
     empType: "",
     projectTimeline: { gte: "", lte: "" },
     postedDate: new Date(),
-    expiryDate: "",
+    expiryDate: `${date.getDate()}-${date.getMonth() + 1
+      }-${date.getFullYear()}`,
     madeOfWork: "",
     noOfOpenings: "",
     salaryCurrency: "",
     salaryRange: { gte: isSalaryRange.gte, lte: isSalaryRange.lte },
-    // salaryType : '', /// look after
+    salaryType: 'negotiable',
     salaryPayFreq: "",
     additionalEmails: [],
     closed: false,
   });
-
-  useEffect(() => {
-    if (jobData && jobData.postedDate && !jobData.expiryDate) {
-      // let expiryDate = `${jobData.postedDate.getDate()}-${
-      //   Number(jobData.postedDate.getMonth()) + 1
-      // }-${jobData.postedDate.getFullYear()}`;
-      if (jobData.postedDate.getMonth() < 11) {
-        let expiryDate = `${jobData.postedDate.getDate()}-${
-          Number(jobData.postedDate.getMonth()) + 2
-        }-${jobData.postedDate.getFullYear()}`;
-        expiryDate = expiryDate;
-        setJobData({ ...jobData, expiryDate: expiryDate });
-      } else {
-        let expiryDate = `${jobData.postedDate.getDate()}-${1}-${
-          Number(jobData.postedDate.getFullYear()) + 1
-        }`;
-        setJobData({ ...jobData, expiryDate: expiryDate });
-      }
-    }
-  }, [jobData]);
-
-  // submitted : true when dfat post publised
-  const navigate = useNavigate();
-
   const PostFunc = () => {
+    let currentDate = new Date();
+
     let Data = {
       title: jobData.title,
       industry: jobData.industry,
@@ -86,39 +79,77 @@ function MyVerticallyCenteredModal(props) {
         gte: isProjectTimeline.gte,
         lte: isProjectTimeline.lte,
       },
-      noOfOpenings: jobData.noOfOpenings,
-      postedDate: new Date(),
-      salaryRange: {
-        gte: Number(isSalaryRange.gte),
-        lte: Number(isSalaryRange.lte),
+      noOfOpenings: jobData.noOfOpenings.toString(),
+      postedDate: new Date().toString(),
+      projectTimeline: {
+        gte: isProjectTimeline.gte,
+        lte: isProjectTimeline.lte,
       },
-      expiryDate: new Date(),
-      closed: false,
+      "closed": false,
       modeOfWork: jobData.madeOfWork,
-      submitted: true,
+      "submitted": true,
       educationLevel: jobData.educationLevel,
       empType: jobData.empType,
       salaryPayFreq: jobData.salaryPayFreq,
       salaryCurrency: jobData.salaryCurrency,
-      additionalEmails: [isEmail],
-    };
-
+      "expiryDate": new Date(currentDate.setDate(currentDate.getDate() + 30)).toString(),
+      "additionalEmails": [isEmail],
+      salaryRange: {
+        gte: isSalaryRange.gte,
+        lte: isSalaryRange.lte
+      }
+    }
     console.log(Data, "daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa");
-    axios
-      .post("api/v1/job-post", Data)
-      .then((res) => {
-        console.log(res, "data sended successfully");
-
-        // navigate('/CompanyProfile')
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (Data.submitted) {
+      axios
+        .post("api/v1/job-post", Data)
+        .then((res) => {
+          console.log(res, "data sended successfully");
+          // navigate('/CompanyProfile')
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   const draftFunc = () => {
+    let currentDate = new Date();
+
+    let Data = {
+      title: jobData.title,
+      industry: jobData.industry,
+      jobFunction: jobData.jobFunction,
+      location: jobData.location,
+      description: jobData.description,
+      requirements: jobData.requirements,
+      profession: jobData.profession,
+      projectTimeline: {
+        gte: isProjectTimeline.gte,
+        lte: isProjectTimeline.lte,
+      },
+      noOfOpenings: jobData.noOfOpenings.toString(),
+      postedDate: new Date().toString(),
+      projectTimeline: {
+        gte: isProjectTimeline.gte,
+        lte: isProjectTimeline.lte,
+      },
+      "closed": false,
+      modeOfWork: jobData.madeOfWork,
+      "submitted": true,
+      educationLevel: jobData.educationLevel,
+      empType: jobData.empType,
+      salaryPayFreq: jobData.salaryPayFreq,
+      salaryCurrency: jobData.salaryCurrency,
+      "expiryDate": new Date(currentDate.setDate(currentDate.getDate() + 30)).toString(),
+      "additionalEmails": [isEmail],
+      salaryRange: {
+        gte: isSalaryRange.gte,
+        lte: isSalaryRange.lte
+      }
+    }
     axios
-      .post("api/v1/job-post", jobData)
+      .post("api/v1/job-post", Data)
       .then((res) => {
         console.log(res, "data sended successfully");
         // navigate('/CompanyProfile')
@@ -142,804 +173,796 @@ function MyVerticallyCenteredModal(props) {
 
   return (
     <Modal
-      {...props}
-      size="lg"
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
-    >
-      <Modal.Header>
-        <Modal.Title id="contained-modal-title-vcenter" className="text-center">
-          Post A Job
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <Row>
-          <Col lg="12">
-            <div className="p-3">
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Job Title
-                  </label>
-                  <input
-                    style={{ width: "100%" }}
-                    className="form-control"
-                    name="fname"
-                    type={"text"}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, title: e.target.value })
-                    }
-                    //   value={user.number}
-                    //   onChange={getUserData}
-                    placeholder="Doctor for Child
-                "
-                  />
-                </fieldset>
-              </Col>
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Job Industry
-                  </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, industry: e.target.value })
-                    }
-                  >
-                    <option value="DEFAULT" disabled="">
-                      Select Job Industry
-                    </option>
-                    <option>Universities / Education</option>
-                    <option>Manufacturing</option>
-                    <option>Security</option>
-                    <option>Real Estate</option>
-                    <option>
-                      Professional Consultings (Legal, HR, Finance etc.)
-                    </option>
-                    <option>Banking and Finance</option>
-                    <option>Beautiy Care and Health / Welness / Fitness</option>
-                    <option>Government / Public Utilities</option>
-                    <option>Hospitality / Travel / Airlines / Clubhouse</option>
-                    <option>
-                      IT / R&amp;D / Cyber Security / Telecommunication /
-                      Science
-                    </option>
-                    <option>Retail</option>
-                    <option>Insurance</option>
-                    <option>Logistics / Transportaton / Supply Chain</option>
-                    <option>F&amp;B / Wine &amp; Spriits</option>
-                    <option>Logistics / Transportaton / Supply Chain</option>
-                    <option>Medical / Pharmacy / Hospital</option>
-                    <option>Engineerings</option>
-                    <option>Others</option>
-                  </Form.Select>
-                  {/* <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="firstname"
-                //   value={user.name}
-                //   onChange={getUserData}
-                placeholder="Select Job Industry
-                "
-                required
-              /> */}
-                </fieldset>
-              </Col>
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Job Function
-                  </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, jobFunction: e.target.value })
-                    }
-                  >
-                    <option value="DEFAULT" disabled="">
-                      Select Job Function
-                    </option>
-                    <option>HR &amp; Admin</option>
-                    <option>General Management</option>
-                    <option>Finance and Accounting</option>
-                    <option>Sales and Marketing</option>
-                    <option>
-                      Banking and Financial Institue Professionals
-                    </option>
-                    <option>Insurance Professionals (back-end functions</option>
-                    <option>IT Professionals (Specific Fields)</option>
-                    <option>Manufacturing</option>
-                    <option>Finance and Accounting</option>
-                    <option>Professional Designers</option>
-                    <option>Lecturers / Teachers</option>
-                    <option>Engineering / Architect</option>
-                    <option>Others</option>
-                  </Form.Select>
-                  {/* <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="firstname"
-                //   value={user.name}
-                //   onChange={getUserData}
-                placeholder="Select Job Industry
-                "
-                required
-              /> */}
-                </fieldset>
-              </Col>
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
+    {...props}
+    size="lg"
+    aria-labelledby="contained-modal-title-vcenter"
+    centered
+  >
+    <Modal.Header>
+      <Modal.Title id="contained-modal-title-vcenter" className="text-center">
+        Post A Job
+      </Modal.Title>
+    </Modal.Header>
+    <Modal.Body>
+      <Row>
+        <Col lg="12">
+          <div className="p-3">
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Job Title
+                </label>
+                <input
+                  style={{ width: "100%" }}
+                  className="form-control"
+                  name="fname"
+                  type={"text"}
+                  onChange={(e) =>
+                    setJobData({ ...jobData, title: e.target.value })
+                  }
+                  //   value={user.number}
+                  //   onChange={getUserData}
+                  placeholder="Doctor for Child
+              "
+                />
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Job Industry
+                </label>
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) =>
+                    setJobData({ ...jobData, industry: e.target.value })
+                  }
+                >
+                  <option value="DEFAULT" disabled="">
+                    Select Job Industry
+                  </option>
+                  <option>Universities / Education</option>
+                  <option>Manufacturing</option>
+                  <option>Security</option>
+                  <option>Real Estate</option>
+                  <option>
+                    Professional Consultings (Legal, HR, Finance etc.)
+                  </option>
+                  <option>Banking and Finance</option>
+                  <option>Beautiy Care and Health / Welness / Fitness</option>
+                  <option>Government / Public Utilities</option>
+                  <option>Hospitality / Travel / Airlines / Clubhouse</option>
+                  <option>
+                    IT / R&amp;D / Cyber Security / Telecommunication /
+                    Science
+                  </option>
+                  <option>Retail</option>
+                  <option>Insurance</option>
+                  <option>Logistics / Transportaton / Supply Chain</option>
+                  <option>F&amp;B / Wine &amp; Spriits</option>
+                  <option>Logistics / Transportaton / Supply Chain</option>
+                  <option>Medical / Pharmacy / Hospital</option>
+                  <option>Engineerings</option>
+                  <option>Others</option>
+                </Form.Select>
+                {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Job Function
+                </label>
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) =>
+                    setJobData({ ...jobData, jobFunction: e.target.value })
+                  }
+                >
+                  <option value="DEFAULT" disabled="">
+                    Select Job Function
+                  </option>
+                  <option>HR &amp; Admin</option>
+                  <option>General Management</option>
+                  <option>Finance and Accounting</option>
+                  <option>Sales and Marketing</option>
+                  <option>
+                    Banking and Financial Institue Professionals
+                  </option>
+                  <option>Insurance Professionals (back-end functions</option>
+                  <option>IT Professionals (Specific Fields)</option>
+                  <option>Manufacturing</option>
+                  <option>Finance and Accounting</option>
+                  <option>Professional Designers</option>
+                  <option>Lecturers / Teachers</option>
+                  <option>Engineering / Architect</option>
+                  <option>Others</option>
+                </Form.Select>
+                {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Sub Job Function
+                </label>
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) =>
+                    setJobData({ ...jobData, jobSubFunction: e.target.value })
+                  }
+                >
+                  <option value="DEFAULT" disabled="">
                     Sub Job Function
-                  </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, jobSubFunction: e.target.value })
-                    }
-                  >
-                    <option value="DEFAULT" disabled="">
-                      Sub Job Function
-                    </option>
-                  </Form.Select>
-                  {/* <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="firstname"
-                //   value={user.name}
-                //   onChange={getUserData}
-                placeholder="Select Job Industry
-                "
-                required
-              /> */}
-                </fieldset>
-              </Col>
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Job Location
-                  </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, location: e.target.value })
-                    }
-                  >
-                    <option value="DEFAULT" disabled="">
-                      Select Job Location
-                    </option>
-                    <option>Central and Western</option>
-                    <option>Eastern</option>
-                    <option>Southern</option>
-                    <option>Wan Chai</option>
-                    <option>Kowloon City</option>
-                    <option>Kwun Tong</option>
-                    <option>Sham Shui Po</option>
-                    <option>Wong Tai Sin</option>
-                    <option>Yau Tsim Mong</option>
-                    <option>Islands</option>
-                    <option>Kwai Tsing</option>
-                    <option>North</option>
-                    <option>Sai Kung</option>
-                    <option>Shatin</option>
-                    <option>Tai Po</option>
-                    <option>Tsuen Wan</option>
-                    <option>Tuen Mun</option>
-                    <option>Yuen Long</option>
-                    <option>China</option>
-                    <option>South East Asia (SEA)</option>
-                    <option>Asia Pacific (APAC)</option>
-                    <option>Others</option>
-                  </Form.Select>
-                  {/* <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="firstname"
-                //   value={user.name}
-                //   onChange={getUserData}
-                placeholder="Select Job Industry
-                "
-                required
-              /> */}
-                </fieldset>
-              </Col>
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Job Description
-                  </label>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data="<p>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-                    standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
-                    scramble.</p>"
-                    onReady={(editor) => {
-                      // You can store the "editor" and use when it is needed.
-                      console.log("Editor is ready to use!", editor);
-                    }}
-                    onChange={(event, editor) => {
-                      const data = editor.getData();
-                      setJobData({ ...jobData, description: data });
-                    }}
-                    onBlur={(event, editor) => {
-                      console.log("Blur.", editor);
-                    }}
-                    onFocus={(event, editor) => {
-                      console.log("Focus.", editor);
-                    }}
-                  />
-                </fieldset>
-              </Col>
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Job Requirements
-                  </label>
-                  <CKEditor
-                    editor={ClassicEditor}
-                    data="<p>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-                    standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
-                    scramble.</p>"
-                    onReady={(editor) => {
-                      // You can store the "editor" and use when it is needed.
-                      console.log("Editor is ready to use!", editor);
-                    }}
-                    onChange={(event, editor) => {
-                      const data = editor.getData();
-                      // console.log({ event, editor, data });
-                      setJobData({ ...jobData, requirements: data });
-                    }}
-                    onBlur={(event, editor) => {
-                      console.log("Blur.", editor);
-                    }}
-                    onFocus={(event, editor) => {
-                      console.log("Focus.", editor);
-                    }}
-                  />
-                </fieldset>
-              </Col>
-              {/* <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Profession
-                  </label>
+                  </option>
+                </Form.Select>
+                {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Job Location
+                </label>
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) =>
+                    setJobData({ ...jobData, location: e.target.value })
+                  }
+                >
+                  <option value="DEFAULT" disabled="">
+                    Select Job Location
+                  </option>
+                  <option>Central and Western</option>
+                  <option>Eastern</option>
+                  <option>Southern</option>
+                  <option>Wan Chai</option>
+                  <option>Kowloon City</option>
+                  <option>Kwun Tong</option>
+                  <option>Sham Shui Po</option>
+                  <option>Wong Tai Sin</option>
+                  <option>Yau Tsim Mong</option>
+                  <option>Islands</option>
+                  <option>Kwai Tsing</option>
+                  <option>North</option>
+                  <option>Sai Kung</option>
+                  <option>Shatin</option>
+                  <option>Tai Po</option>
+                  <option>Tsuen Wan</option>
+                  <option>Tuen Mun</option>
+                  <option>Yuen Long</option>
+                  <option>China</option>
+                  <option>South East Asia (SEA)</option>
+                  <option>Asia Pacific (APAC)</option>
+                  <option>Others</option>
+                </Form.Select>
+                {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Job Description
+                </label>
+                <CKEditor
+                  editor={ClassicEditor}
+                  data="<p>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
+                  standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
+                  scramble.</p>"
+                  onReady={(editor) => {
+                    // You can store the "editor" and use when it is needed.
+                    console.log("Editor is ready to use!", editor);
+                  }}
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    setJobData({ ...jobData, description: data });
+                  }}
+                  onBlur={(event, editor) => {
+                    console.log("Blur.", editor);
+                  }}
+                  onFocus={(event, editor) => {
+                    console.log("Focus.", editor);
+                  }}
+                />
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Job Requirements
+                </label>
+                <CKEditor
+                  editor={ClassicEditor}
+                  data="<p>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
+                  standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
+                  scramble.</p>"
+                  onReady={(editor) => {
+                    // You can store the "editor" and use when it is needed.
+                    console.log("Editor is ready to use!", editor);
+                  }}
+                  onChange={(event, editor) => {
+                    const data = editor.getData();
+                    // console.log({ event, editor, data });
+                    setJobData({ ...jobData, requirements: data });
+                  }}
+                  onBlur={(event, editor) => {
+                    console.log("Blur.", editor);
+                  }}
+                  onFocus={(event, editor) => {
+                    console.log("Focus.", editor);
+                  }}
+                />
+              </fieldset>
+            </Col>
+            {/* <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Profession
+                </label>
 
+                <input
+                  style={{ width: "100%" }}
+                  className="form-control"
+                  type={"text"}
+                  name="firstname"
+                  //   value={user.name}
+                  //   onChange={getUserData}
+                  placeholder="Enter Profession
+              "
+                  required
+                  onChange={(e) =>
+                    setJobData({ ...jobData, profession: e.target.value })
+                  }
+                />
+              </fieldset>
+            </Col> */}
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Education Level
+                </label>
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) =>
+                    setJobData({ ...jobData, educationLevel: e.target.value })
+                  }
+                >
+                  <option value="DEFAULT" disabled="">Select Education level</option><option>ASSOCIATE DEGREE</option><option>MASTER DEGREE</option><option>DOCTORATE DEGREE</option><option>PHD</option><option>OTHER</option>
+                </Form.Select>
+                {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Employment Type
+                </label>
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) =>
+                    setJobData({ ...jobData, empType: e.target.value })
+                  }
+                >
+                  <option value="DEFAULT" disabled="">Select Employment Type</option><option>PART TIME</option><option>CASUAL–NO SET HOURS OR DAYS OF WORK</option><option>PROJECT BASED</option><option>OTHER</option>
+                </Form.Select>
+                {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Project Timeline
+                </label>
+              </fieldset>
+            </Col>
+            <Container>
+              <Row>
+                <Col>
+                  <label className="text-l" style={{ color: "#7A7979" }}>
+                    Start :
+                  </label>
                   <input
+                    onChange={(e) =>
+                      setIsProjectTimeline({
+                        ...isProjectTimeline,
+                        gte: e.target.value,
+                      })
+                    }
                     style={{ width: "100%" }}
                     className="form-control"
-                    type={"text"}
+                    type={"date"}
                     name="firstname"
                     //   value={user.name}
                     //   onChange={getUserData}
-                    placeholder="Enter Profession
-                "
+                    placeholder="Start"
                     required
-                    onChange={(e) =>
-                      setJobData({ ...jobData, profession: e.target.value })
-                    }
                   />
-                </fieldset>
-              </Col> */}
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Education Level
+                </Col>
+                <Col>
+                  <label className="text-l" style={{ color: "#7A7979" }}>
+                    End :
                   </label>
-                  <Form.Select
-                    aria-label="Default select example"
+                  <input
                     onChange={(e) =>
-                      setJobData({ ...jobData, educationLevel: e.target.value })
+                      setIsProjectTimeline({
+                        ...isProjectTimeline,
+                        lte: e.target.value,
+                      })
                     }
-                  >
-                    <option>Select Education level</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </Form.Select>
-                  {/* <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="firstname"
-                //   value={user.name}
-                //   onChange={getUserData}
-                placeholder="Select Job Industry
-                "
-                required
-              /> */}
-                </fieldset>
-              </Col>
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Employment Type
-                  </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, empType: e.target.value })
-                    }
-                  >
-                    <option>Select Employement Type</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </Form.Select>
-                  {/* <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="firstname"
-                //   value={user.name}
-                //   onChange={getUserData}
-                placeholder="Select Job Industry
-                "
-                required
-              /> */}
-                </fieldset>
-              </Col>
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Project Timeline
-                  </label>
-                </fieldset>
-              </Col>
-              <Container>
-                <Row>
-                  <Col>
-                    <label className="text-l" style={{ color: "#7A7979" }}>
-                      Start :
-                    </label>
-                    <input
-                      onChange={(e) =>
-                        setIsProjectTimeline({
-                          ...isProjectTimeline,
-                          gte: e.target.value,
-                        })
-                      }
-                      style={{ width: "100%" }}
-                      className="form-control"
-                      type={"date"}
-                      name="firstname"
-                      //   value={user.name}
-                      //   onChange={getUserData}
-                      placeholder="Start"
-                      required
-                    />
-                  </Col>
-                  <Col>
-                    <label className="text-l" style={{ color: "#7A7979" }}>
-                      End :
-                    </label>
-                    <input
-                      onChange={(e) =>
-                        setIsProjectTimeline({
-                          ...isProjectTimeline,
-                          lte: e.target.value,
-                        })
-                      }
-                      style={{ width: "100%" }}
-                      className="form-control mx-2"
-                      type={"date"}
-                      name="firstname"
-                      //   value={user.name}
-                      //   onChange={getUserData}
-                      placeholder="Start
-                "
-                      required
-                    />
-                  </Col>
-                </Row>
-              </Container>
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Profession
-                  </label>
+                    style={{ width: "100%" }}
+                    className="form-control mx-2"
+                    type={"date"}
+                    name="firstname"
+                    //   value={user.name}
+                    //   onChange={getUserData}
+                    placeholder="Start
+              "
+                    required
+                  />
+                </Col>
+              </Row>
+            </Container>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Profession
+                </label>
+                <input
+                  style={{ width: "100%" }}
+                  className="form-control"
+                  name="firstname"
+                  onChange={(e) =>
+                    setJobData({ ...jobData, profession: e.target.value })
+                  }
+                  //   value={user.name}
+                  //   onChange={getUserData}
+                  placeholder="Enter Profession"
+                  required
+                />
+              </fieldset>
+            </Col>
+            {/* <Container>
+              <Row>
+                <Col lg="6">
+                  <label className="text-l">Start :</label>
                   <input
                     style={{ width: "100%" }}
                     className="form-control"
+                    type={"date"}
                     name="firstname"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, profession: e.target.value })
-                    }
                     //   value={user.name}
                     //   onChange={getUserData}
-                    placeholder="Enter Profession"
+                    placeholder="Minimum Salary"
                     required
                   />
-                </fieldset>
-              </Col>
-              {/* <Container>
-                <Row>
-                  <Col lg="6">
-                    <label className="text-l">Start :</label>
-                    <input
-                      style={{ width: "100%" }}
-                      className="form-control"
-                      type={"date"}
-                      name="firstname"
-                      //   value={user.name}
-                      //   onChange={getUserData}
-                      placeholder="Minimum Salary"
-                      required
-                    />
-                  </Col>
-                  <Col lg="6">
-                    <label className="text-l">End :</label>
-                    <input
-                      style={{ width: "100%" }}
-                      className="form-control mx-2"
-                      type={"date"}
-                      name="firstname"
-                      //   value={user.name}
-                      //   onChange={getUserData}
-                      placeholder="Maximum Salary
-                "
-                      required
-                    />
-                  </Col>
-                </Row>
-              </Container> */}
+                </Col>
+                <Col lg="6">
+                  <label className="text-l">End :</label>
+                  <input
+                    style={{ width: "100%" }}
+                    className="form-control mx-2"
+                    type={"date"}
+                    name="firstname"
+                    //   value={user.name}
+                    //   onChange={getUserData}
+                    placeholder="Maximum Salary
+              "
+                    required
+                  />
+                </Col>
+              </Row>
+            </Container> */}
 
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    Mode of Work
-                  </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, madeOfWork: e.target.value })
-                    }
-                  >
-                    <option>Select Mode of Work</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
-                  </Form.Select>
-                  {/* <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="firstname"
-                //   value={user.name}
-                //   onChange={getUserData}
-                placeholder="Select Job Industry
-                "
-                required
-              /> */}
-                </fieldset>
-              </Col>
-              <Col lg="12">
-                <fieldset>
-                  <label className="text-lg" style={{ width: "100%" }}>
-                    No. of Openings
-                  </label>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Mode of Work
+                </label>
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) =>
+                    setJobData({ ...jobData, madeOfWork: e.target.value })
+                  }
+                >
+                  <option>Select Mode of Work</option>
+                  <option value="1">One</option>
+                  <option value="2">Two</option>
+                  <option value="3">Three</option>
+                </Form.Select>
+                {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  No. of Openings
+                </label>
 
+                <input
+                  style={{ width: "100%" }}
+                  className="form-control"
+                  type={"number"}
+                  name="firstname"
+                  onChange={(e) =>
+                    setJobData({ ...jobData, noOfOpenings: e.target.value })
+                  }
+                  //   value={user.name}
+                  //   onChange={getUserData}
+                  placeholder="Enter No. of Openings
+              "
+                  required
+                />
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Salary Info
+                </label>
+                <Form.Select
+                  aria-label="Default select example"
+                  onChange={(e) =>
+                    setJobData({ ...jobData, salaryCurrency: e.target.value })
+                  }
+                >
+                  <option value="DEFAULT" disabled="">
+                    Currency
+                  </option>
+                  <option>HKD</option>
+                  <option>USD</option>
+                  <option>RMB</option>
+                  <option>Yen</option>
+                  <option>Won</option>
+                  <option>TWD</option>
+                  <option>Others</option>
+                </Form.Select>
+
+                {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+              </fieldset>
+            </Col>
+            <Container>
+              <Row>
+                <Col lg="6">
+                  <label className="text-l" style={{ color: "#7A7979" }}>
+                    Min :
+                  </label>
                   <input
                     style={{ width: "100%" }}
                     className="form-control"
                     type={"number"}
                     name="firstname"
                     onChange={(e) =>
-                      setJobData({ ...jobData, noOfOpenings: e.target.value })
+                      setisSalaryRange({
+                        ...isSalaryRange,
+                        gte: e.target.value,
+                      })
                     }
                     //   value={user.name}
                     //   onChange={getUserData}
-                    placeholder="Enter No. of Openings
-                "
+                    placeholder="Minimum Salary"
+                    required
+                  />
+                </Col>
+                <Col lg="6">
+                  <label className="text-l" style={{ color: "#7A7979" }}>
+                    Max :
+                  </label>
+                  <input
+                    style={{ width: "100%" }}
+                    className="form-control mx-2"
+                    type={"number"}
+                    name="firstname"
+                    onChange={(e) =>
+                      setisSalaryRange({
+                        ...isSalaryRange,
+                        lte: e.target.value,
+                      })
+                    }
+                    //   value={user.name}
+                    //   onChange={getUserData}
+                    placeholder="Maximum Salary
+              "
+                    required
+                  />
+                </Col>
+              </Row>
+            </Container>
+            <Col lg="12">
+              <fieldset className="dflexx">
+                <label className="text-lg">Salary Type :</label>
+                <input
+                  type="radio"
+                  name="radios"
+                  class="form-check-input"
+                  id="exampleRadio1"
+                  value="Salary Negotiable"
+                  style={{ marginLeft: "60px" }}
+                  onChange={(e) =>
+                    setJobData({ ...jobData, salaryType: e.target.value })
+                  }
+                />
+                <label
+                  class="form-check-label"
+                  for="exampleRadio1"
+                  style={{ color: "#7A7979" }}
+                >
+                  Salary Negotiable
+                </label>
+                <input
+                  type="radio"
+                  name="radios"
+                  class="form-check-input"
+                  id="exampleRadio2"
+                  value="Project Based"
+                  style={{ marginLeft: "60px" }}
+                  onChange={(e) =>
+                    setJobData({ ...jobData, salaryType: e.target.value })
+                  }
+                />
+                <label
+                  class="form-check-label"
+                  for="exampleRadio2"
+                  style={{ color: "#7A7979" }}
+                >
+                  Project Based
+                </label>
+                <input
+                  type="radio"
+                  name="radios"
+                  class="form-check-input"
+                  id="exampleRadio3"
+                  style={{ marginLeft: "60px" }}
+                  value="Others"
+                  onChange={(e) =>
+                    setJobData({ ...jobData, salaryType: e.target.value })
+                  }
+                />
+                <label
+                  class="form-check-label"
+                  for="exampleRadio3"
+                  style={{ color: "#7A7979" }}
+                >
+                  Others
+                </label>
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset className="dflexx">
+                <label className="text-lg">Salary Freq :</label>
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="bsradio"
+                  id="radio1"
+                  value="Per Day"
+                  style={{ marginLeft: "60px" }}
+                  onChange={(e) =>
+                    setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                  }
+                />
+                <label
+                  for="radio1"
+                  class="form-check-label pl-2"
+                  style={{ color: "#7A7979" }}
+                >
+                  Per Day
+                </label>
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="bsradio"
+                  id="radio2"
+                  value="per Week"
+                  style={{ marginLeft: "60px" }}
+                  onChange={(e) =>
+                    setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                  }
+                />
+                <label
+                  for="radio2"
+                  class="form-check-label pl-2"
+                  style={{ color: "#7A7979" }}
+                >
+                  Per Week
+                </label>
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="bsradio"
+                  id="radio3"
+                  value="per Month"
+                  style={{ marginLeft: "60px" }}
+                  onChange={(e) =>
+                    setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                  }
+                />
+                <label
+                  for="radio3"
+                  class="form-check-label pl-2"
+                  style={{ color: "#7A7979" }}
+                >
+                  Per Month
+                </label>
+                <input
+                  type="radio"
+                  class="form-check-input"
+                  name="bsradio"
+                  id="radio4"
+                  value="others"
+                  style={{ marginLeft: "60px" }}
+                  onChange={(e) =>
+                    setJobData({ ...jobData, salaryPayFreq: e.target.value })
+                  }
+                />
+                <label
+                  for="radio4"
+                  class="form-check-label pl-2"
+                  style={{ color: "#7A7979" }}
+                >
+                  Others
+                </label>
+              </fieldset>
+            </Col>
+
+            <Row>
+              <Col lg="6">
+                <fieldset>
+                  <label className="text-lg" style={{ width: "100%" }}>
+                    Posted Date
+                  </label>
+
+                  <input
+                    style={{ width: "100%" }}
+                    className="form-control"
+                    name="firstname"
+                    //   value={user.name}
+                    //   onChange={getUserData}
+                    disabled
+                    value={`${date.getDate()}-${date.getMonth() + 1
+                      }-${date.getFullYear()}`}
+                    placeholder="Enter No. of Openings"
+                    // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                     required
                   />
                 </fieldset>
               </Col>
-              <Col lg="12">
+
+              <Col lg="6">
                 <fieldset>
                   <label className="text-lg" style={{ width: "100%" }}>
-                    Salary Info
+                    Additional Emails
                   </label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryCurrency: e.target.value })
-                    }
-                  >
-                    <option value="DEFAULT" disabled="">
-                      Currency
-                    </option>
-                    <option>HKD</option>
-                    <option>USD</option>
-                    <option>RMB</option>
-                    <option>Yen</option>
-                    <option>Won</option>
-                    <option>TWD</option>
-                    <option>Others</option>
-                  </Form.Select>
 
-                  {/* <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="firstname"
-                //   value={user.name}
-                //   onChange={getUserData}
-                placeholder="Select Job Industry
-                "
-                required
-              /> */}
+                  <input
+                    style={{ width: "100%" }}
+                    className="form-control"
+                    type={"email"}
+                    name="firstname"
+                    onChange={(e) => setIsEmail(e.target.value)}
+                    //   value={user.name}
+                    //   onChange={getUserData}
+                    placeholder="Enter Additional Emails
+              "
+                    required
+                  />
                 </fieldset>
               </Col>
-              <Container>
-                <Row>
-                  <Col lg="6">
-                    <label className="text-l" style={{ color: "#7A7979" }}>
-                      Min :
-                    </label>
-                    <input
-                      style={{ width: "100%" }}
-                      className="form-control"
-                      type={"number"}
-                      name="firstname"
-                      onChange={(e) =>
-                        setisSalaryRange({
-                          ...isSalaryRange,
-                          gte: e.target.value,
-                        })
-                      }
-                      //   value={user.name}
-                      //   onChange={getUserData}
-                      placeholder="Minimum Salary"
-                      required
-                    />
-                  </Col>
-                  <Col lg="6">
-                    <label className="text-l" style={{ color: "#7A7979" }}>
-                      Max :
-                    </label>
-                    <input
-                      style={{ width: "100%" }}
-                      className="form-control mx-2"
-                      type={"number"}
-                      name="firstname"
-                      onChange={(e) =>
-                        setisSalaryRange({
-                          ...isSalaryRange,
-                          lte: e.target.value,
-                        })
-                      }
-                      //   value={user.name}
-                      //   onChange={getUserData}
-                      placeholder="Maximum Salary
-                "
-                      required
-                    />
-                  </Col>
-                </Row>
-              </Container>
-              <Col lg="12">
-                <fieldset className="dflexx">
-                  <label className="text-lg">Salary Type :</label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio1"
-                    value="Salary Negotiable"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio1"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Salary Negotiable
-                  </label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio2"
-                    value="Project Based"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Project Based
-                  </label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio3"
-                    style={{ marginLeft: "60px" }}
-                    value="Others"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio3"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Others
-                  </label>
-                </fieldset>
-              </Col>
-              <Col lg="12">
-                <fieldset className="dflexx">
-                  <label className="text-lg">Salary Freq :</label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio1"
-                    value="Per Day"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio1"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Day
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio2"
-                    value="per Week"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio2"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Week
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio3"
-                    value="per Month"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio3"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Month
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio4"
-                    value="others"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio4"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Others
-                  </label>
-                </fieldset>
-              </Col>
-
-              <Row>
-                <Col lg="6">
-                  <fieldset>
-                    <label className="text-lg" style={{ width: "100%" }}>
-                      Posted Date
-                    </label>
-
-                    <input
-                      style={{ width: "100%" }}
-                      className="form-control"
-                      name="firstname"
-                      //   value={user.name}
-                      //   onChange={getUserData}
-                      disabled
-                      value={`${date.getDate()}-${
-                        date.getMonth() + 1
-                      }-${date.getFullYear()}`}
-                      placeholder="Enter No. of Openings"
-                      // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
-                      required
-                    />
-                  </fieldset>
-                </Col>
-
-                <Col lg="6">
-                  <fieldset>
-                    <label className="text-lg" style={{ width: "100%" }}>
-                      Additional Emails
-                    </label>
-
-                    <input
-                      style={{ width: "100%" }}
-                      className="form-control"
-                      type={"email"}
-                      name="firstname"
-                      onChange={(e) => setIsEmail(e.target.value)}
-                      //   value={user.name}
-                      //   onChange={getUserData}
-                      placeholder="Enter Additional Emails
-                "
-                      required
-                    />
-                  </fieldset>
-                </Col>
-              </Row>
-            </div>
-          </Col>
-        </Row>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          style={{ background: "none", color: "#C1C1C1" }}
-          onClick={props.onHide}
-        >
-          Cancel
-        </Button>
-        <Button
-          style={{ background: "none", color: "#C1C1C1" }}
-          // onClick={props.onHide}
-          onClick={() => draftFunc()}
-        >
-          Save as Draft
-        </Button>
-        <Button
-          style={{ background: "none", color: "#C1C1C1" }}
-          // onClick={props.onHide}
-          onClick={() => previewFunc()}
-        >
-          Preview
-        </Button>
-        <Button
-          style={{ background: "none", color: "#39BEC1" }}
-          onClick={() => PostFunc()}
-        >
-          Post
-        </Button>
-      </Modal.Footer>
-    </Modal>
+            </Row>
+          </div>
+        </Col>
+      </Row>
+    </Modal.Body>
+    <Modal.Footer>
+      <Button
+        style={{ background: "none", color: "#C1C1C1" }}
+        onClick={props.onHide}
+      >
+        Cancel
+      </Button>
+      <Button
+        style={{ background: "none", color: "#C1C1C1" }}
+        // onClick={props.onHide}
+        onClick={() => draftFunc()}
+      >
+        Save as Draft
+      </Button>
+      <Button
+        style={{ background: "none", color: "#C1C1C1" }}
+        // onClick={props.onHide}
+        onClick={() => previewFunc()}
+      >
+        Preview
+      </Button>
+      <Button
+        style={{ background: "none", color: "#39BEC1" }}
+        onClick={() => PostFunc()}
+      >
+        Post
+      </Button>
+    </Modal.Footer>
+  </Modal>
   );
 }
-
 export const PublishedJob = () => {
   const [modalShowPublish, setModalShowPublish] = React.useState(false);
   const [show, setShow] = useState(false);
@@ -1434,300 +1457,11 @@ export const PublishedJob = () => {
                                           onHide={() => modalshow(items)}
                                         />
                                       )}
-                                      {/* <Modal
-                                      show={show}
-                                      onHide={handleClose}
-                                      backdrop="static"
-                                      keyboard={false}
-                                    >
-                                      <Modal.Header closeButton>
-                                        <Modal.Title style={{ color: "black" }}>
-                                          Edit Recruiter Profile
-                                        </Modal.Title>
-                                      </Modal.Header>
-                                      <Modal.Body>
-                                        <Row>
-                                          <Col lg="6">
-                                            <h2
-                                              className="text-2xl"
-                                              style={{ color: "#39BEC1" }}
-                                            >
-                                              Personal Info
-                                            </h2>
-                                            <div className="p-3">
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    First Name
-                                                  </label>
-                                                  <input
-                                                    style={{ width: "100%" }}
-                                                    className="form-control"
-                                                    name="fname"
-                                                    type={"text"}
-                                                   
-                                                    placeholder="Gia 
-
-                "
-                                                  />
-                                                </fieldset>
-                                              </Col>
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    Last Name
-                                                  </label>
-                                                  <input
-                                                    style={{ width: "100%" }}
-                                                    className="form-control"
-                                                    name="lname"
-                                                    type={"text"}
-                                                    placeholder="Jay 
-
-                "
-                                                  />
-                                                </fieldset>
-                                              </Col>
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    Email Address
-                                                  </label>
-                                                  <input
-                                                    style={{ width: "100%" }}
-                                                    className="form-control"
-                                                    name="email"
-                                                    type={"email"}
-                                                    placeholder="gaiaewreeytyrt@gmail.com 
-
-                "
-                                                  />
-                                                </fieldset>
-                                              </Col>
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    Phone Number
-                                                  </label>
-                                                  <input
-                                                    style={{ width: "100%" }}
-                                                    className="form-control"
-                                                    name="email"
-                                                    type={"text"}
-                                                    placeholder="61453472
-
-                "
-                                                  />
-                                                </fieldset>
-                                              </Col>
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    Founded in
-                                                  </label>
-                                                  <input
-                                                    style={{ width: "100%" }}
-                                                    className="form-control"
-                                                    name="email"
-                                                    type={"text"}
-                                                    placeholder="2000
-
-                "
-                                                  />
-                                                </fieldset>
-                                              </Col>
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    What makes us special
-                                                  </label>
-                                                  <input
-                                                    style={{ width: "100%" }}
-                                                    className="form-control"
-                                                    name="email"
-                                                    type={"text"}
-                                                   
-                                                    placeholder="A Service Like No Other
-                "
-                                                  />
-                                                </fieldset>
-                                              </Col>
-                                            </div>
-                                          </Col>
-                                          <Col lg="6">
-                                            <h2
-                                              className="text-2xl"
-                                              style={{ color: "#39BEC1" }}
-                                            >
-                                              Company Info{" "}
-                                            </h2>
-                                            <div className="p-3">
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    Company Name
-                                                  </label>
-
-                                                  <input
-                                                    style={{ width: "100%" }}
-                                                    className="form-control"
-                                                    type={"text"}
-                                                    name="firstname"
-                                                    
-                                                    placeholder="Gia (PVT) LTD
-
-                "
-                                                    required
-                                                  />
-                                                </fieldset>
-                                              </Col>
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    Company Scope
-                                                  </label>
-
-                                                  <input
-                                                    style={{ width: "100%" }}
-                                                    className="form-control"
-                                                    type={"text"}
-                                                    name="lastname"
-                                                    
-                                                    placeholder="IT Industry
-                "
-                                                    required
-                                                  />
-                                                </fieldset>
-                                              </Col>
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    Salary Range
-                                                  </label>
-                                                  <input
-                                                    style={{ width: "100%" }}
-                                                    className="form-control"
-                                                    name="Email"
-                                                    type={"text"}
-                                                   
-                                                    placeholder="https://www.me2work.com/
-                "
-                                                  />
-                                                </fieldset>
-                                              </Col>
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    Headquaters
-                                                  </label>
-                                                  <div
-                                                    style={{ display: "flex" }}
-                                                  >
-                                                    <input
-                                                      style={{ width: "100%" }}
-                                                      className="form-control"
-                                                      name="minwork"
-                                                      type={"text"}
-                                                      placeholder="USA
-                "
-                                                    />
-                                                  </div>
-                                                </fieldset>
-                                              </Col>
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    Company Location
-                                                  </label>
-                                                  <input
-                                                    style={{ width: "100%" }}
-                                                    className="form-control"
-                                                    name="Email"
-                                                    type={"text"}
-                                                   
-                                                    placeholder="Huston
-                "
-                                                  />
-                                                </fieldset>
-                                              </Col>
-                                              <Col lg="12">
-                                                <fieldset>
-                                                  <label
-                                                    className="text-lg"
-                                                    style={{ width: "100%" }}
-                                                  >
-                                                    Description
-                                                  </label>
-                                                  <textarea
-                                                    placeholder="Description"
-                                                    className="form-control"
-                                                  />
-                                                </fieldset>
-                                              </Col>
-                                            </div>
-                                          </Col>
-                                        </Row>
-                                      </Modal.Body>
-                                      <Modal.Footer>
-                                        <Button
-                                          variant="secondary"
-                                          onClick={handleClose}
-                                          style={{
-                                            background: "none",
-                                            color: "#C1C1C1",
-                                          }}
-                                        >
-                                          Cancel
-                                        </Button>
-                                        <Button
-                                          variant="primary"
-                                          style={{
-                                            background: "none",
-                                            color: "#39BEC1",
-                                          }}
-                                        >
-                                          Save
-                                        </Button>
-                                      </Modal.Footer>
-                                    </Modal> */}
                                       <p>
                                         Posted Date :{" "}
-                                        {items?._source?.createdAt}{" "}
+                                        {items?._source?.createdAt.substring(0,10)}
                                         &nbsp;&nbsp;&nbsp;Expiry Date :{" "}
-                                        {items?._source?.expiryDate}
+                                        {items?._source?.expiryDate.substring(0,10)}
                                       </p>
                                     </div>
                                   </div>

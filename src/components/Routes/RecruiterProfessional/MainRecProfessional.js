@@ -1,4 +1,4 @@
-import React, { useState, Component } from "react";
+import React, { useState, Component, useEffect } from "react";
 import { Container, Button, Row, Col, Image, Form } from "react-bootstrap";
 
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
@@ -1116,11 +1116,63 @@ function MyVerticallyCenteredModal1(props) {
 }
 export const MainRecProfessional = () => {
   const [show, setShow] = useState(false);
+  
+  const [searchShow, setSearchShow] = useState(false);
   const [smShow, setSmShow] = useState(false);
   const [lgShow, setLgShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [modalShow, setModalShow] = React.useState(false);
+  const [jobIndustry, setJobIndustry] = useState('')
+  const [jobFunction, setJobFunction] = useState('')
+  const [subJobFunction, setSubJobFunction] = useState('')
+  const [profession, setProfession] = useState('')
+  const [companyName, setCompanyName] = useState('')
+  const [modeofWork, setModeOfWork] = useState('')
+  const [salaryRange, setSalaryRange] = useState({
+    gte : '',
+    lte : ''
+  })
+  const [location, setLocation] = useState('')
+  const handleChanger = () => {
+    if (searchShow === true) {
+      setSearchShow(false);
+    } else {
+      setSearchShow(true);
+    }
+  };
+
+  const [searchData ,setSearchData] = useState({})
+
+  const [isSearch, setIsSearch] = useState({
+    keyword: "",
+    filter: [],
+  });
+
+
+  useEffect(() => {
+    searchFun()
+  },[])
+
+  const searchFun = () => {
+    axios
+      .get(`api/v1/job-post?from=0&size=4&submitted=true`)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data.data.data;
+        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+        // setIsProfileData(data)
+        setSearchData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const resetFun = () => {
+    setSearchData(null);
+  };
+
+
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -1193,11 +1245,14 @@ export const MainRecProfessional = () => {
             <Row>
               <Col>
                 <div className="About_main_images_search">
-                  <input placeholder="Enter Profession, Company Name or Keywords."></input>
+                  <input placeholder="Enter Profession, Company Name or Keywords."
+                  onChange={(e) => setIsSearch({...isSearch, keyword : e.target.value})}
+                  ></input>
 
                   <Button
                     className="text-white border-rounded px-3"
                     style={{ background: "#39BEC1", border: "none" }}
+                    onClick={() => searchFun()}
                   >
                     Search
                   </Button>
@@ -1212,11 +1267,208 @@ export const MainRecProfessional = () => {
             </Row>
           </Col>
         </Row>
-        <Row>
-          <Col lg="12" className="webkit mt-4">
+        {searchShow === true ? (
+          <>
+            <Row className="align-items-center">
+              <Col lg="5">
+                <div className="p-3">
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Job Industry
+                      </label>
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setJobIndustry(e.target.value)}
+                      // onChange={}
+                      >
+                      <option hidden="">Select Job Industry</option><option>Universities / Education</option><option>Manufacturing</option><option>Security </option><option>Real Estate</option><option>Professional Consultings (Legal, HR, Finance etc.)</option><option>Banking and Finance</option><option>Beautiy Care and Health / Welness / Fitness</option><option>Building / Constructions / Surveying</option><option>Government / Public Utilities</option><option>Hospitality / Travel / Airlines / Clubhouse</option><option>IT / R&amp;D / Cyber Security / Telecommunication / Science</option><option>Retail</option><option>Insurance</option><option>Logistics / Transportaton / Supply Chain</option><option>F&amp;B / Wine &amp; Spriits</option><option>Logistics / Transportaton / Supply Chain</option><option>Medical / Pharmacy / Hospital</option><option>Engineerings</option><option>Others</option>
+                      </Form.Select>
+                      {/* <input
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="firstname"
+                //   value={user.name}
+                //   onChange={getUserData}
+                placeholder="Select Job Industry
+                "
+                required
+              /> */}
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Job Function
+                      </label>
+                      <Form.Select aria-label="Default select example"
+                          onChange={(e) => setJobFunction(e.target.value)}>
+                      <option hidden="">Select Job Function</option><option>HR &amp; Admin</option><option>General Management</option><option>Finance and Accounting</option><option>Sales and Marketing</option><option>Banking and Financial Institue Professionals</option><option>Insurance Professionals (back-end functions)</option><option>IT Professionals (Specific Fields)</option><option>Manufacturing</option><option>Real Estate (Surveyers / reasearchers etc.)</option><option>Professional Designers</option><option>Lecturers / Teachers</option><option>Engineering / Architect</option><option>Others</option>
+                      </Form.Select>
+                      {/* <input
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="lastname"
+                //   value={user.email}
+                //   onChange={getUserData}
+                placeholder="Select Job Function
+                "
+                required
+              /> */}
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Sub Job Function
+                      </label>
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setSubJobFunction(e.target.value)}>
+                      <option hidden="">Select Sub Job Function</option>
+                      </Form.Select>
+                      {/* <input
+                style={{ width: "100%" }}
+                className="form-control"
+                name="Email"
+                type={"email"}
+                //   value={user.number}
+                //   onChange={getUserData}
+                placeholder="Select Sub Job Function
+                "
+              /> */}
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Profession
+                      </label>
+                     
+                      <input
+                style={{ width: "100%" }}
+                className="form-control"
+                name="Profession"
+                type={"text"}
+                //   value={user.number}
+                //   onChange={getUserData}
+                placeholder="Enter Job Title"
+                onChange={(e) => setProfession(e.target.value)}
+              />
+                    </fieldset>
+                  </Col>
+                </div>
+              </Col>
+              <Col lg="2">
+                <hr className="hr" />
+              </Col>
+              <Col lg="5">
+                <div className="p-3">
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Company Name
+                      </label>
+                     
+                      <input
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="CompanyName"
+                //   value={user.name}
+                //   onChange={getUserData}
+                placeholder="Enter Company Name"
+                required
+                onChange={(e) => setCompanyName(e.target.value)}
+              />
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Mode of Work
+                      </label>
+                      <Form.Select aria-label="Default select example"
+                       onChange={(e) => setModeOfWork(e.target.value)}>
+                      <option hidden="">Select Mode of Work</option><option>Eastern</option><option>Office</option><option>Work From Home</option><option>Hybrid</option>
+                      </Form.Select>
+                      {/* <input
+                style={{ width: "100%" }}
+                className="form-control"
+                type={"text"}
+                name="lastname"
+                //   value={user.email}
+                //   onChange={getUserData}
+                placeholder="Select Job Function
+                "
+                required
+              /> */}
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Salary Range
+                      </label>
+                      <div style={{ display: "flex" }}>
+                        <input
+                          style={{ width: "100%" }}
+                          className="form-control"
+                          name="SaleryMin"
+                          type={"number"}
+                          //   value={user.number}
+                          //   onChange={getUserData}
+                          placeholder="Enter Min Salary"
+                          onChange={(e) => setSalaryRange({...salaryRange, gte : e.target.value})}
+                        />
+                        <input
+                          style={{ width: "100%" }}
+                          className="form-control mx-2"
+                          name="SaleryMax"
+                          type={"number"}
+                          //   value={user.number}
+                          //   onChange={getUserData}
+                          placeholder="Enter Max Salary"
+                          onChange={(e) => setSalaryRange({...salaryRange, lte : e.target.value})}
+                        />
+                      </div>
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Location
+                      </label>
+                      <Form.Select aria-label="Default select example"
+                       onChange={(e) => setLocation(e.target.value)}>
+                      <option hidden="">Select Job Location</option><option>Central and Western</option><option>Eastern</option><option>Southern</option><option>Wan Chai</option><option>Kowloon City</option><option>Kwun Tong</option><option>Sham Shui Po</option><option>Wong Tai Sin</option><option>Yau Tsim Mong</option><option>Islands</option><option>Kwai Tsing</option><option>North</option><option>Sai Kung</option><option>Shatin</option><option>Tai Po</option><option>Tsuen Wan</option><option>Tuen Mun</option><option>Yuen Long</option><option>China</option><option>South East Asia (SEA)</option><option>Asia Pacific (APAC)</option><option>Others</option>
+                      </Form.Select>
+                      {/* <input
+                style={{ width: "100%" }}
+                className="form-control"
+                name="Email"
+                type={"email"}
+                //   value={user.number}
+                //   onChange={getUserData}
+                placeholder="Select Job Title
+
+                "
+              /> */}
+                    </fieldset>
+                  </Col>
+                </div>
+              </Col>
+            </Row>
+          </>
+        ) : (
+          ""
+        )}
+  <Row>
+          <Col lg="12" className="webkit">
             <div className="p-2">
               <h2 className="text-2xl">Advance Search</h2>
               <BsArrowBarDown
+                onClick={() => handleChanger()}
                 className="text-2xl"
                 style={{ color: "#39BEC1" }}
               />
@@ -1226,7 +1478,9 @@ export const MainRecProfessional = () => {
       </Container>
       <Container>
         <Row className="align-items-center">
-          <Col lg="12">
+        {searchData.length > 0 && searchData.map((event, data) => {
+          return (
+            <Col lg="12">
             <div className="m-3">
               <div className="boxshad py-3">
                 <Row className="align-items-center">
@@ -1262,22 +1516,19 @@ export const MainRecProfessional = () => {
                         style={{ color: "#39bec1" }}
                         className="text-2xl font-bold"
                       >
-                        Zeeshan Siddique
-                      </span>{" "}
+                        {event?._source?.title}
+                      </span>
                       <br />
                       <span className="text-2xl" style={{ color: "black" }}>
-                        Doctor
+                      {event?._source?.industry}
                       </span>
                       <br />
                       <br />
                       <span style={{ color: "rgb(148,147,147)" }}>
-                        It has survived t is a long established fact that a
-                        reader will be distracted by the readable content of a
-                        page when looking at its layout. The point of using
-                        Lorem Ipsum is that it has a more-or-less normal
-                        distribution of letters, as opposed to using 'Content
-                        here, content here', making it look like readable
-                        English.
+                      {event?._source?.description.replace(
+                                  /(<([^>]+)>)/gi,
+                                  ""
+                                )}
                       </span>
                     </h3>
                   </Col>
@@ -1318,7 +1569,7 @@ export const MainRecProfessional = () => {
                       <h2 className="text-xl font-semibold">Salary Range</h2>
                       <br />
                       <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                        $15000 - $20,000
+                        $ {event?._source?.salaryRange?.gte} - $ {event?._source?.salaryRange?.lte}
                       </h2>
                     </div>
                   </Col>
@@ -1332,385 +1583,17 @@ export const MainRecProfessional = () => {
                           style={{
                             fontWeight: "bolder",
                           }}
-                        />{" "}
-                        Panam
+                        />
+                       {event?._source?.location}
                       </h2>
                     </div>
                   </Col>
                 </Row>
-                {/* <hr className="my-2" />
-              <Row className="align-items-center pl-4">
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-xl font-semibold">Experience</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      4
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Salary Range</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      $15000 - $20,000
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Location</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        style={{
-                          fontWeight: "bolder",
-                        }}
-                      />{" "}
-                      Panam
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <Button
-                    className="text-white border-rounded px-3"
-                    style={{ background: "#39BEC1", border: "none" }}
-                  >
-                    View Profile
-                  </Button>
-                </Col>
-              </Row> */}
               </div>
             </div>
           </Col>
-        </Row>
-      </Container>
-      <Container>
-        <Row className="align-items-center">
-          <Col lg="12">
-            <div className="m-3">
-              <div className="boxshad py-3">
-                <Row className="align-items-center">
-                  <Col lg="12" style={{ textAlign: "-webkit-right" }}>
-                    <div
-                      style={{
-                        float: "right",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                      className="webkit"
-                    >
-                      <Button
-                        className="border-rounded text-2xl"
-                        style={{
-                          background: "none",
-                          color: "#C1C1C1",
-                        }}
-                      >
-                        <BsBookmark />
-                      </Button>
-                    </div>
-                  </Col>
-                  <Col lg="2" className="webkit">
-                    <Image
-                      style={{ width: "100%" }}
-                      src={require("../../../assets/Profile.png")}
-                    />
-                  </Col>
-                  <Col lg="7">
-                    <h3 className="py-3 robot">
-                      <span
-                        style={{ color: "#39bec1" }}
-                        className="text-2xl font-bold"
-                      >
-                        Zeeshan Siddique
-                      </span>{" "}
-                      <br />
-                      <span className="text-2xl" style={{ color: "black" }}>
-                        Doctor
-                      </span>
-                      <br />
-                      <br />
-                      <span style={{ color: "rgb(148,147,147)" }}>
-                        It has survived t is a long established fact that a
-                        reader will be distracted by the readable content of a
-                        page when looking at its layout. The point of using
-                        Lorem Ipsum is that it has a more-or-less normal
-                        distribution of letters, as opposed to using 'Content
-                        here, content here', making it look like readable
-                        English.
-                      </span>
-                    </h3>
-                  </Col>
-
-                  <Col lg="3">
-                    <div className="webkit" style={{ display: "grid" }}>
-                      <Button
-                        variant="primary"
-                        onClick={() => setModalShow(true)}
-                        className="text-white border-rounded px-3 py-3 mx-2"
-                        style={{
-                          background: "#39BEC1",
-                          border: "none",
-                        }}
-                      >
-                        VIEW PROFILE
-                      </Button>
-                      <MyVerticallyCenteredModal
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                      />
-                    </div>
-                  </Col>
-                </Row>
-                <hr className="my-2" />
-                <Row className="align-items-center pl-4">
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-xl font-semibold">Experience</h2>
-                      <br />
-                      <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                        4 Year
-                      </h2>
-                    </div>
-                  </Col>
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-xl font-semibold">Salary Range</h2>
-                      <br />
-                      <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                        $15000 - $20,000
-                      </h2>
-                    </div>
-                  </Col>
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-xl font-semibold">Location</h2>
-                      <br />
-                      <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                        <FontAwesomeIcon
-                          icon={faLocationDot}
-                          style={{
-                            fontWeight: "bolder",
-                          }}
-                        />{" "}
-                        Panam
-                      </h2>
-                    </div>
-                  </Col>
-                </Row>
-                {/* <hr className="my-2" />
-              <Row className="align-items-center pl-4">
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Experience</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      4
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Salary Range</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      $15000 - $20,000
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Location</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        style={{
-                          fontWeight: "bolder",
-                        }}
-                      />{" "}
-                      Panam
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <Button
-                    className="text-white border-rounded px-3"
-                    style={{ background: "#39BEC1", border: "none" }}
-                  >
-                    View Profile
-                  </Button>
-                </Col>
-              </Row> */}
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
-      <Container>
-        <Row className="align-items-center">
-          <Col lg="12">
-            <div className="m-3">
-              <div className="boxshad py-3">
-                <Row className="align-items-center">
-                  <Col lg="12" style={{ textAlign: "-webkit-right" }}>
-                    <div
-                      style={{
-                        float: "right",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                      className="webkit"
-                    >
-                      <Button
-                        className="border-rounded text-2xl"
-                        style={{
-                          background: "none",
-                          color: "#C1C1C1",
-                        }}
-                      >
-                        <BsBookmark />
-                      </Button>
-                    </div>
-                  </Col>
-                  <Col lg="2" className="webkit">
-                    <Image
-                      style={{ width: "100%" }}
-                      src={require("../../../assets/Profile.png")}
-                    />
-                  </Col>
-                  <Col lg="7">
-                    <h3 className="py-3 robot">
-                      <span
-                        style={{ color: "#39bec1" }}
-                        className="text-2xl font-bold"
-                      >
-                        Zeeshan Siddique
-                      </span>{" "}
-                      <br />
-                      <span className="text-2xl" style={{ color: "black" }}>
-                        Doctor
-                      </span>
-                      <br />
-                      <br />
-                      <span style={{ color: "rgb(148,147,147)" }}>
-                        It has survived t is a long established fact that a
-                        reader will be distracted by the readable content of a
-                        page when looking at its layout. The point of using
-                        Lorem Ipsum is that it has a more-or-less normal
-                        distribution of letters, as opposed to using 'Content
-                        here, content here', making it look like readable
-                        English.
-                      </span>
-                    </h3>
-                  </Col>
-
-                  <Col lg="3">
-                    <div className="webkit" style={{ display: "grid" }}>
-                      <Button
-                        variant="primary"
-                        onClick={() => setModalShow(true)}
-                        className="text-white border-rounded px-3 py-3 mx-2"
-                        style={{
-                          background: "#39BEC1",
-                          border: "none",
-                        }}
-                      >
-                        VIEW PROFILE
-                      </Button>
-                      <MyVerticallyCenteredModal
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                      />
-                    </div>
-                  </Col>
-                </Row>
-                <hr className="my-2" />
-                <Row className="align-items-center pl-4">
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-xl font-semibold">Experience</h2>
-                      <br />
-                      <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                        4 Year
-                      </h2>
-                    </div>
-                  </Col>
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-xl font-semibold">Salary Range</h2>
-                      <br />
-                      <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                        $15000 - $20,000
-                      </h2>
-                    </div>
-                  </Col>
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-xl font-semibold">Location</h2>
-                      <br />
-                      <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                        <FontAwesomeIcon
-                          icon={faLocationDot}
-                          style={{
-                            fontWeight: "bolder",
-                          }}
-                        />{" "}
-                        Panam
-                      </h2>
-                    </div>
-                  </Col>
-                </Row>
-                {/* <hr className="my-2" />
-              <Row className="align-items-center pl-4">
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Experience</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      4
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Salary Range</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      $15000 - $20,000
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Location</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        style={{
-                          fontWeight: "bolder",
-                        }}
-                      />{" "}
-                      Panam
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <Button
-                    className="text-white border-rounded px-3"
-                    style={{ background: "#39BEC1", border: "none" }}
-                  >
-                    View Profile
-                  </Button>
-                </Col>
-              </Row> */}
-              </div>
-            </div>
-          </Col>
+          )
+        })} 
         </Row>
       </Container>
     </Container>

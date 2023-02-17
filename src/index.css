@@ -305,8 +305,13 @@ fieldset input ,textarea{
 #check{
   font-size: 13px !important;
 }
-
-@media only screen and (max-width: 992px){
+.profileWidth {
+  width: 8%;
+}
+@media only screen and (max-width: 992px) {
+  .profileWidth {
+    width: 25% !important;
+  }
   .accordion-body{
     padding: 0px !important;
   }
