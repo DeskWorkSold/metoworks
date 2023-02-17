@@ -160,6 +160,8 @@ export const FreelanceProfileView = () => {
 
   const [profileImg, setProfileImg] = useState("");
   const navigate = useNavigate();
+  const [thumbnail, setThumbnail] = useState('')
+  console.log(thumbnail, 'thumbnail');
 
   // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
   // console.log(profileData, "profileData");
@@ -297,22 +299,26 @@ export const FreelanceProfileView = () => {
         console.log(err);
       });
 
-    axios
-      .get(`api/v1/user/asset/thumbnail`, { responseType: "arraybuffer" })
-      .then((res) => {
-        let buffer = require("buffer");
-        const data = `data:${
-          res.headers["content-type"]
-        };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
-        console.log("res", res);
-        console.log("imagee", data);
-        setProfileImg(data);
-         localStorage.setItem('profileImg', data)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      profileImageFunc()
   };
+
+  const profileImageFunc = () => {
+    axios
+    .get(`api/v1/user/asset/thumbnail`, { responseType: "arraybuffer" })
+    .then((res) => {
+      let buffer = require("buffer");
+      const data = `data:${
+        res.headers["content-type"]
+      };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
+      console.log("res", res);
+      console.log("imagee", data);
+      setProfileImg(data);
+       localStorage.setItem('profileImg', data)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   const profileFunc = () => {
     let isData = {
@@ -604,6 +610,30 @@ export const FreelanceProfileView = () => {
       });
   };
 
+  const updateProfileImage = (event) => {
+    setThumbnail(event.target.files[0])
+    if(thumbnail) {
+      onPostThumnail()
+    }
+  }
+
+  const onPostThumnail = () => {
+    if (thumbnail) {
+      const formData = new FormData();
+      formData.append("thumbnail", thumbnail);
+      axios.post(`api/v1/user/asset/thumbnail`, formData)
+      .then((res) => {
+        console.log(res, 'img response');
+        if(res) {
+          profileImageFunc()
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+}
+
   const FileUploadComponent = () => {
     // alert('clicked')s
     const fileParams = ({ meta }) => {
@@ -636,11 +666,9 @@ export const FreelanceProfileView = () => {
             type="file"
             accept={accept}
             multiple
-            onChange={(e) => {
-              getFilesFromEvent(e).then((chosenFiles) => {
-                onFiles(chosenFiles);
-              });
-            }}
+            onChange={(e) => 
+              updateProfileImage(e)
+            }
           />
         </label>
       );
@@ -2364,6 +2392,36 @@ export const FreelanceProfileView = () => {
     // setEditIsExperienceData(event);
   };
 
+const [isOpenWork,setIsOpenToWork] = useState(false)
+
+ const getOpenWork = () => {
+
+    setIsOpenToWork(isOpenWork ? false : true)
+    
+
+ }
+   
+useEffect(()=>{
+  const reqBody = {
+    isOpenToWork: isOpenWork,
+  }; 
+  axios
+        .post(
+          `api/v1/user/freelancer`,
+          reqBody
+        )
+        .then((res) => {
+          // alert(isEditExperienceData.profession)
+          console.log(res, "education edit data successfully added");
+          if (res) {
+            initialFun()
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+},[isOpenWork])
+
   // Language edit & delete End
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -2464,6 +2522,7 @@ export const FreelanceProfileView = () => {
                         type="switch"
                         id="custom-switch"
                         defaultChecked={profileData?.data?.isOpenToWork}
+                        onClick = {()=>getOpenWork()}
                       />
                       <h2 className="text-2xl font-semibold pt-2">
                         Salary Range

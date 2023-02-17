@@ -18,6 +18,8 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useNavigate } from "react-router-dom/dist";
+import profilePicture from '../assets/profile-picture.png'
+
 export const Topnav = () => {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -229,7 +231,7 @@ export const Topnav = () => {
                   >
                     <Image
                       style={{ width: "100%", objectFit: "cover", borderRadius : '100%' }}
-                      src={profileImage}
+                      src={profileImage ? profileImage : {uri : profilePicture}}
                     />
                     {/* <AccountCircle /> */}
                   </IconButton>
