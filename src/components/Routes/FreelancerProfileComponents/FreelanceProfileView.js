@@ -57,6 +57,7 @@ export const FreelanceProfileView = () => {
   const [modalShowLanguage, setModalShowLanguage] = React.useState(false);
   const [modalShowLanguageDelete, setModalShowLanguageDelete] =
     React.useState(false);
+    const [isDelete,setIsDelete] = React.useState(false)
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
@@ -1106,7 +1107,7 @@ export const FreelanceProfileView = () => {
         </div>
       );
     },
-    [isEditExperienceData, isChecked]
+    [isEditExperienceData, isChecked,isDelete]
   );
 
   const modalshow = (event) => {
@@ -1138,6 +1139,7 @@ export const FreelanceProfileView = () => {
       .then((res) => {
         // console.log(res.data, 'eeeeeeeeeeeeee');
         let data = res.data;
+        setIsDelete(!isDelete)
         initialFun();
         console.log(res, "profile edit data successfully added");
         // ProfileExpData(userId);

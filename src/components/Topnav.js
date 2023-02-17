@@ -192,7 +192,7 @@ export const Topnav = () => {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    <Link>
+                    <Link to={userType == "freeLancer" ? '/FreelancerProfile' : '/CompanyProfile'}>
                       <MenuItem >My Profile</MenuItem>
                     </Link>
                     <Link

@@ -626,8 +626,8 @@ export const SecOpportunities = () => {
                                 {values?._source?.description.replace(
                                   /(<([^>]+)>)/gi,
                                   ""
-                                )}
-                              </h2>
+                                )}`
+                              </h2>`
                             </div>
                           </Col>
 
