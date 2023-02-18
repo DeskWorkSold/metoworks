@@ -57,7 +57,8 @@ export const FreelanceProfileView = () => {
   const [modalShowLanguage, setModalShowLanguage] = React.useState(false);
   const [modalShowLanguageDelete, setModalShowLanguageDelete] =
     React.useState(false);
-    const [isDelete,setIsDelete] = React.useState(false)
+  const [update, setUpdate] = useState(false);
+  const [deleteData, setDeleteData] = useState(false);
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
@@ -126,15 +127,18 @@ export const FreelanceProfileView = () => {
     },
   });
 
-  console.log(profileData, "profileeee");
-
   const [isIdPublic, setIdPublic] = useState(profileData?.isIdCardPublic);
   const [profileExp, setProfileExp] = useState({});
   const [experienceId, setExperienceId] = useState("");
   const [editProfileExp, setEditProfileExp] = useState({});
   const [isEducation, setIsEducation] = useState({});
+  console.log(isEducation.certificate, "certificaaaaaaaaaaateeeee");
   const [isAchievement, setIsAchievement] = useState({});
-  const [isLanguage, setIsLanguage] = useState({});
+  const [isLanguage, setIsLanguage] = useState({
+    languageType: "",
+    examLevel: "",
+    gradingLevel: "",
+  });
   const [isEducationData, setIsEducationData] = useState({});
   const [isAchievementData, setIsAchievementData] = useState({});
   const [isExperienceData, setIsExperienceData] = useState({
@@ -274,20 +278,17 @@ export const FreelanceProfileView = () => {
 
   // console.log(profileImg);
 
-  const initialFun = (id) => {
-    axios
+  const initialFun = async (id) => {
+    await axios
       .get(`/api/v1/user/freelancer`)
       .then((res) => {
-        // console.log(res, "Initial Data");
         let data = res.data;
-        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
-        // setIsProfileData(data)
+        console.log(data, "dataaaaaaa");
         setProfileData(data);
         setIsExperienceData(data.data.experience);
         setIsAchievementData(data.data.achievement);
         setIsEducationData(data.data.education);
         setIsLanguageData(data.data.language);
-        // setProfileImg(data.data.files.thumbnail)
       })
       .catch((err) => {
         console.log(err);
@@ -330,27 +331,6 @@ export const FreelanceProfileView = () => {
   };
 
   const profileFunc = () => {
-    // let isData = { data :{
-    //   firstName: profileData.data.firstName,
-    //   lastName: profileData.data.lastName,
-    //   visaPermit: profileData.data.visaPermit,
-    //   idCard: profileData.data.idCard.toString(),
-    //   gender: profileData.data.gender,
-    //   isIdCardPublic: profileData.data.isIdCardPublic,
-    //   aboutMe: profileData.data.aboutMe,
-    //   phoneNumber: profileData.data.phoneNumber,
-    //   dob: profileData.data.dob,
-    //   country: profileData.data.country,
-    //   city: profileData.data.city,
-    //   address: profileData.data.address,
-    //   state: profileData.data.state,
-    //   salaryRange: {
-    //     gte: isSalaryRange.gte,
-    //     lte: isSalaryRange.lte,
-
-    //   },
-    // },
-    // };
     let myData = {
       aboutMe: profileData.aboutMe ?? profileData.data.aboutMe,
       address: profileData.address ?? profileData.data.address,
@@ -371,27 +351,13 @@ export const FreelanceProfileView = () => {
       state: profileData.state ?? profileData.data.state,
       visaPermit: profileData.visaPermit ?? profileData.data.visaPermit,
     };
-
-    console.log(myData, "myDataa");
-
-    // console.log(isData, "Dataaaaaaaaaaaaa");
-    // console.log(profileData, "profileData");
-    // isData.data = isData
-    // console.log(isData)
-    // let formdata = new FormData();
-    // console.log(formdata, "data");
-
     if (myData) {
-      // Object.entries(profileData).map(([key, value]) => {
-      //   console.log(key,key)
-      //   console.log(value,"values")
-      //   formdata.append(key, value);
-      // });
-      // console.log(formdata, "formData");
       axios
         .post(`api/v1/user/freelancer`, myData)
         .then((res) => {
-          initialFun();
+          setTimeout(() => {
+            initialFun();
+          }, 1000);
           if (res.data) {
             setShow(false);
           }
@@ -403,12 +369,6 @@ export const FreelanceProfileView = () => {
   };
 
   const ProfileExp = () => {
-    console.log(profileExp, "profileExp");
-
-    console.log(isExperienceData, "experienceData");
-
-    console.log(profileData, "dataa");
-
     profileExp.duration = durationData;
 
     let myExperienceData = [...isExperienceData, profileExp];
@@ -426,9 +386,11 @@ export const FreelanceProfileView = () => {
     axios
       .post(`api/v1/user/freelancer`, profileData.data)
       .then((res) => {
-        initialFun();
+        setTimeout(() => {
+          initialFun();
+        }, 1000);
         if (res.data) {
-          setShow3(false);
+          setShow1(false);
         }
       })
       .catch((err) => {
@@ -498,20 +460,31 @@ export const FreelanceProfileView = () => {
     }
   };
 
-  const educationFunc = () => {
-    let formdata = new FormData();
-    Object.entries(isEducation).map(([key, value]) => {
-      formdata.append(key, value);
-    });
+  const educationFunc = (props) => {
+    isEducation.duration = durationData;
+    isEducation.isCurrentlyWorking = false;
+    delete isEducation.lte;
+    isEducation.certificate = profileData.data.id;
+    let myEducationData = [...isEducationData, isEducation];
+
+    profileData.data.education = myEducationData;
+    delete profileData.data.expYears;
+    delete profileData.data.createdAt;
+    delete profileData.data.updatedAt;
+    delete profileData.data.email;
+    delete profileData.data.id;
+
     axios
-      .post(`http://localhost:3000/v1/education`, formdata)
+      .post(`api/v1/user/freelancer`, profileData.data)
       .then((res) => {
-        // console.log(res, "profile data successfully added");
-        setProfileExp(res.data);
-        if (res) {
+        setTimeout(() => {
+          initialFun();
+        }, 1000);
+
+        if (res.data) {
           setShow2(false);
+          props.onHide();
         }
-        // ProfileExpData()
       })
       .catch((err) => {
         console.log(err);
@@ -531,14 +504,26 @@ export const FreelanceProfileView = () => {
   // };
 
   const achievementFunc = () => {
-    let formdata = new FormData();
-    Object.entries(isAchievement).map(([key, value]) => {
-      formdata.append(key, value);
-    });
+    isAchievement.certificate = profileData.data.id;
+    let myAchievementData = [...isAchievementData, isAchievement];
+
+    profileData.data.achievement = myAchievementData;
+    delete profileData.data.expYears;
+    delete profileData.data.createdAt;
+    delete profileData.data.updatedAt;
+    delete profileData.data.email;
+    delete profileData.data.id;
+
     axios
-      .post(`http://localhost:3000/v1/achievement`, formdata)
+      .post(`api/v1/user/freelancer`, profileData.data)
       .then((res) => {
-        console.log(res, "profile data successfully added");
+        setTimeout(() => {
+          initialFun();
+        }, 1000);
+        if (res.data) {
+          setShow7(false);
+          setShow3(false);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -614,14 +599,42 @@ export const FreelanceProfileView = () => {
   // console.log(isEditExperienceData,"edit")
 
   const LanguageFunc = () => {
+    console.log(isLanguage, "language");
+
+    let myLanguageData = [...isLanguageData, isLanguage];
+
+    console.log(myLanguageData, "myLanguage");
+    profileData.data.language = myLanguageData;
+
+    console.log(profileData, "profileAfter");
+    delete profileData.data.expYears;
+    delete profileData.data.createdAt;
+    delete profileData.data.updatedAt;
+    delete profileData.data.id;
+    delete profileData.data.email;
+
     axios
-      .post(`http://localhost:3000/v1/language`, isLanguage)
+      .post(`api/v1/user/freelancer`, profileData.data)
       .then((res) => {
-        console.log(res, "profile data successfully added");
+        setTimeout(() => {
+          initialFun();
+        }, 1000);
+        if (res.data) {
+          setShow4(false);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
+
+    // axios
+    //   .post(`http://localhost:3000/v1/language`, isLanguage)
+    //   .then((res) => {
+    //     console.log(res, "profile data successfully added");
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
 
   const LanguageData = (id) => {
@@ -785,7 +798,7 @@ export const FreelanceProfileView = () => {
       };
       console.log(editIsExperienceData1, "titlllllllllllllllle");
 
-      const updateProfileExp = () => {
+      const updateProfileExp = (props) => {
         let newData = [...isExperienceData];
 
         const expData = {
@@ -837,7 +850,14 @@ export const FreelanceProfileView = () => {
             console.log(res, "profile edit data successfully added");
             // ProfileExpData(userId);
             if (data) {
-              setShow5(false);
+              props.onHide();
+              setShow(false);
+              setTimeout(() => {
+                initialFun();
+              }, 1000);
+              setTimeout(() => {
+                setUpdate(!update);
+              }, 2000);
             }
           })
           .catch((err) => {
@@ -905,7 +925,7 @@ export const FreelanceProfileView = () => {
                       </label>
                       <Form.Select
                         aria-label="Default select example"
-                        value={props?.props?.jobIndustry}
+                        placeholder={props?.props?.jobIndustry}
                         onChange={(e) =>
                           (editIsExperienceData1.jobIndustry = e.target.value)
                         }
@@ -952,7 +972,7 @@ export const FreelanceProfileView = () => {
                       </label>
                       <Form.Select
                         aria-label="Default select example"
-                        value={props?.props?.jobFunction}
+                        placeholder={props?.props?.jobFunction}
                         onChange={(e) =>
                           (editIsExperienceData1.jobFunction = e.target.value)
                         }
@@ -1098,16 +1118,16 @@ export const FreelanceProfileView = () => {
               <Button
                 style={{ background: "none", color: "#39BEC1" }}
                 // onClick={props.post}
-                onClick={() => updateProfileExp()}
+                onClick={() => updateProfileExp(props)}
               >
-                Send
+                send
               </Button>
             </Modal.Footer>
           </Modal>
         </div>
       );
     },
-    [isEditExperienceData, isChecked,isDelete]
+    [isEditExperienceData, isChecked, update, deleteData]
   );
 
   const modalshow = (event) => {
@@ -1132,15 +1152,19 @@ export const FreelanceProfileView = () => {
 
   const deleteExperienceProfileData = (props) => {
     // console.log(props?.props?.id);
-    const newData = isExperienceData?.filter((x) => x?.id != props.props.id);
+    const newData = isExperienceData?.filter((x, ind) => ind !== props);
     console.log(newData, "data");
     axios
       .post(`api/v1/user/freelancer`, { experience: newData })
       .then((res) => {
-        // console.log(res.data, 'eeeeeeeeeeeeee');
         let data = res.data;
-        setIsDelete(!isDelete)
-        initialFun();
+
+        setTimeout(() => {
+          initialFun();
+        }, 1000);
+        setTimeout(() => {
+          setDeleteData(!deleteData);
+        }, 2000);
         console.log(res, "profile edit data successfully added");
         // ProfileExpData(userId);
         if (data) {
@@ -1183,7 +1207,7 @@ export const FreelanceProfileView = () => {
 
             <Button
               style={{ background: "none", color: "#39BEC1" }}
-              onClick={() => deleteExperienceProfileData(props)}
+              onClick={() => deleteExperienceProfileData(props.index)}
             >
               Confirm
             </Button>
@@ -1216,6 +1240,8 @@ export const FreelanceProfileView = () => {
     (props) => {
       // console.log(props, "proooooooooops");
 
+      console.log(props, "props");
+
       const editIsEducationData = {
         id: props.id,
         educationLevel: "",
@@ -1232,7 +1258,7 @@ export const FreelanceProfileView = () => {
         certificate: "",
       };
       // console.log(isEditEducationData, 'isEditEducationData');
-      const updateEducationData = (id) => {
+      const updateEducationData = (props) => {
         let EducationData = {
           id: isEditEducationData.id,
           educationLevel: editIsEducationData.educationLevel
@@ -1267,9 +1293,16 @@ export const FreelanceProfileView = () => {
             )
             .then((res) => {
               console.log("education edit data successfully added");
+
               if (res) {
                 setShow6(false);
-                initialFun();
+                props.onHide();
+                setTimeout(() => {
+                  initialFun();
+                }, 1000);
+                setTimeout(() => {
+                  setUpdate(!update);
+                }, 2000);
               }
             })
             .catch((err) => {
@@ -1291,6 +1324,13 @@ export const FreelanceProfileView = () => {
               // console.log(res, "education edit data successfully added");
               if (res) {
                 setShow6(false);
+                props.onHide();
+                setTimeout(() => {
+                  initialFun();
+                }, 1000);
+                setTimeout(() => {
+                  setUpdate(!update);
+                }, 2000);
                 initialFun();
               }
             })
@@ -1568,7 +1608,7 @@ export const FreelanceProfileView = () => {
 
               <Button
                 style={{ background: "none", color: "#39BEC1" }}
-                onClick={() => updateEducationData()}
+                onClick={() => updateEducationData(props)}
               >
                 Send
               </Button>
@@ -1577,7 +1617,7 @@ export const FreelanceProfileView = () => {
         </div>
       );
     },
-    [isEditEducationData]
+    [isEditEducationData, update, deleteData]
   );
 
   const modalshow2 = (event) => {
@@ -1605,7 +1645,12 @@ export const FreelanceProfileView = () => {
       .then((res) => {
         // console.log(res.data, 'eeeeeeeeeeeeee');
         let data = res.data;
-        initialFun();
+        setTimeout(() => {
+          initialFun();
+        }, 1000);
+        setTimeout(() => {
+          setDeleteData(!deleteData);
+        }, 1500);
         console.log(res, "profile edit data successfully added");
         // ProfileExpData(userId);
         if (data) {
@@ -1693,7 +1738,8 @@ export const FreelanceProfileView = () => {
       };
       console.log(editIsAchievementData1, "editIsAchievementData1");
 
-      const updateProfileExp = () => {
+      const updateProfileExp = (props) => {
+        console.log(props, "propsss");
         const achData = {
           id: props.props.id,
           title: editIsAchievementData1.title
@@ -1703,7 +1749,6 @@ export const FreelanceProfileView = () => {
             ? editIsAchievementData1.description
             : props.props.description,
         };
-        console.log(achData, "achData");
         if (editIsAchievementCertificate.certificate) {
           const formdata = new FormData();
           formdata.append(
@@ -1719,7 +1764,12 @@ export const FreelanceProfileView = () => {
               console.log("education edit data successfully added");
               if (res) {
                 setShow7(false);
-                initialFun();
+                setTimeout(() => {
+                  initialFun();
+                }, 1000);
+                setTimeout(() => {
+                  setUpdate(!update);
+                }, 1500);
               }
             })
             .catch((err) => {
@@ -1728,7 +1778,7 @@ export const FreelanceProfileView = () => {
         } else {
           let newData = [...isAchievementData];
           newData = newData.filter((e, i) => {
-            return e.id !== achData.id;
+            return i !== props.index;
           });
           newData.push(achData);
           console.log(newData, "newDaataaa");
@@ -1740,7 +1790,13 @@ export const FreelanceProfileView = () => {
               // console.log(res, "education edit data successfully added");
               if (res) {
                 setShow7(false);
-                initialFun();
+                props.onHide();
+                setTimeout(() => {
+                  initialFun();
+                }, 1000);
+                setTimeout(() => {
+                  setUpdate(!update);
+                }, 1500);
               }
             })
             .catch((err) => {
@@ -1831,7 +1887,7 @@ export const FreelanceProfileView = () => {
               <Button
                 style={{ background: "none", color: "#39BEC1" }}
                 // onClick={props.post}
-                onClick={() => updateProfileExp()}
+                onClick={() => updateProfileExp(props)}
               >
                 Send
               </Button>
@@ -1840,7 +1896,7 @@ export const FreelanceProfileView = () => {
         </div>
       );
     },
-    [isAchievementData]
+    [isAchievementData, update, deleteData]
   );
 
   const modalshow5 = (event) => {
@@ -1863,14 +1919,19 @@ export const FreelanceProfileView = () => {
 
   // delete
   const deleteProfileAchievementData = (event) => {
-    const newData = isAchievementData?.filter((x) => x?.id != event.id);
-    console.log(newData, "data");
+    const newData = isAchievementData?.filter((x, i) => i != event.index);
     axios
       .post(`api/v1/user/freelancer`, { achievement: newData })
       .then((res) => {
         // console.log(res.data, 'eeeeeeeeeeeeee');
         let data = res.data;
-        initialFun();
+        setTimeout(() => {
+          initialFun();
+        }, 1000);
+        setTimeout(() => {
+          setDeleteData(!deleteData);
+          event.onHide();
+        }, 1500);
         console.log(res, "profile edit data successfully added");
         // ProfileExpData(userId);
         if (data) {
@@ -1912,7 +1973,7 @@ export const FreelanceProfileView = () => {
 
             <Button
               style={{ background: "none", color: "#39BEC1" }}
-              onClick={() => deleteProfileAchievementData(props.props)}
+              onClick={() => deleteProfileAchievementData(props)}
             >
               Confirm
             </Button>
@@ -1953,7 +2014,8 @@ export const FreelanceProfileView = () => {
       };
       console.log(editIsLangugeData1, "editIsLangugeData1");
 
-      const updateProfileExp = () => {
+      const updateProfileExp = (props) => {
+        console.log(props, "propsssssss");
         let newData = [...isLanguageData];
 
         const langData = {
@@ -1971,10 +2033,9 @@ export const FreelanceProfileView = () => {
 
         console.log(langData, "langData");
         newData = newData.filter((e, i) => {
-          return e.id !== langData.id;
+          return i !== props.index;
         });
         newData.push(langData);
-        console.log(newData, "newDaataaa");
 
         // let arrayData = [isEditExperienceData]
         // const newData = [isEditExperienceData]?.filter((x) => x?.id != experienceId);
@@ -1989,7 +2050,13 @@ export const FreelanceProfileView = () => {
             console.log(res, "profile edit data successfully added");
             // ProfileExpData(userId);
             setShow7(false);
-            initialFun();
+            props.onHide();
+            setTimeout(() => {
+              initialFun();
+            }, 1000);
+            setTimeout(() => {
+              setUpdate(!update);
+            }, 1500);
           })
           .catch((err) => {
             console.log(err);
@@ -2359,7 +2426,7 @@ export const FreelanceProfileView = () => {
                         type={"text"}
                         //   value={user.number}
                         //   onChange={getUserData}
-                        onClick={(e) =>
+                        onChange={(e) =>
                           (editIsLangugeData1.examLevel = e.target.value)
                         }
                         placeholder={props?.props?.examLevel}
@@ -2384,7 +2451,7 @@ export const FreelanceProfileView = () => {
                         name="lname"
                         type={"text"}
                         placeholder={props?.props?.gradingLevel}
-                        onClick={(e) =>
+                        onChange={(e) =>
                           (editIsLangugeData1.gradingLevel = e.target.value)
                         }
                         //   value={user.number}
@@ -2406,7 +2473,7 @@ export const FreelanceProfileView = () => {
               <Button
                 style={{ background: "none", color: "#39BEC1" }}
                 // onClick={props.post}
-                onClick={() => updateProfileExp()}
+                onClick={() => updateProfileExp(props)}
               >
                 Send
               </Button>
@@ -2415,7 +2482,7 @@ export const FreelanceProfileView = () => {
         </div>
       );
     },
-    [isLanguageData]
+    [isLanguageData, update, deleteData]
   );
 
   const modalshow7 = (event) => {
@@ -2439,18 +2506,25 @@ export const FreelanceProfileView = () => {
   // delete
 
   const deleteProfileLanguageData = (event) => {
-    const newData = isLanguageData?.filter((x) => x?.id != event.id);
+    console.log(event, "evemt");
+    const newData = isLanguageData?.filter((x, i) => i != event.index);
     console.log(newData, "data");
     axios
       .post(`api/v1/user/freelancer`, { language: newData })
       .then((res) => {
         // console.log(res.data, 'eeeeeeeeeeeeee');
         let data = res.data;
-        initialFun();
+        setTimeout(() => {
+          initialFun();
+        }, 1000);
+        setTimeout(() => {
+          setDeleteData(!deleteData);
+        }, 1500);
         console.log(res, "profile edit data successfully added");
         // ProfileExpData(userId);
         if (data) {
           setShow8(false);
+          event.onHide();
         }
       })
       .catch((err) => {
@@ -2489,7 +2563,7 @@ export const FreelanceProfileView = () => {
 
             <Button
               style={{ background: "none", color: "#39BEC1" }}
-              onClick={() => deleteProfileLanguageData(props.props)}
+              onClick={() => deleteProfileLanguageData(props)}
             >
               Send
             </Button>
@@ -2833,7 +2907,7 @@ export const FreelanceProfileView = () => {
                                   style={{ width: "100%" }}
                                   className="form-control"
                                   name="visaPermit"
-                                  type={"number"}
+                                  type={"text"}
                                   placeholder={profileData?.data?.idCard || ""}
                                   onChange={(e) =>
                                     setProfileData({
@@ -3681,14 +3755,14 @@ export const FreelanceProfileView = () => {
                                         <Col lg="6">
                                           <div className="p3">
                                             <h2 className="text-xl font-semibold">
-                                              {event?.title}
+                                              {event?.title ?? event.profession}
                                             </h2>
 
                                             <h2
                                               className="text-lg"
                                               style={{ color: "#7A7979" }}
                                             >
-                                              {event?.jobIndustry}
+                                              {event?.companyName}
                                             </h2>
                                           </div>
                                         </Col>
@@ -3781,6 +3855,7 @@ export const FreelanceProfileView = () => {
                                           <MyVerticallyCenteredModalDelete
                                             show={modalShowDelete}
                                             props={event}
+                                            index={index}
                                             onHide={() => modalshow1(event)}
                                           />
                                         )}
@@ -3921,8 +3996,8 @@ export const FreelanceProfileView = () => {
                                   className="form-control"
                                   name="email"
                                   onChange={(e) =>
-                                    setIsEducation({
-                                      ...isEducation.duration,
+                                    setDurationData({
+                                      ...durationData,
                                       gte: e.target.value,
                                     })
                                   }
@@ -3949,8 +4024,8 @@ export const FreelanceProfileView = () => {
                                   type={"date"}
                                   name="firstname"
                                   onChange={(e) =>
-                                    setIsEducation({
-                                      ...isEducation.duration,
+                                    setDurationData({
+                                      ...durationData,
                                       lte: e.target.value,
                                     })
                                   }
@@ -4320,6 +4395,7 @@ export const FreelanceProfileView = () => {
                                           <MyVerticallyCenteredModalAchievement
                                             show={modalShowAchievement}
                                             props={event}
+                                            index={index}
                                             onHide={() => modalshow5(event)}
                                           />
                                         )}
@@ -4340,6 +4416,7 @@ export const FreelanceProfileView = () => {
                                         <MyVerticallyCenteredModalAchievementDelete
                                           show={modalShowAchievementDelete}
                                           props={event}
+                                          index={index}
                                           onHide={() => modalshow6(event)}
                                         />
                                       )}
@@ -4502,7 +4579,7 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 name="lname"
                                 type={"text"}
-                                onClick={(e) =>
+                                onChange={(e) =>
                                   setIsLanguage({
                                     ...isLanguage,
                                     examLevel: e.target.value,
@@ -4526,8 +4603,8 @@ export const FreelanceProfileView = () => {
                                 style={{ width: "100%" }}
                                 className="form-control"
                                 name="lname"
-                                type={"text"}
-                                onClick={(e) =>
+                                type={"number"}
+                                onChange={(e) =>
                                   setIsLanguage({
                                     ...isLanguage,
                                     gradingLevel: e.target.value,
@@ -4615,6 +4692,7 @@ export const FreelanceProfileView = () => {
                                               <MyVerticallyCenteredModalLanguage
                                                 show={modalShowLanguage}
                                                 props={event}
+                                                index={index}
                                                 onHide={() => modalshow7(event)}
                                               />
                                             )}
@@ -4635,6 +4713,7 @@ export const FreelanceProfileView = () => {
                                             <MyVerticallyCenteredModalLanguageDelete
                                               show={modalShowLanguageDelete}
                                               props={event}
+                                              index={index}
                                               onHide={() => modalshow8(event)}
                                             />
                                           )}

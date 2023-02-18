@@ -23,17 +23,16 @@ export const FreelanceFindWork = () => {
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
 
-
   useEffect(() => {
-    checkAuth()
-  }, [])
+    checkAuth();
+  }, []);
 
-  const checkAuth  = async () => {
+  const checkAuth = async () => {
     const token = await localStorage.getItem("access-token");
-    if(!token){
-      navigate('/login')
+    if (!token) {
+      navigate("/login");
     }
-  }
+  };
 
   const [isSearch, setIsSearch] = useState({
     keyword: "",
@@ -66,6 +65,35 @@ export const FreelanceFindWork = () => {
       setSearchShow(true);
     }
   };
+
+  const saveJob = (event) => {
+    axios
+      .post(`api/v1/user/freelancer/saved-jobs/${event._id}`)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data.data;
+        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+        searchFun();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const applyFunc = (event) => {
+    axios
+      .post(`/api/v1/interview/apply?jobId=${event._id}`)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data.data;
+        searchFun();
+        // setIsProfileData(data)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   function MyVerticallyCenteredModal(props) {
     // console.log(props, "proooooooooops");
     return (
@@ -498,6 +526,7 @@ export const FreelanceFindWork = () => {
                           <Button
                             className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
                             style={{ background: "#39BEC1", border: "none" }}
+                            onClick={() => applyFunc(values)}
                             // onClick={() => navigate("/FreelancerProfile", { state: { values } })}
                           >
                             APPLY
@@ -529,10 +558,12 @@ export const FreelanceFindWork = () => {
                                 view more details
                               </Button> */}
                           <p style={{ color: "#7A7979" }} className="text-lg">
-                            Posted Date : {values?._source?.postedDate}{" "}
+                            Posted Date :{" "}
+                            {values?._source?.postedDate.substring(0, 10)}
                             &nbsp;&nbsp; &nbsp;&nbsp;
                             <span>
-                              Expiry Date : {values?._source?.expiryDate}{" "}
+                              Expiry Date :{" "}
+                              {values?._source?.expiryDate.substring(0, 10)}
                             </span>
                           </p>
                         </Col>
@@ -630,7 +661,7 @@ export const FreelanceFindWork = () => {
                               display: "flex",
                             }}
                           >
-                            <BsBookmark />
+                            <BsBookmark onClick={() => saveJob(values)} />
                           </p>
                           {/* <Button
                                 className="text-white border-rounded px-3"
@@ -649,4 +680,4 @@ export const FreelanceFindWork = () => {
       </Container>
     </Container>
   );
-};
+};  

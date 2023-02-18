@@ -35,10 +35,18 @@ export const MainProfession = () => {
       navigate('/login')
     }
   }
-
+  const [jobIndustry, setJobIndustry] = useState('');
+  const [languageType, setLanguage] = useState('');
+  const [educationLevel, setEducationLevel] = useState('');
+  const [city, setCity] = useState('');
+  const [jobFunction, setJobFunction] = useState('');
+  const [subJobFunction, setSubJobFunction] = useState('');
+  const [minSalary, setMinSalary] = useState('');
+  const [maxSalary, setMaxSalary] = useState('');
+  const [minExperience, setMinExperience] = useState('');
+  const [maxExperience, setMaxExperience] = useState('');
   const [isSearch, setIsSearch] = useState({
     keyword: "",
-    filter: [],
   });
   const [searchData, setSearchData] = useState({});
   const [modalShow, setModalShow] = React.useState(false);
@@ -46,8 +54,22 @@ export const MainProfession = () => {
   const [searchShow, setSearchShow] = useState(false);
 
   const searchFun = () => {
+    const reqBody = {
+      "keyword": isSearch.keyword,
+      "filter": []
+  };
+
+  if(jobIndustry) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobIndustry":jobIndustry}}}});
+  if(city) reqBody?.filter?.push({"term": {"city":city}});
+  if(jobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobFunction":jobFunction}}}});
+  if(jobFunction && subJobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobSubFunction":subJobFunction}}}});
+  if(minSalary && maxSalary) reqBody?.filter?.push({"range":{"salaryRange":{"gte":minSalary,"lte":maxSalary}}});
+  if(minExperience && maxExperience) reqBody?.filter?.push( {"range":{"expYears":{"gte":minExperience,"lte":maxExperience}}});
+  if(educationLevel) reqBody?.filter?.push({"nested":{"path":"education","query":{"term":{"education.educationLevel":educationLevel}}}});
+  if(languageType) reqBody?.filter?.push({"nested":{"path":"language","query":{"term":{"language.languageType":languageType}}}});
+  console.log(reqBody, 'eeeeeeeeeeeee');
     axios
-      .post(`api/v1/job-post?from=0&size=4&submitted=true`, isSearch)
+      .post(`api/v1/job-post?from=0&size=4&submitted=true`, reqBody)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data;
@@ -255,7 +277,8 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Industry
                       </label>
-                      <Form.Select aria-label="Default select example">
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setJobIndustry(e.target.value)}>
                         <option hidden="">Select Job Industry</option>
                         <option>Universities / Education</option>
                         <option>Manufacturing</option>
@@ -307,7 +330,8 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Function
                       </label>
-                      <Form.Select aria-label="Default select example">
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) =>setJobFunction(e.target.value)}>
                         <option hidden="">Select Job Function</option>
                         <option>HR &amp; Admin</option>
                         <option>General Management</option>
@@ -347,7 +371,9 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Sub Job Function
                       </label>
-                      <Form.Select aria-label="Default select example">
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setSubJobFunction(e.target.value)}
+                      >
                         <option hidden="">Select Sub Job Function</option>
                       </Form.Select>
                       {/* <input
@@ -390,7 +416,9 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Language
                       </label>
-                      <Form.Select aria-label="Default select example">
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setLanguage(e.target.value)}
+                      >
                         <option hidden="">Select Language</option>
                         <option value="English">English</option>
                         <option value="Arabic">Arabic</option>
@@ -451,7 +479,8 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Company Name
                       </label>
-                      <Form.Select aria-label="Default select example">
+                      <Form.Select aria-label="Default select example"
+                      >
                         <option>Enter Company Name</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -505,6 +534,7 @@ export const MainProfession = () => {
                           className="form-control"
                           name="Email"
                           type={"email"}
+                      onChange={(e) => setMinSalary(e.target.value)}
                           //   value={user.number}
                           //   onChange={getUserData}
                           placeholder="Enter Min Salary 
@@ -518,6 +548,7 @@ export const MainProfession = () => {
                           type={"email"}
                           //   value={user.number}
                           //   onChange={getUserData}
+                      onChange={(e) =>setMaxSalary(e.target.value)}
                           placeholder="Enter Max Salary 
 
                 "
@@ -561,7 +592,9 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Location
                       </label>
-                      <Form.Select aria-label="Default select example">
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setCity(e.target.value)}
+                      >
                         <option hidden="">Select Job Location</option>
                         <option>Central and Western</option>
                         <option>Eastern</option>

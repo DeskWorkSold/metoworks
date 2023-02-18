@@ -33,7 +33,7 @@ function MyVerticallyCenteredModal(props) {
         <Modal.Body className="webkit">
           <h2 className="text-2xl font-bold">10 Tokens</h2>
           <p className="text-lg" style={{ color: "#C1C1C1" }}>
-            10 Tokens to View Proï¬le
+            10 Tokens to View ProÃ¯Â¬Âle
           </p>
           <div style={{ display: "inline-grid" }}>
             <Button
@@ -715,7 +715,7 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, empType: e.target.value })
                     }
                   >
-                    <option value="DEFAULT" disabled="">Select Employment Type</option><option>PART TIME</option><option>CASUAL–NO SET HOURS OR DAYS OF WORK</option><option>PROJECT BASED</option><option>OTHER</option>
+                    <option value="DEFAULT" disabled="">Select Employment Type</option><option>PART TIME</option><option>CASUALâ€“NO SET HOURS OR DAYS OF WORK</option><option>PROJECT BASED</option><option>OTHER</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}

@@ -1,5 +1,5 @@
 import React, { useState, Component, useEffect } from "react";
-import { Container, Button, Row, Col, Image, Form } from "react-bootstrap";
+import { Container, Button, Row, Col, Image, Form, Alert } from "react-bootstrap";
 
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,6 +18,7 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import axios from "../../../utils/axios.api";
 import Accordion from "react-bootstrap/Accordion";
+
 
 function MyVerticallyCenteredModal2(props) {
   const [isSalaryRange, setisSalaryRange] = useState({
@@ -61,8 +62,10 @@ function MyVerticallyCenteredModal2(props) {
 
   // submitted : true when dfat post publised
   // const navigate = useNavigate();
+  const [errors, setErrors] = useState()
 
-  const PostFunc = () => {
+  const PostFunc = (props) => {
+    let currentDate = new Date();
     let Data = {
       title: jobData.title,
       industry: jobData.industry,
@@ -81,7 +84,7 @@ function MyVerticallyCenteredModal2(props) {
         gte: Number(isSalaryRange.gte),
         lte: Number(isSalaryRange.lte),
       },
-      expiryDate: new Date(),
+      expiryDate: new Date(currentDate.setDate(currentDate.getDate() + 30)).toString(),
       closed: false,
       modeOfWork: jobData.madeOfWork,
       submitted: true,
@@ -109,7 +112,7 @@ function MyVerticallyCenteredModal2(props) {
         gte: `${isSalaryRange.gte}`,
         lte: `${isSalaryRange.lte}`,
       },
-      expiryDate: new Date(),
+      expiryDate: new Date(currentDate.setDate(currentDate.getDate() + 30)).toString(),
       closed: false,
       modeOfWork: jobData.madeOfWork,
       submitted: true,
@@ -119,19 +122,91 @@ function MyVerticallyCenteredModal2(props) {
       salaryCurrency: jobData.salaryCurrency,
       additionalEmails: [isEmail],
     };
-    console.log(Data, "daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa");
+    
+    let values = Object.values(dummyData)
+
+  // console.log(values,"values")
+    values = values.every((e,i)=> e !== "")
+
+    if(values){
     axios
       .post("api/v1/job-post", dummyData)
       .then((res) => {
         console.log(res, "data sended successfully");
-
+        setErrors({})
+        props.onHide()
         // navigate('/CompanyProfile')
       })
       .catch((err) => {
         console.log(err);
       });
+    }
+    else{
+      let newErrors = {}
+      if ( !dummyData.title) {
+        newErrors.title = 'Job Title is required';
+      }
+       if (!jobData.industry) {
+        newErrors.industry = 'Job industry is required';
+      }
+       if (!jobData.jobFunction) {
+        newErrors.jobFunction = 'Job jobFunction is required';
+      }
+       if (!jobData.jobSubFunction) {
+        newErrors.jobSubFunction = 'Job jobSubFunction is required';
+      }
+       if (!jobData.location) {
+        newErrors.location = 'Job location is required';
+      }
+       if (!jobData.description) {
+        newErrors.description = 'Job DESCRIPTION is required';
+      }
+       if (!jobData.requirements) {
+        newErrors.requirements = 'Job requirements is required';
+      }
+       if (!jobData.educationLevel) {
+        newErrors.educationLevel = 'Job educationLevel is required';
+      }
+       if (!jobData.profession) {
+        newErrors.profession = 'Job profession is required';
+      }
+       if (!jobData.madeOfWork) {
+        newErrors.madeOfWork = 'Job madeOfWork is required';
+      }
+       if (!jobData.noOfOpenings) {
+        newErrors.noOfOpenings = 'Job noOfOpenings is required';
+      }
+       if (!jobData.salaryCurrency) {
+        newErrors.salaryCurrency = 'Job salaryCurrency is required';
+      }
+       if (!jobData.salaryType) {
+        newErrors.salaryType = 'Job salaryCurrency is required';
+      }
+       if (!jobData.salaryPayFreq) {
+        newErrors.salaryPayFreq = 'Job salaryCurrency is required';
+      }
+       if (!isProjectTimeline.gte) {
+        newErrors.gte = 'Job gte is required';
+      }
+       if (!isProjectTimeline.lte) {
+        newErrors.lte = 'Job lte is required';
+      }
+       if (!isSalaryRange.gte) {
+        newErrors.name = 'Job gte is required';
+      }
+       if (!isSalaryRange.lte) {
+        newErrors.gte = 'Job lte is required';
+      }
+       if (!isEmail) {
+        newErrors.isEmail = 'Email is required';
+      }  if (!/\S+@\S+\.\S+/.test(isEmail)) {
+        newErrors.email = 'Email address is invalid';
+      }
+      console.log(newErrors)
+      setErrors(newErrors)
+    }
   };
-
+  console.log("errors",errors);
   const draftFunc = () => {
     axios
       .post("api/v1/job-post", jobData)
@@ -154,6 +229,104 @@ function MyVerticallyCenteredModal2(props) {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const [success, setSuccess] = useState(false);
+
+  // const [errors, setErrors] = useState({
+  //   title: '',
+  //   industry: '',
+  //   jobFunction: '',
+  //   jobSubFunction: '',
+  //   location: '',
+  //   description: '',
+  //   requirements: '',
+  //   educationLevel: '',
+  //   profession: '',
+  //   madeOfWork: '',
+  //   noOfOpenings: '',
+  //   salaryCurrency: '',
+  //   salaryType: '',
+  //   salaryPayFreq: '',
+  //   lte: '',
+  //   gte: '',
+  //   lte: '',
+  //   gte: '',
+  //   isEmail: '',
+    
+  // });
+  const validateForm = () => {
+    let newErrors = {};
+    if (!jobData.title) {
+      newErrors.title = 'Job Title is required';
+    }
+    else if (!jobData.industry) {
+      newErrors.industry = 'Job industry is required';
+    }
+    else if (!jobData.jobFunction) {
+      newErrors.jobFunction = 'Job jobFunction is required';
+    }
+    else if (!jobData.jobSubFunction) {
+      newErrors.jobSubFunction = 'Job jobSubFunction is required';
+    }
+    else if (!jobData.location) {
+      newErrors.location = 'Job location is required';
+    }
+    else if (!jobData.description) {
+      newErrors.description = 'Job DESCRIPTION is required';
+    }
+    else if (!jobData.requirements) {
+      newErrors.requirements = 'Job requirements is required';
+    }
+    else if (!jobData.educationLevel) {
+      newErrors.educationLevel = 'Job educationLevel is required';
+    }
+    else if (!jobData.profession) {
+      newErrors.profession = 'Job profession is required';
+    }
+    else if (!jobData.madeOfWork) {
+      newErrors.madeOfWork = 'Job madeOfWork is required';
+    }
+    else if (!jobData.noOfOpenings) {
+      newErrors.noOfOpenings = 'Job noOfOpenings is required';
+    }
+    else if (!jobData.salaryCurrency) {
+      newErrors.salaryCurrency = 'Job salaryCurrency is required';
+    }
+    else if (!jobData.salaryType) {
+      newErrors.salaryType = 'Job salaryCurrency is required';
+    }
+    else if (!jobData.salaryPayFreq) {
+      newErrors.salaryPayFreq = 'Job salaryCurrency is required';
+    }
+    else if (!isProjectTimeline.gte) {
+      newErrors.gte = 'Job gte is required';
+    }
+    else if (!isProjectTimeline.lte) {
+      newErrors.lte = 'Job lte is required';
+    }
+    else if (!isSalaryRange.gte) {
+      newErrors.name = 'Job gte is required';
+    }
+    else if (!isSalaryRange.lte) {
+      newErrors.gte = 'Job lte is required';
+    }
+    else if (!isEmail) {
+      newErrors.isEmail = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(isEmail)) {
+      newErrors.email = 'Email address is invalid';
+    }
+
+    setErrors(newErrors);
+    console.log(Object.keys(newErrors).length === 0,"validation")
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    if (validateForm()) {
+      setSuccess(true);
+    }
   };
 
   return (
@@ -187,9 +360,9 @@ function MyVerticallyCenteredModal2(props) {
                     }
                     //   value={user.number}
                     //   onChange={getUserData}
-                    placeholder="Doctor for Child
-                "
-                  />
+                    placeholder="Doctor for Child"
+                />
+                {errors &&  errors.title && <p style={{color:'red'}}>{errors.title}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -241,6 +414,7 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+               {errors &&  errors.industry && <p style={{color:'red'}}>{errors.industry}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -284,6 +458,7 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+              {errors &&  errors.jobFunction && <p style={{color:'red'}}>{errors.jobFunction}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -300,7 +475,9 @@ function MyVerticallyCenteredModal2(props) {
                     <option value="DEFAULT" disabled="">
                       Sub Job Function
                     </option>
+
                   </Form.Select>
+                  {errors &&  errors.jobSubFunction && <p style={{color:'red'}}>{errors.jobSubFunction}</p>}
                   {/* <input
                 style={{ width: "100%" }}
                 className="form-control"
@@ -362,6 +539,7 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+              {errors &&  errors.location && <p style={{color:'red'}}>{errors.location}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -371,9 +549,7 @@ function MyVerticallyCenteredModal2(props) {
                   </label>
                   <CKEditor
                     editor={ClassicEditor}
-                    data="<p>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-                    standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
-                    scramble.</p>"
+                    data=""
                     onReady={(editor) => {
                       // You can store the "editor" and use when it is needed.
                       console.log("Editor is ready to use!", editor);
@@ -389,6 +565,7 @@ function MyVerticallyCenteredModal2(props) {
                       console.log("Focus.", editor);
                     }}
                   />
+                  {errors &&  errors.description && <p style={{color:'red'}}>{errors.description}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -398,9 +575,7 @@ function MyVerticallyCenteredModal2(props) {
                   </label>
                   <CKEditor
                     editor={ClassicEditor}
-                    data="<p>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-                    standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
-                    scramble.</p>"
+                    data=""
                     onReady={(editor) => {
                       // You can store the "editor" and use when it is needed.
                       console.log("Editor is ready to use!", editor);
@@ -417,6 +592,7 @@ function MyVerticallyCenteredModal2(props) {
                       console.log("Focus.", editor);
                     }}
                   />
+                  {errors &&  errors.requirements && <p style={{color:'red'}}>{errors.requirements}</p>}
                 </fieldset>
               </Col>
               {/* <Col lg="12">
@@ -452,10 +628,7 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, educationLevel: e.target.value })
                     }
                   >
-                    <option>Select Education level</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                   <option value="DEFAULT" disabled="">Select Education level</option><option>ASSOCIATE DEGREE</option><option>MASTER DEGREE</option><option>DOCTORATE DEGREE</option><option>PHD</option><option>OTHER</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -468,6 +641,7 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+              {errors &&  errors.educationLevel && <p style={{color:'red'}}>{errors.educationLevel}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -481,10 +655,7 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, empType: e.target.value })
                     }
                   >
-                    <option>Select Employement Type</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value="DEFAULT" disabled="">Select Employment Type</option><option>PART TIME</option><option>CASUAL–NO SET HOURS OR DAYS OF WORK</option><option>PROJECT BASED</option><option>OTHER</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -497,6 +668,7 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+              {errors &&  errors.empType && <p style={{color:'red'}}>{errors.empType}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -528,6 +700,7 @@ function MyVerticallyCenteredModal2(props) {
                       placeholder="Start"
                       required
                     />
+                    {errors &&  errors.gte && <p style={{color:'red'}}>{errors.gte}</p>}
                   </Col>
                   <Col>
                     <label className="text-l" style={{ color: "#7A7979" }}>
@@ -550,6 +723,7 @@ function MyVerticallyCenteredModal2(props) {
                 "
                       required
                     />
+                    {errors &&  errors.lte && <p style={{color:'red'}}>{errors.lte}</p>}
                   </Col>
                 </Row>
               </Container>
@@ -570,7 +744,9 @@ function MyVerticallyCenteredModal2(props) {
                     placeholder="Enter Profession"
                     required
                   />
+                  {errors &&  errors.profession && <p style={{color:'red'}}>{errors.profession}</p>}
                 </fieldset>
+
               </Col>
               {/* <Container>
                 <Row>
@@ -615,10 +791,7 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, madeOfWork: e.target.value })
                     }
                   >
-                    <option>Select Mode of Work</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                  <option value="DEFAULT" disabled="">Select Mode of Work</option><option>Office</option><option>Work from Home</option><option>Hybrid</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -631,6 +804,7 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+              {errors &&  errors.madeOfWork && <p style={{color:'red'}}>{errors.madeOfWork}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -653,6 +827,7 @@ function MyVerticallyCenteredModal2(props) {
                 "
                     required
                   />
+                  {errors &&  errors.noOfOpenings && <p style={{color:'red'}}>{errors.noOfOpenings}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -689,6 +864,7 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+              {errors &&  errors.salaryCurrency && <p style={{color:'red'}}>{errors.salaryCurrency}</p>}
                 </fieldset>
               </Col>
               <Container>
@@ -713,6 +889,7 @@ function MyVerticallyCenteredModal2(props) {
                       placeholder="Minimum Salary"
                       required
                     />
+                    {errors &&  errors.industry && <p style={{color:'red'}}>{errors.industry}</p>}
                   </Col>
                   <Col lg="6">
                     <label className="text-l" style={{ color: "#7A7979" }}>
@@ -735,6 +912,7 @@ function MyVerticallyCenteredModal2(props) {
                 "
                       required
                     />
+                    {errors &&  errors.gte && <p style={{color:'red'}}>{errors.gte}</p>}
                   </Col>
                 </Row>
               </Container>
@@ -795,6 +973,7 @@ function MyVerticallyCenteredModal2(props) {
                   >
                     Others
                   </label>
+                  {errors &&  errors.industry && <p style={{color:'red'}}>{errors.industry}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -872,6 +1051,7 @@ function MyVerticallyCenteredModal2(props) {
                   >
                     Others
                   </label>
+                  {errors &&  errors.salaryType && <p style={{color:'red'}}>{errors.salaryType}</p>}
                 </fieldset>
               </Col>
 
@@ -917,6 +1097,7 @@ function MyVerticallyCenteredModal2(props) {
                 "
                       required
                     />
+                    {errors &&  errors.isEmail && <p style={{color:'red'}}>{errors.isEmail}</p>}
                   </fieldset>
                 </Col>
               </Row>
@@ -947,7 +1128,7 @@ function MyVerticallyCenteredModal2(props) {
         </Button>
         <Button
           style={{ background: "none", color: "#39BEC1" }}
-          onClick={() => PostFunc()}
+          onClick={() => PostFunc(props)}
         >
           Post
         </Button>
@@ -955,6 +1136,7 @@ function MyVerticallyCenteredModal2(props) {
     </Modal>
   );
 }
+
 function MyVerticallyCenteredModal(props) {
   return (
     <div>
@@ -1123,9 +1305,6 @@ export const MainRecProfessional = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [modalShow, setModalShow] = React.useState(false);
-  const [jobIndustry, setJobIndustry] = useState('')
-  const [jobFunction, setJobFunction] = useState('')
-  const [subJobFunction, setSubJobFunction] = useState('')
   const [profession, setProfession] = useState('')
   const [companyName, setCompanyName] = useState('')
   const [modeofWork, setModeOfWork] = useState('')
@@ -1141,12 +1320,19 @@ export const MainRecProfessional = () => {
       setSearchShow(true);
     }
   };
-
-  const [searchData ,setSearchData] = useState({})
-
+  const [subJobFunction, setSubJobFunction] = useState('');
+  const [jobIndustry, setJobIndustry] = useState('');
+  const [searchData ,setSearchData] = useState({});
+  const [languageType, setLanguage] = useState('');
+  const [educationLevel, setEducationLevel] = useState('');
+  const [city, setCity] = useState('');
+  const [minSalary, setMinSalary] = useState('');
+  const [maxSalary, setMaxSalary] = useState('');
+  const [jobFunction, setJobFunction] = useState('');
+  const [minExperience, setMinExperience] = useState('');
+  const [maxExperience, setMaxExperience] = useState('');
   const [isSearch, setIsSearch] = useState({
     keyword: "",
-    filter: [],
   });
 
 
@@ -1155,8 +1341,22 @@ export const MainRecProfessional = () => {
   },[])
 
   const searchFun = () => {
+    const reqBody = {
+      "keyword": isSearch.keyword,
+      "filter": []
+  };
+
+  if(jobIndustry) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobIndustry":jobIndustry}}}});
+  if(city) reqBody?.filter?.push({"term": {"city":city}});
+  if(jobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobFunction":jobFunction}}}});
+  if(jobFunction && subJobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobSubFunction":subJobFunction}}}});
+  if(minSalary && maxSalary) reqBody?.filter?.push({"range":{"salaryRange":{"gte":minSalary,"lte":maxSalary}}});
+  if(minExperience && maxExperience) reqBody?.filter?.push( {"range":{"expYears":{"gte":minExperience,"lte":maxExperience}}});
+  if(educationLevel) reqBody?.filter?.push({"nested":{"path":"education","query":{"term":{"education.educationLevel":educationLevel}}}});
+  if(languageType) reqBody?.filter?.push({"nested":{"path":"language","query":{"term":{"language.languageType":languageType}}}});
+  console.log(reqBody, 'eeeeeeeeeeeee');
     axios
-      .get(`api/v1/job-post?from=0&size=4&submitted=true`)
+      .post(`api/v1/search/freelancer?from=0&size=4`, reqBody)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data.data;
@@ -1269,7 +1469,7 @@ export const MainRecProfessional = () => {
         </Row>
         {searchShow === true ? (
           <>
-            <Row className="align-items-center">
+             <Row className="align-items-center">
               <Col lg="5">
                 <div className="p-3">
                   <Col lg="12">
@@ -1278,10 +1478,39 @@ export const MainRecProfessional = () => {
                         Job Industry
                       </label>
                       <Form.Select aria-label="Default select example"
-                      onChange={(e) => setJobIndustry(e.target.value)}
-                      // onChange={}
-                      >
-                      <option hidden="">Select Job Industry</option><option>Universities / Education</option><option>Manufacturing</option><option>Security </option><option>Real Estate</option><option>Professional Consultings (Legal, HR, Finance etc.)</option><option>Banking and Finance</option><option>Beautiy Care and Health / Welness / Fitness</option><option>Building / Constructions / Surveying</option><option>Government / Public Utilities</option><option>Hospitality / Travel / Airlines / Clubhouse</option><option>IT / R&amp;D / Cyber Security / Telecommunication / Science</option><option>Retail</option><option>Insurance</option><option>Logistics / Transportaton / Supply Chain</option><option>F&amp;B / Wine &amp; Spriits</option><option>Logistics / Transportaton / Supply Chain</option><option>Medical / Pharmacy / Hospital</option><option>Engineerings</option><option>Others</option>
+                      onChange={(e) => setJobIndustry(e.target.value)}>
+                        <option hidden="">Select Job Industry</option>
+                        <option>Universities / Education</option>
+                        <option>Manufacturing</option>
+                        <option>Security </option>
+                        <option>Real Estate</option>
+                        <option>
+                          Professional Consultings (Legal, HR, Finance etc.)
+                        </option>
+                        <option>Banking and Finance</option>
+                        <option>
+                          Beautiy Care and Health / Welness / Fitness
+                        </option>
+                        <option>Government / Public Utilities</option>
+                        <option>
+                          Hospitality / Travel / Airlines / Clubhouse
+                        </option>
+                        <option>
+                          IT / R&amp;D / Cyber Security / Telecommunication /
+                          Science
+                        </option>
+                        <option>Retail</option>
+                        <option>Insurance</option>
+                        <option>
+                          Logistics / Transportaton / Supply Chain
+                        </option>
+                        <option>F&amp;B / Wine &amp; Spriits</option>
+                        <option>
+                          Logistics / Transportaton / Supply Chain
+                        </option>
+                        <option>Medical / Pharmacy / Hospital</option>
+                        <option>Engineerings</option>
+                        <option>Others</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -1302,8 +1531,27 @@ export const MainRecProfessional = () => {
                         Job Function
                       </label>
                       <Form.Select aria-label="Default select example"
-                          onChange={(e) => setJobFunction(e.target.value)}>
-                      <option hidden="">Select Job Function</option><option>HR &amp; Admin</option><option>General Management</option><option>Finance and Accounting</option><option>Sales and Marketing</option><option>Banking and Financial Institue Professionals</option><option>Insurance Professionals (back-end functions)</option><option>IT Professionals (Specific Fields)</option><option>Manufacturing</option><option>Real Estate (Surveyers / reasearchers etc.)</option><option>Professional Designers</option><option>Lecturers / Teachers</option><option>Engineering / Architect</option><option>Others</option>
+                      onChange={(e) =>setJobFunction(e.target.value)}>
+                        <option hidden="">Select Job Function</option>
+                        <option>HR &amp; Admin</option>
+                        <option>General Management</option>
+                        <option>Finance and Accounting</option>
+                        <option>Sales and Marketing</option>
+                        <option>
+                          Banking and Financial Institue Professionals
+                        </option>
+                        <option>
+                          Insurance Professionals (back-end functions)
+                        </option>
+                        <option>IT Professionals (Specific Fields)</option>
+                        <option>Manufacturing</option>
+                        <option>
+                          Real Estate (Surveyers / reasearchers etc.)
+                        </option>
+                        <option>Professional Designers</option>
+                        <option>Lecturers / Teachers</option>
+                        <option>Engineering / Architect</option>
+                        <option>Others</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -1324,8 +1572,9 @@ export const MainRecProfessional = () => {
                         Sub Job Function
                       </label>
                       <Form.Select aria-label="Default select example"
-                      onChange={(e) => setSubJobFunction(e.target.value)}>
-                      <option hidden="">Select Sub Job Function</option>
+                      onChange={(e) => setSubJobFunction(e.target.value)}
+                      >
+                        <option hidden="">Select Sub Job Function</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -1344,17 +1593,78 @@ export const MainRecProfessional = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Profession
                       </label>
-                     
+                      {/* <Form.Select aria-label="Default select example">
+                    <option>Select Job Title</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </Form.Select> */}
                       <input
+                        style={{ width: "100%" }}
+                        className="form-control"
+                        name="Email"
+                        type={"email"}
+                        //   value={user.number}
+                        //   onChange={getUserData}
+                        placeholder="Enter Profession
+                "
+                      />
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Language
+                      </label>
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setLanguage(e.target.value)}
+                      >
+                        <option hidden="">Select Language</option>
+                        <option value="English">English</option>
+                        <option value="Arabic">Arabic</option>
+                        <option value="Spanish">Spanish</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Cantonese">Cantonese</option>
+                        <option value="French">French</option>
+                        <option value="German">German</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Korean">Korean</option>
+                        <option value="Mandarin">Mandarin</option>
+                        <option value="Bengali">Bengali</option>
+                        <option value="Burmese">Burmese</option>
+                        <option value="Czech">Czech</option>
+                        <option value="Dutch">Dutch</option>
+                        <option value="Greek">Greek</option>
+                        <option value="Hakka">Hakka</option>
+                        <option value="Hungarian">Hungarian</option>
+                        <option value="Hunnanese">Hunnanese</option>
+                        <option value="Malay/Indonesian">
+                          Malay/Indonesian
+                        </option>
+                        <option value="Nepali">Nepali</option>
+                        <option value="Portuguese">Portuguese</option>
+                        <option value="Russian">Russian</option>
+                        <option value="Shanghainese">Shanghainese</option>
+                        <option value="Swedish">Swedish</option>
+                        <option value="Tagalog">Tagalog</option>
+                        <option value="Telugu">Telugu</option>
+                        <option value="Thai">Thai</option>
+                        <option value="Turkish">Turkish</option>
+                        <option value="Vietnamese">Vietnamese</option>
+                        <option value="Others">Others</option>
+                      </Form.Select>
+                      {/* <input
                 style={{ width: "100%" }}
                 className="form-control"
-                name="Profession"
-                type={"text"}
+                name="Email"
+                type={"email"}
                 //   value={user.number}
                 //   onChange={getUserData}
-                placeholder="Enter Job Title"
-                onChange={(e) => setProfession(e.target.value)}
-              />
+                placeholder="Select Job Title
+
+                "
+              /> */}
                     </fieldset>
                   </Col>
                 </div>
@@ -1369,18 +1679,24 @@ export const MainRecProfessional = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Company Name
                       </label>
-                     
-                      <input
+                      <Form.Select aria-label="Default select example"
+                      >
+                        <option>Enter Company Name</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                      </Form.Select>
+                      {/* <input
                 style={{ width: "100%" }}
                 className="form-control"
                 type={"text"}
-                name="CompanyName"
+                name="firstname"
                 //   value={user.name}
                 //   onChange={getUserData}
-                placeholder="Enter Company Name"
+                placeholder="Select Job Industry
+                "
                 required
-                onChange={(e) => setCompanyName(e.target.value)}
-              />
+              /> */}
                     </fieldset>
                   </Col>
                   <Col lg="12">
@@ -1388,9 +1704,11 @@ export const MainRecProfessional = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Mode of Work
                       </label>
-                      <Form.Select aria-label="Default select example"
-                       onChange={(e) => setModeOfWork(e.target.value)}>
-                      <option hidden="">Select Mode of Work</option><option>Eastern</option><option>Office</option><option>Work From Home</option><option>Hybrid</option>
+                      <Form.Select aria-label="Default select example">
+                        <option>Select Mode of Work</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -1414,22 +1732,57 @@ export const MainRecProfessional = () => {
                         <input
                           style={{ width: "100%" }}
                           className="form-control"
-                          name="SaleryMin"
-                          type={"number"}
+                          name="Email"
+                          type={"email"}
+                      onChange={(e) => setMinSalary(e.target.value)}
                           //   value={user.number}
                           //   onChange={getUserData}
-                          placeholder="Enter Min Salary"
-                          onChange={(e) => setSalaryRange({...salaryRange, gte : e.target.value})}
+                          placeholder="Enter Min Salary 
+
+                "
                         />
                         <input
                           style={{ width: "100%" }}
                           className="form-control mx-2"
-                          name="SaleryMax"
-                          type={"number"}
+                          name="Email"
+                          type={"email"}
                           //   value={user.number}
                           //   onChange={getUserData}
-                          placeholder="Enter Max Salary"
-                          onChange={(e) => setSalaryRange({...salaryRange, lte : e.target.value})}
+                      onChange={(e) =>setMaxSalary(e.target.value)}
+                          placeholder="Enter Max Salary 
+
+                "
+                        />
+                      </div>
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Work Experience
+                      </label>
+                      <div style={{ display: "flex" }}>
+                        <input
+                          style={{ width: "100%" }}
+                          className="form-control"
+                          name="minwork"
+                          type={"text"}
+                          //   value={user.number}
+                          //   onChange={getUserData}
+                          placeholder="Min Work Exp 
+
+                "
+                        />
+                        <input
+                          style={{ width: "100%" }}
+                          className="form-control mx-2"
+                          name="text"
+                          type={"text"}
+                          //   value={user.number}
+                          //   onChange={getUserData}
+                          placeholder="Max Work Exp
+
+                "
                         />
                       </div>
                     </fieldset>
@@ -1440,8 +1793,31 @@ export const MainRecProfessional = () => {
                         Location
                       </label>
                       <Form.Select aria-label="Default select example"
-                       onChange={(e) => setLocation(e.target.value)}>
-                      <option hidden="">Select Job Location</option><option>Central and Western</option><option>Eastern</option><option>Southern</option><option>Wan Chai</option><option>Kowloon City</option><option>Kwun Tong</option><option>Sham Shui Po</option><option>Wong Tai Sin</option><option>Yau Tsim Mong</option><option>Islands</option><option>Kwai Tsing</option><option>North</option><option>Sai Kung</option><option>Shatin</option><option>Tai Po</option><option>Tsuen Wan</option><option>Tuen Mun</option><option>Yuen Long</option><option>China</option><option>South East Asia (SEA)</option><option>Asia Pacific (APAC)</option><option>Others</option>
+                      onChange={(e) => setCity(e.target.value)}
+                      >
+                        <option hidden="">Select Job Location</option>
+                        <option>Central and Western</option>
+                        <option>Eastern</option>
+                        <option>Southern</option>
+                        <option>Wan Chai</option>
+                        <option>Kowloon City</option>
+                        <option>Kwun Tong</option>
+                        <option>Sham Shui Po</option>
+                        <option>Wong Tai Sin</option>
+                        <option>Yau Tsim Mong</option>
+                        <option>Islands</option>
+                        <option>Kwai Tsing</option>
+                        <option>North</option>
+                        <option>Sai Kung</option>
+                        <option>Shatin</option>
+                        <option>Tai Po</option>
+                        <option>Tsuen Wan</option>
+                        <option>Tuen Mun</option>
+                        <option>Yuen Long</option>
+                        <option>China</option>
+                        <option>South East Asia (SEA)</option>
+                        <option>Asia Pacific (APAC)</option>
+                        <option>Others</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -1478,7 +1854,8 @@ export const MainRecProfessional = () => {
       </Container>
       <Container>
         <Row className="align-items-center">
-        {searchData.length > 0 && searchData.map((event, data) => {
+        {searchData && searchData?.length > 0 ? searchData?.length > 0 && searchData?.map((event, data) => {
+          console.log(event, 'eeeeeeeeeeeeeeeeeeeeeeeeee');
           return (
             <Col lg="12">
             <div className="m-3">
@@ -1516,19 +1893,16 @@ export const MainRecProfessional = () => {
                         style={{ color: "#39bec1" }}
                         className="text-2xl font-bold"
                       >
-                        {event?._source?.title}
+                        {event?._source?.firstName + ' ' + event?._source?.lastName} 
                       </span>
                       <br />
                       <span className="text-2xl" style={{ color: "black" }}>
-                      {event?._source?.industry}
+                      {event?._source?.experience[0].title}
                       </span>
                       <br />
                       <br />
                       <span style={{ color: "rgb(148,147,147)" }}>
-                      {event?._source?.description.replace(
-                                  /(<([^>]+)>)/gi,
-                                  ""
-                                )}
+                      {event?._source?.aboutMe}
                       </span>
                     </h3>
                   </Col>
@@ -1560,7 +1934,7 @@ export const MainRecProfessional = () => {
                       <h2 className="text-xl font-semibold">Experience</h2>
                       <br />
                       <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                        4 Year
+                      {event?._source?.expYears}
                       </h2>
                     </div>
                   </Col>
@@ -1584,7 +1958,7 @@ export const MainRecProfessional = () => {
                             fontWeight: "bolder",
                           }}
                         />
-                       {event?._source?.location}
+                       {event?._source?.country}
                       </h2>
                     </div>
                   </Col>
@@ -1593,7 +1967,7 @@ export const MainRecProfessional = () => {
             </div>
           </Col>
           )
-        })} 
+        }) : <div style={{textAlign : 'center'}}> <h1 style={{fontSize : '3vh', fontWeight : 'bolder'}}> No Job Found </h1> </div>} 
         </Row>
       </Container>
     </Container>

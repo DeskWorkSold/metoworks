@@ -13,7 +13,7 @@ import "swiper/css/pagination";
 import { Link } from "react-router-dom";
 // import "swiper/css/scrollbar";
 const token = localStorage.getItem("access-token");
-console.log('token', token);
+// console.log('token', token);
 export const SecBanner = () => {
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>

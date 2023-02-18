@@ -1,4 +1,4 @@
-import React, { useState, Component, useEffect, useRef,  } from "react";
+import React, { useState, Component, useEffect, useRef } from "react";
 import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import Form from "react-bootstrap/Form";
@@ -18,13 +18,14 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useNavigate } from "react-router-dom/dist";
-import profilePicture from '../assets/profile-picture.png'
+import profilePicture from "../assets/profile-picture.png";
 
 export const Topnav = () => {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userType, setUserType] = React.useState("");
-  const [profileImage, setProfileImage] = useState('')
+  const [profileImage, setProfileImage] = useState("");
+  console.log(userType, "eeeeeeeeeeeeeeeee");
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -36,7 +37,6 @@ export const Topnav = () => {
 
   const location = useLocation();
   const [isToken, setIsToken] = useState("");
-  // console.log(isToken, "toooooooooooookkkkkkkkken");
 
   //   const logout = async () => {
   //     await signOut(auth);
@@ -62,12 +62,12 @@ export const Topnav = () => {
 
   //   window.addEventListener("scroll", changeNavbarColor);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     intitialFunc();
-    let profimg = localStorage.getItem('profileImg')
-    setProfileImage(profimg)
+    let profimg = localStorage.getItem("profileImg");
+    setProfileImage(profimg);
   }, [location.state]);
 
   const intitialFunc = async () => {
@@ -80,7 +80,7 @@ export const Topnav = () => {
   const logutFunc = () => {
     const token = localStorage.removeItem("access-token");
     const userType = localStorage.removeItem("userType");
-    setIsToken(token);
+    setIsToken(userType);
   };
   return (
     // <Router>
@@ -93,15 +93,22 @@ export const Topnav = () => {
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
-          <Nav className="me-auto my-2" navbarScroll>
-            {userType == "freeLancer" && (
+          <Nav className="ml-auto my-2" navbarScroll>
+            {userType == "freeLancer" ? (
+              ""
+            ) : (
               <Nav.Link>
                 <Link to="/FindProfessions">Find Professionals</Link>
               </Nav.Link>
             )}
-            <Nav.Link>
-              <Link to="/Opportunities">Find Opportunities</Link>
-            </Nav.Link>
+            {userType == "freeLancer" ? (
+              ""
+            ) : (
+              <Nav.Link>
+                <Link to="/Opportunities">Find Opportunities</Link>
+              </Nav.Link>
+            )}
+
             <NavDropdown title="About Me2Works" id="navbarScrollingDropdown">
               <NavDropdown.Item>
                 <Link to="/AboutMe">About Me2Works</Link>
@@ -139,7 +146,7 @@ export const Topnav = () => {
                 <Link to="/FreeContact">Contact</Link>
               </NavDropdown.Item>
             </NavDropdown>
-            </Nav>
+          </Nav>
           {!isToken && !isToken?.length > 0 ? (
             <>
               <Nav.Link>
@@ -172,8 +179,14 @@ export const Topnav = () => {
                     color="inherit"
                   >
                     <Image
-                      style={{ width: "100%", objectFit: "cover", borderRadius: '100%' }}
-                      src={profileImage ? profileImage : { uri: profilePicture }}
+                      style={{
+                        width: "100%",
+                        objectFit: "cover",
+                        borderRadius: "100%",
+                      }}
+                      src={
+                        profileImage ? profileImage : { uri: profilePicture }
+                      }
                     />
                     {/* <AccountCircle /> */}
                   </IconButton>
@@ -192,8 +205,14 @@ export const Topnav = () => {
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                   >
-                    <Link to={userType == "freeLancer" ? '/FreelancerProfile' : '/CompanyProfile'}>
-                      <MenuItem >My Profile</MenuItem>
+                    <Link
+                      to={
+                        userType == "freeLancer"
+                          ? "/FreelancerProfile"
+                          : "/CompanyProfile"
+                      }
+                    >
+                      <MenuItem>My Profile</MenuItem>
                     </Link>
                     <Link
                       to={isToken && `/Login`}

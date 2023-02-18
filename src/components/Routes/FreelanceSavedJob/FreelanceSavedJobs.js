@@ -40,6 +40,34 @@ export const FreelanceSavedJobs = () => {
       });
   };
 
+  // const saveJob = (event) => {
+  //   axios
+  //     .post(`api/v1/user/freelancer/saved-jobs/${event._id}`)
+  //     .then((res) => {
+  //       // console.log(res, "Initial Data");
+  //       let data = res.data.data;
+  //       console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+  //       searchFun();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
+  const applyFunc = (event) => {
+    console.log(event, "eeeeeeeeeeeeeeee");
+    axios
+      .post(`api/v1/interview/apply?jobId=${event.id}`)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data.data;
+        initialFun();
+        // setIsProfileData(data)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   function MyVerticallyCenteredModal(props) {
     // console.log(props, "proooooooooops");
     return (
@@ -231,6 +259,7 @@ export const FreelanceSavedJobs = () => {
                           <Button
                             className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
                             style={{ background: "#39BEC1", border: "none" }}
+                            onClick={() => applyFunc(items)}
                           >
                             APPLY
                           </Button>
