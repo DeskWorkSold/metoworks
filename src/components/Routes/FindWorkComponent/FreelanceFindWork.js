@@ -14,6 +14,8 @@ import axios from "../../../utils/axios.api";
 import { useNavigate } from "react-router-dom";
 
 export const FreelanceFindWork = () => {
+  const [modalShowGoogFunc,setModalShowGoogFunc] = useState(false);
+
   const [modalShow, setModalShow] = React.useState(false);
 
   const [show, setShow] = useState(false);
@@ -23,6 +25,30 @@ export const FreelanceFindWork = () => {
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
 
+  function MyVerticallyCenteredModalFunc(props) {
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            apply
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+          apply
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
   useEffect(() => {
     checkAuth();
   }, []);
@@ -34,30 +60,27 @@ export const FreelanceFindWork = () => {
     }
   };
 
+
+  const [searchData, setSearchData] = useState({});
   const [isSearch, setIsSearch] = useState({
     keyword: "",
-    filter: [],
   });
-  const [searchData, setSearchData] = useState({});
 
-  const searchFun = () => {
-    axios
-      .post(`api/v1/search/job-post?from=0&size=4`, isSearch)
-      .then((res) => {
-        // console.log(res, "Initial Data");
-        let data = res.data.data;
-        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
-        // setIsProfileData(data)
-        setSearchData(data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const searchFun = () => {
+  //   axios
+  //     .post(`api/v1/search/job-post?from=0&size=4`, isSearch)
+  //     .then((res) => {
+  //       // console.log(res, "Initial Data");
+  //       let data = res.data.data;
+  //       console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+  //       // setIsProfileData(data)
+  //       setSearchData(data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
-  const resetFun = () => {
-    setSearchData(null);
-  };
   const handleChanger = () => {
     if (searchShow === true) {
       setSearchShow(false);
@@ -229,11 +252,54 @@ export const FreelanceFindWork = () => {
     }
   };
 
+  const [subJobFunction, setSubJobFunction] = useState('');
+  const [jobIndustry, setJobIndustry] = useState('');
+  const [languageType, setLanguage] = useState('');
+  const [educationLevel, setEducationLevel] = useState('');
+  const [city, setCity] = useState('');
+  const [minSalary, setMinSalary] = useState('');
+  const [maxSalary, setMaxSalary] = useState('');
+  const [jobFunction, setJobFunction] = useState('');
+  const [minExperience, setMinExperience] = useState('');
+  const [maxExperience, setMaxExperience] = useState('');
+  const searchFun = () => {
+    const reqBody = {
+      "keyword": isSearch.keyword,
+      "filter": []
+  };
+
+  if(jobIndustry) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobIndustry":jobIndustry}}}});
+  if(city) reqBody?.filter?.push({"term": {"city":city}});
+  if(jobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobFunction":jobFunction}}}});
+  if(jobFunction && subJobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobSubFunction":subJobFunction}}}});
+  if(minSalary && maxSalary) reqBody?.filter?.push({"range":{"salaryRange":{"gte":minSalary,"lte":maxSalary}}});
+  if(minExperience && maxExperience) reqBody?.filter?.push( {"range":{"expYears":{"gte":minExperience,"lte":maxExperience}}});
+  if(educationLevel) reqBody?.filter?.push({"nested":{"path":"education","query":{"term":{"education.educationLevel":educationLevel}}}});
+  if(languageType) reqBody?.filter?.push({"nested":{"path":"language","query":{"term":{"language.languageType":languageType}}}});
+  console.log(reqBody, 'eeeeeeeeeeeee');
+    axios
+      .post(`api/v1/search/job-post?from=0&size=4`, reqBody)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data.data.data;
+        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+        // setIsProfileData(data)
+        setSearchData(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const resetFun = () => {
+    setSearchData(null);
+  };
+
+
+
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
         <Row>
-          <Col lg="12">
             <Col lg="12" className="webkit">
               <Row>
                 <Col>
@@ -263,11 +329,11 @@ export const FreelanceFindWork = () => {
                 </Col>
               </Row>
             </Col>
-          </Col>
+          
         </Row>
         {searchShow === true ? (
           <>
-            <Row className="align-items-center">
+             <Row className="align-items-center">
               <Col lg="5">
                 <div className="p-3">
                   <Col lg="12">
@@ -275,11 +341,40 @@ export const FreelanceFindWork = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Industry
                       </label>
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Job Industry</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setJobIndustry(e.target.value)}>
+                        <option hidden="">Select Job Industry</option>
+                        <option>Universities / Education</option>
+                        <option>Manufacturing</option>
+                        <option>Security </option>
+                        <option>Real Estate</option>
+                        <option>
+                          Professional Consultings (Legal, HR, Finance etc.)
+                        </option>
+                        <option>Banking and Finance</option>
+                        <option>
+                          Beautiy Care and Health / Welness / Fitness
+                        </option>
+                        <option>Government / Public Utilities</option>
+                        <option>
+                          Hospitality / Travel / Airlines / Clubhouse
+                        </option>
+                        <option>
+                          IT / R&amp;D / Cyber Security / Telecommunication /
+                          Science
+                        </option>
+                        <option>Retail</option>
+                        <option>Insurance</option>
+                        <option>
+                          Logistics / Transportaton / Supply Chain
+                        </option>
+                        <option>F&amp;B / Wine &amp; Spriits</option>
+                        <option>
+                          Logistics / Transportaton / Supply Chain
+                        </option>
+                        <option>Medical / Pharmacy / Hospital</option>
+                        <option>Engineerings</option>
+                        <option>Others</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -299,11 +394,28 @@ export const FreelanceFindWork = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Function
                       </label>
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Job Function</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) =>setJobFunction(e.target.value)}>
+                        <option hidden="">Select Job Function</option>
+                        <option>HR &amp; Admin</option>
+                        <option>General Management</option>
+                        <option>Finance and Accounting</option>
+                        <option>Sales and Marketing</option>
+                        <option>
+                          Banking and Financial Institue Professionals
+                        </option>
+                        <option>
+                          Insurance Professionals (back-end functions)
+                        </option>
+                        <option>IT Professionals (Specific Fields)</option>
+                        <option>Manufacturing</option>
+                        <option>
+                          Real Estate (Surveyers / reasearchers etc.)
+                        </option>
+                        <option>Professional Designers</option>
+                        <option>Lecturers / Teachers</option>
+                        <option>Engineering / Architect</option>
+                        <option>Others</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -323,11 +435,10 @@ export const FreelanceFindWork = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Sub Job Function
                       </label>
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Sub Job Function</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setSubJobFunction(e.target.value)}
+                      >
+                        <option hidden="">Select Sub Job Function</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -346,11 +457,66 @@ export const FreelanceFindWork = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Profession
                       </label>
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Job Title</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                      {/* <Form.Select aria-label="Default select example">
+                    <option>Select Job Title</option>
+                    <option value="1">One</option>
+                    <option value="2">Two</option>
+                    <option value="3">Three</option>
+                  </Form.Select> */}
+                      <input
+                        style={{ width: "100%" }}
+                        className="form-control"
+                        name="Email"
+                        type={"email"}
+                        //   value={user.number}
+                        //   onChange={getUserData}
+                        placeholder="Enter Profession
+                "
+                      />
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Language
+                      </label>
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setLanguage(e.target.value)}
+                      >
+                        <option hidden="">Select Language</option>
+                        <option value="English">English</option>
+                        <option value="Arabic">Arabic</option>
+                        <option value="Spanish">Spanish</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Cantonese">Cantonese</option>
+                        <option value="French">French</option>
+                        <option value="German">German</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Korean">Korean</option>
+                        <option value="Mandarin">Mandarin</option>
+                        <option value="Bengali">Bengali</option>
+                        <option value="Burmese">Burmese</option>
+                        <option value="Czech">Czech</option>
+                        <option value="Dutch">Dutch</option>
+                        <option value="Greek">Greek</option>
+                        <option value="Hakka">Hakka</option>
+                        <option value="Hungarian">Hungarian</option>
+                        <option value="Hunnanese">Hunnanese</option>
+                        <option value="Malay/Indonesian">
+                          Malay/Indonesian
+                        </option>
+                        <option value="Nepali">Nepali</option>
+                        <option value="Portuguese">Portuguese</option>
+                        <option value="Russian">Russian</option>
+                        <option value="Shanghainese">Shanghainese</option>
+                        <option value="Swedish">Swedish</option>
+                        <option value="Tagalog">Tagalog</option>
+                        <option value="Telugu">Telugu</option>
+                        <option value="Thai">Thai</option>
+                        <option value="Turkish">Turkish</option>
+                        <option value="Vietnamese">Vietnamese</option>
+                        <option value="Others">Others</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -377,7 +543,8 @@ export const FreelanceFindWork = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Company Name
                       </label>
-                      <Form.Select aria-label="Default select example">
+                      <Form.Select aria-label="Default select example"
+                      >
                         <option>Enter Company Name</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -431,6 +598,7 @@ export const FreelanceFindWork = () => {
                           className="form-control"
                           name="Email"
                           type={"email"}
+                      onChange={(e) => setMinSalary(e.target.value)}
                           //   value={user.number}
                           //   onChange={getUserData}
                           placeholder="Enter Min Salary 
@@ -444,7 +612,39 @@ export const FreelanceFindWork = () => {
                           type={"email"}
                           //   value={user.number}
                           //   onChange={getUserData}
+                      onChange={(e) =>setMaxSalary(e.target.value)}
                           placeholder="Enter Max Salary 
+
+                "
+                        />
+                      </div>
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-2xl" style={{ width: "100%" }}>
+                        Work Experience
+                      </label>
+                      <div style={{ display: "flex" }}>
+                        <input
+                          style={{ width: "100%" }}
+                          className="form-control"
+                          name="minwork"
+                          type={"text"}
+                          //   value={user.number}
+                          //   onChange={getUserData}
+                          placeholder="Min Work Exp 
+
+                "
+                        />
+                        <input
+                          style={{ width: "100%" }}
+                          className="form-control mx-2"
+                          name="text"
+                          type={"text"}
+                          //   value={user.number}
+                          //   onChange={getUserData}
+                          placeholder="Max Work Exp
 
                 "
                         />
@@ -456,11 +656,32 @@ export const FreelanceFindWork = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Location
                       </label>
-                      <Form.Select aria-label="Default select example">
-                        <option>Select Job Location</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setCity(e.target.value)}
+                      >
+                        <option hidden="">Select Job Location</option>
+                        <option>Central and Western</option>
+                        <option>Eastern</option>
+                        <option>Southern</option>
+                        <option>Wan Chai</option>
+                        <option>Kowloon City</option>
+                        <option>Kwun Tong</option>
+                        <option>Sham Shui Po</option>
+                        <option>Wong Tai Sin</option>
+                        <option>Yau Tsim Mong</option>
+                        <option>Islands</option>
+                        <option>Kwai Tsing</option>
+                        <option>North</option>
+                        <option>Sai Kung</option>
+                        <option>Shatin</option>
+                        <option>Tai Po</option>
+                        <option>Tsuen Wan</option>
+                        <option>Tuen Mun</option>
+                        <option>Yuen Long</option>
+                        <option>China</option>
+                        <option>South East Asia (SEA)</option>
+                        <option>Asia Pacific (APAC)</option>
+                        <option>Others</option>
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -527,10 +748,14 @@ export const FreelanceFindWork = () => {
                             className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
                             style={{ background: "#39BEC1", border: "none" }}
                             onClick={() => applyFunc(values)}
-                            // onClick={() => navigate("/FreelancerProfile", { state: { values } })}
+                            // onClick={() => setModalShowGoogFunc(true)}
                           >
                             APPLY
                           </Button>
+                          <MyVerticallyCenteredModalFunc
+        show={modalShowGoogFunc}
+        onHide={() => setModalShowGoogFunc(false)}
+      />
                           <Button
                             onClick={() => modalshow(values)}
                             className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"

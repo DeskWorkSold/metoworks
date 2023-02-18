@@ -1290,6 +1290,10 @@ function MyVerticallyCenteredModal3(props) {
   );
 }
 export const Interview = () => {
+  const [modalShowGoogFunc,setModalShowGoogFunc] = useState(false);
+  const [modalShowNotQuiteFunc,setModalShowNotQuiteFunc] = useState(false);
+  const [modalShowToKeepFunc,setModalShowToKeepFunc] = useState(false);
+
   const [show, setShow] = useState(false);
   const [smShow, setSmShow] = useState(false);
   const [lgShow, setLgShow] = useState(false);
@@ -1334,7 +1338,89 @@ export const Interview = () => {
       });
   };
 
+  function MyVerticallyCenteredModalFunc(props) {
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            good
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+          Good Fit
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  function MyVerticallyCenteredModalGootToKeepFunc(props) {
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+          Keep
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+          Goot To Keep
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  function MyVerticallyCenteredModalNotQuitFunc(props) {
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+          Quit
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+          Not Quit
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  
+  const GoodToFitFunc = () => {
 
+  
+  }
+  const  GoodToKeepFunc = () => {
+    
+  }
+  const NotQuiteFunc = () => {
+    
+  }
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -1545,9 +1631,15 @@ export const Interview = () => {
                                                 marginTop: "10px",
                                                 marginBottom: "10px",
                                               }}
+                                              // onClick={() => GoodToFitFunc()}
+                                              onClick={() => setModalShowGoogFunc(true)}
                                             >
                                               Good Fit
                                             </Button>
+                                            <MyVerticallyCenteredModalFunc
+        show={modalShowGoogFunc}
+        onHide={() => setModalShowGoogFunc(false)}
+      />
                                             <Button
                                               // onClick={handleShow}
                                               className="text-white border-rounded px-3 mx-3 py-3 w-40"
@@ -1557,9 +1649,14 @@ export const Interview = () => {
                                                 marginTop: "10px",
                                                 marginBottom: "10px",
                                               }}
+                                              onClick={() => setModalShowNotQuiteFunc(true)}
                                             >
                                               Not Quite
                                             </Button>
+                                                                                    <MyVerticallyCenteredModalNotQuitFunc
+        show={modalShowNotQuiteFunc}
+        onHide={() => setModalShowNotQuiteFunc(false)}
+      />
                                             <Button
                                               className="text-white border-rounded px-3 mx-3 py-3 w-40"
                                               style={{
@@ -1568,9 +1665,14 @@ export const Interview = () => {
                                                 marginTop: "10px",
                                                 marginBottom: "10px",
                                               }}
+                                              onClick={() => setModalShowToKeepFunc(true)}
                                             >
                                               Good to Keep
                                             </Button>
+                                            <MyVerticallyCenteredModalGootToKeepFunc
+        show={modalShowToKeepFunc}
+        onHide={() => setModalShowToKeepFunc(false)}
+      />
                                             {/* <Button
                                     className="border-rounded text-2xl"
                                     style={{
