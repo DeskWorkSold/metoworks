@@ -11,196 +11,7 @@ import { useEffect } from "react";
 import axios from "../../../utils/axios.api";
 import { useNavigate } from "react-router-dom/dist";
 
-function MyVerticallyCenteredModal(props) {
 
-  return (
-    <div>
-      <Modal
-        id="modal"
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header>
-          {/* <Modal.Title
-            id="contained-modal-title-vcenter"
-            className="text-center"
-          >
-            Post A Job
-          </Modal.Title> */}
-        </Modal.Header>
-        <Modal.Body className="webkit">
-          <h2 className="text-2xl font-bold">10 Tokens</h2>
-          <p className="text-lg" style={{ color: "#C1C1C1" }}>
-            10 Tokens to View ProÃ¯Â¬Âle
-          </p>
-          <div style={{ display: "inline-grid" }}>
-            <Button
-              className="text-white border-rounded px-5 py-3 mx-2"
-              style={{ background: "#39BEC1", border: "none" }}
-              onClick={props.onHide}
-            >
-              YES
-            </Button>
-            <Button
-              className="border-rounded px-5 py-3 mx-2"
-              style={{ background: "none", color: "#C1C1C1" }}
-              onClick={props.onHide}
-            >
-              NO
-            </Button>
-          </div>
-        </Modal.Body>
-        <Modal.Footer></Modal.Footer>
-      </Modal>
-    </div>
-  );
-}
-function MyVerticallyCenteredModal1(props) {
-  console.log(props, "props")
-  const [arrangeInterview, setArrangeInterview] = useState({
-    timestamp: "2023-02-16T17:48",
-    type: '',
-    location: '',
-    notes: '',
-  })
-  console.log('arrangeInterview', arrangeInterview);
-  const submitArrangeInterView = () => {
-
-    console.log(arrangeInterview, "arrange")
-
-    axios.post(`api/v1/interview/schedule/recruiter/reschedule?id=${props.id.id}`, arrangeInterview).then((res) => {
-      if (res.data) {
-        console.log(res, "res")
-      }
-    }).catch((error) => {
-      console.log(error, "error")
-    })
-
-
-    // onScheduleApplicant({
-    //   id: currentApplicant?.id,
-    //   timestamp: arrangeInterview.timestamp,
-    //   type: arrangeInterview.type,
-    //   location: arrangeInterview.location,
-    //   notes: arrangeInterview.notes,
-    // })
-    // console.log('currentApplicant', currentApplicant.id);
-  }
-
-
-  return (
-    <Modal
-      {...props}
-      // size="lg"
-      // show={lgShow}
-      // onHide={() => setLgShow(false)}
-      aria-labelledby="example-modal-sizes-title-lg"
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="example-modal-sizes-title-lg">
-          Arrange Interview
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className="p-3">
-          <Col lg="12">
-            <fieldset>
-              <label className="text-lg" style={{ width: "100%" }}>
-                Interview Date / Time
-              </label>
-              <input
-                style={{ width: "100%" }}
-                className="form-control"
-                name="date"
-                type={"date"}
-                onChange={(e) => setArrangeInterview({ ...arrangeInterview, timestamp: e.target.value })}
-              />
-            </fieldset>
-          </Col>
-          <Col lg="12">
-            <fieldset>
-              <label className="text-lg" style={{ width: "100%" }}>
-                Interview Type
-              </label>
-
-              <Form.Select aria-label="Default select example" value={arrangeInterview.interviewType} onChange={(e) => setArrangeInterview({ ...arrangeInterview, type: e.target.value })}>
-                <option value="DEFAULT" disabled="">
-                  Select Job Function
-                </option>
-                <option>HR &amp; Admin</option>
-                <option>General Management</option>
-                <option>Finance and Accounting</option>
-                <option>Sales and Marketing</option>
-                <option>Banking and Financial Institue Professionals</option>
-                <option>Insurance Professionals (back-end functions</option>
-                <option>IT Professionals (Specific Fields)</option>
-                <option>Manufacturing</option>
-                <option>Finance and Accounting</option>
-                <option>Professional Designers</option>
-                <option>Lecturers / Teachers</option>
-                <option>Engineering / Architect</option>
-                <option>Others</option>
-              </Form.Select>
-            </fieldset>
-          </Col>
-          <Col lg="12">
-            <fieldset>
-              <label className="text-lg" style={{ width: "100%" }}>
-                Interview Location / Link
-              </label>
-
-              <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="Link"
-                onChange={(e) => setArrangeInterview({ ...arrangeInterview, location: e.target.value })}
-                placeholder="  "
-                required
-              />
-            </fieldset>
-          </Col>
-          <Col lg="12">
-            <fieldset>
-              <label className="text-lg" style={{ width: "100%" }}>
-                Other
-              </label>
-
-              <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="firstname"
-                onChange={(e) => setArrangeInterview({ ...arrangeInterview, notes: e.target.value })}
-                placeholder=" "
-                required
-              />
-            </fieldset>
-          </Col>
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          style={{ background: "none", color: "#C1C1C1" }}
-          onClick={props.onHide}
-        >
-          Cancel
-        </Button>
-
-        <Button
-          style={{ background: "none", color: "#39BEC1" }}
-          onClick={() =>
-            submitArrangeInterView()
-          }
-        >
-          Send
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
 
 function MyVerticallyCenteredModal2(props) {
 
@@ -1186,109 +997,7 @@ function MyVerticallyCenteredModal2(props) {
   );
 }
 
-function MyVerticallyCenteredModal3(props) {
-  return (
-    <Modal
-      {...props}
-      size="lg"
-      // show={lgShow}
-      // onHide={() => setLgShow(false)}
-      aria-labelledby="example-modal-sizes-title-lg"
-    >
-      <Modal.Header closeButton>
-        <Modal.Title id="example-modal-sizes-title-lg">
-          Offer Job Position
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <div className="p-3">
-          <Col lg="12">
-            <fieldset>
-              <label className="text-lg" style={{ width: "100%" }}>
-                Joining Date
-              </label>
-              <input
-                style={{ width: "100%" }}
-                className="form-control"
-                name="date"
-                type={"date"}
-              //   value={user.number}
-              //   onChange={getUserData}
-              />
-            </fieldset>
-          </Col>
-          <Col lg="12">
-            <fieldset>
-              <label className="text-lg" style={{ width: "100%" }}>
-                Job Title
-              </label>
 
-              <input
-                style={{ width: "100%" }}
-                className="form-control"
-                name="date"
-                type={"text"}
-              //   value={user.number}
-              //   onChange={getUserData}
-              />
-            </fieldset>
-          </Col>
-          <Col lg="12">
-            <fieldset>
-              <label className="text-lg" style={{ width: "100%" }}>
-                Salary
-              </label>
-
-              <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="Link"
-                //   value={user.name}
-                //   onChange={getUserData}
-                placeholder="  "
-                required
-              />
-            </fieldset>
-          </Col>
-          <Col lg="12">
-            <fieldset>
-              <label className="text-lg" style={{ width: "100%" }}>
-                Message
-              </label>
-
-              <input
-                style={{ width: "100%" }}
-                className="form-control"
-                type={"text"}
-                name="firstname"
-                //   value={user.name}
-                //   onChange={getUserData}
-                placeholder=" "
-                required
-              />
-            </fieldset>
-          </Col>
-        </div>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          style={{ background: "none", color: "#C1C1C1" }}
-          onClick={props.onHide}
-        >
-          Cancel
-        </Button>
-
-        <Button
-          style={{ background: "none", color: "#39BEC1" }}
-          onClick={props.onHide}
-        >
-          Send
-        </Button>
-      </Modal.Footer>
-    </Modal>
-  );
-}
 export const Interview = () => {
   const [modalShowGoogFunc,setModalShowGoogFunc] = useState(false);
   const [modalShowNotQuiteFunc,setModalShowNotQuiteFunc] = useState(false);
@@ -1300,34 +1009,58 @@ export const Interview = () => {
   const [OfferShow, setOfferShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [modalShow, setModalShow] = React.useState(false);
+  const [modalShow, setModalShow] = useState(false);
   const [interviewData, setInterviewData] = useState({});
   const [filteredCategory, setFilteredCategory] = useState("");
   const [selectedValue, setSelectedValue] = useState('')
+  const [isCount, setIsCount] = useState('')
+  const [interviewFilterdData ,setInterviewFilterdData] = useState('')
+  // console.log(isCount, 'isCount');
   const handleSelectChange = (event) => {
+    let data = event.target.value
+    if(data) {
+      setInterviewFilterdData(interviewData.filter(filter => {
+        return filter.internalState == data
+      }))
+      setIsCount(interviewFilterdData.length)
+    }
     setSelectedValue(event.target.value);
+
   };
+  const [profileImg, setProfileImg] = useState('')
 
 
   const [isInput, setIsInput] = useState({
   });
-  console.log('interviewData', interviewData);
+  console.log('interviewFilterdData', interviewFilterdData);
 
   useEffect(() => {
     searchFunc()
   }, [])
 
+  // useEffect(() => {
+  //   searchFunc()
+  // }, [selectedValue])
+
   const searchFunc = () => {
 
     // console.log('data', data);
     axios
-      .get(`api/v1/interview?stage=schedule&size=4&from=0`)
+      .get(`api/v1/interview?stage=applied&size=80&from=10`)
       .then((res) => {
         console.log(res, "Initial Data");
         let data = res.data.data;
-        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
-        // setIsProfileData(data)
+        ThumblailFunc(data)
+        let count = res.data.count
+        // setPageCount(Math.ceil(count / param.size))
+        setIsCount(count)
+      //  if(selectedValue) {
+      //   setInterviewData(data.map((e) => {
+      //     return selectedValue == e.internalState
+      //   }))
+      //  }
         setInterviewData(data);
+        setInterviewFilterdData(data)
         let filteredData = data.map((items) => {
           return items.job.title
         });
@@ -1337,6 +1070,33 @@ export const Interview = () => {
         console.log(err);
       });
   };
+
+  const ThumblailFunc = (data) => {
+    let temArray = [];
+    for (let item of data) {
+      // console.log(item, 'iteeeeeeeeeeeeeeeeeeeeeeem');
+      let image = item?.freelancer?.files?.thumbnail
+  //  console.log(image, 'imaaaaaaaaaaaaaaaaaaage');
+   const imagePath = image?.split(".");
+  //  console.log(imagePath, 'imagePath');
+
+   if (imagePath?.length && image?.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    // alert('sdf')
+    axios.get(`/api/v1/user/asset/thumbnail/${imagePath?.[0]}?mimeType=.${imagePath?.[1]}`)
+    .then((res) => {
+      const response = res.arrayBuffer();
+      let base64ImageString = Buffer.from(response, 'binary').toString('base64')
+      let srcValue = `data:image/${imagePath?.[1]};base64,`+base64ImageString;
+      temArray.push({ img: srcValue, id: item?.id });
+      setProfileImg(srcValue)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+   }
+  }
+   
+  }
 
   function MyVerticallyCenteredModalFunc(props) {
     return (
@@ -1348,12 +1108,12 @@ export const Interview = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            good
+            Good Fit
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
-          Good Fit
+          Success!
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -1362,30 +1122,16 @@ export const Interview = () => {
       </Modal>
     );
   }
-  function MyVerticallyCenteredModalGootToKeepFunc(props) {
-    return (
-      <Modal
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-          Keep
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-          Goot To Keep
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button onClick={props.onHide}>Close</Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  }
+  const Modalshowgoogfunc = (events) => {
+    console.log(events, "funtion values");
+    if (events.clicked == true) {
+      events.clicked = false;
+      setModalShowGoogFunc(false);
+    } else {
+      setModalShowGoogFunc(true);
+      events.clicked = true;
+    }
+  };
   function MyVerticallyCenteredModalNotQuitFunc(props) {
     return (
       <Modal
@@ -1396,12 +1142,12 @@ export const Interview = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-          Quit
+          Not Quit
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
-          Not Quit
+          Success
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -1410,18 +1156,459 @@ export const Interview = () => {
       </Modal>
     );
   }
-  
-  const GoodToFitFunc = () => {
-
+  const Modalnotquitfunc = (events) => {
+    console.log(events, "funtion values");
+    if (events.clicked == true) {
+      events.clicked = false;
+      setModalShowNotQuiteFunc(false);
+    } else {
+      setModalShowNotQuiteFunc(true);
+      events.clicked = true;
+    }
+  };
+  function MyVerticallyCenteredModalGootToKeepFunc(props) {
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+          Goot To Keep
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+     Success
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  const ModalgootTokeepfunc = (events) => {
+    console.log(events, "funtion values");
+    if (events.clicked == true) {
+      events.clicked = false;
+      setModalShowToKeepFunc(false);
+    } else {
+      setModalShowToKeepFunc(true);
+      events.clicked = true;
+    }
+  };
+  const GoodToFitFunc = (event) => {
+    let EventData = event.clicked = true
+  let value = {
+      "value": "GOOD_FIT"
+    }
+    axios
+    .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
+    .then((res) => {
+      console.log(res, "Initial Data");
+      let data = res.data.data;
+      if(res) {
+        // Modalshowgoogfunc(true)
+        // console.log(EventData, 'EventData');
+        Modalshowgoogfunc(EventData)
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   
   }
-  const  GoodToKeepFunc = () => {
+  const  GoodToKeepFunc = (event) => {
+    let EventData = event.clicked = true
+    let value = {
+      "value": "GOOD_TO_KEEP"
+    }
+    axios
+    .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
+    .then((res) => {
+      console.log(res, "Initial Data");
+      let data = res.data.data;
+      if(res) {
+        ModalgootTokeepfunc(EventData)
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  const NotQuiteFunc = (event) => {
+    let EventData = event.clicked = true
+
+    let value = {
+      "value": "NOT_QUITE"
+    }
+    axios
+    .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
+    .then((res) => {
+      console.log(res, "Initial Data");
+      let data = res.data.data;
+      if(res) {
+        Modalnotquitfunc(EventData)
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  function MyVerticallyCenteredModal(props) {
+
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header>
+            {/* <Modal.Title
+              id="contained-modal-title-vcenter"
+              className="text-center"
+            >
+              Post A Job
+            </Modal.Title> */}
+          </Modal.Header>
+          <Modal.Body className="webkit">
+            <h2 className="text-2xl font-bold">10 Tokens</h2>
+            <p className="text-lg" style={{ color: "#C1C1C1" }}>
+              10 Tokens to View ProÃ¯Â¬Âle
+            </p>
+            <div style={{ display: "inline-grid" }}>
+              <Button
+                className="text-white border-rounded px-5 py-3 mx-2"
+                style={{ background: "#39BEC1", border: "none" }}
+                onClick={props.onHide}
+              >
+                YES
+              </Button>
+              <Button
+                className="border-rounded px-5 py-3 mx-2"
+                style={{ background: "none", color: "#C1C1C1" }}
+                onClick={props.onHide}
+              >
+                NO
+              </Button>
+            </div>
+          </Modal.Body>
+          <Modal.Footer></Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+  const token = (events) => {
+    console.log(events, "funtion values");
+    if (events.clicked == true) {
+      events.clicked = false;
+      setModalShow(false);
+    } else {
+      setModalShow(true);
+      events.clicked = true;
+    }
+  };
+
+  function MyVerticallyCenteredModal1(props) {
+    // console.log(props, "props")
+    const [arrangeInterview, setArrangeInterview] = useState({
+      timestamp: "",
+      type: "",
+      location: '',
+      notes: '',
+      id : props?.id?.id
+    })
+  
+  //   const data = {
+  //     "id": props.id.id,
+  //     "timestamp": "2023-12-01T07:20:53+0000",
+  //     "type": "IN_PERSON",
+  //     "location": "421 7b, Paker Street, NY",
+  //     "notes": "hey this is some special notes for you"
+  // }
+    // console.log('arrangeInterview', arrangeInterview);
+    const submitArrangeInterView = () => {
+    
+      // console.log(arrangeInterview, "arrange")
+  
+      axios.post(`/api/v1/interview/applicants/arrange`, arrangeInterview).then((res) => {
+        if (res.data) {
+      props.onHide()
+        }
+      }).catch((error) => {
+        console.log(error, "error")
+      })
+  
+  
+      // onScheduleApplicant({
+      //   id: currentApplicant?.id,
+      //   timestamp: arrangeInterview.timestamp,
+      //   type: arrangeInterview.type,
+      //   location: arrangeInterview.location,
+      //   notes: arrangeInterview.notes,
+      // })
+      // console.log('currentApplicant', currentApplicant.id);
+    }
+  
+  
+    return (
+      <Modal
+        {...props}
+        // size="lg"
+        // show={lgShow}
+        // onHide={() => setLgShow(false)}
+        aria-labelledby="example-modal-sizes-title-lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-modal-sizes-title-lg">
+            Arrange Interview
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="p-3">
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Interview Date / Time
+                </label>
+                <input
+                  style={{ width: "100%" }}
+                  className="form-control"
+                  name="date"
+                  type={"date"}
+                  onChange={(e) => setArrangeInterview({ ...arrangeInterview, timestamp: e.target.value })}
+                />
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Interview Type
+                </label>
+  
+                <Form.Select aria-label="Default select example" value={arrangeInterview.interviewType} onChange={(e) => setArrangeInterview({ ...arrangeInterview, type: e.target.value })}>
+                  <option value="DEFAULT" disabled="">
+                    Select Type
+                  </option>
+                  <option>ONLINE</option>
+                  <option>IN_PERSON</option>
+                </Form.Select>
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Interview Location / Link
+                </label>
+  
+                <input
+                  style={{ width: "100%" }}
+                  className="form-control"
+                  type={"text"}
+                  name="Link"
+                  onChange={(e) => setArrangeInterview({ ...arrangeInterview, location: e.target.value })}
+                  placeholder="  "
+                  required
+                />
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Other
+                </label>
+  
+                <input
+                  style={{ width: "100%" }}
+                  className="form-control"
+                  type={"text"}
+                  name="firstname"
+                  onChange={(e) => setArrangeInterview({ ...arrangeInterview, notes: e.target.value })}
+                  placeholder=" "
+                  required
+                />
+              </fieldset>
+            </Col>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            style={{ background: "none", color: "#C1C1C1" }}
+            onClick={props.onHide}
+          >
+            Cancel
+          </Button>
+  
+          <Button
+            style={{ background: "none", color: "#39BEC1" }}
+            onClick={() =>
+              submitArrangeInterView(props)
+            }
+          >
+            Send
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  const setlgshow = (events) => {
+    console.log(events, "funtion values");
+    if (events.clicked == true) {
+      events.clicked = false;
+      setLgShow(false);
+    } else {
+      setLgShow(true);
+      events.clicked = true;
+    }
+  };
+
+  function MyVerticallyCenteredModal3(props) {
+    // console.log(props, 'prrrrrrrrrrrrrrrrrrrrrrrrrps');
+  const [jobOffer, setJobOffer] = useState({
+     joiningDate: "",
+      jobTitle: "",
+      salary: "",
+      interviewId: props?.props?.id,
+      msg: ''
+  })
+  
+  const JobOfferFunc = () => {
+    axios.post(`api/v1/interview/offer`, jobOffer).then((res) => {
+      if (res.data) {
+     props.onHide()
+      }
+    }).catch((error) => {
+      console.log(error, "error")
+    })
     
   }
-  const NotQuiteFunc = () => {
-    
+  
+  
+  
+    return (
+      <Modal
+        {...props}
+        size="lg"
+        // show={lgShow}
+        // onHide={() => setLgShow(false)}
+        aria-labelledby="example-modal-sizes-title-lg"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="example-modal-sizes-title-lg">
+            Offer Job Position
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <div className="p-3">
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Joining Date
+                </label>
+                <input
+                  style={{ width: "100%" }}
+                  className="form-control"
+                  name="date"
+                  type={"date"}
+                  onChange={(e) => setJobOffer({...jobOffer, joiningDate : e.target.value})}
+                //   value={user.number}
+                //   onChange={getUserData}
+                />
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Job Title
+                </label>
+  
+                <input
+                  style={{ width: "100%" }}
+                  className="form-control"
+                  name="date"
+                  type={"text"}
+                  onChange={(e) => setJobOffer({...jobOffer, jobTitle : e.target.value})}
+                //   value={user.number}
+                //   onChange={getUserData}
+                />
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Salary
+                </label>
+  
+                <input
+                  style={{ width: "100%" }}
+                  className="form-control"
+                  type={"number"}
+                  name="Link"
+                  //   value={user.name}
+                  //   onChange={getUserData}
+                  placeholder="  "
+                  required
+                  onChange={(e) => setJobOffer({...jobOffer, salary : e.target.value})}
+                />
+              </fieldset>
+            </Col>
+            <Col lg="12">
+              <fieldset>
+                <label className="text-lg" style={{ width: "100%" }}>
+                  Message
+                </label>
+  
+                <input
+                  style={{ width: "100%" }}
+                  className="form-control"
+                  type={"text"}
+                  name="firstname"
+                  //   value={user.name}
+                  //   onChange={getUserData}
+                  placeholder=" "
+                  onChange={(e) => setJobOffer({...jobOffer, msg : e.target.value})}
+                  required
+                />
+              </fieldset>
+            </Col>
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            style={{ background: "none", color: "#C1C1C1" }}
+            onClick={props.onHide}
+          >
+            Cancel
+          </Button>
+  
+          <Button
+            style={{ background: "none", color: "#39BEC1" }}
+            onClick={() => JobOfferFunc(props)}
+          >
+            Send
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
   }
-
+  const setoffershow = (events) => {
+    console.log(events, "funtion values");
+    if (events.clicked == true) {
+      events.clicked = false;
+      setOfferShow(false);
+    } else {
+      setOfferShow(true);
+      events.clicked = true;
+    }
+  };
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -1435,10 +1622,9 @@ export const Interview = () => {
               }}
               className="des-flex"
             >
-              <h2 className="text-3xl robot font-bold">Interviews</h2>
+              <h2 className="text-3xl robot">Interviews</h2>
               <div
                 style={{
-                  float: "right",
                   display: "flex",
                   alignItems: "center",
                 }}
@@ -1550,6 +1736,7 @@ export const Interview = () => {
                   <Button
                     className="text-white border-rounded mx-2 px-3"
                     style={{ background: "#39BEC1", border: "none" }}
+                    onClick={() => searchFunc()}
                   >
                     Reset
                   </Button>
@@ -1561,13 +1748,13 @@ export const Interview = () => {
       </Container>
       <Container>
         <div>
-          <h2 className="text-2xl">{filteredCategory && filteredCategory.length} Total Candidates</h2>
+          <h2 className="text-2xl">{interviewFilterdData ? interviewFilterdData.length : 0} Total Candidates</h2>
         </div>
         <Accordion defaultActiveKey="0" flush>
           {filteredCategory.length > 0 &&
             filteredCategory.map((items, keys) => {
               return (
-                <Accordion.Item eventKey="0" key={keys}>
+                <Accordion.Item eventKey={keys} key={keys}>
                   <Accordion.Header>
                     {items} &#160;&#160;&#160;
                     <span
@@ -1578,11 +1765,12 @@ export const Interview = () => {
                     </span>
                   </Accordion.Header>
                   <Accordion.Body>
-                    {interviewData
+                    {interviewFilterdData
                       .filter((filter) => {
-                        return filter.job.title === items && filter.internalState == selectedValue
+                        return filter.job.title === items || filter.internalState == selectedValue
                       })
                       .map((events, key) => {
+                        // console.log(events, 'eventsevents');
                         return (
                           <Container key={key}>
                             <Row className="align-items-center">
@@ -1631,15 +1819,19 @@ export const Interview = () => {
                                                 marginTop: "10px",
                                                 marginBottom: "10px",
                                               }}
-                                              // onClick={() => GoodToFitFunc()}
-                                              onClick={() => setModalShowGoogFunc(true)}
+                                              onClick={() => GoodToFitFunc(events)}
+                                              disabled={events.match == 'GOOD_FIT' ? true : false}
                                             >
                                               Good Fit
                                             </Button>
+                                            {events.clicked == true && (
                                             <MyVerticallyCenteredModalFunc
         show={modalShowGoogFunc}
-        onHide={() => setModalShowGoogFunc(false)}
+        props={events}
+        onHide={() => Modalshowgoogfunc(events)}
       />
+      )}
+
                                             <Button
                                               // onClick={handleShow}
                                               className="text-white border-rounded px-3 mx-3 py-3 w-40"
@@ -1649,14 +1841,19 @@ export const Interview = () => {
                                                 marginTop: "10px",
                                                 marginBottom: "10px",
                                               }}
-                                              onClick={() => setModalShowNotQuiteFunc(true)}
+                                              onClick={() => NotQuiteFunc(events)}
+                                              disabled={events.match == 'NOT_QUITE' ? true : false}
                                             >
                                               Not Quite
                                             </Button>
+                                            {events.clicked == true && (
                                                                                     <MyVerticallyCenteredModalNotQuitFunc
         show={modalShowNotQuiteFunc}
-        onHide={() => setModalShowNotQuiteFunc(false)}
+        props={events}
+        onHide={() => Modalnotquitfunc (events)}
       />
+      
+      )}
                                             <Button
                                               className="text-white border-rounded px-3 mx-3 py-3 w-40"
                                               style={{
@@ -1665,14 +1862,19 @@ export const Interview = () => {
                                                 marginTop: "10px",
                                                 marginBottom: "10px",
                                               }}
-                                              onClick={() => setModalShowToKeepFunc(true)}
+                                             onClick={() => GoodToKeepFunc(events)}
+                                             disabled={events.match == 'GOOT_TO_KEEP' ? true : false}
                                             >
                                               Good to Keep
                                             </Button>
+                                            {events.clicked == true && (
                                             <MyVerticallyCenteredModalGootToKeepFunc
         show={modalShowToKeepFunc}
-        onHide={() => setModalShowToKeepFunc(false)}
+        props={events}
+        onHide={() => ModalgootTokeepfunc (events)}
       />
+      
+      )}
                                             {/* <Button
                                     className="border-rounded text-2xl"
                                     style={{
@@ -1727,7 +1929,7 @@ export const Interview = () => {
                                         >
                                           <Button
                                             variant="primary"
-                                            onClick={() => setModalShow(true)}
+                                            onClick={() => token(events)}
                                             className="text-white border-rounded px-3 py-3 mx-2"
                                             style={{
                                               background: "#39BEC1",
@@ -1736,10 +1938,14 @@ export const Interview = () => {
                                           >
                                             VIEW PROFILE
                                           </Button>
+                                          {events.clicked == true && (
                                           <MyVerticallyCenteredModal
                                             show={modalShow}
-                                            onHide={() => setModalShow(false)}
+                                            props={events}
+                                            onHide={() => token (events)}
                                           />
+                                          
+      )}
                                         </div>
                                       </Col>
                                     </Row>
@@ -1784,14 +1990,14 @@ export const Interview = () => {
                                               style={{ color: "#7A7979" }}
                                             >
                                               {" "}
-                                              {events.location}
+                                              {events.job.location}
                                             </h2>
                                           </div>
                                         </Col>
                                         <Col>
                                           <div className="p3">
                                             <Button
-                                              onClick={() => setLgShow(true)}
+                                              onClick={() => setlgshow(events)}
                                               className=" border-rounded py-3 w-44"
                                               style={{
                                                 background: "none",
@@ -1805,18 +2011,21 @@ export const Interview = () => {
                                             >
                                               ARRANGE INTERVIEW
                                             </Button>
-
+                                          
+      {events.clicked == true && (
                                             <MyVerticallyCenteredModal1
                                               show={lgShow}
-                                              onHide={() => setLgShow(false)}
+                                              props={events}
+                                              onHide={() => setlgshow(events)}
                                               id={events}
                                             />
+                                            )}
                                           </div>
                                         </Col>
                                         <Col>
                                           <div className="p3">
                                             <Button
-                                              onClick={() => setOfferShow(true)}
+                                              onClick={() => setoffershow(events)}
                                               className=" border-rounded py-3 w-44"
                                               style={{
                                                 background: "none",
@@ -1830,59 +2039,20 @@ export const Interview = () => {
                                             >
                                               OFFER
                                             </Button>
-                                            <MyVerticallyCenteredModal3
+                                            {events.clicked == true && (
+                                                <MyVerticallyCenteredModal3
+                                            props={events}
                                               show={OfferShow}
-                                              onHide={() => setOfferShow(false)}
+                                              onHide={() => setoffershow(events)}
                                             />
+                                            
+                                            )}
+
                                           </div>
                                         </Col>
                                       </Row>
                                     </Container>
-                                    {/* <hr className="my-2" />
-                <Row className="align-items-center pl-4">
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-2xl">Experience</h2>
-                      <br />
-                      <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                        4
-                      </h2>
                     </div>
-                  </Col>
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-2xl">Salary Range</h2>
-                      <br />
-                      <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                        $15000 - $20,000
-                      </h2>
-                    </div>
-                  </Col>
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-2xl">Location</h2>
-                      <br />
-                      <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                        <FontAwesomeIcon
-                          icon={faLocationDot}
-                          style={{
-                            fontWeight: "bolder",
-                          }}
-                        />{" "}
-                        Panam
-                      </h2>
-                    </div>
-                  </Col>
-                  <Col lg="3">
-                    <Button
-                      className="text-white border-rounded px-3"
-                      style={{ background: "#39BEC1", border: "none" }}
-                    >
-                      View Profile
-                    </Button>
-                  </Col>
-                </Row> */}
-                                  </div>
                                 </div>
                               </Col>
                             </Row>

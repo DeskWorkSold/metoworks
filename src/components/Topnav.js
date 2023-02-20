@@ -94,16 +94,12 @@ export const Topnav = () => {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="ml-auto my-2" navbarScroll>
-            {userType == "freeLancer" ? (
-              ""
-            ) : (
+            {!isToken && (
               <Nav.Link>
                 <Link to="/FindProfessions">Find Professionals</Link>
               </Nav.Link>
             )}
-            {userType == "freeLancer" ? (
-              ""
-            ) : (
+            {!isToken && (
               <Nav.Link>
                 <Link to="/Opportunities">Find Opportunities</Link>
               </Nav.Link>
@@ -146,86 +142,81 @@ export const Topnav = () => {
                 <Link to="/FreeContact">Contact</Link>
               </NavDropdown.Item>
             </NavDropdown>
-          </Nav>
-          {!isToken && !isToken?.length > 0 ? (
-            <>
-              <Nav.Link>
-                <Button
-                  className="text-black"
-                  style={{ background: "none", border: "none" }}
-                >
-                  <Link to="/Login">Login</Link>
-                </Button>
-              </Nav.Link>
-              <Nav.Link>
-                <Button
-                  className="text-white border-rounded"
-                  style={{ background: "#39BEC1", border: "none" }}
-                >
-                  <Link to="/Signup">Sign up</Link>
-                </Button>
-              </Nav.Link>
-            </>
-          ) : (
-            <Nav.Link className="profileWidth">
-              {auth && (
-                <div>
-                  <IconButton
-                    size="large"
-                    aria-label="account of current user"
-                    aria-controls="menu-appbar"
-                    aria-haspopup="true"
-                    onClick={handleMenu}
-                    color="inherit"
+            {!isToken && !isToken?.length > 0 ? (
+              <>
+                <Nav.Link>
+                  <Button
+                    className="text-black"
+                    style={{ background: "none", border: "none" }}
                   >
-                    <Image
-                      style={{
-                        width: "100%",
-                        objectFit: "cover",
-                        borderRadius: "100%",
+                    <Link to="/Login">Login</Link>
+                  </Button>
+                </Nav.Link>
+                <Nav.Link>
+                  <Button
+                    className="text-white border-rounded"
+                    style={{ background: "#39BEC1", border: "none" }}
+                  >
+                    <Link to="/Signup">Sign up</Link>
+                  </Button>
+                </Nav.Link>
+              </>
+            ) : (
+              <Nav.Link className="profileWidth">
+                {auth && (
+                  <div>
+                    <IconButton
+                      size="large"
+                      aria-label="account of current user"
+                      aria-controls="menu-appbar"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      color="inherit"
+                    >
+                      <Image
+                        src={
+                          profileImage ? profileImage : { uri: profilePicture }
+                        }
+                      />
+                      {/* <AccountCircle /> */}
+                    </IconButton>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
                       }}
-                      src={
-                        profileImage ? profileImage : { uri: profilePicture }
-                      }
-                    />
-                    {/* <AccountCircle /> */}
-                  </IconButton>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorEl}
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "right",
-                    }}
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <Link
-                      to={
-                        userType == "freeLancer"
-                          ? "/FreelancerProfile"
-                          : "/CompanyProfile"
-                      }
+                      keepMounted
+                      transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                      }}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
                     >
-                      <MenuItem>My Profile</MenuItem>
-                    </Link>
-                    <Link
-                      to={isToken && `/Login`}
-                      href="/Signup"
-                      onClick={() => logutFunc()}
-                    >
-                      <MenuItem>SignOut</MenuItem>
-                    </Link>
-                  </Menu>
-                </div>
-              )}
-            </Nav.Link>
-          )}
+                      <Link
+                        to={
+                          userType == "freeLancer"
+                            ? "/FreelancerProfile"
+                            : "/CompanyProfile"
+                        }
+                      >
+                        <MenuItem>My Profile</MenuItem>
+                      </Link>
+                      <Link
+                        to={isToken && `/Login`}
+                        href="/Signup"
+                        onClick={() => logutFunc()}
+                      >
+                        <MenuItem>SignOut</MenuItem>
+                      </Link>
+                    </Menu>
+                  </div>
+                )}
+              </Nav.Link>
+            )}
+          </Nav>
         </Navbar.Collapse>
       </Container>
     </Navbar>

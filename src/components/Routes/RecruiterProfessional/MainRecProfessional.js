@@ -1386,10 +1386,9 @@ export const MainRecProfessional = () => {
               }}
               className="des-flex"
             >
-              <h2 className="text-3xl robot font-bold">Find Professionals</h2>
+              <h2 className="text-3xl robot">Find Professionals</h2>
               <div
                 style={{
-                  float: "right",
                   display: "flex",
                   alignItems: "center",
                 }}
@@ -1417,7 +1416,6 @@ export const MainRecProfessional = () => {
                 />
                 <div
                   style={{
-                    width: "155px",
                     float: "right",
                     background: "white",
                     borderRadius: "20px",

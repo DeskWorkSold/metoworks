@@ -51,7 +51,7 @@ export const Login = () => {
           localStorage.setItem("userType", userType);
           // console.log(data, 'daata');
           if (type === "freelancer") {
-            navigate("/FreelancerProfile", { state: token });
+            navigate("/FreelancerProfile" + `?id=${token.substring(0,20)}`, { state: token });
           }
         })
         .catch((error) => {
@@ -76,7 +76,7 @@ export const Login = () => {
           localStorage.setItem("userType", userType);
           console.log(token, "daata");
           if (type === "recruiter") {
-            navigate("/CompanyProfile");
+            navigate("/CompanyProfile" + `?id=${token.substring(0,20)}`);
           }
         })
         .catch((error) => {

@@ -2132,7 +2132,6 @@ const [isProfileData, setIsProfileData] = useState({})
               <h2 className="text-3xl robot">Draft jobs</h2>
               <div
                 style={{
-                  float: "right",
                   display: "flex",
                   alignItems: "center",
                 }}
@@ -2160,7 +2159,6 @@ const [isProfileData, setIsProfileData] = useState({})
                 />
                 <div
                   style={{
-                    width: "155px",
                     float: "right",
                     background: "white",
                     borderRadius: "20px",

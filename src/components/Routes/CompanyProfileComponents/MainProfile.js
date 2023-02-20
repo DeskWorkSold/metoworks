@@ -43,12 +43,10 @@ function MyVerticallyCenteredModal(props) {
     educationLevel: "",
     empType: "",
     projectTimeline: { gte: "", lte: "" },
-    postedDate: `${date.getDate()}-${
-      date.getMonth() + 1
-    }-${date.getFullYear()}`,
-    expiryDate: `${date.getDate()}-${
-      date.getMonth() + 1
-    }-${date.getFullYear()}`,
+    postedDate: `${date.getDate()}-${date.getMonth() + 1
+      }-${date.getFullYear()}`,
+    expiryDate: `${date.getDate()}-${date.getMonth() + 1
+      }-${date.getFullYear()}`,
     madeOfWork: "",
     noOfOpenings: "",
     salaryCurrency: "",
@@ -123,91 +121,91 @@ function MyVerticallyCenteredModal(props) {
       salaryCurrency: jobData.salaryCurrency,
       additionalEmails: [isEmail],
     };
-    
+
     let values = Object.values(dummyData)
 
-  // console.log(values,"values")
-    values = values.every((e,i)=> e !== "")
+    // console.log(values,"values")
+    values = values.every((e, i) => e !== "")
 
-    if(values){
-    axios
-      .post("api/v1/job-post", dummyData)
-      .then((res) => {
-        console.log(res, "data sended successfully");
-        setErrors({})
-        props.onHide()
-        // navigate('/CompanyProfile')
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (values) {
+      axios
+        .post("api/v1/job-post", dummyData)
+        .then((res) => {
+          console.log(res, "data sended successfully");
+          setErrors({})
+          props.onHide()
+          // navigate('/CompanyProfile')
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-    else{
+    else {
       let newErrors = {}
-      if ( !dummyData.title) {
+      if (!dummyData.title) {
         newErrors.title = 'Job Title is required';
       }
-       if (!jobData.industry) {
+      if (!jobData.industry) {
         newErrors.industry = 'Job industry is required';
       }
-       if (!jobData.jobFunction) {
+      if (!jobData.jobFunction) {
         newErrors.jobFunction = 'Job jobFunction is required';
       }
-       if (!jobData.jobSubFunction) {
+      if (!jobData.jobSubFunction) {
         newErrors.jobSubFunction = 'Job jobSubFunction is required';
       }
-       if (!jobData.location) {
+      if (!jobData.location) {
         newErrors.location = 'Job location is required';
       }
-       if (!jobData.description) {
+      if (!jobData.description) {
         newErrors.description = 'Job DESCRIPTION is required';
       }
-       if (!jobData.requirements) {
+      if (!jobData.requirements) {
         newErrors.requirements = 'Job requirements is required';
       }
-       if (!jobData.educationLevel) {
+      if (!jobData.educationLevel) {
         newErrors.educationLevel = 'Job educationLevel is required';
       }
-       if (!jobData.profession) {
+      if (!jobData.profession) {
         newErrors.profession = 'Job profession is required';
       }
-       if (!jobData.madeOfWork) {
+      if (!jobData.madeOfWork) {
         newErrors.madeOfWork = 'Job madeOfWork is required';
       }
-       if (!jobData.noOfOpenings) {
+      if (!jobData.noOfOpenings) {
         newErrors.noOfOpenings = 'Job noOfOpenings is required';
       }
-       if (!jobData.salaryCurrency) {
+      if (!jobData.salaryCurrency) {
         newErrors.salaryCurrency = 'Job salaryCurrency is required';
       }
-       if (!jobData.salaryType) {
+      if (!jobData.salaryType) {
         newErrors.salaryType = 'Job salaryCurrency is required';
       }
-       if (!jobData.salaryPayFreq) {
+      if (!jobData.salaryPayFreq) {
         newErrors.salaryPayFreq = 'Job salaryCurrency is required';
       }
-       if (!isProjectTimeline.gte) {
+      if (!isProjectTimeline.gte) {
         newErrors.gte = 'Job gte is required';
       }
-       if (!isProjectTimeline.lte) {
+      if (!isProjectTimeline.lte) {
         newErrors.lte = 'Job lte is required';
       }
-       if (!isSalaryRange.gte) {
+      if (!isSalaryRange.gte) {
         newErrors.name = 'Job gte is required';
       }
-       if (!isSalaryRange.lte) {
+      if (!isSalaryRange.lte) {
         newErrors.gte = 'Job lte is required';
       }
-       if (!isEmail) {
+      if (!isEmail) {
         newErrors.isEmail = 'Email is required';
-      }  if (!/\S+@\S+\.\S+/.test(isEmail)) {
+      } if (!/\S+@\S+\.\S+/.test(isEmail)) {
         newErrors.email = 'Email address is invalid';
       }
       console.log(newErrors)
       setErrors(newErrors)
     }
   };
-  console.log("errors",errors);
+  console.log("errors", errors);
   const draftFunc = () => {
     axios
       .post("api/v1/job-post", jobData)
@@ -232,103 +230,7 @@ function MyVerticallyCenteredModal(props) {
       });
   };
 
-  const [success, setSuccess] = useState(false);
 
-  // const [errors, setErrors] = useState({
-  //   title: '',
-  //   industry: '',
-  //   jobFunction: '',
-  //   jobSubFunction: '',
-  //   location: '',
-  //   description: '',
-  //   requirements: '',
-  //   educationLevel: '',
-  //   profession: '',
-  //   madeOfWork: '',
-  //   noOfOpenings: '',
-  //   salaryCurrency: '',
-  //   salaryType: '',
-  //   salaryPayFreq: '',
-  //   lte: '',
-  //   gte: '',
-  //   lte: '',
-  //   gte: '',
-  //   isEmail: '',
-    
-  // });
-  const validateForm = () => {
-    let newErrors = {};
-    if (!jobData.title) {
-      newErrors.title = 'Job Title is required';
-    }
-    else if (!jobData.industry) {
-      newErrors.industry = 'Job industry is required';
-    }
-    else if (!jobData.jobFunction) {
-      newErrors.jobFunction = 'Job jobFunction is required';
-    }
-    else if (!jobData.jobSubFunction) {
-      newErrors.jobSubFunction = 'Job jobSubFunction is required';
-    }
-    else if (!jobData.location) {
-      newErrors.location = 'Job location is required';
-    }
-    else if (!jobData.description) {
-      newErrors.description = 'Job DESCRIPTION is required';
-    }
-    else if (!jobData.requirements) {
-      newErrors.requirements = 'Job requirements is required';
-    }
-    else if (!jobData.educationLevel) {
-      newErrors.educationLevel = 'Job educationLevel is required';
-    }
-    else if (!jobData.profession) {
-      newErrors.profession = 'Job profession is required';
-    }
-    else if (!jobData.madeOfWork) {
-      newErrors.madeOfWork = 'Job madeOfWork is required';
-    }
-    else if (!jobData.noOfOpenings) {
-      newErrors.noOfOpenings = 'Job noOfOpenings is required';
-    }
-    else if (!jobData.salaryCurrency) {
-      newErrors.salaryCurrency = 'Job salaryCurrency is required';
-    }
-    else if (!jobData.salaryType) {
-      newErrors.salaryType = 'Job salaryCurrency is required';
-    }
-    else if (!jobData.salaryPayFreq) {
-      newErrors.salaryPayFreq = 'Job salaryCurrency is required';
-    }
-    else if (!isProjectTimeline.gte) {
-      newErrors.gte = 'Job gte is required';
-    }
-    else if (!isProjectTimeline.lte) {
-      newErrors.lte = 'Job lte is required';
-    }
-    else if (!isSalaryRange.gte) {
-      newErrors.name = 'Job gte is required';
-    }
-    else if (!isSalaryRange.lte) {
-      newErrors.gte = 'Job lte is required';
-    }
-    else if (!isEmail) {
-      newErrors.isEmail = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(isEmail)) {
-      newErrors.email = 'Email address is invalid';
-    }
-
-    setErrors(newErrors);
-    console.log(Object.keys(newErrors).length === 0,"validation")
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = event => {
-    event.preventDefault();
-    if (validateForm()) {
-      setSuccess(true);
-    }
-  };
 
   return (
     <Modal
@@ -362,8 +264,8 @@ function MyVerticallyCenteredModal(props) {
                     //   value={user.number}
                     //   onChange={getUserData}
                     placeholder="Doctor for Child"
-                />
-                {errors &&  errors.title && <p style={{color:'red'}}>{errors.title}</p>}
+                  />
+                  {errors && errors.title && <p style={{ color: 'red' }}>{errors.title}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -415,7 +317,7 @@ function MyVerticallyCenteredModal(props) {
                 "
                 required
               /> */}
-               {errors &&  errors.industry && <p style={{color:'red'}}>{errors.industry}</p>}
+                  {errors && errors.industry && <p style={{ color: 'red' }}>{errors.industry}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -459,7 +361,7 @@ function MyVerticallyCenteredModal(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.jobFunction && <p style={{color:'red'}}>{errors.jobFunction}</p>}
+                  {errors && errors.jobFunction && <p style={{ color: 'red' }}>{errors.jobFunction}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -478,7 +380,7 @@ function MyVerticallyCenteredModal(props) {
                     </option>
 
                   </Form.Select>
-                  {errors &&  errors.jobSubFunction && <p style={{color:'red'}}>{errors.jobSubFunction}</p>}
+                  {errors && errors.jobSubFunction && <p style={{ color: 'red' }}>{errors.jobSubFunction}</p>}
                   {/* <input
                 style={{ width: "100%" }}
                 className="form-control"
@@ -540,7 +442,7 @@ function MyVerticallyCenteredModal(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.location && <p style={{color:'red'}}>{errors.location}</p>}
+                  {errors && errors.location && <p style={{ color: 'red' }}>{errors.location}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -566,7 +468,7 @@ function MyVerticallyCenteredModal(props) {
                       console.log("Focus.", editor);
                     }}
                   />
-                  {errors &&  errors.description && <p style={{color:'red'}}>{errors.description}</p>}
+                  {errors && errors.description && <p style={{ color: 'red' }}>{errors.description}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -593,7 +495,7 @@ function MyVerticallyCenteredModal(props) {
                       console.log("Focus.", editor);
                     }}
                   />
-                  {errors &&  errors.requirements && <p style={{color:'red'}}>{errors.requirements}</p>}
+                  {errors && errors.requirements && <p style={{ color: 'red' }}>{errors.requirements}</p>}
                 </fieldset>
               </Col>
               {/* <Col lg="12">
@@ -629,7 +531,7 @@ function MyVerticallyCenteredModal(props) {
                       setJobData({ ...jobData, educationLevel: e.target.value })
                     }
                   >
-                   <option value="DEFAULT" disabled="">Select Education level</option><option>ASSOCIATE DEGREE</option><option>MASTER DEGREE</option><option>DOCTORATE DEGREE</option><option>PHD</option><option>OTHER</option>
+                    <option value="DEFAULT" disabled="">Select Education level</option><option>ASSOCIATE DEGREE</option><option>MASTER DEGREE</option><option>DOCTORATE DEGREE</option><option>PHD</option><option>OTHER</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -642,7 +544,7 @@ function MyVerticallyCenteredModal(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.educationLevel && <p style={{color:'red'}}>{errors.educationLevel}</p>}
+                  {errors && errors.educationLevel && <p style={{ color: 'red' }}>{errors.educationLevel}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -669,7 +571,7 @@ function MyVerticallyCenteredModal(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.empType && <p style={{color:'red'}}>{errors.empType}</p>}
+                  {errors && errors.empType && <p style={{ color: 'red' }}>{errors.empType}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -701,7 +603,7 @@ function MyVerticallyCenteredModal(props) {
                       placeholder="Start"
                       required
                     />
-                    {errors &&  errors.gte && <p style={{color:'red'}}>{errors.gte}</p>}
+                    {errors && errors.gte && <p style={{ color: 'red' }}>{errors.gte}</p>}
                   </Col>
                   <Col>
                     <label className="text-l" style={{ color: "#7A7979" }}>
@@ -724,7 +626,7 @@ function MyVerticallyCenteredModal(props) {
                 "
                       required
                     />
-                    {errors &&  errors.lte && <p style={{color:'red'}}>{errors.lte}</p>}
+                    {errors && errors.lte && <p style={{ color: 'red' }}>{errors.lte}</p>}
                   </Col>
                 </Row>
               </Container>
@@ -745,7 +647,7 @@ function MyVerticallyCenteredModal(props) {
                     placeholder="Enter Profession"
                     required
                   />
-                  {errors &&  errors.profession && <p style={{color:'red'}}>{errors.profession}</p>}
+                  {errors && errors.profession && <p style={{ color: 'red' }}>{errors.profession}</p>}
                 </fieldset>
 
               </Col>
@@ -792,7 +694,7 @@ function MyVerticallyCenteredModal(props) {
                       setJobData({ ...jobData, madeOfWork: e.target.value })
                     }
                   >
-                  <option value="DEFAULT" disabled="">Select Mode of Work</option><option>Office</option><option>Work from Home</option><option>Hybrid</option>
+                    <option value="DEFAULT" disabled="">Select Mode of Work</option><option>Office</option><option>Work from Home</option><option>Hybrid</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -805,7 +707,7 @@ function MyVerticallyCenteredModal(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.madeOfWork && <p style={{color:'red'}}>{errors.madeOfWork}</p>}
+                  {errors && errors.madeOfWork && <p style={{ color: 'red' }}>{errors.madeOfWork}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -828,7 +730,7 @@ function MyVerticallyCenteredModal(props) {
                 "
                     required
                   />
-                  {errors &&  errors.noOfOpenings && <p style={{color:'red'}}>{errors.noOfOpenings}</p>}
+                  {errors && errors.noOfOpenings && <p style={{ color: 'red' }}>{errors.noOfOpenings}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -865,7 +767,7 @@ function MyVerticallyCenteredModal(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.salaryCurrency && <p style={{color:'red'}}>{errors.salaryCurrency}</p>}
+                  {errors && errors.salaryCurrency && <p style={{ color: 'red' }}>{errors.salaryCurrency}</p>}
                 </fieldset>
               </Col>
               <Container>
@@ -890,7 +792,7 @@ function MyVerticallyCenteredModal(props) {
                       placeholder="Minimum Salary"
                       required
                     />
-                    {errors &&  errors.industry && <p style={{color:'red'}}>{errors.industry}</p>}
+                    {errors && errors.industry && <p style={{ color: 'red' }}>{errors.industry}</p>}
                   </Col>
                   <Col lg="6">
                     <label className="text-l" style={{ color: "#7A7979" }}>
@@ -913,7 +815,7 @@ function MyVerticallyCenteredModal(props) {
                 "
                       required
                     />
-                    {errors &&  errors.gte && <p style={{color:'red'}}>{errors.gte}</p>}
+                    {errors && errors.gte && <p style={{ color: 'red' }}>{errors.gte}</p>}
                   </Col>
                 </Row>
               </Container>
@@ -974,7 +876,7 @@ function MyVerticallyCenteredModal(props) {
                   >
                     Others
                   </label>
-                  {errors &&  errors.industry && <p style={{color:'red'}}>{errors.industry}</p>}
+                  {errors && errors.industry && <p style={{ color: 'red' }}>{errors.industry}</p>}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -1052,7 +954,7 @@ function MyVerticallyCenteredModal(props) {
                   >
                     Others
                   </label>
-                  {errors &&  errors.salaryType && <p style={{color:'red'}}>{errors.salaryType}</p>}
+                  {errors && errors.salaryType && <p style={{ color: 'red' }}>{errors.salaryType}</p>}
                 </fieldset>
               </Col>
 
@@ -1070,9 +972,8 @@ function MyVerticallyCenteredModal(props) {
                       //   value={user.name}
                       //   onChange={getUserData}
                       disabled
-                      value={`${date.getDate()}-${
-                        date.getMonth() + 1
-                      }-${date.getFullYear()}`}
+                      value={`${date.getDate()}-${date.getMonth() + 1
+                        }-${date.getFullYear()}`}
                       placeholder="Enter No. of Openings"
                       // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
@@ -1098,7 +999,7 @@ function MyVerticallyCenteredModal(props) {
                 "
                       required
                     />
-                    {errors &&  errors.isEmail && <p style={{color:'red'}}>{errors.isEmail}</p>}
+                    {errors && errors.isEmail && <p style={{ color: 'red' }}>{errors.isEmail}</p>}
                   </fieldset>
                 </Col>
               </Row>
@@ -1198,59 +1099,103 @@ export const MainProfile = () => {
 
   const profileImageFunc = () => {
     axios
-    .get(`api/v1/user/asset/thumbnail`, { responseType: "arraybuffer" })
-    .then((res) => {
-      let buffer = require("buffer");
-      const data = `data:${
-        res.headers["content-type"]
-      };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
-      // console.log("res", res);
-      // console.log("imagee", data);
-      setProfileImg(data);
-       localStorage.setItem('profileImg', data)
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .get(`api/v1/user/asset/thumbnail`, { responseType: "arraybuffer" })
+      .then((res) => {
+        let buffer = require("buffer");
+        const data = `data:${res.headers["content-type"]
+          };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
+        // console.log("res", res);
+        // console.log("imagee", data);
+        setProfileImg(data);
+        localStorage.setItem('profileImg', data)
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
-
 
   useEffect(() => {
     profileData && setIsProfileData(profileData);
     // profileData && setProfilePicture(profileData)
   }, [profileData]);
-
-  console.log(profileData, 'daaaaaaaaaaaaaataa');
-
+  const [editError, setEditError] = useState()
   const profileFunc = () => {
-const data = {
-        companyName:  editProfileData.companyName ? editProfileData.companyName : profileData.companyName,
-        speciality: editProfileData.speciality ? editProfileData.speciality : profileData.speciality,
-        sop: editProfileData.sop ? editProfileData.sop : profileData.sop,
-        companyLocation: editProfileData.location ? editProfileData.location :  profileData.location,
-        companySize: editProfileData.companySize ? editProfileData.companySize : profileData.companySize,
-        websiteLink: editProfileData.website ? editProfileData.website : profileData.websiteLink,
-        headquarters: editProfileData.headquarters ? editProfileData.headquarters : profileData.headquarters,
-        companyDesc: editProfileData.companyDesc ? editProfileData.companyDesc : profileData.companyDesc,
-        founded: editProfileData.founded ? editProfileData.founded :  profileData.founded,
-        firstName: editProfileData.firstName ? editProfileData.firstName : profileData.firstName,
-        lastName: editProfileData.lastName ? editProfileData.lastName : profileData.lastName,
-        phoneNumber: editProfileData.phoneNumber ? +editProfileData.phoneNumber : +profileData.phoneNumber
-}
-console.log(data, 'dataa');
-    axios
-      .post(`api/v1/user/recruiter`, data)
-      .then((res) => {
-        console.log(res, "profile data successfully added");
-        if (res) {
-          setShow(false);
-          initialFun()
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const data = {
+      companyName: editProfileData.companyName ? editProfileData.companyName : isProfileData.companyName,
+      speciality: editProfileData.speciality ? editProfileData.speciality : isProfileData.speciality,
+      sop: editProfileData.sop ? editProfileData.sop : isProfileData.sop,
+      companyLocation: editProfileData.location ? editProfileData.location : isProfileData.location,
+      companySize: editProfileData.companySize ? editProfileData.companySize : isProfileData.companySize,
+      websiteLink: editProfileData.websiteLink ? editProfileData.websiteLink : isProfileData.websiteLink,
+      headquarters: editProfileData.headquarters ? editProfileData.headquarters : isProfileData.headquarters,
+      companyDesc: editProfileData.companyDesc ? editProfileData.companyDesc : isProfileData.companyDesc,
+      founded: editProfileData.founded ? editProfileData.founded : isProfileData.founded,
+      firstName: editProfileData.firstName ? editProfileData.firstName : isProfileData.firstName,
+      lastName: editProfileData.lastName ? editProfileData.lastName : isProfileData.lastName,
+      phoneNumber: editProfileData.phoneNumber ? +editProfileData.phoneNumber : +isProfileData.phoneNumber
+    }
+
+    let values = Object.values(data)
+    values = values.every((e, i) => e !== "")
+    console.log(values, 'values');
+    if (values) {
+      axios
+        .post(`api/v1/user/recruiter`, data)
+        .then((res) => {
+          console.log(res, "profile data successfully added");
+          if (res) {
+            setShow(false);
+            initialFun()
+            handleShow(false)
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    else {
+      let newErrors = {}
+      if (!isProfileData.companyName) {
+        newErrors.companyName = 'companyName is required';
+      }
+      if (!isProfileData.speciality) {
+        newErrors.speciality = 'speciality is required';
+      }
+      if (!isProfileData.companyScope) {
+        newErrors.sop = 'Scope is required';
+      }
+      if (!isProfileData.companyLocation) {
+        newErrors.companyLocation = 'company Location is required';
+      }
+      if (!isProfileData.companySize) {
+        newErrors.companySize = 'companySize is required';
+      }
+      if (!isProfileData.websiteLink) {
+        newErrors.websiteLink = 'websiteLink is required';
+      }
+      if (!isProfileData.headquarters) {
+        newErrors.headquarters = 'headquarters is required';
+      }
+      if (!isProfileData.companyDesc) {
+        newErrors.companyDesc = 'companyDesc is required';
+      }
+      if (!isProfileData.founded) {
+        newErrors.founded = 'founded is required';
+      }
+      if (!isProfileData.firstName) {
+        newErrors.firstName = 'firstName is required';
+      }
+      if (!isProfileData.lastName) {
+        newErrors.lastName = 'lastName is required';
+      }
+      if (!isProfileData.phoneNumber) {
+        newErrors.phoneNumber = 'phoneNumber is required';
+      }
+      console.log(newErrors)
+      setEditError(newErrors)
+    }
   };
+  console.log('editError', editError);
 
   const profilePictureUpdate = () => {
     let formdata = new FormData();
@@ -1270,31 +1215,29 @@ console.log(data, 'dataa');
       });
   };
 
-  
- const updateProfileImage = (event) => {
-  setThumbnail(event.target.files[0])
-}
+  const updateProfileImage = (event) => {
+    setThumbnail(event.target.files[0])
+  }
 
-useEffect(() => {
-  onPostThumnail()
-}, [thumbnail])
+  useEffect(() => {
+    onPostThumnail()
+  }, [thumbnail])
 
-const onPostThumnail = () => {
-  if (thumbnail) {
-    const formData = new FormData();
-    formData.append("thumbnail", thumbnail);
-    console.log(thumbnail);
-    axios.post(`api/v1/user/asset/thumbnail`, formData)
-    .then((res) => {
-      console.log('Updated Image');
-      initialFun()
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-}
-}
-
+  const onPostThumnail = () => {
+    if (thumbnail) {
+      const formData = new FormData();
+      formData.append("thumbnail", thumbnail);
+      console.log(thumbnail);
+      axios.post(`api/v1/user/asset/thumbnail`, formData)
+        .then((res) => {
+          console.log('Updated Image');
+          initialFun()
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
 
   const FileUploadComponent = () => {
     // alert('clicked')s
@@ -1549,6 +1492,7 @@ const onPostThumnail = () => {
                                       //   onChange={getUserData}
                                       placeholder={profileData?.firstName || ""}
                                     />
+                                    {editError && editError.firstName && <p style={{ color: 'red' }}>{editError.firstName}</p>}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1574,6 +1518,7 @@ const onPostThumnail = () => {
                                       //   onChange={getUserData}
                                       placeholder={profileData?.lastName || ""}
                                     />
+                                    {editError && editError.lastName && <p style={{ color: 'red' }}>{editError.lastName}</p>}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1599,8 +1544,7 @@ const onPostThumnail = () => {
                                       }
                                       //   value={user.number}
                                       //   onChange={getUserData}
-                                      placeholder="gaiaewreeytyrt@gmail.com 
-                "
+                                      placeholder="gaiaewreeytyrt@gmail.com"
                                     />
                                   </fieldset>
                                 </Col>
@@ -1616,7 +1560,7 @@ const onPostThumnail = () => {
                                       style={{ width: "100%" }}
                                       className="form-control"
                                       name="email"
-                                      type={"text"}
+                                      type={"number"}
                                       onChange={(e) =>
                                         setEditProfileData({
                                           ...editProfileData,
@@ -1629,6 +1573,7 @@ const onPostThumnail = () => {
                                         profileData?.phoneNumber || ""
                                       }
                                     />
+                                    {editError && editError.phoneNumber && <p style={{ color: 'red' }}>{editError.phoneNumber}</p>}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1654,6 +1599,7 @@ const onPostThumnail = () => {
                                       //   onChange={getUserData}
                                       placeholder={profileData?.foundedIn || ""}
                                     />
+                                    {editError && editError.founded && <p style={{ color: 'red' }}>{editError.founded}</p>}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1672,7 +1618,7 @@ const onPostThumnail = () => {
                                       onChange={(e) =>
                                         setEditProfileData({
                                           ...editProfileData,
-                                          companyScope : e.target.value,
+                                          speciality: e.target.value,
                                         })
                                       }
                                       //   value={user.number}
@@ -1681,6 +1627,7 @@ const onPostThumnail = () => {
                                         profileData?.whatsMakesUsSpecial || ""
                                       }
                                     />
+                                    {editError && editError.speciality && <p style={{ color: 'red' }}>{editError.speciality}</p>}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1689,7 +1636,7 @@ const onPostThumnail = () => {
                                       className="text-lg"
                                       style={{ width: "100%" }}
                                     >
-                                      Website 
+                                      Website
                                     </label>
                                     <input
                                       style={{ width: "100%" }}
@@ -1699,7 +1646,7 @@ const onPostThumnail = () => {
                                       onChange={(e) =>
                                         setEditProfileData({
                                           ...editProfileData,
-                                          website : e.target.value,
+                                          websiteLink: e.target.value,
                                         })
                                       }
                                       //   value={user.number}
@@ -1708,6 +1655,7 @@ const onPostThumnail = () => {
                                         profileData?.whatsMakesUsSpecial || ""
                                       }
                                     />
+                                    {editError && editError.websiteLink && <p style={{ color: 'red' }}>{editError.websiteLink}</p>}
                                   </fieldset>
                                 </Col>
                               </div>
@@ -1747,6 +1695,7 @@ const onPostThumnail = () => {
                                       }
                                       required
                                     />
+                                    {editError && editError.companyName && <p style={{ color: 'red' }}>{editError.companyName}</p>}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1766,7 +1715,7 @@ const onPostThumnail = () => {
                                       onChange={(e) =>
                                         setEditProfileData({
                                           ...editProfileData,
-                                          companyScope: e.target.value,
+                                          sop: e.target.value,
                                         })
                                       }
                                       //   value={user.email}
@@ -1776,6 +1725,7 @@ const onPostThumnail = () => {
                                       }
                                       required
                                     />
+                                    {editError && editError.sop && <p style={{ color: 'red' }}>{editError.sop}</p>}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1826,6 +1776,7 @@ const onPostThumnail = () => {
                                         }
                                       />
                                     </div>
+                                    {editError && editError.headquarters && <p style={{ color: 'red' }}>{editError.headquarters}</p>}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1853,6 +1804,7 @@ const onPostThumnail = () => {
                                         profileData?.companyLocation || ""
                                       }
                                     />
+                                    {editError && editError.companyLocation && <p style={{ color: 'red' }}>{editError.companyLocation}</p>}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1867,7 +1819,7 @@ const onPostThumnail = () => {
                                       onChange={(e) =>
                                         setEditProfileData({
                                           ...editProfileData,
-                                          description: e.target.value,
+                                          companyDesc: e.target.value,
                                         })
                                       }
                                       placeholder={
@@ -1875,16 +1827,7 @@ const onPostThumnail = () => {
                                       }
                                       className="form-control"
                                     />
-                                    {/* <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      name="Email"
-                                      type={"text"}
-                                      //   value={user.number}
-                                      //   onChange={getUserData}
-                                      placeholder="Huston
-                "
-                                    /> */}
+                                    {editError && editError.companyDesc && <p style={{ color: 'red' }}>{editError.companyDesc}</p>}
                                   </fieldset>
                                 </Col>
                               </div>

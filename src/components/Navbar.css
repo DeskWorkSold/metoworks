@@ -11,6 +11,9 @@
 .navbar-collapse{
     flex-grow: unset !important;
 }
+#navbarScroll .navbar-nav {
+    align-items: center;
+}
 .navbar-brand img{
     object-fit: cover;
     width: 100%;
@@ -62,6 +65,11 @@
     }
 }
 @media only screen and (max-width: 992px){
+    
+#navbarScroll .navbar-nav {
+    align-items: flex-start;
+
+}
     
    
     .navbar-dark .navbar-nav .nav-link{
