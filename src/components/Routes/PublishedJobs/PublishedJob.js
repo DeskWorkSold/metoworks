@@ -660,7 +660,7 @@ function MyVerticallyCenteredModal(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUALâ€“NO SET HOURS OR DAYS OF WORK</option>
+                    <option>CASUAL–NO SET HOURS OR DAYS OF WORK</option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -947,61 +947,69 @@ function MyVerticallyCenteredModal(props) {
               </Container>
               <Col lg="12">
                 <fieldset className="dflexx">
-                  <label className="text-lg">Salary Type :</label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio1"
-                    value="Salary Negotiable"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio1"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Salary Negotiable
-                  </label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio2"
-                    value="Project Based"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Project Based
-                  </label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio3"
-                    style={{ marginLeft: "60px" }}
-                    value="Others"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio3"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Others
-                  </label>
+                  <Row className="py-2 contdis">
+                    <Col>
+                      <label className="text-lg">Salary Type :</label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio1"
+                        value="Salary Negotiable"
+                        onChange={(e) =>
+                          setJobData({ ...jobData, salaryType: e.target.value })
+                        }
+                      />{" "}
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio1"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Salary Negotiable
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio2"
+                        value="Project Based"
+                        onChange={(e) =>
+                          setJobData({ ...jobData, salaryType: e.target.value })
+                        }
+                      />{" "}
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Project Based
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio3"
+                        value="Others"
+                        onChange={(e) =>
+                          setJobData({ ...jobData, salaryType: e.target.value })
+                        }
+                      />{" "}
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio3"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Others
+                      </label>
+                    </Col>
+                  </Row>
+
                   {errors && errors.industry && (
                     <p style={{ color: "red" }}>{errors.industry}</p>
                   )}
@@ -1009,79 +1017,100 @@ function MyVerticallyCenteredModal(props) {
               </Col>
               <Col lg="12">
                 <fieldset className="dflexx">
-                  <label className="text-lg">Salary Freq :</label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio1"
-                    value="Per Day"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio1"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Day
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio2"
-                    value="per Week"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio2"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Week
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio3"
-                    value="per Month"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio3"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Month
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio4"
-                    value="others"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio4"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Others
-                  </label>
+                  <Row className="py-2 contdis">
+                    <Col>
+                      <label className="text-lg">Salary Freq :</label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio1"
+                        value="Per Day"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio1"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Day
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio2"
+                        value="per Week"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio2"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Week
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio3"
+                        value="per Month"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio3"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Month
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio4"
+                        value="others"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio4"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Others
+                      </label>
+                    </Col>
+                  </Row>
+
                   {errors && errors.salaryType && (
                     <p style={{ color: "red" }}>{errors.salaryType}</p>
                   )}
@@ -1171,7 +1200,6 @@ function MyVerticallyCenteredModal(props) {
     </Modal>
   );
 }
-
 export const PublishedJob = () => {
   const data = [
     { id: 1, name: "Item 1" },
@@ -1456,7 +1484,7 @@ export const PublishedJob = () => {
           >
             <Modal.Header closeButton>
               <Modal.Title style={{ color: "black" }}>
-                Edit Recruiter Profile
+              Edit Job
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>

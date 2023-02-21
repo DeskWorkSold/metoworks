@@ -310,12 +310,16 @@ export const FreelanceProfileView = () => {
         console.log(err);
       });
 
-    axios
+    await axios
       .get(`api/v1/user/asset/cv`)
       .then((res) => {
         // console.log(res, "Initial Data");
-        const file = new Blob([res]);
+        console.log(res, "ressssss")
+        const file = new Blob([res])
+
+        console.log(file, "fileee")
         const fileURL = URL.createObjectURL(file);
+        console.log(fileURL, "fileUrl")
         // let data = res.data;
         // console.log(fileURL, 'cvvvvvvvvvvvvvvvvvvvv');
         // setIsProfileData(data)
@@ -327,6 +331,8 @@ export const FreelanceProfileView = () => {
 
     profileImageFunc();
   };
+
+  console.log(isCv, "cvvvv")
 
   const profileImageFunc = () => {
     axios
@@ -345,6 +351,7 @@ export const FreelanceProfileView = () => {
       });
   };
 
+  const [error, setError] = useState()
   const profileFunc = () => {
     console.log(profileData, "data")
     let myData = {
@@ -366,50 +373,109 @@ export const FreelanceProfileView = () => {
           : profileData.data.salaryRange,
       state: profileData.state ?? profileData.data.state,
       visaPermit: profileData.visaPermit ?? profileData.data.visaPermit,
-
-
     };
 
-
-
-    if (isCv) {
-      let formData = new FormData();
-      formData.append("cv", isCv);
-
-      axios
-        .post(`api/v1/user/asset/cv `, formData)
-        .then((res) => {
-          initialFun()
-          setIsCv({})
-          if (res) {
-            setShow(false);
-          }
-        })
-        .catch((err) => {
-          // console.log(err);
-        });
-
+    let flagData = { ...myData }
+    console.log(flagData, "data")
+    delete flagData.isIdCardPublic
+    flagData.firstName = ""
+    let flag = Object.values(flagData)
+    let flag1 = flag.some((e, i) => e == "")
+    console.log(flag1, "falg1")
+    console.log(flagData, "flagDATA")
+    if (flag1) {
+      let newErrors = {}
+      if (!myData.aboutMe) {
+        newErrors.aboutMe = 'aboutMe is required';
+      }
+      if (!myData.address) {
+        newErrors.address = 'address is required';
+      }
+      if (!myData.city) {
+        newErrors.city = 'city is required';
+      }
+      if (!myData.country) {
+        newErrors.country = 'country is required';
+      }
+      if (!myData.dob) {
+        newErrors.dob = 'dob is required';
+      }
+      if (!myData.firstName) {
+        console.log("firstName")
+        newErrors.firstName = 'firstName is Required';
+      }
+      if (!myData.gender) {
+        newErrors.gender = 'gender is Required';
+      }
+      if (!myData.idCard) {
+        newErrors.idCard = 'idCard is Required';
+      }
+      if (!myData.isIdCardPublic) {
+        newErrors.isIdCardPublic = 'isIdCardPublic is Required';
+      }
+      if (!myData.lastName) {
+        newErrors.lastName = 'lastName is Required';
+      }
+      if (!myData.phoneNumber) {
+        newErrors.phoneNumber = 'phoneNumber is Required';
+      }
+      if (!myData.state) {
+        newErrors.state = 'state is Required';
+      }
+      if (!myData.visaPermit) {
+        newErrors.visaPermit = 'visaPermit is Required';
+      }
+      if (!myData.salaryRange.lte) {
+        newErrors.salaryRange = 'End Date is Required';
+      }
+      if (!myData.salaryRange.gte) {
+        newErrors.salaryRange = 'start Date is Required';
+      }
+      console.log(newErrors, "newError")
+      setError(newErrors)
     }
 
-    if (myData) {
-      axios
-        .post(`api/v1/user/freelancer`, myData)
-        .then((res) => {
-          setTimeout(() => {
-            initialFun();
-          }, 1000);
-          if (res.data) {
-            setShow(false);
-          }
-        })
-        .catch((err) => {
-          // console.log(err);
-        });
+    else if (!flag1 && isCv) {
+      if (isCv) {
+        let formData = new FormData();
+        formData.append("cv", isCv);
+
+        axios
+          .post(`api/v1/user/asset/cv `, formData)
+          .then((res) => {
+            initialFun()
+            setIsCv({})
+            if (res) {
+              setShow(false);
+            }
+          })
+          .catch((err) => {
+            // console.log(err);
+          });
+
+      }
+
+      if (!flag1) {
+        axios
+          .post(`api/v1/user/freelancer`, myData)
+          .then((res) => {
+            setTimeout(() => {
+              initialFun();
+            }, 1000);
+            if (res.data) {
+              setShow(false);
+            }
+          })
+          .catch((err) => {
+            // console.log(err);
+          });
+      }
     }
   };
 
 
-  const [error, setError] = useState()
+
+
   const ProfileExp = () => {
 
 
@@ -2894,50 +2960,6 @@ export const FreelanceProfileView = () => {
                     </div>
                   </Col>
                 </Row>
-                {/* <hr className="my-2" />
-              <Row className="align-items-center pl-4">
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Experience</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      4
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Salary Range</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      $15000 - $20,000
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <div className="p3 py-3">
-                    <h2 className="text-2xl">Location</h2>
-                    <br />
-                    <h2 className="text-xl" style={{ color: "#7A7979" }}>
-                      <FontAwesomeIcon
-                        icon={faLocationDot}
-                        style={{
-                          fontWeight: "bolder",
-                        }}
-                      />{" "}
-                      Panam
-                    </h2>
-                  </div>
-                </Col>
-                <Col lg="3">
-                  <Button
-                    className="text-white border-rounded px-3"
-                    style={{ background: "#39BEC1", border: "none" }}
-                  >
-                    View Profile
-                  </Button>  
-                </Col>
-              </Row> */}
               </div>
             </div>
           </Col>
@@ -2996,6 +3018,7 @@ export const FreelanceProfileView = () => {
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 />
+                                {error && error.firstName && <p style={{ color: 'red' }}>{error.firstName}</p>}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3023,6 +3046,7 @@ export const FreelanceProfileView = () => {
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 />
+                                {error && error.lastName && <p style={{ color: 'red' }}>{error.lastName}</p>}
                               </fieldset>
                             </Col>
                           </Row>
@@ -3050,6 +3074,7 @@ export const FreelanceProfileView = () => {
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 />
+                                {error && error.idCard && <p style={{ color: 'red' }}>{error.idCard}</p>}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3083,6 +3108,7 @@ export const FreelanceProfileView = () => {
                                   <option>Yes</option>
                                   <option>No</option>
                                 </Form.Select> */}
+                                {error && error.visaPermit && <p style={{ color: 'red' }}>{error.visaPermit}</p>}
                               </fieldset>
                             </Col>
                           </Row>
@@ -3136,6 +3162,7 @@ export const FreelanceProfileView = () => {
                                 <option>Female</option>
                                 <option>Other</option>
                               </Form.Select>
+                              {error && error.gender && <p style={{ color: 'red' }}>{error.gender}</p>}
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -3156,6 +3183,7 @@ export const FreelanceProfileView = () => {
                                 }
                                 className="form-control"
                               />
+                              {error && error.aboutMe && <p style={{ color: 'red' }}>{error.aboutMe}</p>}
                             </fieldset>
                           </Col>
                           <Row>
@@ -3184,6 +3212,7 @@ export const FreelanceProfileView = () => {
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 />
+                                {error && error.phoneNumber && <p style={{ color: 'red' }}>{error.phoneNumber}</p>}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3208,6 +3237,7 @@ export const FreelanceProfileView = () => {
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 />
+                                {error && error.dob && <p style={{ color: 'red' }}>{error.dob}</p>}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3235,6 +3265,7 @@ export const FreelanceProfileView = () => {
                                   //   onChange={getUserData}
                                   required
                                 />
+                                {error && error.country && <p style={{ color: 'red' }}>{error.country}</p>}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3262,6 +3293,7 @@ export const FreelanceProfileView = () => {
                                   }
                                   required
                                 />
+                                {error && error.city && <p style={{ color: 'red' }}>{error.city}</p>}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3287,6 +3319,7 @@ export const FreelanceProfileView = () => {
                                 //   value={user.number}
                                 //   onChange={getUserData}
                                 />
+                                {error && error.address && <p style={{ color: 'red' }}>{error.address}</p>}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3314,6 +3347,7 @@ export const FreelanceProfileView = () => {
                                   //   onChange={getUserData}
                                   />
                                 </div>
+                                {error && error.state && <p style={{ color: 'red' }}>{error.state}</p>}
                               </fieldset>
                             </Col>
                           </Row>
@@ -3380,6 +3414,7 @@ export const FreelanceProfileView = () => {
                                   //   onChange={getUserData}
                                   required
                                 />
+                                {error && error.lte && <p style={{ color: 'red' }}>{error.lte}</p>}
                               </Col>
                               <Col lg="6">
                                 <label
@@ -3406,6 +3441,7 @@ export const FreelanceProfileView = () => {
                                   //   onChange={getUserData
                                   required
                                 />
+                                {error && error.gte && <p style={{ color: 'red' }}>{error.gte}</p>}
                               </Col>
                             </Row>
                           </Container>

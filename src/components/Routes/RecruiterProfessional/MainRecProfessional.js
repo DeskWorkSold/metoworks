@@ -62,7 +62,7 @@ function MyVerticallyCenteredModal2(props) {
 
   // submitted : true when dfat post publised
   // const navigate = useNavigate();
-  const [errors, setErrors] = useState()
+  const [errors, setErrors] = useState();
 
   const PostFunc = (props) => {
     let currentDate = new Date();
@@ -84,7 +84,9 @@ function MyVerticallyCenteredModal2(props) {
         gte: Number(isSalaryRange.gte),
         lte: Number(isSalaryRange.lte),
       },
-      expiryDate: new Date(currentDate.setDate(currentDate.getDate() + 30)).toString(),
+      expiryDate: new Date(
+        currentDate.setDate(currentDate.getDate() + 30)
+      ).toString(),
       closed: false,
       modeOfWork: jobData.madeOfWork,
       submitted: true,
@@ -112,7 +114,9 @@ function MyVerticallyCenteredModal2(props) {
         gte: `${isSalaryRange.gte}`,
         lte: `${isSalaryRange.lte}`,
       },
-      expiryDate: new Date(currentDate.setDate(currentDate.getDate() + 30)).toString(),
+      expiryDate: new Date(
+        currentDate.setDate(currentDate.getDate() + 30)
+      ).toString(),
       closed: false,
       modeOfWork: jobData.madeOfWork,
       submitted: true,
@@ -122,91 +126,91 @@ function MyVerticallyCenteredModal2(props) {
       salaryCurrency: jobData.salaryCurrency,
       additionalEmails: [isEmail],
     };
-    
-    let values = Object.values(dummyData)
 
-  // console.log(values,"values")
-    values = values.every((e,i)=> e !== "")
+    let values = Object.values(dummyData);
 
-    if(values){
-    axios
-      .post("api/v1/job-post", dummyData)
-      .then((res) => {
-        console.log(res, "data sended successfully");
-        setErrors({})
-        props.onHide()
-        // navigate('/CompanyProfile')
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    }
-    else{
-      let newErrors = {}
-      if ( !dummyData.title) {
-        newErrors.title = 'Job Title is required';
+    // console.log(values,"values")
+    values = values.every((e, i) => e !== "");
+
+    if (values) {
+      axios
+        .post("api/v1/job-post", dummyData)
+        .then((res) => {
+          console.log(res, "data sended successfully");
+          setErrors({});
+          props.onHide();
+          // navigate('/CompanyProfile')
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      let newErrors = {};
+      if (!dummyData.title) {
+        newErrors.title = "Job Title is required";
       }
-       if (!jobData.industry) {
-        newErrors.industry = 'Job industry is required';
+      if (!jobData.industry) {
+        newErrors.industry = "Job industry is required";
       }
-       if (!jobData.jobFunction) {
-        newErrors.jobFunction = 'Job jobFunction is required';
+      if (!jobData.jobFunction) {
+        newErrors.jobFunction = "Job jobFunction is required";
       }
-       if (!jobData.jobSubFunction) {
-        newErrors.jobSubFunction = 'Job jobSubFunction is required';
+      if (!jobData.jobSubFunction) {
+        newErrors.jobSubFunction = "Job jobSubFunction is required";
       }
-       if (!jobData.location) {
-        newErrors.location = 'Job location is required';
+      if (!jobData.location) {
+        newErrors.location = "Job location is required";
       }
-       if (!jobData.description) {
-        newErrors.description = 'Job DESCRIPTION is required';
+      if (!jobData.description) {
+        newErrors.description = "Job DESCRIPTION is required";
       }
-       if (!jobData.requirements) {
-        newErrors.requirements = 'Job requirements is required';
+      if (!jobData.requirements) {
+        newErrors.requirements = "Job requirements is required";
       }
-       if (!jobData.educationLevel) {
-        newErrors.educationLevel = 'Job educationLevel is required';
+      if (!jobData.educationLevel) {
+        newErrors.educationLevel = "Job educationLevel is required";
       }
-       if (!jobData.profession) {
-        newErrors.profession = 'Job profession is required';
+      if (!jobData.profession) {
+        newErrors.profession = "Job profession is required";
       }
-       if (!jobData.madeOfWork) {
-        newErrors.madeOfWork = 'Job madeOfWork is required';
+      if (!jobData.madeOfWork) {
+        newErrors.madeOfWork = "Job madeOfWork is required";
       }
-       if (!jobData.noOfOpenings) {
-        newErrors.noOfOpenings = 'Job noOfOpenings is required';
+      if (!jobData.noOfOpenings) {
+        newErrors.noOfOpenings = "Job noOfOpenings is required";
       }
-       if (!jobData.salaryCurrency) {
-        newErrors.salaryCurrency = 'Job salaryCurrency is required';
+      if (!jobData.salaryCurrency) {
+        newErrors.salaryCurrency = "Job salaryCurrency is required";
       }
-       if (!jobData.salaryType) {
-        newErrors.salaryType = 'Job salaryCurrency is required';
+      if (!jobData.salaryType) {
+        newErrors.salaryType = "Job salaryCurrency is required";
       }
-       if (!jobData.salaryPayFreq) {
-        newErrors.salaryPayFreq = 'Job salaryCurrency is required';
+      if (!jobData.salaryPayFreq) {
+        newErrors.salaryPayFreq = "Job salaryCurrency is required";
       }
-       if (!isProjectTimeline.gte) {
-        newErrors.gte = 'Job gte is required';
+      if (!isProjectTimeline.gte) {
+        newErrors.gte = "Job gte is required";
       }
-       if (!isProjectTimeline.lte) {
-        newErrors.lte = 'Job lte is required';
+      if (!isProjectTimeline.lte) {
+        newErrors.lte = "Job lte is required";
       }
-       if (!isSalaryRange.gte) {
-        newErrors.name = 'Job gte is required';
+      if (!isSalaryRange.gte) {
+        newErrors.name = "Job gte is required";
       }
-       if (!isSalaryRange.lte) {
-        newErrors.gte = 'Job lte is required';
+      if (!isSalaryRange.lte) {
+        newErrors.gte = "Job lte is required";
       }
-       if (!isEmail) {
-        newErrors.isEmail = 'Email is required';
-      }  if (!/\S+@\S+\.\S+/.test(isEmail)) {
-        newErrors.email = 'Email address is invalid';
+      if (!isEmail) {
+        newErrors.isEmail = "Email is required";
       }
-      console.log(newErrors)
-      setErrors(newErrors)
+      if (!/\S+@\S+\.\S+/.test(isEmail)) {
+        newErrors.email = "Email address is invalid";
+      }
+      console.log(newErrors);
+      setErrors(newErrors);
     }
   };
-  console.log("errors",errors);
+  console.log("errors", errors);
   const draftFunc = () => {
     axios
       .post("api/v1/job-post", jobData)
@@ -253,76 +257,58 @@ function MyVerticallyCenteredModal2(props) {
   //   lte: '',
   //   gte: '',
   //   isEmail: '',
-    
+
   // });
   const validateForm = () => {
     let newErrors = {};
     if (!jobData.title) {
-      newErrors.title = 'Job Title is required';
-    }
-    else if (!jobData.industry) {
-      newErrors.industry = 'Job industry is required';
-    }
-    else if (!jobData.jobFunction) {
-      newErrors.jobFunction = 'Job jobFunction is required';
-    }
-    else if (!jobData.jobSubFunction) {
-      newErrors.jobSubFunction = 'Job jobSubFunction is required';
-    }
-    else if (!jobData.location) {
-      newErrors.location = 'Job location is required';
-    }
-    else if (!jobData.description) {
-      newErrors.description = 'Job DESCRIPTION is required';
-    }
-    else if (!jobData.requirements) {
-      newErrors.requirements = 'Job requirements is required';
-    }
-    else if (!jobData.educationLevel) {
-      newErrors.educationLevel = 'Job educationLevel is required';
-    }
-    else if (!jobData.profession) {
-      newErrors.profession = 'Job profession is required';
-    }
-    else if (!jobData.madeOfWork) {
-      newErrors.madeOfWork = 'Job madeOfWork is required';
-    }
-    else if (!jobData.noOfOpenings) {
-      newErrors.noOfOpenings = 'Job noOfOpenings is required';
-    }
-    else if (!jobData.salaryCurrency) {
-      newErrors.salaryCurrency = 'Job salaryCurrency is required';
-    }
-    else if (!jobData.salaryType) {
-      newErrors.salaryType = 'Job salaryCurrency is required';
-    }
-    else if (!jobData.salaryPayFreq) {
-      newErrors.salaryPayFreq = 'Job salaryCurrency is required';
-    }
-    else if (!isProjectTimeline.gte) {
-      newErrors.gte = 'Job gte is required';
-    }
-    else if (!isProjectTimeline.lte) {
-      newErrors.lte = 'Job lte is required';
-    }
-    else if (!isSalaryRange.gte) {
-      newErrors.name = 'Job gte is required';
-    }
-    else if (!isSalaryRange.lte) {
-      newErrors.gte = 'Job lte is required';
-    }
-    else if (!isEmail) {
-      newErrors.isEmail = 'Email is required';
+      newErrors.title = "Job Title is required";
+    } else if (!jobData.industry) {
+      newErrors.industry = "Job industry is required";
+    } else if (!jobData.jobFunction) {
+      newErrors.jobFunction = "Job jobFunction is required";
+    } else if (!jobData.jobSubFunction) {
+      newErrors.jobSubFunction = "Job jobSubFunction is required";
+    } else if (!jobData.location) {
+      newErrors.location = "Job location is required";
+    } else if (!jobData.description) {
+      newErrors.description = "Job DESCRIPTION is required";
+    } else if (!jobData.requirements) {
+      newErrors.requirements = "Job requirements is required";
+    } else if (!jobData.educationLevel) {
+      newErrors.educationLevel = "Job educationLevel is required";
+    } else if (!jobData.profession) {
+      newErrors.profession = "Job profession is required";
+    } else if (!jobData.madeOfWork) {
+      newErrors.madeOfWork = "Job madeOfWork is required";
+    } else if (!jobData.noOfOpenings) {
+      newErrors.noOfOpenings = "Job noOfOpenings is required";
+    } else if (!jobData.salaryCurrency) {
+      newErrors.salaryCurrency = "Job salaryCurrency is required";
+    } else if (!jobData.salaryType) {
+      newErrors.salaryType = "Job salaryCurrency is required";
+    } else if (!jobData.salaryPayFreq) {
+      newErrors.salaryPayFreq = "Job salaryCurrency is required";
+    } else if (!isProjectTimeline.gte) {
+      newErrors.gte = "Job gte is required";
+    } else if (!isProjectTimeline.lte) {
+      newErrors.lte = "Job lte is required";
+    } else if (!isSalaryRange.gte) {
+      newErrors.name = "Job gte is required";
+    } else if (!isSalaryRange.lte) {
+      newErrors.gte = "Job lte is required";
+    } else if (!isEmail) {
+      newErrors.isEmail = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(isEmail)) {
-      newErrors.email = 'Email address is invalid';
+      newErrors.email = "Email address is invalid";
     }
 
     setErrors(newErrors);
-    console.log(Object.keys(newErrors).length === 0,"validation")
+    console.log(Object.keys(newErrors).length === 0, "validation");
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     if (validateForm()) {
       setSuccess(true);
@@ -361,8 +347,10 @@ function MyVerticallyCenteredModal2(props) {
                     //   value={user.number}
                     //   onChange={getUserData}
                     placeholder="Doctor for Child"
-                />
-                {errors &&  errors.title && <p style={{color:'red'}}>{errors.title}</p>}
+                  />
+                  {errors && errors.title && (
+                    <p style={{ color: "red" }}>{errors.title}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -414,7 +402,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
-               {errors &&  errors.industry && <p style={{color:'red'}}>{errors.industry}</p>}
+                  {errors && errors.industry && (
+                    <p style={{ color: "red" }}>{errors.industry}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -458,7 +448,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.jobFunction && <p style={{color:'red'}}>{errors.jobFunction}</p>}
+                  {errors && errors.jobFunction && (
+                    <p style={{ color: "red" }}>{errors.jobFunction}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -475,9 +467,10 @@ function MyVerticallyCenteredModal2(props) {
                     <option value="DEFAULT" disabled="">
                       Sub Job Function
                     </option>
-
                   </Form.Select>
-                  {errors &&  errors.jobSubFunction && <p style={{color:'red'}}>{errors.jobSubFunction}</p>}
+                  {errors && errors.jobSubFunction && (
+                    <p style={{ color: "red" }}>{errors.jobSubFunction}</p>
+                  )}
                   {/* <input
                 style={{ width: "100%" }}
                 className="form-control"
@@ -539,7 +532,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.location && <p style={{color:'red'}}>{errors.location}</p>}
+                  {errors && errors.location && (
+                    <p style={{ color: "red" }}>{errors.location}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -565,7 +560,9 @@ function MyVerticallyCenteredModal2(props) {
                       console.log("Focus.", editor);
                     }}
                   />
-                  {errors &&  errors.description && <p style={{color:'red'}}>{errors.description}</p>}
+                  {errors && errors.description && (
+                    <p style={{ color: "red" }}>{errors.description}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -592,7 +589,9 @@ function MyVerticallyCenteredModal2(props) {
                       console.log("Focus.", editor);
                     }}
                   />
-                  {errors &&  errors.requirements && <p style={{color:'red'}}>{errors.requirements}</p>}
+                  {errors && errors.requirements && (
+                    <p style={{ color: "red" }}>{errors.requirements}</p>
+                  )}
                 </fieldset>
               </Col>
               {/* <Col lg="12">
@@ -628,7 +627,14 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, educationLevel: e.target.value })
                     }
                   >
-                   <option value="DEFAULT" disabled="">Select Education level</option><option>ASSOCIATE DEGREE</option><option>MASTER DEGREE</option><option>DOCTORATE DEGREE</option><option>PHD</option><option>OTHER</option>
+                    <option value="DEFAULT" disabled="">
+                      Select Education level
+                    </option>
+                    <option>ASSOCIATE DEGREE</option>
+                    <option>MASTER DEGREE</option>
+                    <option>DOCTORATE DEGREE</option>
+                    <option>PHD</option>
+                    <option>OTHER</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -641,7 +647,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.educationLevel && <p style={{color:'red'}}>{errors.educationLevel}</p>}
+                  {errors && errors.educationLevel && (
+                    <p style={{ color: "red" }}>{errors.educationLevel}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -655,7 +663,13 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, empType: e.target.value })
                     }
                   >
-                    <option value="DEFAULT" disabled="">Select Employment Type</option><option>PART TIME</option><option>CASUAL–NO SET HOURS OR DAYS OF WORK</option><option>PROJECT BASED</option><option>OTHER</option>
+                    <option value="DEFAULT" disabled="">
+                      Select Employment Type
+                    </option>
+                    <option>PART TIME</option>
+                    <option>CASUAL–NO SET HOURS OR DAYS OF WORK</option>
+                    <option>PROJECT BASED</option>
+                    <option>OTHER</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -668,7 +682,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.empType && <p style={{color:'red'}}>{errors.empType}</p>}
+                  {errors && errors.empType && (
+                    <p style={{ color: "red" }}>{errors.empType}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -700,7 +716,9 @@ function MyVerticallyCenteredModal2(props) {
                       placeholder="Start"
                       required
                     />
-                    {errors &&  errors.gte && <p style={{color:'red'}}>{errors.gte}</p>}
+                    {errors && errors.gte && (
+                      <p style={{ color: "red" }}>{errors.gte}</p>
+                    )}
                   </Col>
                   <Col>
                     <label className="text-l" style={{ color: "#7A7979" }}>
@@ -723,7 +741,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                       required
                     />
-                    {errors &&  errors.lte && <p style={{color:'red'}}>{errors.lte}</p>}
+                    {errors && errors.lte && (
+                      <p style={{ color: "red" }}>{errors.lte}</p>
+                    )}
                   </Col>
                 </Row>
               </Container>
@@ -744,9 +764,10 @@ function MyVerticallyCenteredModal2(props) {
                     placeholder="Enter Profession"
                     required
                   />
-                  {errors &&  errors.profession && <p style={{color:'red'}}>{errors.profession}</p>}
+                  {errors && errors.profession && (
+                    <p style={{ color: "red" }}>{errors.profession}</p>
+                  )}
                 </fieldset>
-
               </Col>
               {/* <Container>
                 <Row>
@@ -791,7 +812,12 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, madeOfWork: e.target.value })
                     }
                   >
-                  <option value="DEFAULT" disabled="">Select Mode of Work</option><option>Office</option><option>Work from Home</option><option>Hybrid</option>
+                    <option value="DEFAULT" disabled="">
+                      Select Mode of Work
+                    </option>
+                    <option>Office</option>
+                    <option>Work from Home</option>
+                    <option>Hybrid</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -804,7 +830,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.madeOfWork && <p style={{color:'red'}}>{errors.madeOfWork}</p>}
+                  {errors && errors.madeOfWork && (
+                    <p style={{ color: "red" }}>{errors.madeOfWork}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -827,7 +855,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                     required
                   />
-                  {errors &&  errors.noOfOpenings && <p style={{color:'red'}}>{errors.noOfOpenings}</p>}
+                  {errors && errors.noOfOpenings && (
+                    <p style={{ color: "red" }}>{errors.noOfOpenings}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -864,7 +894,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
-              {errors &&  errors.salaryCurrency && <p style={{color:'red'}}>{errors.salaryCurrency}</p>}
+                  {errors && errors.salaryCurrency && (
+                    <p style={{ color: "red" }}>{errors.salaryCurrency}</p>
+                  )}
                 </fieldset>
               </Col>
               <Container>
@@ -889,7 +921,9 @@ function MyVerticallyCenteredModal2(props) {
                       placeholder="Minimum Salary"
                       required
                     />
-                    {errors &&  errors.industry && <p style={{color:'red'}}>{errors.industry}</p>}
+                    {errors && errors.industry && (
+                      <p style={{ color: "red" }}>{errors.industry}</p>
+                    )}
                   </Col>
                   <Col lg="6">
                     <label className="text-l" style={{ color: "#7A7979" }}>
@@ -912,146 +946,181 @@ function MyVerticallyCenteredModal2(props) {
                 "
                       required
                     />
-                    {errors &&  errors.gte && <p style={{color:'red'}}>{errors.gte}</p>}
+                    {errors && errors.gte && (
+                      <p style={{ color: "red" }}>{errors.gte}</p>
+                    )}
                   </Col>
                 </Row>
               </Container>
               <Col lg="12">
                 <fieldset className="dflexx">
-                  <label className="text-lg">Salary Type :</label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio1"
-                    value="Salary Negotiable"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio1"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Salary Negotiable
-                  </label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio2"
-                    value="Project Based"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Project Based
-                  </label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio3"
-                    style={{ marginLeft: "60px" }}
-                    value="Others"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio3"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Others
-                  </label>
-                  {errors &&  errors.industry && <p style={{color:'red'}}>{errors.industry}</p>}
+                  <Row className="py-2 contdis">
+                    <Col>
+                      <label className="text-lg">Salary Type :</label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio1"
+                        value="Salary Negotiable"
+                        onChange={(e) =>
+                          setJobData({ ...jobData, salaryType: e.target.value })
+                        }
+                      />{" "}
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio1"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Salary Negotiable
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio2"
+                        value="Project Based"
+                        onChange={(e) =>
+                          setJobData({ ...jobData, salaryType: e.target.value })
+                        }
+                      />{" "}
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Project Based
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio3"
+                        value="Others"
+                        onChange={(e) =>
+                          setJobData({ ...jobData, salaryType: e.target.value })
+                        }
+                      />{" "}
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio3"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Others
+                      </label>
+                    </Col>
+                  </Row>
+
+                  {errors && errors.industry && (
+                    <p style={{ color: "red" }}>{errors.industry}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
                 <fieldset className="dflexx">
-                  <label className="text-lg">Salary Freq :</label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio1"
-                    value="Per Day"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio1"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Day
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio2"
-                    value="per Week"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio2"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Week
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio3"
-                    value="per Month"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio3"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Month
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio4"
-                    value="others"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio4"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Others
-                  </label>
-                  {errors &&  errors.salaryType && <p style={{color:'red'}}>{errors.salaryType}</p>}
+                  <Row className="py-2 contdis">
+                    <Col>
+                      <label className="text-lg">Salary Freq :</label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio1"
+                        value="Per Day"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio1"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Day
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio2"
+                        value="per Week"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio2"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Week
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio3"
+                        value="per Month"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio3"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Month
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio4"
+                        value="others"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio4"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Others
+                      </label>
+                    </Col>
+                  </Row>
+
+                  {errors && errors.salaryType && (
+                    <p style={{ color: "red" }}>{errors.salaryType}</p>
+                  )}
                 </fieldset>
               </Col>
 
@@ -1097,7 +1166,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                       required
                     />
-                    {errors &&  errors.isEmail && <p style={{color:'red'}}>{errors.isEmail}</p>}
+                    {errors && errors.isEmail && (
+                      <p style={{ color: "red" }}>{errors.isEmail}</p>
+                    )}
                   </fieldset>
                 </Col>
               </Row>

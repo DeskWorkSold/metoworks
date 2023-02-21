@@ -14,28 +14,11 @@ import { useNavigate } from "react-router-dom/dist";
 
 
 function MyVerticallyCenteredModal2(props) {
-
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    checkAuth()
-  }, [])
-
-  const checkAuth = async () => {
-    const token = await localStorage.getItem("access-token");
-    if (!token) {
-      navigate('/login')
-    }
-  }
-
   const [isSalaryRange, setisSalaryRange] = useState({
     gte: "",
     lte: "",
   });
-  const [isProjectTimeline, setIsProjectTimeline] = useState({
-    gte: "",
-    lte: "",
-  });
+  const [isProjectTimeline, setIsProjectTimeline] = useState({});
 
   let date = new Date();
   const [isEmail, setIsEmail] = useState("");
@@ -44,7 +27,7 @@ function MyVerticallyCenteredModal2(props) {
     title: "",
     industry: "",
     jobFunction: "",
-    jobSubFunction: "dummy",
+    // jobSubFunction: "dummy",
     location: "",
     description: "",
     requirements: "",
@@ -52,14 +35,17 @@ function MyVerticallyCenteredModal2(props) {
     educationLevel: "",
     empType: "",
     projectTimeline: { gte: "", lte: "" },
-    postedDate: new Date(),
-    expiryDate: `${date.getDate()}-${date.getMonth() + 1
-      }-${date.getFullYear()}`,
+    postedDate: `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}`,
+    expiryDate: `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}`,
     madeOfWork: "",
     noOfOpenings: "",
     salaryCurrency: "",
     salaryRange: { gte: isSalaryRange.gte, lte: isSalaryRange.lte },
-    salaryType: 'negotiable',
+    // salaryType : '', /// look after
     salaryPayFreq: "",
     additionalEmails: [],
     closed: false,
@@ -68,38 +54,11 @@ function MyVerticallyCenteredModal2(props) {
   // console.log(jobData, 'jobDaaaaaaaataaa');
 
   // submitted : true when dfat post publised
+  // const navigate = useNavigate();
+  const [errors, setErrors] = useState();
 
-  const PostFunc = () => {
-    // let Data = {
-    //   title: jobData.title,
-    //   industry: jobData.industry,
-    //   jobFunction: jobData.jobFunction,
-
-    //   location: jobData.location,
-    //   description: jobData.description,
-    //   requirements: jobData.requirements,
-    //   profession: jobData.profession,
-    //   educationLevel: jobData.educationLevel,
-    //   empType: jobData.empType,
-    //   projectTimeline: {
-    //     gte: isProjectTimeline.gte,
-    //     lte: isProjectTimeline.lte,
-    //   },
-    //   postedDate: new Date().toString(),
-    //   madeOfWork: jobData.madeOfWork,
-    //   noOfOpenings: jobData.noOfOpenings.toString(),
-    //   salaryCurrency: jobData.salaryCurrency,
-    //   salaryRange: { gte: isSalaryRange.gte, lte: isSalaryRange.lte },
-    //   salaryType: 'negotiable',
-    //   salaryPayFreq: jobData.salaryPayFreq,
-    //   "additionalEmails": ["hello@dom.com", "freelancer@dom.com"],
-    //   closed: false,
-    //   submitted: true,
-    //   "expiryDate": "2022-01-07T16:55:51.188Z",
-    // };
-
+  const PostFunc = (props) => {
     let currentDate = new Date();
-
     let Data = {
       title: jobData.title,
       industry: jobData.industry,
@@ -112,77 +71,142 @@ function MyVerticallyCenteredModal2(props) {
         gte: isProjectTimeline.gte,
         lte: isProjectTimeline.lte,
       },
-      noOfOpenings: jobData.noOfOpenings.toString(),
-      postedDate: new Date().toString(),
-      projectTimeline: {
-        gte: isProjectTimeline.gte,
-        lte: isProjectTimeline.lte,
+      noOfOpenings: Number(jobData.noOfOpenings),
+      postedDate: new Date(),
+      salaryRange: {
+        gte: Number(isSalaryRange.gte),
+        lte: Number(isSalaryRange.lte),
       },
-      "closed": false,
+      expiryDate: new Date(
+        currentDate.setDate(currentDate.getDate() + 30)
+      ).toString(),
+      closed: false,
       modeOfWork: jobData.madeOfWork,
-      "submitted": true,
+      submitted: true,
       educationLevel: jobData.educationLevel,
       empType: jobData.empType,
       salaryPayFreq: jobData.salaryPayFreq,
       salaryCurrency: jobData.salaryCurrency,
-      "expiryDate": new Date(currentDate.setDate(currentDate.getDate() + 30)).toString(),
-      "additionalEmails": [isEmail],
+      additionalEmails: [isEmail],
+    };
+    let dummyData = {
+      title: jobData.title,
+      industry: jobData.industry,
+      jobFunction: jobData.jobFunction,
+      location: jobData.location,
+      description: jobData.description,
+      requirements: jobData.requirements,
+      profession: jobData.profession,
+      projectTimeline: {
+        gte: isProjectTimeline.gte,
+        lte: isProjectTimeline.lte,
+      },
+      noOfOpenings: Number(jobData.noOfOpenings),
+      postedDate: new Date(),
       salaryRange: {
-        gte: isSalaryRange.gte,
-        lte: isSalaryRange.lte
-      }
-    }
-    console.log(Data, "daaaaaaaaaaaaaaaaaaaaaataaaaaaaaaa");
-    if (Data.submitted) {
+        gte: `${isSalaryRange.gte}`,
+        lte: `${isSalaryRange.lte}`,
+      },
+      expiryDate: new Date(
+        currentDate.setDate(currentDate.getDate() + 30)
+      ).toString(),
+      closed: false,
+      modeOfWork: jobData.madeOfWork,
+      submitted: true,
+      educationLevel: jobData.educationLevel,
+      empType: jobData.empType,
+      salaryPayFreq: jobData.salaryPayFreq,
+      salaryCurrency: jobData.salaryCurrency,
+      additionalEmails: [isEmail],
+    };
+
+    let values = Object.values(dummyData);
+
+    // console.log(values,"values")
+    values = values.every((e, i) => e !== "");
+
+    if (values) {
       axios
-        .post("api/v1/job-post", Data)
+        .post("api/v1/job-post", dummyData)
         .then((res) => {
           console.log(res, "data sended successfully");
+          setErrors({});
+          props.onHide();
           // navigate('/CompanyProfile')
         })
         .catch((err) => {
           console.log(err);
         });
+    } else {
+      let newErrors = {};
+      if (!dummyData.title) {
+        newErrors.title = "Job Title is required";
+      }
+      if (!jobData.industry) {
+        newErrors.industry = "Job industry is required";
+      }
+      if (!jobData.jobFunction) {
+        newErrors.jobFunction = "Job jobFunction is required";
+      }
+      if (!jobData.jobSubFunction) {
+        newErrors.jobSubFunction = "Job jobSubFunction is required";
+      }
+      if (!jobData.location) {
+        newErrors.location = "Job location is required";
+      }
+      if (!jobData.description) {
+        newErrors.description = "Job DESCRIPTION is required";
+      }
+      if (!jobData.requirements) {
+        newErrors.requirements = "Job requirements is required";
+      }
+      if (!jobData.educationLevel) {
+        newErrors.educationLevel = "Job educationLevel is required";
+      }
+      if (!jobData.profession) {
+        newErrors.profession = "Job profession is required";
+      }
+      if (!jobData.madeOfWork) {
+        newErrors.madeOfWork = "Job madeOfWork is required";
+      }
+      if (!jobData.noOfOpenings) {
+        newErrors.noOfOpenings = "Job noOfOpenings is required";
+      }
+      if (!jobData.salaryCurrency) {
+        newErrors.salaryCurrency = "Job salaryCurrency is required";
+      }
+      if (!jobData.salaryType) {
+        newErrors.salaryType = "Job salaryCurrency is required";
+      }
+      if (!jobData.salaryPayFreq) {
+        newErrors.salaryPayFreq = "Job salaryCurrency is required";
+      }
+      if (!isProjectTimeline.gte) {
+        newErrors.gte = "Job gte is required";
+      }
+      if (!isProjectTimeline.lte) {
+        newErrors.lte = "Job lte is required";
+      }
+      if (!isSalaryRange.gte) {
+        newErrors.name = "Job gte is required";
+      }
+      if (!isSalaryRange.lte) {
+        newErrors.gte = "Job lte is required";
+      }
+      if (!isEmail) {
+        newErrors.isEmail = "Email is required";
+      }
+      if (!/\S+@\S+\.\S+/.test(isEmail)) {
+        newErrors.email = "Email address is invalid";
+      }
+      console.log(newErrors);
+      setErrors(newErrors);
     }
   };
-
+  console.log("errors", errors);
   const draftFunc = () => {
-    let currentDate = new Date();
-
-    let Data = {
-      title: jobData.title,
-      industry: jobData.industry,
-      jobFunction: jobData.jobFunction,
-      location: jobData.location,
-      description: jobData.description,
-      requirements: jobData.requirements,
-      profession: jobData.profession,
-      projectTimeline: {
-        gte: isProjectTimeline.gte,
-        lte: isProjectTimeline.lte,
-      },
-      noOfOpenings: jobData.noOfOpenings.toString(),
-      postedDate: new Date().toString(),
-      projectTimeline: {
-        gte: isProjectTimeline.gte,
-        lte: isProjectTimeline.lte,
-      },
-      "closed": false,
-      modeOfWork: jobData.madeOfWork,
-      "submitted": true,
-      educationLevel: jobData.educationLevel,
-      empType: jobData.empType,
-      salaryPayFreq: jobData.salaryPayFreq,
-      salaryCurrency: jobData.salaryCurrency,
-      "expiryDate": new Date(currentDate.setDate(currentDate.getDate() + 30)).toString(),
-      "additionalEmails": [isEmail],
-      salaryRange: {
-        gte: isSalaryRange.gte,
-        lte: isSalaryRange.lte
-      }
-    }
     axios
-      .post("api/v1/job-post", Data)
+      .post("api/v1/job-post", jobData)
       .then((res) => {
         console.log(res, "data sended successfully");
         // navigate('/CompanyProfile')
@@ -202,6 +226,86 @@ function MyVerticallyCenteredModal2(props) {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const [success, setSuccess] = useState(false);
+
+  // const [errors, setErrors] = useState({
+  //   title: '',
+  //   industry: '',
+  //   jobFunction: '',
+  //   jobSubFunction: '',
+  //   location: '',
+  //   description: '',
+  //   requirements: '',
+  //   educationLevel: '',
+  //   profession: '',
+  //   madeOfWork: '',
+  //   noOfOpenings: '',
+  //   salaryCurrency: '',
+  //   salaryType: '',
+  //   salaryPayFreq: '',
+  //   lte: '',
+  //   gte: '',
+  //   lte: '',
+  //   gte: '',
+  //   isEmail: '',
+
+  // });
+  const validateForm = () => {
+    let newErrors = {};
+    if (!jobData.title) {
+      newErrors.title = "Job Title is required";
+    } else if (!jobData.industry) {
+      newErrors.industry = "Job industry is required";
+    } else if (!jobData.jobFunction) {
+      newErrors.jobFunction = "Job jobFunction is required";
+    } else if (!jobData.jobSubFunction) {
+      newErrors.jobSubFunction = "Job jobSubFunction is required";
+    } else if (!jobData.location) {
+      newErrors.location = "Job location is required";
+    } else if (!jobData.description) {
+      newErrors.description = "Job DESCRIPTION is required";
+    } else if (!jobData.requirements) {
+      newErrors.requirements = "Job requirements is required";
+    } else if (!jobData.educationLevel) {
+      newErrors.educationLevel = "Job educationLevel is required";
+    } else if (!jobData.profession) {
+      newErrors.profession = "Job profession is required";
+    } else if (!jobData.madeOfWork) {
+      newErrors.madeOfWork = "Job madeOfWork is required";
+    } else if (!jobData.noOfOpenings) {
+      newErrors.noOfOpenings = "Job noOfOpenings is required";
+    } else if (!jobData.salaryCurrency) {
+      newErrors.salaryCurrency = "Job salaryCurrency is required";
+    } else if (!jobData.salaryType) {
+      newErrors.salaryType = "Job salaryCurrency is required";
+    } else if (!jobData.salaryPayFreq) {
+      newErrors.salaryPayFreq = "Job salaryCurrency is required";
+    } else if (!isProjectTimeline.gte) {
+      newErrors.gte = "Job gte is required";
+    } else if (!isProjectTimeline.lte) {
+      newErrors.lte = "Job lte is required";
+    } else if (!isSalaryRange.gte) {
+      newErrors.name = "Job gte is required";
+    } else if (!isSalaryRange.lte) {
+      newErrors.gte = "Job lte is required";
+    } else if (!isEmail) {
+      newErrors.isEmail = "Email is required";
+    } else if (!/\S+@\S+\.\S+/.test(isEmail)) {
+      newErrors.email = "Email address is invalid";
+    }
+
+    setErrors(newErrors);
+    console.log(Object.keys(newErrors).length === 0, "validation");
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (validateForm()) {
+      setSuccess(true);
+    }
   };
 
   return (
@@ -235,9 +339,11 @@ function MyVerticallyCenteredModal2(props) {
                     }
                     //   value={user.number}
                     //   onChange={getUserData}
-                    placeholder="Doctor for Child
-                "
+                    placeholder="Doctor for Child"
                   />
+                  {errors && errors.title && (
+                    <p style={{ color: "red" }}>{errors.title}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -289,6 +395,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+                  {errors && errors.industry && (
+                    <p style={{ color: "red" }}>{errors.industry}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -332,6 +441,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+                  {errors && errors.jobFunction && (
+                    <p style={{ color: "red" }}>{errors.jobFunction}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -349,6 +461,9 @@ function MyVerticallyCenteredModal2(props) {
                       Sub Job Function
                     </option>
                   </Form.Select>
+                  {errors && errors.jobSubFunction && (
+                    <p style={{ color: "red" }}>{errors.jobSubFunction}</p>
+                  )}
                   {/* <input
                 style={{ width: "100%" }}
                 className="form-control"
@@ -410,6 +525,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+                  {errors && errors.location && (
+                    <p style={{ color: "red" }}>{errors.location}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -419,9 +537,7 @@ function MyVerticallyCenteredModal2(props) {
                   </label>
                   <CKEditor
                     editor={ClassicEditor}
-                    data="<p>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-                    standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
-                    scramble.</p>"
+                    data=""
                     onReady={(editor) => {
                       // You can store the "editor" and use when it is needed.
                       console.log("Editor is ready to use!", editor);
@@ -437,6 +553,9 @@ function MyVerticallyCenteredModal2(props) {
                       console.log("Focus.", editor);
                     }}
                   />
+                  {errors && errors.description && (
+                    <p style={{ color: "red" }}>{errors.description}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -446,9 +565,7 @@ function MyVerticallyCenteredModal2(props) {
                   </label>
                   <CKEditor
                     editor={ClassicEditor}
-                    data="<p>simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's 
-                    standard dummy text ever since the 1500s, when avn unknown printer took a galley of type and 
-                    scramble.</p>"
+                    data=""
                     onReady={(editor) => {
                       // You can store the "editor" and use when it is needed.
                       console.log("Editor is ready to use!", editor);
@@ -465,6 +582,9 @@ function MyVerticallyCenteredModal2(props) {
                       console.log("Focus.", editor);
                     }}
                   />
+                  {errors && errors.requirements && (
+                    <p style={{ color: "red" }}>{errors.requirements}</p>
+                  )}
                 </fieldset>
               </Col>
               {/* <Col lg="12">
@@ -500,7 +620,14 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, educationLevel: e.target.value })
                     }
                   >
-                    <option value="DEFAULT" disabled="">Select Education level</option><option>ASSOCIATE DEGREE</option><option>MASTER DEGREE</option><option>DOCTORATE DEGREE</option><option>PHD</option><option>OTHER</option>
+                    <option value="DEFAULT" disabled="">
+                      Select Education level
+                    </option>
+                    <option>ASSOCIATE DEGREE</option>
+                    <option>MASTER DEGREE</option>
+                    <option>DOCTORATE DEGREE</option>
+                    <option>PHD</option>
+                    <option>OTHER</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -513,6 +640,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+                  {errors && errors.educationLevel && (
+                    <p style={{ color: "red" }}>{errors.educationLevel}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -526,7 +656,13 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, empType: e.target.value })
                     }
                   >
-                    <option value="DEFAULT" disabled="">Select Employment Type</option><option>PART TIME</option><option>CASUALâ€“NO SET HOURS OR DAYS OF WORK</option><option>PROJECT BASED</option><option>OTHER</option>
+                    <option value="DEFAULT" disabled="">
+                      Select Employment Type
+                    </option>
+                    <option>PART TIME</option>
+                    <option>CASUAL–NO SET HOURS OR DAYS OF WORK</option>
+                    <option>PROJECT BASED</option>
+                    <option>OTHER</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -539,6 +675,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+                  {errors && errors.empType && (
+                    <p style={{ color: "red" }}>{errors.empType}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -570,6 +709,9 @@ function MyVerticallyCenteredModal2(props) {
                       placeholder="Start"
                       required
                     />
+                    {errors && errors.gte && (
+                      <p style={{ color: "red" }}>{errors.gte}</p>
+                    )}
                   </Col>
                   <Col>
                     <label className="text-l" style={{ color: "#7A7979" }}>
@@ -592,6 +734,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                       required
                     />
+                    {errors && errors.lte && (
+                      <p style={{ color: "red" }}>{errors.lte}</p>
+                    )}
                   </Col>
                 </Row>
               </Container>
@@ -612,6 +757,9 @@ function MyVerticallyCenteredModal2(props) {
                     placeholder="Enter Profession"
                     required
                   />
+                  {errors && errors.profession && (
+                    <p style={{ color: "red" }}>{errors.profession}</p>
+                  )}
                 </fieldset>
               </Col>
               {/* <Container>
@@ -657,10 +805,12 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, madeOfWork: e.target.value })
                     }
                   >
-                    <option>Select Mode of Work</option>
-                    <option value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+                    <option value="DEFAULT" disabled="">
+                      Select Mode of Work
+                    </option>
+                    <option>Office</option>
+                    <option>Work from Home</option>
+                    <option>Hybrid</option>
                   </Form.Select>
                   {/* <input
                 style={{ width: "100%" }}
@@ -673,6 +823,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+                  {errors && errors.madeOfWork && (
+                    <p style={{ color: "red" }}>{errors.madeOfWork}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -695,6 +848,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                     required
                   />
+                  {errors && errors.noOfOpenings && (
+                    <p style={{ color: "red" }}>{errors.noOfOpenings}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
@@ -731,6 +887,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                 required
               /> */}
+                  {errors && errors.salaryCurrency && (
+                    <p style={{ color: "red" }}>{errors.salaryCurrency}</p>
+                  )}
                 </fieldset>
               </Col>
               <Container>
@@ -755,6 +914,9 @@ function MyVerticallyCenteredModal2(props) {
                       placeholder="Minimum Salary"
                       required
                     />
+                    {errors && errors.industry && (
+                      <p style={{ color: "red" }}>{errors.industry}</p>
+                    )}
                   </Col>
                   <Col lg="6">
                     <label className="text-l" style={{ color: "#7A7979" }}>
@@ -777,143 +939,181 @@ function MyVerticallyCenteredModal2(props) {
                 "
                       required
                     />
+                    {errors && errors.gte && (
+                      <p style={{ color: "red" }}>{errors.gte}</p>
+                    )}
                   </Col>
                 </Row>
               </Container>
               <Col lg="12">
                 <fieldset className="dflexx">
-                  <label className="text-lg">Salary Type :</label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio1"
-                    value="Salary Negotiable"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio1"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Salary Negotiable
-                  </label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio2"
-                    value="Project Based"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Project Based
-                  </label>
-                  <input
-                    type="radio"
-                    name="radios"
-                    class="form-check-input"
-                    id="exampleRadio3"
-                    style={{ marginLeft: "60px" }}
-                    value="Others"
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryType: e.target.value })
-                    }
-                  />
-                  <label
-                    class="form-check-label"
-                    for="exampleRadio3"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Others
-                  </label>
+                  <Row className="py-2 contdis">
+                    <Col>
+                      <label className="text-lg">Salary Type :</label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio1"
+                        value="Salary Negotiable"
+                        onChange={(e) =>
+                          setJobData({ ...jobData, salaryType: e.target.value })
+                        }
+                      />{" "}
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio1"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Salary Negotiable
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio2"
+                        value="Project Based"
+                        onChange={(e) =>
+                          setJobData({ ...jobData, salaryType: e.target.value })
+                        }
+                      />{" "}
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Project Based
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio3"
+                        value="Others"
+                        onChange={(e) =>
+                          setJobData({ ...jobData, salaryType: e.target.value })
+                        }
+                      />{" "}
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio3"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Others
+                      </label>
+                    </Col>
+                  </Row>
+
+                  {errors && errors.industry && (
+                    <p style={{ color: "red" }}>{errors.industry}</p>
+                  )}
                 </fieldset>
               </Col>
               <Col lg="12">
                 <fieldset className="dflexx">
-                  <label className="text-lg">Salary Freq :</label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio1"
-                    value="Per Day"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio1"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Day
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio2"
-                    value="per Week"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio2"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Week
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio3"
-                    value="per Month"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio3"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Per Month
-                  </label>
-                  <input
-                    type="radio"
-                    class="form-check-input"
-                    name="bsradio"
-                    id="radio4"
-                    value="others"
-                    style={{ marginLeft: "60px" }}
-                    onChange={(e) =>
-                      setJobData({ ...jobData, salaryPayFreq: e.target.value })
-                    }
-                  />
-                  <label
-                    for="radio4"
-                    class="form-check-label pl-2"
-                    style={{ color: "#7A7979" }}
-                  >
-                    Others
-                  </label>
+                  <Row className="py-2 contdis">
+                    <Col>
+                      <label className="text-lg">Salary Freq :</label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio1"
+                        value="Per Day"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio1"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Day
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio2"
+                        value="per Week"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio2"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Week
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio3"
+                        value="per Month"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio3"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Month
+                      </label>
+                    </Col>
+                    <Col>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio4"
+                        value="others"
+                        onChange={(e) =>
+                          setJobData({
+                            ...jobData,
+                            salaryPayFreq: e.target.value,
+                          })
+                        }
+                      />
+                      <label
+                        for="radio4"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Others
+                      </label>
+                    </Col>
+                  </Row>
+
+                  {errors && errors.salaryType && (
+                    <p style={{ color: "red" }}>{errors.salaryType}</p>
+                  )}
                 </fieldset>
               </Col>
 
@@ -931,8 +1131,9 @@ function MyVerticallyCenteredModal2(props) {
                       //   value={user.name}
                       //   onChange={getUserData}
                       disabled
-                      value={`${date.getDate()}-${date.getMonth() + 1
-                        }-${date.getFullYear()}`}
+                      value={`${date.getDate()}-${
+                        date.getMonth() + 1
+                      }-${date.getFullYear()}`}
                       placeholder="Enter No. of Openings"
                       // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
@@ -958,6 +1159,9 @@ function MyVerticallyCenteredModal2(props) {
                 "
                       required
                     />
+                    {errors && errors.isEmail && (
+                      <p style={{ color: "red" }}>{errors.isEmail}</p>
+                    )}
                   </fieldset>
                 </Col>
               </Row>
@@ -988,7 +1192,7 @@ function MyVerticallyCenteredModal2(props) {
         </Button>
         <Button
           style={{ background: "none", color: "#39BEC1" }}
-          onClick={() => PostFunc()}
+          onClick={() => PostFunc(props)}
         >
           Post
         </Button>
@@ -1214,6 +1418,8 @@ export const Interview = () => {
         // Modalshowgoogfunc(true)
         // console.log(EventData, 'EventData');
         Modalshowgoogfunc(EventData)
+        searchFunc()
+
       }
     })
     .catch((err) => {
@@ -1233,6 +1439,7 @@ export const Interview = () => {
       let data = res.data.data;
       if(res) {
         ModalgootTokeepfunc(EventData)
+        searchFunc()
       }
     })
     .catch((err) => {
@@ -1253,6 +1460,7 @@ export const Interview = () => {
       let data = res.data.data;
       if(res) {
         Modalnotquitfunc(EventData)
+        searchFunc()
       }
     })
     .catch((err) => {
@@ -1383,7 +1591,7 @@ export const Interview = () => {
                   style={{ width: "100%" }}
                   className="form-control"
                   name="date"
-                  type={"date"}
+                  type={"datetime-local"}
                   onChange={(e) => setArrangeInterview({ ...arrangeInterview, timestamp: e.target.value })}
                 />
               </fieldset>
@@ -1517,7 +1725,7 @@ export const Interview = () => {
                   style={{ width: "100%" }}
                   className="form-control"
                   name="date"
-                  type={"date"}
+                  type={"datetime-local"}
                   onChange={(e) => setJobOffer({...jobOffer, joiningDate : e.target.value})}
                 //   value={user.number}
                 //   onChange={getUserData}
@@ -1600,7 +1808,7 @@ export const Interview = () => {
     );
   }
   const setoffershow = (events) => {
-    console.log(events, "funtion values");
+    // console.log(events, "funtion values");
     if (events.clicked == true) {
       events.clicked = false;
       setOfferShow(false);
@@ -1609,6 +1817,15 @@ export const Interview = () => {
       events.clicked = true;
     }
   };
+
+  const saveBookMarkFunc = (event) => {
+  axios.post(`api/v1/user/recruiter/save-freelancer/${event.id}`).then((res) => {
+     console.log(res, 'data save succesfully');
+  }).catch((error) => {
+    console.log(error, "error")
+  })
+  
+  }
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -1770,6 +1987,7 @@ export const Interview = () => {
                         return filter.job.title === items || filter.internalState == selectedValue
                       })
                       .map((events, key) => {
+                        console.log(profileImg, 'resourece not found');
                         // console.log(events, 'eventsevents');
                         return (
                           <Container key={key}>
@@ -1798,7 +2016,7 @@ export const Interview = () => {
                                               color: "#C1C1C1",
                                             }}
                                           >
-                                            <BsBookmark />
+                                            <BsBookmark onClick={() => saveBookMarkFunc(events)} />
                                           </Button>
                                         </div>
                                         <div
@@ -1888,10 +2106,14 @@ export const Interview = () => {
                                         </div>
                                       </Col>
                                       <Col lg="2" className="webkit">
-                                        <Image
-                                          style={{ width: "100%" }}
-                                          src={require("../../../assets/Profile.png")}
-                                        />
+                                        {profileImg.length > 0 ?  
+                                        <div style={{ width: '150px',  height: '150px', borderRadius: '50%',  background: '#512DA8',  fontSize: '35px',  color: '#fff',  textAlign: 'center', lineHeight: '150px',  margin: '20px 0'}}>{events.freelancer.firstName.substring(0, 1)}</div>
+                                      :
+                                      <Image
+                                      style={{ width: "100%" }}
+                                      src={profileImg ? profileImg : require("../../../assets/Profile.png")}
+                                    />
+                                      }
                                       </Col>
                                       <Col lg="7">
                                         <h2 className="py-3">
@@ -1943,8 +2165,7 @@ export const Interview = () => {
                                             show={modalShow}
                                             props={events}
                                             onHide={() => token (events)}
-                                          />
-                                          
+                                          />                                       
       )}
                                         </div>
                                       </Col>
