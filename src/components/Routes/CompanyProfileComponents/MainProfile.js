@@ -668,7 +668,7 @@ function MyVerticallyCenteredModal(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUAL–NO SET HOURS OR DAYS OF WORK</option>
+                    <option>CASUALâ€“NO SET HOURS OR DAYS OF WORK</option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -1235,9 +1235,9 @@ export const MainProfile = () => {
     companyLocation: "",
     description: "",
   });
-  const [editProfileData, setEditProfileData] = useState({})
-  const [profileImg, setProfileImg] = useState('')
-  const [thumbnail, setThumbnail] = useState('')
+  const [editProfileData, setEditProfileData] = useState({});
+  const [profileImg, setProfileImg] = useState("");
+  const [thumbnail, setThumbnail] = useState("");
 
   // const [profilePicture, setProfilePicture] = useState('')
 
@@ -1250,7 +1250,7 @@ export const MainProfile = () => {
     // let id = localStorage.getItem('id')
     setUserId();
     initialFun();
-    profileImageFunc()
+    profileImageFunc();
   }, []);
 
   const initialFun = () => {
@@ -1272,42 +1272,65 @@ export const MainProfile = () => {
       .get(`api/v1/user/asset/thumbnail`, { responseType: "arraybuffer" })
       .then((res) => {
         let buffer = require("buffer");
-        const data = `data:${res.headers["content-type"]
-          };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
+        const data = `data:${
+          res.headers["content-type"]
+        };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
         // console.log("res", res);
         // console.log("imagee", data);
         setProfileImg(data);
-        localStorage.setItem('profileImg', data)
+        localStorage.setItem("profileImg", data);
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   useEffect(() => {
     profileData && setIsProfileData(profileData);
     // profileData && setProfilePicture(profileData)
   }, [profileData]);
-  const [editError, setEditError] = useState()
+  const [editError, setEditError] = useState();
   const profileFunc = () => {
     const data = {
-      companyName: editProfileData.companyName ? editProfileData.companyName : isProfileData.companyName,
-      speciality: editProfileData.speciality ? editProfileData.speciality : isProfileData.speciality,
+      companyName: editProfileData.companyName
+        ? editProfileData.companyName
+        : isProfileData.companyName,
+      speciality: editProfileData.speciality
+        ? editProfileData.speciality
+        : isProfileData.speciality,
       sop: editProfileData.sop ? editProfileData.sop : isProfileData.sop,
-      companyLocation: editProfileData.location ? editProfileData.location : isProfileData.location,
-      companySize: editProfileData.companySize ? editProfileData.companySize : isProfileData.companySize,
-      websiteLink: editProfileData.websiteLink ? editProfileData.websiteLink : isProfileData.websiteLink,
-      headquarters: editProfileData.headquarters ? editProfileData.headquarters : isProfileData.headquarters,
-      companyDesc: editProfileData.companyDesc ? editProfileData.companyDesc : isProfileData.companyDesc,
-      founded: editProfileData.founded ? editProfileData.founded : isProfileData.founded,
-      firstName: editProfileData.firstName ? editProfileData.firstName : isProfileData.firstName,
-      lastName: editProfileData.lastName ? editProfileData.lastName : isProfileData.lastName,
-      phoneNumber: editProfileData.phoneNumber ? +editProfileData.phoneNumber : +isProfileData.phoneNumber
-    }
+      companyLocation: editProfileData.location
+        ? editProfileData.location
+        : isProfileData.location,
+      companySize: editProfileData.companySize
+        ? editProfileData.companySize
+        : isProfileData.companySize,
+      websiteLink: editProfileData.websiteLink
+        ? editProfileData.websiteLink
+        : isProfileData.websiteLink,
+      headquarters: editProfileData.headquarters
+        ? editProfileData.headquarters
+        : isProfileData.headquarters,
+      companyDesc: editProfileData.companyDesc
+        ? editProfileData.companyDesc
+        : isProfileData.companyDesc,
+      founded: editProfileData.founded
+        ? editProfileData.founded
+        : isProfileData.founded,
+      firstName: editProfileData.firstName
+        ? editProfileData.firstName
+        : isProfileData.firstName,
+      lastName: editProfileData.lastName
+        ? editProfileData.lastName
+        : isProfileData.lastName,
+      phoneNumber: editProfileData.phoneNumber
+        ? +editProfileData.phoneNumber
+        : +isProfileData.phoneNumber,
+    };
 
-    let values = Object.values(data)
-    values = values.every((e, i) => e !== "")
-    console.log(values, 'values');
+    let values = Object.values(data);
+    values = values.every((e, i) => e !== "");
+    console.log(values, "values");
     if (values) {
       axios
         .post(`api/v1/user/recruiter`, data)
@@ -1315,57 +1338,56 @@ export const MainProfile = () => {
           console.log(res, "profile data successfully added");
           if (res) {
             setShow(false);
-            initialFun()
-            handleShow(false)
+            initialFun();
+            handleClose(false);
           }
         })
         .catch((err) => {
           console.log(err);
         });
-    }
-    else {
-      let newErrors = {}
+    } else {
+      let newErrors = {};
       if (!isProfileData.companyName) {
-        newErrors.companyName = 'companyName is required';
+        newErrors.companyName = "companyName is required";
       }
       if (!isProfileData.speciality) {
-        newErrors.speciality = 'speciality is required';
+        newErrors.speciality = "speciality is required";
       }
       if (!isProfileData.companyScope) {
-        newErrors.sop = 'Scope is required';
+        newErrors.sop = "Scope is required";
       }
       if (!isProfileData.companyLocation) {
-        newErrors.companyLocation = 'company Location is required';
+        newErrors.companyLocation = "company Location is required";
       }
       if (!isProfileData.companySize) {
-        newErrors.companySize = 'companySize is required';
+        newErrors.companySize = "companySize is required";
       }
       if (!isProfileData.websiteLink) {
-        newErrors.websiteLink = 'websiteLink is required';
+        newErrors.websiteLink = "websiteLink is required";
       }
       if (!isProfileData.headquarters) {
-        newErrors.headquarters = 'headquarters is required';
+        newErrors.headquarters = "headquarters is required";
       }
       if (!isProfileData.companyDesc) {
-        newErrors.companyDesc = 'companyDesc is required';
+        newErrors.companyDesc = "companyDesc is required";
       }
       if (!isProfileData.founded) {
-        newErrors.founded = 'founded is required';
+        newErrors.founded = "founded is required";
       }
       if (!isProfileData.firstName) {
-        newErrors.firstName = 'firstName is required';
+        newErrors.firstName = "firstName is required";
       }
       if (!isProfileData.lastName) {
-        newErrors.lastName = 'lastName is required';
+        newErrors.lastName = "lastName is required";
       }
       if (!isProfileData.phoneNumber) {
-        newErrors.phoneNumber = 'phoneNumber is required';
+        newErrors.phoneNumber = "phoneNumber is required";
       }
-      console.log(newErrors)
-      setEditError(newErrors)
+      console.log(newErrors);
+      setEditError(newErrors);
     }
   };
-  console.log('editError', editError);
+  console.log("editError", editError);
 
   const profilePictureUpdate = () => {
     let formdata = new FormData();
@@ -1386,28 +1408,29 @@ export const MainProfile = () => {
   };
 
   const updateProfileImage = (event) => {
-    setThumbnail(event.target.files[0])
-  }
+    setThumbnail(event.target.files[0]);
+  };
 
   useEffect(() => {
-    onPostThumnail()
-  }, [thumbnail])
+    onPostThumnail();
+  }, [thumbnail]);
 
   const onPostThumnail = () => {
     if (thumbnail) {
       const formData = new FormData();
       formData.append("thumbnail", thumbnail);
       console.log(thumbnail);
-      axios.post(`api/v1/user/asset/thumbnail`, formData)
+      axios
+        .post(`api/v1/user/asset/thumbnail`, formData)
         .then((res) => {
-          console.log('Updated Image');
-          initialFun()
+          console.log("Updated Image");
+          initialFun();
         })
         .catch((err) => {
           console.log(err);
         });
     }
-  }
+  };
 
   const FileUploadComponent = () => {
     // alert('clicked')s
@@ -1521,12 +1544,12 @@ export const MainProfile = () => {
             <div className="m-3">
               <div className="boxshad py-5">
                 <Row className="align-items-center">
-                  <Col lg="2" className="webkit">
+                  <Col lg="3" className="webkit">
                     <button>
                       <FileUploadComponent />
                     </button>
                   </Col>
-                  <Col lg="4">
+                  <Col lg="3">
                     <h2 className="text-3xl py-3 robot">
                       {profileData?.companyName
                         ? profileData.companyName
@@ -1541,7 +1564,7 @@ export const MainProfile = () => {
                   </Col>
                   <Col lg="3">
                     <div className="text-left">
-                      <ul style={{ color: "#6A489C", fontSize: "16px" }}>
+                      <ul style={{ color: "#6A489C", fontSize: "15px" }}>
                         <li>
                           <FontAwesomeIcon
                             icon={faUserClock}
@@ -1550,7 +1573,7 @@ export const MainProfile = () => {
 
                               fontWeight: "bolder",
                             }}
-                          />
+                          />{" "}
                           Founded in{" "}
                           {profileData?.foundedIn
                             ? profileData.foundedIn
@@ -1563,7 +1586,7 @@ export const MainProfile = () => {
                               color: "#39BEC1",
                               fontWeight: "bolder",
                             }}
-                          />
+                          />{" "}
                           {profileData?.headquarters
                             ? profileData.headquarters
                             : "USA"}
@@ -1575,7 +1598,7 @@ export const MainProfile = () => {
                               color: "#39BEC1",
                               fontWeight: "bolder",
                             }}
-                          />
+                          />{" "}
                           {profileData?.websiteLink}
                         </li>
                       </ul>
@@ -1591,7 +1614,7 @@ export const MainProfile = () => {
                       >
                         <div
                           className="inline-flex"
-                          style={{ fontSize: "18px" }}
+                          style={{ fontSize: "16px", alignItems: "center" }}
                         >
                           <BsReceipt />
                           &nbsp; POST A JOB
@@ -1613,7 +1636,7 @@ export const MainProfile = () => {
                       >
                         <div
                           className="inline-flex"
-                          style={{ fontSize: "20px" }}
+                          style={{ fontSize: "16px", alignItems: "center" }}
                         >
                           <BsPencilSquare /> &nbsp; edit profile
                         </div>
@@ -1662,7 +1685,11 @@ export const MainProfile = () => {
                                       //   onChange={getUserData}
                                       placeholder={profileData?.firstName || ""}
                                     />
-                                    {editError && editError.firstName && <p style={{ color: 'red' }}>{editError.firstName}</p>}
+                                    {editError && editError.firstName && (
+                                      <p style={{ color: "red" }}>
+                                        {editError.firstName}
+                                      </p>
+                                    )}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1688,7 +1715,11 @@ export const MainProfile = () => {
                                       //   onChange={getUserData}
                                       placeholder={profileData?.lastName || ""}
                                     />
-                                    {editError && editError.lastName && <p style={{ color: 'red' }}>{editError.lastName}</p>}
+                                    {editError && editError.lastName && (
+                                      <p style={{ color: "red" }}>
+                                        {editError.lastName}
+                                      </p>
+                                    )}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1743,7 +1774,11 @@ export const MainProfile = () => {
                                         profileData?.phoneNumber || ""
                                       }
                                     />
-                                    {editError && editError.phoneNumber && <p style={{ color: 'red' }}>{editError.phoneNumber}</p>}
+                                    {editError && editError.phoneNumber && (
+                                      <p style={{ color: "red" }}>
+                                        {editError.phoneNumber}
+                                      </p>
+                                    )}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1757,8 +1792,8 @@ export const MainProfile = () => {
                                     <input
                                       style={{ width: "100%" }}
                                       className="form-control"
-                                      name="email"
-                                      type={"text"}
+                                      name=""
+                                      type={"number"}
                                       onChange={(e) =>
                                         setEditProfileData({
                                           ...editProfileData,
@@ -1769,7 +1804,11 @@ export const MainProfile = () => {
                                       //   onChange={getUserData}
                                       placeholder={profileData?.foundedIn || ""}
                                     />
-                                    {editError && editError.founded && <p style={{ color: 'red' }}>{editError.founded}</p>}
+                                    {editError && editError.founded && (
+                                      <p style={{ color: "red" }}>
+                                        {editError.founded}
+                                      </p>
+                                    )}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1797,7 +1836,11 @@ export const MainProfile = () => {
                                         profileData?.whatsMakesUsSpecial || ""
                                       }
                                     />
-                                    {editError && editError.speciality && <p style={{ color: 'red' }}>{editError.speciality}</p>}
+                                    {editError && editError.speciality && (
+                                      <p style={{ color: "red" }}>
+                                        {editError.speciality}
+                                      </p>
+                                    )}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1825,7 +1868,11 @@ export const MainProfile = () => {
                                         profileData?.whatsMakesUsSpecial || ""
                                       }
                                     />
-                                    {editError && editError.websiteLink && <p style={{ color: 'red' }}>{editError.websiteLink}</p>}
+                                    {editError && editError.websiteLink && (
+                                      <p style={{ color: "red" }}>
+                                        {editError.websiteLink}
+                                      </p>
+                                    )}
                                   </fieldset>
                                 </Col>
                               </div>
@@ -1865,7 +1912,11 @@ export const MainProfile = () => {
                                       }
                                       required
                                     />
-                                    {editError && editError.companyName && <p style={{ color: 'red' }}>{editError.companyName}</p>}
+                                    {editError && editError.companyName && (
+                                      <p style={{ color: "red" }}>
+                                        {editError.companyName}
+                                      </p>
+                                    )}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1895,7 +1946,11 @@ export const MainProfile = () => {
                                       }
                                       required
                                     />
-                                    {editError && editError.sop && <p style={{ color: 'red' }}>{editError.sop}</p>}
+                                    {editError && editError.sop && (
+                                      <p style={{ color: "red" }}>
+                                        {editError.sop}
+                                      </p>
+                                    )}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1946,7 +2001,11 @@ export const MainProfile = () => {
                                         }
                                       />
                                     </div>
-                                    {editError && editError.headquarters && <p style={{ color: 'red' }}>{editError.headquarters}</p>}
+                                    {editError && editError.headquarters && (
+                                      <p style={{ color: "red" }}>
+                                        {editError.headquarters}
+                                      </p>
+                                    )}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1974,7 +2033,11 @@ export const MainProfile = () => {
                                         profileData?.companyLocation || ""
                                       }
                                     />
-                                    {editError && editError.companyLocation && <p style={{ color: 'red' }}>{editError.companyLocation}</p>}
+                                    {editError && editError.companyLocation && (
+                                      <p style={{ color: "red" }}>
+                                        {editError.companyLocation}
+                                      </p>
+                                    )}
                                   </fieldset>
                                 </Col>
                                 <Col lg="12">
@@ -1997,7 +2060,11 @@ export const MainProfile = () => {
                                       }
                                       className="form-control"
                                     />
-                                    {editError && editError.companyDesc && <p style={{ color: 'red' }}>{editError.companyDesc}</p>}
+                                    {editError && editError.companyDesc && (
+                                      <p style={{ color: "red" }}>
+                                        {editError.companyDesc}
+                                      </p>
+                                    )}
                                   </fieldset>
                                 </Col>
                               </div>
@@ -2188,7 +2255,7 @@ export const MainProfile = () => {
                     </Col>
                   </Row>
                 </Container>
-                <hr style={{ border: "1px solid" }} />
+                {/* <hr style={{ border: "1px solid" }} />
                 <div className="webkit pt-3">
                   <Button
                     className="mx-2 px-3 font-semibold"
@@ -2201,7 +2268,7 @@ export const MainProfile = () => {
                   >
                     SEE MORE DETAIL
                   </Button>
-                </div>
+                </div> */}
               </div>
             </div>
           </Col>

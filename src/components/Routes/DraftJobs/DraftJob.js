@@ -38,10 +38,12 @@ function MyVerticallyCenteredModal(props) {
     educationLevel: "",
     empType: "",
     projectTimeline: { gte: "", lte: "" },
-    postedDate: `${date.getDate()}-${date.getMonth() + 1
-      }-${date.getFullYear()}`,
-    expiryDate: `${date.getDate()}-${date.getMonth() + 1
-      }-${date.getFullYear()}`,
+    postedDate: `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}`,
+    expiryDate: `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}`,
     madeOfWork: "",
     noOfOpenings: "",
     salaryCurrency: "",
@@ -1132,8 +1134,9 @@ function MyVerticallyCenteredModal(props) {
                       //   value={user.name}
                       //   onChange={getUserData}
                       disabled
-                      value={`${date.getDate()}-${date.getMonth() + 1
-                        }-${date.getFullYear()}`}
+                      value={`${date.getDate()}-${
+                        date.getMonth() + 1
+                      }-${date.getFullYear()}`}
                       placeholder="Enter No. of Openings"
                       // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
@@ -1201,7 +1204,6 @@ function MyVerticallyCenteredModal(props) {
   );
 }
 
-
 const ReadMore = ({ children }) => {
   const text = children;
   const [isReadMore, setIsReadMore] = useState(true);
@@ -1221,8 +1223,8 @@ const ReadMore = ({ children }) => {
     </p>
   );
 };
-
 export const DraftJob = () => {
+  const [modalShowPublishMain, setModalShowPublishMain] = useState(false);
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
   const [show2, setShow2] = useState(false);
@@ -1239,7 +1241,7 @@ export const DraftJob = () => {
   const handleShow3 = () => setShow3(true);
   const [modalShow, setModalShow] = React.useState(false);
 
-  const [draftData, setDraftData] = useState({})
+  const [draftData, setDraftData] = useState({});
   const [isSalaryRange, setisSalaryRange] = useState({
     gte: "",
     lte: "",
@@ -1247,7 +1249,7 @@ export const DraftJob = () => {
   const [isProjectTimeline, setIsProjectTimeline] = useState({
     gte: "",
     lte: "",
-  })
+  });
   const [profileData, setProfileData] = useState({
     firstName: "",
     lastName: "",
@@ -1265,8 +1267,8 @@ export const DraftJob = () => {
 
   const [isEmail, setIsEmail] = useState("");
 
-  const [isProfileData, setIsProfileData] = useState({})
-  console.log(draftData, 'draft Daaaaaaaaataa');
+  const [isProfileData, setIsProfileData] = useState({});
+  console.log(draftData, "draft Daaaaaaaaataa");
 
   const date = new Date();
   const initialFun = () => {
@@ -1282,7 +1284,6 @@ export const DraftJob = () => {
         console.log(err);
       });
   };
-
 
   useEffect(() => {
     axios
@@ -1300,33 +1301,28 @@ export const DraftJob = () => {
       });
   }, []);
 
-
-
   const Content = ({ props }) => {
     return (
       <div className="container">
         <h2>
-          <ReadMore>
-            {props.description}
-          </ReadMore>
+          <ReadMore>{props.description}</ReadMore>
         </h2>
       </div>
     );
   };
 
-
   const PublishJob = (event) => {
-    console.log(event, 'evvvvvvvvvvvvvent');
-    delete event._source.createdAt
-    delete event._source.updatedAt
-    delete event._source.email
-    delete event._source.profileDataId
-    delete event._source.salaryCurrency
-    delete event._source.salaryType
-    delete event._source.salaryPayFreq
-    delete event._source.companyName
-    delete event._source.additionalEmails
-    event._source.id = event._id
+    console.log(event, "evvvvvvvvvvvvvent");
+    delete event._source.createdAt;
+    delete event._source.updatedAt;
+    delete event._source.email;
+    delete event._source.profileDataId;
+    delete event._source.salaryCurrency;
+    delete event._source.salaryType;
+    delete event._source.salaryPayFreq;
+    delete event._source.companyName;
+    delete event._source.additionalEmails;
+    event._source.id = event._id;
     axios
       .patch(`api/v1/job-post?id=${event._id}`, event._source)
       .then((res) => {
@@ -1341,7 +1337,7 @@ export const DraftJob = () => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   // edit
   const MyVerticallyCenteredModalPublish = useCallback(
@@ -1361,8 +1357,9 @@ export const DraftJob = () => {
         projectTimelineGte: "",
         projectTimelineLte: "",
         postedDate: new Date(),
-        expiryDate: `${date.getDate()}-${date.getMonth() + 1
-          }-${date.getFullYear()}`,
+        expiryDate: `${date.getDate()}-${
+          date.getMonth() + 1
+        }-${date.getFullYear()}`,
         modeOfWork: "",
         noOfOpenings: "",
         salaryCurrency: "",
@@ -1373,7 +1370,7 @@ export const DraftJob = () => {
         closed: false,
       };
 
-      const profileFunc = () => {
+      const profileFunc = (props) => {
         console.log(isProjectTimeline?.gte, "my name is odho");
         // let currentDate = new Date();
         const data = {
@@ -1446,6 +1443,7 @@ export const DraftJob = () => {
                 initialFun();
               }, 1000);
             }
+            props.onHide();
           })
           .catch((err) => {
             console.log(err);
@@ -1462,9 +1460,7 @@ export const DraftJob = () => {
             centered
           >
             <Modal.Header closeButton>
-              <Modal.Title style={{ color: "black" }}>
-                Edit Job
-              </Modal.Title>
+              <Modal.Title style={{ color: "black" }}>Edit Job</Modal.Title>
             </Modal.Header>
             <Modal.Body>
               <Row>
@@ -1798,7 +1794,9 @@ export const DraftJob = () => {
                             Select Employment Type
                           </option>
                           <option>PART TIME</option>
-                          <option>CASUALÃ¢â‚¬â€œNO SET HOURS OR DAYS OF WORK</option>
+                          <option>
+                            CASUALÃ¢â‚¬â€œNO SET HOURS OR DAYS OF WORK
+                          </option>
                           <option>PROJECT BASED</option>
                           <option>OTHER</option>
                         </Form.Select>
@@ -2196,8 +2194,9 @@ export const DraftJob = () => {
                             //   value={user.name}
                             //   onChange={getUserData}
                             disabled
-                            value={`${date.getDate()}-${date.getMonth() + 1
-                              }-${date.getFullYear()}`}
+                            value={`${date.getDate()}-${
+                              date.getMonth() + 1
+                            }-${date.getFullYear()}`}
                             placeholder="Enter No. of Openings"
                             // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                             required
@@ -2241,7 +2240,7 @@ export const DraftJob = () => {
               <Button
                 variant="primary"
                 style={{ background: "none", color: "#39BEC1" }}
-                onClick={() => profileFunc()}
+                onClick={() => profileFunc(props)}
               >
                 Save
               </Button>
@@ -2252,7 +2251,6 @@ export const DraftJob = () => {
     },
     [profileData]
   );
-
 
   const modalshow = (items) => {
     console.log(items, "funtion items");
@@ -2268,6 +2266,84 @@ export const DraftJob = () => {
   const btnEdit = (items) => {
     modalshow(items);
     // setEditIsExperienceData(event);
+  };
+
+  // publishMain
+  function MyVerticallyCenteredModalPublishMain(props) {
+    const PublishJob = (event) => {
+      console.log(event, "evvvvvvvvvvvvvent");
+      const data = event.props;
+      delete data._source.createdAt;
+      delete data._source.updatedAt;
+      delete data._source.email;
+      delete data._source.profileDataId;
+      delete data._source.salaryCurrency;
+      delete data._source.salaryType;
+      delete data._source.salaryPayFreq;
+      delete data._source.companyName;
+      delete data._source.additionalEmails;
+      data._source.id = data._id;
+      axios
+        .patch(`api/v1/job-post?id=${event._id}`, data._source)
+        .then((res) => {
+          console.log(res, "profile data successfully added");
+          if (res) {
+            event.onHide();
+            setTimeout(() => {
+              initialFun();
+            }, 1000);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>PublishedJob</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Are You Sure?</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              onClick={() => PublishJob(props)}
+            >
+              Confirm
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+  const modalshowpublishmain = (event) => {
+    // console.log(items, "funtion items");
+    if (event.clicked == true) {
+      event.clicked = false;
+      setModalShowPublishMain(false);
+    } else {
+      setModalShowPublishMain(true);
+      event.clicked = true;
+    }
   };
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -2330,180 +2406,227 @@ export const DraftJob = () => {
               </div>
             </div>
           </Col>
-          {draftData.length && draftData.map((event, keys) => {
-            return (<Col lg="12">
-              <div className="m-3" key={keys}>
-                <div className="boxshad">
-                  <div
-                    style={{
-                      // display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                    }}
-                    className="des-flex"
-                  >
-                    <div style={{ display: "block" }}>
-                      <h2 className="text-3xl robot" style={{ color: "#39BEC1" }}>
-                        {event._source.title}
-                      </h2>
-                      <p style={{ color: "#7A7979" }}> {event._source.modeOfWork} </p>
-                    </div>
-                    <div
-                      style={{
-                        float: "right",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                      className="p-3 webkit"
-                    >
-                      <div style={{ display: "block" }}>
-                        <Button
-                          // onClick={handleShow}
-                          className="text-white border-rounded px-3"
-                          style={{
-                            background: "#39BEC1",
-                            border: "none",
-                            marginTop: "10px",
-                            marginBottom: "10px",
-                          }}
-                          onClick={() => PublishJob(event)}
-                        >
-                          <div
-                            className="inline-flex"
-                            style={{ fontSize: "20px" }}
+          {draftData.length &&
+            draftData.map((event, keys) => {
+              return (
+                <Col lg="12">
+                  <div className="m-3" key={keys}>
+                    <div className="boxshad">
+                      <div
+                        style={{
+                          // display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
+                        className="des-flex"
+                      >
+                        <div style={{ display: "block" }}>
+                          <h2
+                            className="text-3xl robot"
+                            style={{ color: "#39BEC1" }}
                           >
-                            <FontAwesomeIcon
-                              icon={faPaperPlane}
+                            {event._source.title}
+                          </h2>
+                          <p style={{ color: "#7A7979" }}>
+                            {" "}
+                            {event._source.modeOfWork}{" "}
+                          </p>
+                        </div>
+                        <div
+                          style={{
+                            float: "right",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                          className="p-3 webkit"
+                        >
+                          <div style={{ display: "block" }}>
+                            <Button
+                              // onClick={handleShow}
+                              className="text-white border-rounded px-3"
                               style={{
-                                color: "white",
                                 background: "#39BEC1",
-                                //   padding: "6px",
-                                borderRadius: "100px",
-                                fontWeight: "bolder",
-                                //   height: "34px",
-                                //   width: "34px",
-                                fontSize: "22px",
-                                //   marginRight: "10px"
+                                border: "none",
+                                marginTop: "10px",
+                                marginBottom: "10px",
                               }}
-                            />
-                            &nbsp; PUBLISHED
+                              // onClick={() => PublishJob(event)}
+                              onClick={() => modalshowpublishmain(event)}
+                            >
+                              <div
+                                className="inline-flex"
+                                style={{ fontSize: "20px" }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={faPaperPlane}
+                                  style={{
+                                    color: "white",
+                                    background: "#39BEC1",
+                                    //   padding: "6px",
+                                    borderRadius: "100px",
+                                    fontWeight: "bolder",
+                                    //   height: "34px",
+                                    //   width: "34px",
+                                    fontSize: "22px",
+                                    //   marginRight: "10px"
+                                  }}
+                                />
+                                &nbsp; PUBLISHED
+                              </div>
+                            </Button>
+                            {event.clicked == true && (
+                              <MyVerticallyCenteredModalPublishMain
+                                show={modalShowPublishMain}
+                                props={event}
+                                onHide={() => modalshowpublishmain(event)}
+                              />
+                            )}
+                            <Button
+                              onClick={handleShow}
+                              className="text-white border-rounded px-3 mx-3"
+                              style={{
+                                background: "#39BEC1",
+                                border: "none",
+                                marginTop: "10px",
+                                marginBottom: "10px",
+                              }}
+                            >
+                              <div
+                                className="inline-flex"
+                                style={{ fontSize: "20px" }}
+                                onClick={() => btnEdit(event)}
+                              >
+                                <BsPencilSquare /> &nbsp; Edit Job
+                              </div>
+                            </Button>
+                            {event.clicked == true && (
+                              <MyVerticallyCenteredModalPublish
+                                show={modalShowPublish}
+                                props={event}
+                                onHide={() => modalshow(event)}
+                              />
+                            )}
+                            <p>
+                              Posted Date :{" "}
+                              {event._source.createdAt?.substring(0, 10)}{" "}
+                              <span className="mrdg">
+                                Expiry Date :
+                                {event._source.expiryDate?.substring(0, 10)}
+                              </span>
+                            </p>
                           </div>
-                        </Button>
-                        <Button
-                          onClick={handleShow}
-                          className="text-white border-rounded px-3 mx-3"
-                          style={{
-                            background: "#39BEC1",
-                            border: "none",
-                            marginTop: "10px",
-                            marginBottom: "10px",
-                          }}
-                        >
-                          <div
-                            className="inline-flex"
-                            style={{ fontSize: "20px" }}
-                            onClick={() => btnEdit(event)}
-                          >
-                            <BsPencilSquare /> &nbsp; Edit Job
-                          </div>
-                        </Button>
-                        {event.clicked == true && (
-                          <MyVerticallyCenteredModalPublish
-                            show={modalShowPublish}
-                            props={event}
-                            onHide={() => modalshow(event)}
-                          />
-                        )}
-                        <p>
-                          Posted Date : {event._source.createdAt?.substring(0, 10)} &nbsp;&nbsp;&nbsp;Expiry Date :
-                          {event._source.expiryDate?.substring(0, 10)}
-                        </p>
+                        </div>
                       </div>
+                      <Container>
+                        <Row className="align-items-center block-for-res">
+                          <Col>
+                            <div className="p3">
+                              <h2 className="text-xl font-semibold">
+                                Company Name
+                              </h2>
+
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {event._source.companyName}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3">
+                              <h2 className="text-xl font-semibold">
+                                Job Industry
+                              </h2>
+
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {event._source.industry}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3">
+                              <h2 className="text-xl font-semibold">
+                                Salary Range
+                              </h2>
+
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                HKD {event._source.salaryRange.gte} - HKD{" "}
+                                {event._source.salaryRange.lte}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3">
+                              <h2 className="text-xl font-semibold">
+                                Location
+                              </h2>
+
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {event._source.location}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3">
+                              <h2 className="text-xl font-semibold">
+                                No. of candidates
+                              </h2>
+
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {event._source.noOfOpenings}
+                              </h2>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Container>
+
+                      <hr style={{ border: "1px solid" }} />
+                      <Container>
+                        <Row className="align-items-center">
+                          <Col lg="11">
+                            <div className="pt-3">
+                              <h2 className="text-xl font-semibold">
+                                Company Description
+                              </h2>
+
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                <Content props={event._source} />
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col lg="1">
+                            <div className="webkit">
+                              <Button
+                                className="text-lg mr-3"
+                                style={{ background: "none", color: "#FF0000" }}
+                              >
+                                CLOSE
+                              </Button>
+                            </div>
+                          </Col>
+                        </Row>
+                      </Container>
                     </div>
                   </div>
-                  <Container>
-                    <Row className="align-items-center block-for-res">
-                      <Col>
-                        <div className="p3">
-                          <h2 className="text-xl font-semibold">Company Name</h2>
-
-                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                            {event._source.companyName}
-                          </h2>
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="p3">
-                          <h2 className="text-xl font-semibold">Job Industry</h2>
-
-                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                            {event._source.industry}
-                          </h2>
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="p3">
-                          <h2 className="text-xl font-semibold">Salary Range</h2>
-
-                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                            HKD {event._source.salaryRange.gte} - HKD {event._source.salaryRange.lte}
-                          </h2>
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="p3">
-                          <h2 className="text-xl font-semibold">Location</h2>
-
-                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                            {event._source.location}
-                          </h2>
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="p3">
-                          <h2 className="text-xl font-semibold">
-                            No. of candidates
-                          </h2>
-
-                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                            {event._source.noOfOpenings}
-                          </h2>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Container>
-
-                  <hr style={{ border: "1px solid" }} />
-                  <Container>
-                    <Row className="align-items-center">
-                      <Col lg="11">
-                        <div className="pt-3">
-                          <h2 className="text-xl font-semibold">
-                            Company Description
-                          </h2>
-
-                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                            <Content props={event._source} />
-                          </h2>
-                        </div>
-                      </Col>
-                      <Col lg="1">
-                        <div className="p-3">
-                          <Button
-                            className="text-lg mr-3"
-                            style={{ background: "none", color: "#FF0000" }}
-                          >
-                            CLOSE
-                          </Button>
-                        </div>
-                      </Col>
-                    </Row>
-                  </Container>
-                </div>
-              </div>
-            </Col>)
-          })}
-
+                </Col>
+              );
+            })}
         </Row>
       </Container>
     </Container>

@@ -229,13 +229,13 @@ export const FreelanceSavedJobs = () => {
       <Container>
         {searchData.length > 0 &&
           searchData.map((items, keys) => {
-            // console.log(items, "items");
+            console.log(items, "items");
             return (
               <Row>
                 <Col lg="12" key={keys}>
                   <div className="p-3">
                     <div className="boxshad">
-                      <Row>
+                      <Row className="align-items-center">
                         <Col lg="7">
                           {/* <p
                         className="py-2"
@@ -440,9 +440,10 @@ export const FreelanceSavedJobs = () => {
                         view more details
                       </Button> */}
                           <p style={{ color: "#7A7979" }} className="text-lg">
-                            Posted Date : {items?.postedDate} &nbsp;&nbsp;
-                            &nbsp;&nbsp;
-                            <span>Expiry Date : {items?.expiryDate} </span>
+                            Posted Date : {items?.postedDate.substring(0, 10)}
+                            {/* <span className="mrdg">
+                              Expiry Date : {items?.expiryDate}{" "}
+                            </span> */}
                           </p>
                         </Col>
                       </Row>
@@ -540,12 +541,6 @@ export const FreelanceSavedJobs = () => {
                           >
                             <BsBookmark style={{ color: "#39BEC1" }} />
                           </p>
-                          {/* <Button
-                        className="text-white border-rounded px-3"
-                        style={{ background: "#39BEC1", border: "none" }}
-                      >
-                        View Profile
-                      </Button> */}
                         </Col>
                       </Row>
                     </div>

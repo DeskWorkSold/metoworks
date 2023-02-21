@@ -320,11 +320,33 @@ fieldset input ,textarea{
 }
 .dzu-dropzone img{
   border-radius: 300px;
-  width: 150px !important;
-  height: 150px;
+  width: 140px !important;
+  height: 140px;
   background-size: contain;
 }
+.mrdg{
+ margin-left: 20px;   
+}
+@media only screen and (max-width: 768px) {
+ 
+.boxshad .btn{
+  width: 85% !important;
+ }
+}
 @media only screen and (max-width: 992px) {
+  
+  .boxshad .imgprofile{
+    width: 70% !important;
+  }
+.mrdg{
+  margin-left: 0px !important; 
+ }
+  .boxshad p{
+    display: grid;
+  }
+  .br{
+    display: block;
+  }
   .contdis{
     display: contents;
   }
@@ -733,3 +755,7 @@ p{
     background: #39bec1;
     font-size: 20px;
   }
+  .table tr td{
+    padding: 15px;
+  }
+ 

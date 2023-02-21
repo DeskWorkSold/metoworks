@@ -9,20 +9,19 @@ import axios from "../../../utils/axios.api";
 export const FreelanceJobApply = () => {
   const [searchData, setSearchData] = useState({});
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     initialFun();
-    checkAuth()
+    checkAuth();
   }, []);
 
-  const checkAuth  = async () => {
+  const checkAuth = async () => {
     const token = await localStorage.getItem("access-token");
-    if(!token){
-      navigate('/login')
+    if (!token) {
+      navigate("/login");
     }
-  }
-
+  };
 
   const initialFun = () => {
     //   const response = applyJob(
@@ -65,25 +64,25 @@ export const FreelanceJobApply = () => {
       <Container>
         {searchData.length > 0 &&
           searchData.map((items, keys) => {
+            // console.log("items", items);
             return (
               <Row>
                 <Col lg="12">
                   <div className="p-3">
                     <div className="boxshad">
                       <Row>
-                        <Col lg="7">
+                        <Col lg="6">
                           <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
                             {items.title}
                           </h2>
-                          <p style={{ color: "#7A7979" }} className="text-l">
+                          {/* <p style={{ color: "#7A7979" }} className="text-l">
                             Full Time
-                          </p>
+                          </p> */}
                         </Col>
-                        <Col lg="5" className="webkit-right">
+                        <Col lg="6" className="webkit-right">
                           <p style={{ color: "#7A7979" }} className="text-lg">
-                            Posted Date : {items?.postedDate} &nbsp;&nbsp;
-                            &nbsp;&nbsp;
-                            <span>Expiry Date : Feb 2023</span>
+                            Posted Date : {items?.postedDate.substring(0, 10)}
+                            <span className="mrdg">Expiry Date : Feb 2023</span>
                           </p>
                         </Col>
                       </Row>

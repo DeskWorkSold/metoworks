@@ -10,8 +10,7 @@ import Accordion from "react-bootstrap/Accordion";
 import { useEffect } from "react";
 import axios from "../../../utils/axios.api";
 import { useNavigate } from "react-router-dom/dist";
-
-
+import { FilterCenterFocus } from "@mui/icons-material";
 
 function MyVerticallyCenteredModal2(props) {
   const [isSalaryRange, setisSalaryRange] = useState({
@@ -35,10 +34,12 @@ function MyVerticallyCenteredModal2(props) {
     educationLevel: "",
     empType: "",
     projectTimeline: { gte: "", lte: "" },
-    postedDate: `${date.getDate()}-${date.getMonth() + 1
-      }-${date.getFullYear()}`,
-    expiryDate: `${date.getDate()}-${date.getMonth() + 1
-      }-${date.getFullYear()}`,
+    postedDate: `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}`,
+    expiryDate: `${date.getDate()}-${
+      date.getMonth() + 1
+    }-${date.getFullYear()}`,
     madeOfWork: "",
     noOfOpenings: "",
     salaryCurrency: "",
@@ -226,8 +227,7 @@ function MyVerticallyCenteredModal2(props) {
       });
   };
 
-  console.log(jobData,"jobData")
-
+  console.log(jobData, "jobData");
 
   return (
     <Modal
@@ -581,7 +581,7 @@ function MyVerticallyCenteredModal2(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUALâ€“NO SET HOURS OR DAYS OF WORK</option>
+                    <option>CASUALÃ¢â‚¬â€œNO SET HOURS OR DAYS OF WORK</option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -1052,8 +1052,9 @@ function MyVerticallyCenteredModal2(props) {
                       //   value={user.name}
                       //   onChange={getUserData}
                       disabled
-                      value={`${date.getDate()}-${date.getMonth() + 1
-                        }-${date.getFullYear()}`}
+                      value={`${date.getDate()}-${
+                        date.getMonth() + 1
+                      }-${date.getFullYear()}`}
                       placeholder="Enter No. of Openings"
                       // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
@@ -1121,7 +1122,6 @@ function MyVerticallyCenteredModal2(props) {
   );
 }
 
-
 export const Interview = () => {
   const [modalShowGoogFunc, setModalShowGoogFunc] = useState(false);
   const [modalShowNotQuiteFunc, setModalShowNotQuiteFunc] = useState(false);
@@ -1136,107 +1136,134 @@ export const Interview = () => {
   const [modalShow, setModalShow] = useState(false);
   const [interviewData, setInterviewData] = useState({});
   const [filteredCategory, setFilteredCategory] = useState("");
-  const [selectedValue, setSelectedValue] = useState('')
-  const [isCount, setIsCount] = useState('')
-  const [interviewFilterdData, setInterviewFilterdData] = useState('')
+  const [selectedValue, setSelectedValue] = useState("");
+  const [isCount, setIsCount] = useState("");
+  const [interviewFilterdData, setInterviewFilterdData] = useState("");
   // console.log(isCount, 'isCount');
   const handleSelectChange = (event) => {
-    let data = event.target.value
+    let data = event.target.value;
     if (data) {
+      console.log("hello", data);
 
-      console.log("hello",data)
-
-      setInterviewFilterdData(interviewData.filter(filter => {
-        return filter.internalState == data
-      }))
-      setIsCount(interviewFilterdData.length)
+      setInterviewFilterdData(
+        interviewData &&
+          interviewData.length > 0 &&
+          interviewData.filter((filter) => {
+            return filter.internalState == data;
+          })
+      );
+      setIsCount(interviewFilterdData.length);
     }
     setSelectedValue(event.target.value);
-
   };
-  const [profileImg, setProfileImg] = useState('')
+  const [profileImg, setProfileImg] = useState("");
 
-
-  const [isInput, setIsInput] = useState({
-  });
-  console.log('interviewFilterdData', interviewFilterdData);
+  const [isInput, setIsInput] = useState({});
+  console.log("interviewFilterdData", interviewFilterdData);
 
   useEffect(() => {
-    searchFunc()
-  }, [])
+    searchFunc();
+  }, []);
 
+  useEffect(() => {
+    if (filteredCategory && filteredCategory.length > 0) {
+      setFilteredCategory(
+        filteredCategory &&
+          filteredCategory.length > 0 &&
+          filteredCategory.map((e, i) => {
+            if (e.count) {
+              return {
+                ...e,
+                count: (e.count = 0),
+              };
+            } else {
+              return e;
+            }
+          })
+      );
+    }
 
-  useEffect(()=>{
-      if(selectedValue == "DEFAULT"){
-        setSelectedValue("")
-        searchFunc()
-      }
-  },[selectedValue])
+    if (selectedValue == "DEFAULT") {
+      setSelectedValue("");
+      searchFunc();
+    }
+  }, [selectedValue]);
 
   // useEffect(() => {
   //   searchFunc()
   // }, [selectedValue])
 
   const searchFunc = () => {
-
     // console.log('data', data);
     axios
       .get(`api/v1/interview?stage=applied&size=80&from=10`, isInput)
       .then((res) => {
         console.log(res, "Initial Data");
         let data = res.data.data;
-        ThumblailFunc(data)
-        let count = res.data.count
+        ThumblailFunc(data);
+        let count = res.data.count;
         // setPageCount(Math.ceil(count / param.size))
-        setIsCount(count)
+        setIsCount(count);
         //  if(selectedValue) {
         //   setInterviewData(data.map((e) => {
         //     return selectedValue == e.internalState
         //   }))
         //  }
         setInterviewData(data);
-        setInterviewFilterdData(data)
+
         let filteredData = data.map((items) => {
-          return items.job.title
-
-
+          return items.job.title;
         });
-        setFilteredCategory([...new Set(filteredData)]);
+
+        console.log(filteredData, "filteredCate");
+
+        let myData = [...new Set(filteredData)];
+
+        let yourData = { ...myData };
+
+        let allData = [];
+        Object.entries(yourData).map(([key, value]) => {
+          allData.push({ category: value, count: 0 });
+        });
+
+        setFilteredCategory(allData);
+        setSelectedValue("");
+
+        setTimeout(() => {
+          setInterviewFilterdData(data);
+        }, 1000);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-
-console.log(interviewData,"dataaaaa")
+  console.log(interviewData, "dataaaaa");
 
   const ThumblailFunc = (data) => {
-    let temArray = [];
-    for (let item of data) {
-      // console.log(item, 'iteeeeeeeeeeeeeeeeeeeeeeem');
-      let image = item?.freelancer?.files?.thumbnail
-      //  console.log(image, 'imaaaaaaaaaaaaaaaaaaage');
-      const imagePath = image?.split(".");
-      //  console.log(imagePath, 'imagePath');
-
-      if (imagePath?.length && image?.match(/\.(jpg|jpeg|png|gif)$/i)) {
-        // alert('sdf')
-        axios.get(`/api/v1/user/asset/thumbnail/${imagePath?.[0]}?mimeType=.${imagePath?.[1]}`)
-          .then((res) => {
-            const response = res.arrayBuffer();
-            let base64ImageString = Buffer.from(response, 'binary').toString('base64')
-            let srcValue = `data:image/${imagePath?.[1]};base64,` + base64ImageString;
-            temArray.push({ img: srcValue, id: item?.id });
-            setProfileImg(srcValue)
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-    }
-
-  }
+    //   let temArray = [];
+    //   for (let item of data) {
+    //     // console.log(item, 'iteeeeeeeeeeeeeeeeeeeeeeem');
+    //     let image = item?.freelancer?.files?.thumbnail
+    //     //  console.log(image, 'imaaaaaaaaaaaaaaaaaaage');
+    //     const imagePath = image?.split(".");
+    //     //  console.log(imagePath, 'imagePath');
+    //     if (imagePath?.length && image?.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    //       // alert('sdf')
+    //       axios.get(`/api/v1/user/asset/thumbnail/${imagePath?.[0]}?mimeType=.${imagePath?.[1]}`)
+    //         .then((res) => {
+    //           const response = res.arrayBuffer();
+    //           let base64ImageString = Buffer.from(response, 'binary').toString('base64')
+    //           let srcValue = `data:image/${imagePath?.[1]};base64,` + base64ImageString;
+    //           temArray.push({ img: srcValue, id: item?.id });
+    //           setProfileImg(srcValue)
+    //         })
+    //         .catch((err) => {
+    //           console.log(err);
+    //         });
+    //     }
+    //   }
+  };
 
   function MyVerticallyCenteredModalFunc(props) {
     return (
@@ -1247,14 +1274,10 @@ console.log(interviewData,"dataaaaa")
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Good Fit
-          </Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">Good Fit</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>
-            Success!
-          </p>
+          <p>Success!</p>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
@@ -1281,14 +1304,10 @@ console.log(interviewData,"dataaaaa")
         centered
       >
         <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Not Quit
-          </Modal.Title>
+          <Modal.Title id="contained-modal-title-vcenter">Not Quit</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>
-            Success
-          </p>
+          <p>Success</p>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
@@ -1320,9 +1339,7 @@ console.log(interviewData,"dataaaaa")
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>
-            Success
-          </p>
+          <p>Success</p>
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
@@ -1341,10 +1358,10 @@ console.log(interviewData,"dataaaaa")
     }
   };
   const GoodToFitFunc = (event) => {
-    let EventData = event.clicked = true
+    let EventData = (event.clicked = true);
     let value = {
-      "value": "GOOD_FIT"
-    }
+      value: "GOOD_FIT",
+    };
     axios
       .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
       .then((res) => {
@@ -1353,59 +1370,56 @@ console.log(interviewData,"dataaaaa")
         if (res) {
           // Modalshowgoogfunc(true)
           // console.log(EventData, 'EventData');
-          Modalshowgoogfunc(EventData)
-          searchFunc()
-
+          Modalshowgoogfunc(EventData);
+          searchFunc();
         }
       })
       .catch((err) => {
         console.log(err);
       });
-
-  }
+  };
   const GoodToKeepFunc = (event) => {
-    let EventData = event.clicked = true
+    let EventData = (event.clicked = true);
     let value = {
-      "value": "GOOD_TO_KEEP"
-    }
+      value: "GOOD_TO_KEEP",
+    };
     axios
       .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
       .then((res) => {
         console.log(res, "Initial Data");
         let data = res.data.data;
         if (res) {
-          ModalgootTokeepfunc(EventData)
-          searchFunc()
+          ModalgootTokeepfunc(EventData);
+          searchFunc();
         }
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   const NotQuiteFunc = (event) => {
-    let EventData = event.clicked = true
+    let EventData = (event.clicked = true);
 
     let value = {
-      "value": "NOT_QUITE"
-    }
+      value: "NOT_QUITE",
+    };
     axios
       .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
       .then((res) => {
         console.log(res, "Initial Data");
         let data = res.data.data;
         if (res) {
-          Modalnotquitfunc(EventData)
-          searchFunc()
+          Modalnotquitfunc(EventData);
+          searchFunc();
         }
       })
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   function MyVerticallyCenteredModal(props) {
-
     return (
       <div>
         <Modal
@@ -1426,7 +1440,7 @@ console.log(interviewData,"dataaaaa")
           <Modal.Body className="webkit">
             <h2 className="text-2xl font-bold">10 Tokens</h2>
             <p className="text-lg" style={{ color: "#C1C1C1" }}>
-              10 Tokens to View ProÃƒÂ¯Ã‚Â¬Ã‚Âle
+              10 Tokens to View ProÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¬Ãƒâ€šÃ‚Âle
             </p>
             <div style={{ display: "inline-grid" }}>
               <Button
@@ -1461,29 +1475,31 @@ console.log(interviewData,"dataaaaa")
     }
   };
 
-  const [errors, setErrors] = useState()
+  const [errors, setErrors] = useState();
   function MyVerticallyCenteredModal1(props) {
     // console.log(props, "props")
     const [arrangeInterview, setArrangeInterview] = useState({
       timestamp: "",
       type: "",
-      location: '',
-      notes: '',
-      id: props?.id?.id
-    })
+      location: "",
+      notes: "",
+      id: props?.id?.id,
+    });
     let values = Object.values(arrangeInterview);
     values = values.every((e, i) => e !== "");
     const submitArrangeInterView = () => {
       if (values) {
-        axios.post(`/api/v1/interview/applicants/arrange`, arrangeInterview).then((res) => {
-          if (res.data) {
-            props.onHide()
-          }
-        }).catch((error) => {
-          console.log(error, "error")
-        })
-      }
-      else {
+        axios
+          .post(`/api/v1/interview/applicants/arrange`, arrangeInterview)
+          .then((res) => {
+            if (res.data) {
+              props.onHide();
+            }
+          })
+          .catch((error) => {
+            console.log(error, "error");
+          });
+      } else {
         let newErrors = {};
         if (!arrangeInterview.timestamp) {
           newErrors.timestamp = "Job Time is required";
@@ -1497,9 +1513,9 @@ console.log(interviewData,"dataaaaa")
         if (!arrangeInterview.notes) {
           newErrors.notes = "Job notes is required";
         }
-        setErrors(newErrors)
+        setErrors(newErrors);
       }
-    }
+    };
     return (
       <Modal
         {...props}
@@ -1525,9 +1541,16 @@ console.log(interviewData,"dataaaaa")
                   className="form-control"
                   name="date"
                   type={"datetime-local"}
-                  onChange={(e) => setArrangeInterview({ ...arrangeInterview, timestamp: e.target.value })}
+                  onChange={(e) =>
+                    setArrangeInterview({
+                      ...arrangeInterview,
+                      timestamp: e.target.value,
+                    })
+                  }
                 />
-                {errors && errors.timestamp && (<p style={{ color: "red" }}>{errors.timestamp}</p>)}
+                {errors && errors.timestamp && (
+                  <p style={{ color: "red" }}>{errors.timestamp}</p>
+                )}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1536,14 +1559,25 @@ console.log(interviewData,"dataaaaa")
                   Interview Type
                 </label>
 
-                <Form.Select aria-label="Default select example" value={arrangeInterview.interviewType} onChange={(e) => setArrangeInterview({ ...arrangeInterview, type: e.target.value })}>
+                <Form.Select
+                  aria-label="Default select example"
+                  value={arrangeInterview.interviewType}
+                  onChange={(e) =>
+                    setArrangeInterview({
+                      ...arrangeInterview,
+                      type: e.target.value,
+                    })
+                  }
+                >
                   <option value="DEFAULT" disabled="">
                     Select Type
                   </option>
                   <option>ONLINE</option>
                   <option>IN_PERSON</option>
                 </Form.Select>
-                {errors && errors.type && (<p style={{ color: "red" }}>{errors.type}</p>)}
+                {errors && errors.type && (
+                  <p style={{ color: "red" }}>{errors.type}</p>
+                )}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1557,11 +1591,18 @@ console.log(interviewData,"dataaaaa")
                   className="form-control"
                   type={"text"}
                   name="Link"
-                  onChange={(e) => setArrangeInterview({ ...arrangeInterview, location: e.target.value })}
+                  onChange={(e) =>
+                    setArrangeInterview({
+                      ...arrangeInterview,
+                      location: e.target.value,
+                    })
+                  }
                   placeholder="  "
                   required
                 />
-                {errors && errors.location && (<p style={{ color: "red" }}>{errors.location}</p>)}
+                {errors && errors.location && (
+                  <p style={{ color: "red" }}>{errors.location}</p>
+                )}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1575,11 +1616,18 @@ console.log(interviewData,"dataaaaa")
                   className="form-control"
                   type={"text"}
                   name="firstname"
-                  onChange={(e) => setArrangeInterview({ ...arrangeInterview, notes: e.target.value })}
+                  onChange={(e) =>
+                    setArrangeInterview({
+                      ...arrangeInterview,
+                      notes: e.target.value,
+                    })
+                  }
                   placeholder=" "
                   required
                 />
-                {errors && errors.notes && (<p style={{ color: "red" }}>{errors.notes}</p>)}
+                {errors && errors.notes && (
+                  <p style={{ color: "red" }}>{errors.notes}</p>
+                )}
               </fieldset>
             </Col>
           </div>
@@ -1594,9 +1642,7 @@ console.log(interviewData,"dataaaaa")
 
           <Button
             style={{ background: "none", color: "#39BEC1" }}
-            onClick={() =>
-              submitArrangeInterView(props)
-            }
+            onClick={() => submitArrangeInterView(props)}
           >
             Send
           </Button>
@@ -1622,23 +1668,25 @@ console.log(interviewData,"dataaaaa")
       jobTitle: "",
       salary: "",
       interviewId: props?.props?.id,
-      msg: ''
-    })
+      msg: "",
+    });
 
     let values = Object.values(jobOffer);
     values = values.every((e, i) => e !== "");
-    console.log('values', values);
+    console.log("values", values);
     const JobOfferFunc = () => {
       if (values) {
-        axios.post(`api/v1/interview/offer`, jobOffer).then((res) => {
-          if (res.data) {
-            props.onHide()
-          }
-        }).catch((error) => {
-          console.log(error, "error")
-        })
-      }
-      else {
+        axios
+          .post(`api/v1/interview/offer`, jobOffer)
+          .then((res) => {
+            if (res.data) {
+              props.onHide();
+            }
+          })
+          .catch((error) => {
+            console.log(error, "error");
+          });
+      } else {
         let newErrors = {};
         if (!jobOffer.joiningDate) {
           newErrors.joiningDate = "Job joiningDate is required";
@@ -1652,9 +1700,9 @@ console.log(interviewData,"dataaaaa")
         if (!jobOffer.msg) {
           newErrors.msg = "Job msg is required";
         }
-        setErrors(newErrors)
+        setErrors(newErrors);
       }
-    }
+    };
 
     return (
       <Modal
@@ -1681,11 +1729,15 @@ console.log(interviewData,"dataaaaa")
                   className="form-control"
                   name="date"
                   type={"datetime-local"}
-                  onChange={(e) => setJobOffer({ ...jobOffer, joiningDate: e.target.value })}
-                //   value={user.number}
-                //   onChange={getUserData}
+                  onChange={(e) =>
+                    setJobOffer({ ...jobOffer, joiningDate: e.target.value })
+                  }
+                  //   value={user.number}
+                  //   onChange={getUserData}
                 />
-                {errors && errors.joiningDate && (<p style={{ color: "red" }}>{errors.joiningDate}</p>)}
+                {errors && errors.joiningDate && (
+                  <p style={{ color: "red" }}>{errors.joiningDate}</p>
+                )}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1699,11 +1751,15 @@ console.log(interviewData,"dataaaaa")
                   className="form-control"
                   name="date"
                   type={"text"}
-                  onChange={(e) => setJobOffer({ ...jobOffer, jobTitle: e.target.value })}
-                //   value={user.number}
-                //   onChange={getUserData}
+                  onChange={(e) =>
+                    setJobOffer({ ...jobOffer, jobTitle: e.target.value })
+                  }
+                  //   value={user.number}
+                  //   onChange={getUserData}
                 />
-                {errors && errors.jobTitle && (<p style={{ color: "red" }}>{errors.jobTitle}</p>)}
+                {errors && errors.jobTitle && (
+                  <p style={{ color: "red" }}>{errors.jobTitle}</p>
+                )}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1721,9 +1777,13 @@ console.log(interviewData,"dataaaaa")
                   //   onChange={getUserData}
                   placeholder="  "
                   required
-                  onChange={(e) => setJobOffer({ ...jobOffer, salary: e.target.value })}
+                  onChange={(e) =>
+                    setJobOffer({ ...jobOffer, salary: e.target.value })
+                  }
                 />
-                {errors && errors.salary && (<p style={{ color: "red" }}>{errors.salary}</p>)}
+                {errors && errors.salary && (
+                  <p style={{ color: "red" }}>{errors.salary}</p>
+                )}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1740,10 +1800,14 @@ console.log(interviewData,"dataaaaa")
                   //   value={user.name}
                   //   onChange={getUserData}
                   placeholder=" "
-                  onChange={(e) => setJobOffer({ ...jobOffer, msg: e.target.value })}
+                  onChange={(e) =>
+                    setJobOffer({ ...jobOffer, msg: e.target.value })
+                  }
                   required
                 />
-                {errors && errors.msg && (<p style={{ color: "red" }}>{errors.msg}</p>)}
+                {errors && errors.msg && (
+                  <p style={{ color: "red" }}>{errors.msg}</p>
+                )}
               </fieldset>
             </Col>
           </div>
@@ -1777,23 +1841,55 @@ console.log(interviewData,"dataaaaa")
     }
   };
 
-console.log(selectedValue,"selected")
+  console.log(selectedValue, "selected");
 
   const saveBookMarkFunc = (event) => {
-    axios.post(`api/v1/user/recruiter/save-freelancer/${event.id}`).then((res) => {
-      console.log(res, 'data save succesfully');
-    }).catch((error) => {
-      console.log(error, "error")
-    })
+    axios
+      .post(`api/v1/user/recruiter/save-freelancer/${event.id}`)
+      .then((res) => {
+        console.log(res, "data save succesfully");
+      })
+      .catch((error) => {
+        console.log(error, "error");
+      });
+  };
 
-  }
+  const getAllData = () => {
+    setSelectedValue("");
+    searchFunc();
+  };
 
-const getAllData = () => {
-  setSelectedValue("")
-  searchFunc()
-}
+  useEffect(() => {
+    setTimeout(() => {
+      interviewFilterdData &&
+        interviewFilterdData.length > 0 &&
+        filteredCategory &&
+        filteredCategory.length > 0 &&
+        Array.isArray(filteredCategory) &&
+        interviewFilterdData.map((e, i) => {
+          setFilteredCategory(
+            filteredCategory.map((x, ind) => {
+              console.log(x, "xxxxxxx", e, "eeeeeeee");
 
-let count = 0
+              if (x.category.toLowerCase() == e.job.title.toLowerCase()) {
+                console.log("Titleeeee");
+                return {
+                  ...x,
+                  count: (x.count = x.count ? x.count + 1 : 1),
+                };
+              } else {
+                return {
+                  ...x,
+                  count: (x.count = x.count ? x.count : 0),
+                };
+              }
+            })
+          );
+        });
+    }, 500);
+  }, [interviewFilterdData, selectedValue]);
+
+  console.log(filteredCategory, "filtered");
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -1877,7 +1973,11 @@ let count = 0
                   >
                     Filter By
                   </label>
-                  <Form.Select aria-label="Default select example" value={selectedValue} onChange={handleSelectChange}>
+                  <Form.Select
+                    aria-label="Default select example"
+                    value={selectedValue}
+                    onChange={handleSelectChange}
+                  >
                     <option value="DEFAULT" disabled="">
                       Choose State
                     </option>
@@ -1907,9 +2007,7 @@ let count = 0
                 <div className="About_main_images_search">
                   <input
                     placeholder="Enter Profession, Company Name or Keywords."
-                    onChange={(e) =>
-                      setIsInput(e.target.value)
-                    }
+                    onChange={(e) => setIsInput(e.target.value)}
                   ></input>
 
                   <Button
@@ -1934,166 +2032,180 @@ let count = 0
       </Container>
       <Container>
         <div>
-          <h2 className="text-2xl">{interviewFilterdData ? interviewFilterdData.length : 0} Total Candidates</h2>
+          <h2 className="text-2xl">
+            {interviewFilterdData ? interviewFilterdData.length : 0} Total
+            Candidates
+          </h2>
         </div>
         <Accordion defaultActiveKey="0" flush>
-          
-          {filteredCategory.length > 0 &&
+          {filteredCategory &&
+            filteredCategory.length > 0 &&
             filteredCategory.map((items, keys) => {
-              
-
-              
-
-              interviewFilterdData && interviewFilterdData.map((e,i)=>{
-
-                console.log(e.job.title,"title")
-
-                if(e.job.title == items){
-                  count = count + 1
-                }
-                
-
-              })
-              
-
+              console.log(items, "itemsss");
               return (
                 <Accordion.Item eventKey={keys} key={keys}>
                   <Accordion.Header>
-                    {items} &#160;&#160;&#160;
-                    
-
-                    
+                    {items && items.category} &#160;&#160;&#160;
                     <span
                       className="fontpxx"
                       style={{ color: "rgb(148,147,147)", float: "right" }}
                     >
-                        {`${count}candidate`}
+                      {`${items.count} Candidate`}
                     </span>
                   </Accordion.Header>
                   <Accordion.Body>
                     {/* {
                          selectedValue && selectedValue == "DEFAULT" ? getAllData() : ""
                     } */}
-                    {interviewFilterdData
-                      .filter((filter) => {
-                        
-                        if(filter.job.title === items && filter.internalState == selectedValue){
+                    {interviewFilterdData &&
+                      interviewFilterdData.length > 0 &&
+                      interviewFilterdData
+                        .filter((filter) => {
+                          if (
+                            filter.job.title === items.category &&
+                            filter.internalState == selectedValue
+                          ) {
+                            return filter;
+                          }
+                          if (!selectedValue) {
+                            return filter.job.title === items.category;
+                          }
+                        })
+                        .map((events, key) => {
+                          console.log(profileImg, "resourece not found");
 
-                         return filter
-                        }
-                      })
-                      .map((events, key) => {
-                        console.log(profileImg, 'resourece not found');
-                        
-                         
-                        
-
-                        // console.log(events, 'eventsevents');
-                        return (
-                          <Container key={key}>
-                            <Row className="align-items-center">
-                              <Col lg="12">
-                                <div className="m-3">
-                                  <div className="boxshad py-3">
-                                    <Row className="align-items-center">
-                                      <Col
-                                        lg="12"
-                                        style={{ textAlign: "-webkit-right" }}
-                                      >
-                                        <div
-                                          style={{
-                                            textAlign: "-webkit-right",
-                                            float: "right",
-                                            display: "flex",
-                                            alignItems: "center",
-                                          }}
-                                          className="webkit"
+                          // console.log(events, 'eventsevents');
+                          return (
+                            <Container key={key}>
+                              <Row className="align-items-center">
+                                <Col lg="12">
+                                  <div className="m-3">
+                                    <div className="boxshad py-3">
+                                      <Row className="align-items-center">
+                                        <Col
+                                          lg="12"
+                                          style={{ textAlign: "-webkit-right" }}
                                         >
-                                          <Button
-                                            className="border-rounded text-2xl"
+                                          <div
                                             style={{
-                                              background: "none",
-                                              color: "#C1C1C1",
+                                              textAlign: "-webkit-right",
+                                              float: "right",
+                                              display: "flex",
+                                              alignItems: "center",
                                             }}
+                                            className="webkit"
                                           >
-                                            <BsBookmark onClick={() => saveBookMarkFunc(events)} />
-                                          </Button>
-                                        </div>
-                                        <div
-                                          style={{
-                                            float: "right",
-                                            display: "flex",
-                                            alignItems: "center",
-                                          }}
-                                          className="webkit"
-                                        >
-                                          <div style={{ display: "block" }}>
                                             <Button
-                                              // onClick={handleShow}
-                                              className="text-white border-rounded px-3 mx-3 py-3 w-40"
+                                              className="border-rounded text-2xl"
                                               style={{
-                                                background: "rgb(58,182,73)",
-                                                border: "none",
-                                                marginTop: "10px",
-                                                marginBottom: "10px",
+                                                background: "none",
+                                                color: "#C1C1C1",
                                               }}
-                                              onClick={() => GoodToFitFunc(events)}
-                                              disabled={events.match == 'GOOD_FIT' ? true : false}
                                             >
-                                              Good Fit
-                                            </Button>
-                                            {events.clicked == true && (
-                                              <MyVerticallyCenteredModalFunc
-                                                show={modalShowGoogFunc}
-                                                props={events}
-                                                onHide={() => Modalshowgoogfunc(events)}
+                                              <BsBookmark
+                                                onClick={() =>
+                                                  saveBookMarkFunc(events)
+                                                }
                                               />
-                                            )}
-
-                                            <Button
-                                              // onClick={handleShow}
-                                              className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                              style={{
-                                                background: "rgb(255,0,0)",
-                                                border: "none",
-                                                marginTop: "10px",
-                                                marginBottom: "10px",
-                                              }}
-                                              onClick={() => NotQuiteFunc(events)}
-                                              disabled={events.match == 'NOT_QUITE' ? true : false}
-                                            >
-                                              Not Quite
                                             </Button>
-                                            {events.clicked == true && (
-                                              <MyVerticallyCenteredModalNotQuitFunc
-                                                show={modalShowNotQuiteFunc}
-                                                props={events}
-                                                onHide={() => Modalnotquitfunc(events)}
-                                              />
+                                          </div>
+                                          <div
+                                            style={{
+                                              float: "right",
+                                              display: "flex",
+                                              alignItems: "center",
+                                            }}
+                                            className="webkit"
+                                          >
+                                            <div style={{ display: "block" }}>
+                                              <Button
+                                                // onClick={handleShow}
+                                                className="text-white border-rounded px-3 mx-3 py-3 w-40"
+                                                style={{
+                                                  background: "rgb(58,182,73)",
+                                                  border: "none",
+                                                  marginTop: "10px",
+                                                  marginBottom: "10px",
+                                                }}
+                                                onClick={() =>
+                                                  GoodToFitFunc(events)
+                                                }
+                                                disabled={
+                                                  events.match == "GOOD_FIT"
+                                                    ? true
+                                                    : false
+                                                }
+                                              >
+                                                Good Fit
+                                              </Button>
+                                              {events.clicked == true && (
+                                                <MyVerticallyCenteredModalFunc
+                                                  show={modalShowGoogFunc}
+                                                  props={events}
+                                                  onHide={() =>
+                                                    Modalshowgoogfunc(events)
+                                                  }
+                                                />
+                                              )}
 
-                                            )}
-                                            <Button
-                                              className="text-white border-rounded px-3 mx-3 py-3 w-40"
-                                              style={{
-                                                background: "rgb(41,172,226)",
-                                                border: "none",
-                                                marginTop: "10px",
-                                                marginBottom: "10px",
-                                              }}
-                                              onClick={() => GoodToKeepFunc(events)}
-                                              disabled={events.match == 'GOOT_TO_KEEP' ? true : false}
-                                            >
-                                              Good to Keep
-                                            </Button>
-                                            {events.clicked == true && (
-                                              <MyVerticallyCenteredModalGootToKeepFunc
-                                                show={modalShowToKeepFunc}
-                                                props={events}
-                                                onHide={() => ModalgootTokeepfunc(events)}
-                                              />
-
-                                            )}
-                                            {/* <Button
+                                              <Button
+                                                // onClick={handleShow}
+                                                className="text-white border-rounded px-3 mx-3 py-3 w-40"
+                                                style={{
+                                                  background: "rgb(255,0,0)",
+                                                  border: "none",
+                                                  marginTop: "10px",
+                                                  marginBottom: "10px",
+                                                }}
+                                                onClick={() =>
+                                                  NotQuiteFunc(events)
+                                                }
+                                                disabled={
+                                                  events.match == "NOT_QUITE"
+                                                    ? true
+                                                    : false
+                                                }
+                                              >
+                                                Not Quite
+                                              </Button>
+                                              {events.clicked == true && (
+                                                <MyVerticallyCenteredModalNotQuitFunc
+                                                  show={modalShowNotQuiteFunc}
+                                                  props={events}
+                                                  onHide={() =>
+                                                    Modalnotquitfunc(events)
+                                                  }
+                                                />
+                                              )}
+                                              <Button
+                                                className="text-white border-rounded px-3 mx-3 py-3 w-40"
+                                                style={{
+                                                  background: "rgb(41,172,226)",
+                                                  border: "none",
+                                                  marginTop: "10px",
+                                                  marginBottom: "10px",
+                                                }}
+                                                onClick={() =>
+                                                  GoodToKeepFunc(events)
+                                                }
+                                                disabled={
+                                                  events.match == "GOOT_TO_KEEP"
+                                                    ? true
+                                                    : false
+                                                }
+                                              >
+                                                Good to Keep
+                                              </Button>
+                                              {events.clicked == true && (
+                                                <MyVerticallyCenteredModalGootToKeepFunc
+                                                  show={modalShowToKeepFunc}
+                                                  props={events}
+                                                  onHide={() =>
+                                                    ModalgootTokeepfunc(events)
+                                                  }
+                                                />
+                                              )}
+                                              {/* <Button
                                     className="border-rounded text-2xl"
                                     style={{
                                       background: "none",
@@ -2102,191 +2214,217 @@ let count = 0
                                   >
                                     <BsBookmark />
                                   </Button> */}
+                                            </div>
                                           </div>
-                                        </div>
-                                      </Col>
-                                      <Col lg="2" className="webkit">
-                                        {profileImg.length > 0 ?
-                                          <div style={{ width: '150px', height: '150px', borderRadius: '50%', background: '#512DA8', fontSize: '35px', color: '#fff', textAlign: 'center', lineHeight: '150px', margin: '20px 0' }}>{events.freelancer.firstName.substring(0, 1)}</div>
-                                          :
-                                          <Image
-                                            style={{ width: "100%" }}
-                                            src={profileImg ? profileImg : require("../../../assets/Profile.png")}
-                                          />
-                                        }
-                                      </Col>
-                                      <Col lg="7">
-                                        <h2 className="py-3">
-                                          <span
-                                            style={{ color: "#39bec1" }}
-                                            className="text-2xl font-bold robot"
-                                          >
-                                            {events.freelancer.firstName +
-                                              " " +
-                                              events.freelancer.lastName}
-                                          </span>{" "}
-                                          <br />
-                                          <span
-                                            className="text-2xl"
-                                            style={{ color: "black" }}
-                                          >
-                                            Doctor
-                                          </span>
-                                          <br />
-                                          <br />
-                                          <span
-                                            style={{
-                                              color: "rgb(148,147,147)",
-                                            }}
-                                          >
-                                            {events.freelancer.aboutMe}
-                                          </span>
-                                        </h2>
-                                      </Col>
-
-                                      <Col lg="3">
-                                        <div
-                                          className="webkit"
-                                          style={{ display: "grid" }}
-                                        >
-                                          <Button
-                                            variant="primary"
-                                            onClick={() => token(events)}
-                                            className="text-white border-rounded px-3 py-3 mx-2"
-                                            style={{
-                                              background: "#39BEC1",
-                                              border: "none",
-                                            }}
-                                          >
-                                            VIEW PROFILE
-                                          </Button>
-                                          {events.clicked == true && (
-                                            <MyVerticallyCenteredModal
-                                              show={modalShow}
-                                              props={events}
-                                              onHide={() => token(events)}
+                                        </Col>
+                                        <Col lg="2" className="webkit">
+                                          {profileImg.length > 0 ? (
+                                            <div
+                                              style={{
+                                                width: "150px",
+                                                height: "150px",
+                                                borderRadius: "50%",
+                                                background: "#512DA8",
+                                                fontSize: "35px",
+                                                color: "#fff",
+                                                textAlign: "center",
+                                                lineHeight: "150px",
+                                                margin: "20px 0",
+                                              }}
+                                            >
+                                              {events.freelancer.firstName.substring(
+                                                0,
+                                                1
+                                              )}
+                                            </div>
+                                          ) : (
+                                            <Image
+                                              style={{ width: "100%" }}
+                                              src={
+                                                profileImg
+                                                  ? profileImg
+                                                  : require("../../../assets/Profile.png")
+                                              }
                                             />
                                           )}
-                                        </div>
-                                      </Col>
-                                    </Row>
-                                    <Container>
-                                      <Row className="align-items-center block-for-res">
-                                        <Col>
-                                          <div className="p3">
-                                            <h2 className="text-xl font-semibold">
-                                              Experience
-                                            </h2>
-
-                                            <h2
-                                              className="text-lg"
-                                              style={{ color: "#7A7979" }}
-                                            >
-                                              4 Year
-                                            </h2>
-                                          </div>
                                         </Col>
-                                        <Col>
-                                          <div className="p3">
-                                            <h2 className="text-xl font-semibold">
-                                              Salary Range
-                                            </h2>
-
-                                            <h2
-                                              className="text-lg "
-                                              style={{ color: "#7A7979" }}
+                                        <Col lg="7">
+                                          <h2 className="py-3">
+                                            <span
+                                              style={{ color: "#39bec1" }}
+                                              className="text-2xl font-bold robot"
                                             >
-                                              $15000 - $20,000
-                                            </h2>
-                                          </div>
-                                        </Col>
-                                        <Col>
-                                          <div className="p3">
-                                            <h2 className="text-xl font-semibold">
-                                              Location
-                                            </h2>
-
-                                            <h2
-                                              className="text-lg "
-                                              style={{ color: "#7A7979" }}
+                                              {events.freelancer.firstName +
+                                                " " +
+                                                events.freelancer.lastName}
+                                            </span>{" "}
+                                            <br />
+                                            <span
+                                              className="text-2xl"
+                                              style={{ color: "black" }}
                                             >
-                                              {" "}
-                                              {events.job.location}
-                                            </h2>
-                                          </div>
-                                        </Col>
-                                        <Col>
-                                          <div className="p3">
-                                            <Button
-                                              onClick={() => setlgshow(events)}
-                                              className=" border-rounded py-3 w-44"
+                                              Doctor
+                                            </span>
+                                            <br />
+                                            <br />
+                                            <span
                                               style={{
-                                                background: "none",
-                                                fontSize: "15px",
-                                                border:
-                                                  "1px solid rgb(57, 190, 193)",
-                                                color: "rgb(57, 190, 193)",
-                                                marginTop: "10px",
-                                                marginBottom: "10px",
+                                                color: "rgb(148,147,147)",
                                               }}
                                             >
-                                              ARRANGE INTERVIEW
-                                            </Button>
-
-                                            {events.clicked == true && (
-                                              <MyVerticallyCenteredModal1
-                                                show={lgShow}
-                                                props={events}
-                                                onHide={() => setlgshow(events)}
-                                                id={events}
-                                              />
-                                            )}
-                                          </div>
+                                              {events.freelancer.aboutMe}
+                                            </span>
+                                          </h2>
                                         </Col>
-                                        <Col>
-                                          <div className="p3">
+
+                                        <Col lg="3">
+                                          <div
+                                            className="webkit"
+                                            style={{ display: "grid" }}
+                                          >
                                             <Button
-                                              onClick={() => setoffershow(events)}
-                                              className=" border-rounded py-3 w-44"
+                                              variant="primary"
+                                              onClick={() => token(events)}
+                                              className="text-white border-rounded px-3 py-3 mx-2"
                                               style={{
-                                                background: "none",
-                                                fontSize: "15px",
-                                                border:
-                                                  "1px solid rgb(57, 190, 193)",
-                                                color: "rgb(57, 190, 193)",
-                                                marginTop: "10px",
-                                                marginBottom: "10px",
+                                                background: "#39BEC1",
+                                                border: "none",
                                               }}
                                             >
-                                              OFFER
+                                              VIEW PROFILE
                                             </Button>
                                             {events.clicked == true && (
-                                              <MyVerticallyCenteredModal3
+                                              <MyVerticallyCenteredModal
+                                                show={modalShow}
                                                 props={events}
-                                                show={OfferShow}
-                                                onHide={() => setoffershow(events)}
+                                                onHide={() => token(events)}
                                               />
-
                                             )}
-
                                           </div>
                                         </Col>
                                       </Row>
-                                    </Container>
+                                      <Container>
+                                        <Row className="align-items-center block-for-res">
+                                          <Col>
+                                            <div className="p3">
+                                              <h2 className="text-xl font-semibold">
+                                                Experience
+                                              </h2>
+
+                                              <h2
+                                                className="text-lg"
+                                                style={{ color: "#7A7979" }}
+                                              >
+                                                4 Year
+                                              </h2>
+                                            </div>
+                                          </Col>
+                                          <Col>
+                                            <div className="p3">
+                                              <h2 className="text-xl font-semibold">
+                                                Salary Range
+                                              </h2>
+
+                                              <h2
+                                                className="text-lg "
+                                                style={{ color: "#7A7979" }}
+                                              >
+                                                $15000 - $20,000
+                                              </h2>
+                                            </div>
+                                          </Col>
+                                          <Col>
+                                            <div className="p3">
+                                              <h2 className="text-xl font-semibold">
+                                                Location
+                                              </h2>
+
+                                              <h2
+                                                className="text-lg "
+                                                style={{ color: "#7A7979" }}
+                                              >
+                                                {" "}
+                                                {events.job.location}
+                                              </h2>
+                                            </div>
+                                          </Col>
+                                          <Col>
+                                            <div className="p3">
+                                              <Button
+                                                onClick={() =>
+                                                  setlgshow(events)
+                                                }
+                                                className=" border-rounded py-3 w-44"
+                                                style={{
+                                                  background: "none",
+                                                  fontSize: "15px",
+                                                  border:
+                                                    "1px solid rgb(57, 190, 193)",
+                                                  color: "rgb(57, 190, 193)",
+                                                  marginTop: "10px",
+                                                  marginBottom: "10px",
+                                                }}
+                                              >
+                                                ARRANGE INTERVIEW
+                                              </Button>
+
+                                              {events.clicked == true && (
+                                                <MyVerticallyCenteredModal1
+                                                  show={lgShow}
+                                                  props={events}
+                                                  onHide={() =>
+                                                    setlgshow(events)
+                                                  }
+                                                  id={events}
+                                                />
+                                              )}
+                                            </div>
+                                          </Col>
+                                          <Col>
+                                            <div className="p3">
+                                              <Button
+                                                onClick={() =>
+                                                  setoffershow(events)
+                                                }
+                                                className=" border-rounded py-3 w-44"
+                                                style={{
+                                                  background: "none",
+                                                  fontSize: "15px",
+                                                  border:
+                                                    "1px solid rgb(57, 190, 193)",
+                                                  color: "rgb(57, 190, 193)",
+                                                  marginTop: "10px",
+                                                  marginBottom: "10px",
+                                                }}
+                                              >
+                                                OFFER
+                                              </Button>
+                                              {events.clicked == true && (
+                                                <MyVerticallyCenteredModal3
+                                                  props={events}
+                                                  show={OfferShow}
+                                                  onHide={() =>
+                                                    setoffershow(events)
+                                                  }
+                                                />
+                                              )}
+                                            </div>
+                                          </Col>
+                                        </Row>
+                                      </Container>
+                                    </div>
                                   </div>
-                                </div>
-                              </Col>
-                            </Row>
-                          </Container>
-                        );
-                      })}
+                                </Col>
+                              </Row>
+                            </Container>
+                          );
+                        })}
                   </Accordion.Body>
                 </Accordion.Item>
               );
             })}
         </Accordion>
       </Container>
-
     </Container>
   );
 };

@@ -1,5 +1,13 @@
 import React, { useState, Component, useEffect } from "react";
-import { Container, Button, Row, Col, Image, Form, Alert } from "react-bootstrap";
+import {
+  Container,
+  Button,
+  Row,
+  Col,
+  Image,
+  Form,
+  Alert,
+} from "react-bootstrap";
 
 import { faLocationDot } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -18,7 +26,6 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import axios from "../../../utils/axios.api";
 import Accordion from "react-bootstrap/Accordion";
-
 
 function MyVerticallyCenteredModal2(props) {
   const [isSalaryRange, setisSalaryRange] = useState({
@@ -1369,21 +1376,21 @@ function MyVerticallyCenteredModal1(props) {
 }
 export const MainRecProfessional = () => {
   const [show, setShow] = useState(false);
-  
+
   const [searchShow, setSearchShow] = useState(false);
   const [smShow, setSmShow] = useState(false);
   const [lgShow, setLgShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [modalShow, setModalShow] = React.useState(false);
-  const [profession, setProfession] = useState('')
-  const [companyName, setCompanyName] = useState('')
-  const [modeofWork, setModeOfWork] = useState('')
+  const [profession, setProfession] = useState("");
+  const [companyName, setCompanyName] = useState("");
+  const [modeofWork, setModeOfWork] = useState("");
   const [salaryRange, setSalaryRange] = useState({
-    gte : '',
-    lte : ''
-  })
-  const [location, setLocation] = useState('')
+    gte: "",
+    lte: "",
+  });
+  const [location, setLocation] = useState("");
   const handleChanger = () => {
     if (searchShow === true) {
       setSearchShow(false);
@@ -1391,41 +1398,76 @@ export const MainRecProfessional = () => {
       setSearchShow(true);
     }
   };
-  const [subJobFunction, setSubJobFunction] = useState('');
-  const [jobIndustry, setJobIndustry] = useState('');
-  const [searchData ,setSearchData] = useState({});
-  const [languageType, setLanguage] = useState('');
-  const [educationLevel, setEducationLevel] = useState('');
-  const [city, setCity] = useState('');
-  const [minSalary, setMinSalary] = useState('');
-  const [maxSalary, setMaxSalary] = useState('');
-  const [jobFunction, setJobFunction] = useState('');
-  const [minExperience, setMinExperience] = useState('');
-  const [maxExperience, setMaxExperience] = useState('');
+  const [subJobFunction, setSubJobFunction] = useState("");
+  const [jobIndustry, setJobIndustry] = useState("");
+  const [searchData, setSearchData] = useState({});
+  const [languageType, setLanguage] = useState("");
+  const [educationLevel, setEducationLevel] = useState("");
+  const [city, setCity] = useState("");
+  const [minSalary, setMinSalary] = useState("");
+  const [maxSalary, setMaxSalary] = useState("");
+  const [jobFunction, setJobFunction] = useState("");
+  const [minExperience, setMinExperience] = useState("");
+  const [maxExperience, setMaxExperience] = useState("");
   const [isSearch, setIsSearch] = useState({
     keyword: "",
   });
 
-
   useEffect(() => {
-    searchFun()
-  },[])
+    searchFun();
+  }, []);
 
   const searchFun = () => {
     const reqBody = {
-      "keyword": isSearch.keyword,
-      "filter": []
-  };
+      keyword: isSearch.keyword,
+      filter: [],
+    };
 
-  if(jobIndustry) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobIndustry":jobIndustry}}}});
-  if(city) reqBody?.filter?.push({"term": {"city":city}});
-  if(jobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobFunction":jobFunction}}}});
-  if(jobFunction && subJobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobSubFunction":subJobFunction}}}});
-  if(minSalary && maxSalary) reqBody?.filter?.push({"range":{"salaryRange":{"gte":minSalary,"lte":maxSalary}}});
-  if(minExperience && maxExperience) reqBody?.filter?.push( {"range":{"expYears":{"gte":minExperience,"lte":maxExperience}}});
-  if(educationLevel) reqBody?.filter?.push({"nested":{"path":"education","query":{"term":{"education.educationLevel":educationLevel}}}});
-  if(languageType) reqBody?.filter?.push({"nested":{"path":"language","query":{"term":{"language.languageType":languageType}}}});
-  console.log(reqBody, 'eeeeeeeeeeeee');
+    if (jobIndustry)
+      reqBody?.filter?.push({
+        nested: {
+          path: "experience",
+          query: { term: { "experience.jobIndustry": jobIndustry } },
+        },
+      });
+    if (city) reqBody?.filter?.push({ term: { city: city } });
+    if (jobFunction)
+      reqBody?.filter?.push({
+        nested: {
+          path: "experience",
+          query: { term: { "experience.jobFunction": jobFunction } },
+        },
+      });
+    if (jobFunction && subJobFunction)
+      reqBody?.filter?.push({
+        nested: {
+          path: "experience",
+          query: { term: { "experience.jobSubFunction": subJobFunction } },
+        },
+      });
+    if (minSalary && maxSalary)
+      reqBody?.filter?.push({
+        range: { salaryRange: { gte: minSalary, lte: maxSalary } },
+      });
+    if (minExperience && maxExperience)
+      reqBody?.filter?.push({
+        range: { expYears: { gte: minExperience, lte: maxExperience } },
+      });
+    if (educationLevel)
+      reqBody?.filter?.push({
+        nested: {
+          path: "education",
+          query: { term: { "education.educationLevel": educationLevel } },
+        },
+      });
+    if (languageType)
+      reqBody?.filter?.push({
+        nested: {
+          path: "language",
+          query: { term: { "language.languageType": languageType } },
+        },
+      });
+    console.log(reqBody, "eeeeeeeeeeeee");
     axios
       .post(`api/v1/search/freelancer?from=0&size=4`, reqBody)
       .then((res) => {
@@ -1442,7 +1484,6 @@ export const MainRecProfessional = () => {
   const resetFun = () => {
     setSearchData(null);
   };
-
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -1462,6 +1503,7 @@ export const MainRecProfessional = () => {
                 style={{
                   display: "flex",
                   alignItems: "center",
+                  justifyContent: "center",
                 }}
                 className="p-3 webkit"
               >
@@ -1514,8 +1556,11 @@ export const MainRecProfessional = () => {
             <Row>
               <Col>
                 <div className="About_main_images_search">
-                  <input placeholder="Enter Profession, Company Name or Keywords."
-                  onChange={(e) => setIsSearch({...isSearch, keyword : e.target.value})}
+                  <input
+                    placeholder="Enter Profession, Company Name or Keywords."
+                    onChange={(e) =>
+                      setIsSearch({ ...isSearch, keyword: e.target.value })
+                    }
                   ></input>
 
                   <Button
@@ -1538,7 +1583,7 @@ export const MainRecProfessional = () => {
         </Row>
         {searchShow === true ? (
           <>
-             <Row className="align-items-center">
+            <Row className="align-items-center">
               <Col lg="5">
                 <div className="p-3">
                   <Col lg="12">
@@ -1546,8 +1591,10 @@ export const MainRecProfessional = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Industry
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setJobIndustry(e.target.value)}>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setJobIndustry(e.target.value)}
+                      >
                         <option hidden="">Select Job Industry</option>
                         <option>Universities / Education</option>
                         <option>Manufacturing</option>
@@ -1599,8 +1646,10 @@ export const MainRecProfessional = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Function
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) =>setJobFunction(e.target.value)}>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setJobFunction(e.target.value)}
+                      >
                         <option hidden="">Select Job Function</option>
                         <option>HR &amp; Admin</option>
                         <option>General Management</option>
@@ -1640,8 +1689,9 @@ export const MainRecProfessional = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Sub Job Function
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setSubJobFunction(e.target.value)}
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setSubJobFunction(e.target.value)}
                       >
                         <option hidden="">Select Sub Job Function</option>
                       </Form.Select>
@@ -1685,8 +1735,9 @@ export const MainRecProfessional = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Language
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setLanguage(e.target.value)}
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setLanguage(e.target.value)}
                       >
                         <option hidden="">Select Language</option>
                         <option value="English">English</option>
@@ -1748,8 +1799,7 @@ export const MainRecProfessional = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Company Name
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      >
+                      <Form.Select aria-label="Default select example">
                         <option>Enter Company Name</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -1803,7 +1853,7 @@ export const MainRecProfessional = () => {
                           className="form-control"
                           name="Email"
                           type={"email"}
-                      onChange={(e) => setMinSalary(e.target.value)}
+                          onChange={(e) => setMinSalary(e.target.value)}
                           //   value={user.number}
                           //   onChange={getUserData}
                           placeholder="Enter Min Salary 
@@ -1817,7 +1867,7 @@ export const MainRecProfessional = () => {
                           type={"email"}
                           //   value={user.number}
                           //   onChange={getUserData}
-                      onChange={(e) =>setMaxSalary(e.target.value)}
+                          onChange={(e) => setMaxSalary(e.target.value)}
                           placeholder="Enter Max Salary 
 
                 "
@@ -1861,8 +1911,9 @@ export const MainRecProfessional = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Location
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setCity(e.target.value)}
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setCity(e.target.value)}
                       >
                         <option hidden="">Select Job Location</option>
                         <option>Central and Western</option>
@@ -1908,7 +1959,7 @@ export const MainRecProfessional = () => {
         ) : (
           ""
         )}
-  <Row>
+        <Row>
           <Col lg="12" className="webkit">
             <div className="p-2">
               <h2 className="text-2xl">Advance Search</h2>
@@ -1923,119 +1974,150 @@ export const MainRecProfessional = () => {
       </Container>
       <Container>
         <Row className="align-items-center">
-        {searchData && searchData?.length > 0 ? searchData?.length > 0 && searchData?.map((event, data) => {
-          return (
-            <Col lg="12" keys={data}>
-            <div className="m-3">
-              <div className="boxshad py-3">
-                <Row className="align-items-center">
-                  <Col lg="12" style={{ textAlign: "-webkit-right" }}>
-                    <div
-                      style={{
-                        float: "right",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                      className="webkit"
-                    >
-                      <Button
-                        className="border-rounded text-2xl"
-                        style={{
-                          background: "none",
-                          color: "#C1C1C1",
-                        }}
-                      >
-                        <BsBookmark />
-                      </Button>
-                    </div>
-                  </Col>
-                  <Col lg="2" className="webkit">
-                    <Image
-                      style={{ width: "100%" }}
-                      src={require("../../../assets/Profile.png")}
-                    />
-                  </Col>
-                  <Col lg="7">
-                    <h3 className="py-3 robot">
-                      <span
-                        style={{ color: "#39bec1" }}
-                        className="text-2xl font-bold"
-                      >
-                        {event?._source?.firstName + ' ' + event?._source?.lastName} 
-                      </span>
-                      <br />
-                      <span className="text-2xl" style={{ color: "black" }}>
-                      {event?._source?.experience[0].title}
-                      </span>
-                      <br />
-                      <br />
-                      <span style={{ color: "rgb(148,147,147)" }}>
-                      {event?._source?.aboutMe}
-                      </span>
-                    </h3>
-                  </Col>
+          {searchData && searchData?.length > 0 ? (
+            searchData?.length > 0 &&
+            searchData?.map((event, data) => {
+              return (
+                <Col lg="12" keys={data}>
+                  <div className="m-3">
+                    <div className="boxshad py-3">
+                      <Row className="align-items-center">
+                        <Col lg="12" style={{ textAlign: "-webkit-right" }}>
+                          <div
+                            style={{
+                              float: "right",
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                            className="webkit"
+                          >
+                            <Button
+                              className="border-rounded text-2xl"
+                              style={{
+                                background: "none",
+                                color: "#C1C1C1",
+                              }}
+                            >
+                              <BsBookmark />
+                            </Button>
+                          </div>
+                        </Col>
+                        <Col lg="2" className="webkit">
+                          <Image
+                            className="imgprofile"
+                            style={{ width: "100%" }}
+                            src={require("../../../assets/Profile.png")}
+                          />
+                        </Col>
+                        <Col lg="7">
+                          <h3 className="py-3 robot">
+                            <span
+                              style={{ color: "#39bec1" }}
+                              className="text-2xl font-bold"
+                            >
+                              {event?._source?.firstName +
+                                " " +
+                                event?._source?.lastName}
+                            </span>
+                            <br />
+                            <span
+                              className="text-2xl"
+                              style={{ color: "black" }}
+                            >
+                              {event?._source?.experience[0].title}
+                            </span>
+                            <br />
+                            <br />
+                            <span style={{ color: "rgb(148,147,147)" }}>
+                              {event?._source?.aboutMe}
+                            </span>
+                          </h3>
+                        </Col>
 
-                  <Col lg="3">
-                    <div className="webkit" style={{ display: "grid" }}>
-                      <Button
-                        variant="primary"
-                        onClick={() => setModalShow(true)}
-                        className="text-white border-rounded px-3 py-3 mx-2"
-                        style={{
-                          background: "#39BEC1",
-                          border: "none",
-                        }}
-                      >
-                        VIEW PROFILE
-                      </Button>
-                      <MyVerticallyCenteredModal
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                      />
+                        <Col lg="3">
+                          <div className="webkit" style={{ display: "grid" }}>
+                            <Button
+                              variant="primary"
+                              onClick={() => setModalShow(true)}
+                              className="text-white border-rounded px-3 py-3 mx-2"
+                              style={{
+                                background: "#39BEC1",
+                                border: "none",
+                              }}
+                            >
+                              VIEW PROFILE
+                            </Button>
+                            <MyVerticallyCenteredModal
+                              show={modalShow}
+                              onHide={() => setModalShow(false)}
+                            />
+                          </div>
+                        </Col>
+                      </Row>
+                      <hr className="my-2" />
+                      <Row className="align-items-center pl-4">
+                        <Col lg="3">
+                          <div className="p3 py-3">
+                            <h2 className="text-xl font-semibold">
+                              Experience
+                            </h2>
+                            <br />
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {event?._source?.expYears}
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col lg="3">
+                          <div className="p3 py-3">
+                            <h2 className="text-xl font-semibold">
+                              Salary Range
+                            </h2>
+                            <br />
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              $ {event?._source?.salaryRange?.gte} - ${" "}
+                              {event?._source?.salaryRange?.lte}
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col lg="3">
+                          <div className="p3 py-3">
+                            <h2 className="text-xl font-semibold">Location</h2>
+                            <br />
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              <FontAwesomeIcon
+                                icon={faLocationDot}
+                                style={{
+                                  fontWeight: "bolder",
+                                }}
+                              />
+                              {event?._source?.country}
+                            </h2>
+                          </div>
+                        </Col>
+                      </Row>
                     </div>
-                  </Col>
-                </Row>
-                <hr className="my-2" />
-                <Row className="align-items-center pl-4">
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-xl font-semibold">Experience</h2>
-                      <br />
-                      <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                      {event?._source?.expYears}
-                      </h2>
-                    </div>
-                  </Col>
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-xl font-semibold">Salary Range</h2>
-                      <br />
-                      <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                        $ {event?._source?.salaryRange?.gte} - $ {event?._source?.salaryRange?.lte}
-                      </h2>
-                    </div>
-                  </Col>
-                  <Col lg="3">
-                    <div className="p3 py-3">
-                      <h2 className="text-xl font-semibold">Location</h2>
-                      <br />
-                      <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                        <FontAwesomeIcon
-                          icon={faLocationDot}
-                          style={{
-                            fontWeight: "bolder",
-                          }}
-                        />
-                       {event?._source?.country}
-                      </h2>
-                    </div>
-                  </Col>
-                </Row>
-              </div>
+                  </div>
+                </Col>
+              );
+            })
+          ) : (
+            <div style={{ textAlign: "center" }}>
+              {" "}
+              <h1 style={{ fontSize: "3vh", fontWeight: "bolder" }}>
+                {" "}
+                No Job Found{" "}
+              </h1>{" "}
             </div>
-          </Col>
-          )
-        }) : <div style={{textAlign : 'center'}}> <h1 style={{fontSize : '3vh', fontWeight : 'bolder'}}> No Job Found </h1> </div>} 
+          )}
         </Row>
       </Container>
     </Container>

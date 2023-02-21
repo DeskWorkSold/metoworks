@@ -73,27 +73,27 @@ export const FreelanceProfileView = () => {
   const [show10, setShow10] = useState(false);
   const handleClose = () => {
     setShow(false);
-    setError({})
-  }
+    setError({});
+  };
   const handleShow = () => setShow(true);
   const handleClose1 = () => {
-    setShow1(false)
-    setError({})
+    setShow1(false);
+    setError({});
   };
   const handleShow1 = () => setShow1(true);
   const handleClose2 = () => {
-    setError({})
-    setShow2(false)
+    setError({});
+    setShow2(false);
   };
   const handleShow2 = () => setShow2(true);
   const handleClose3 = () => {
-    setShow3(false)
-    setError({})
+    setShow3(false);
+    setError({});
   };
   const handleShow3 = () => setShow3(true);
   const handleClose4 = () => {
-    setShow4(false)
-    setError({})
+    setShow4(false);
+    setError({});
   };
   const handleShow4 = () => setShow4(true);
   const handleClose5 = () => setShow5(false);
@@ -314,12 +314,12 @@ export const FreelanceProfileView = () => {
       .get(`api/v1/user/asset/cv`)
       .then((res) => {
         // console.log(res, "Initial Data");
-        console.log(res, "ressssss")
-        const file = new Blob([res])
+        console.log(res, "ressssss");
+        const file = new Blob([res]);
 
-        console.log(file, "fileee")
+        console.log(file, "fileee");
         const fileURL = URL.createObjectURL(file);
-        console.log(fileURL, "fileUrl")
+        console.log(fileURL, "fileUrl");
         // let data = res.data;
         // console.log(fileURL, 'cvvvvvvvvvvvvvvvvvvvv');
         // setIsProfileData(data)
@@ -332,15 +332,16 @@ export const FreelanceProfileView = () => {
     profileImageFunc();
   };
 
-  console.log(isCv, "cvvvv")
+  console.log(isCv, "cvvvv");
 
   const profileImageFunc = () => {
     axios
       .get(`api/v1/user/asset/thumbnail`, { responseType: "arraybuffer" })
       .then((res) => {
         let buffer = require("buffer");
-        const data = `data:${res.headers["content-type"]
-          };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
+        const data = `data:${
+          res.headers["content-type"]
+        };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
         // console.log("res", res);
         // console.log("imagee", data);
         setProfileImg(data);
@@ -351,9 +352,9 @@ export const FreelanceProfileView = () => {
       });
   };
 
-  const [error, setError] = useState()
+  const [error, setError] = useState();
   const profileFunc = () => {
-    console.log(profileData, "data")
+    console.log(profileData, "data");
     let myData = {
       aboutMe: profileData.aboutMe ?? profileData.data.aboutMe,
       address: profileData.address ?? profileData.data.address,
@@ -375,67 +376,65 @@ export const FreelanceProfileView = () => {
       visaPermit: profileData.visaPermit ?? profileData.data.visaPermit,
     };
 
-    let flagData = { ...myData }
-    console.log(flagData, "data")
-    delete flagData.isIdCardPublic
-    flagData.firstName = ""
-    let flag = Object.values(flagData)
-    let flag1 = flag.some((e, i) => e == "")
-    console.log(flag1, "falg1")
-    console.log(flagData, "flagDATA")
+    let flagData = { ...myData };
+    console.log(flagData, "data");
+    delete flagData.isIdCardPublic;
+    flagData.firstName = "";
+    let flag = Object.values(flagData);
+    let flag1 = flag.some((e, i) => e == "");
+    console.log(flag1, "falg1");
+    console.log(flagData, "flagDATA");
     if (flag1) {
-      let newErrors = {}
+      let newErrors = {};
       if (!myData.aboutMe) {
-        newErrors.aboutMe = 'aboutMe is required';
+        newErrors.aboutMe = "aboutMe is required";
       }
       if (!myData.address) {
-        newErrors.address = 'address is required';
+        newErrors.address = "address is required";
       }
       if (!myData.city) {
-        newErrors.city = 'city is required';
+        newErrors.city = "city is required";
       }
       if (!myData.country) {
-        newErrors.country = 'country is required';
+        newErrors.country = "country is required";
       }
       if (!myData.dob) {
-        newErrors.dob = 'dob is required';
+        newErrors.dob = "dob is required";
       }
       if (!myData.firstName) {
-        console.log("firstName")
-        newErrors.firstName = 'firstName is Required';
+        console.log("firstName");
+        newErrors.firstName = "firstName is Required";
       }
       if (!myData.gender) {
-        newErrors.gender = 'gender is Required';
+        newErrors.gender = "gender is Required";
       }
       if (!myData.idCard) {
-        newErrors.idCard = 'idCard is Required';
+        newErrors.idCard = "idCard is Required";
       }
       if (!myData.isIdCardPublic) {
-        newErrors.isIdCardPublic = 'isIdCardPublic is Required';
+        newErrors.isIdCardPublic = "isIdCardPublic is Required";
       }
       if (!myData.lastName) {
-        newErrors.lastName = 'lastName is Required';
+        newErrors.lastName = "lastName is Required";
       }
       if (!myData.phoneNumber) {
-        newErrors.phoneNumber = 'phoneNumber is Required';
+        newErrors.phoneNumber = "phoneNumber is Required";
       }
       if (!myData.state) {
-        newErrors.state = 'state is Required';
+        newErrors.state = "state is Required";
       }
       if (!myData.visaPermit) {
-        newErrors.visaPermit = 'visaPermit is Required';
+        newErrors.visaPermit = "visaPermit is Required";
       }
       if (!myData.salaryRange.lte) {
-        newErrors.salaryRange = 'End Date is Required';
+        newErrors.salaryRange = "End Date is Required";
       }
       if (!myData.salaryRange.gte) {
-        newErrors.salaryRange = 'start Date is Required';
+        newErrors.salaryRange = "start Date is Required";
       }
-      console.log(newErrors, "newError")
-      setError(newErrors)
-    }
-
-    else if (!flag1 && isCv) {
+      console.log(newErrors, "newError");
+      setError(newErrors);
+    } else if (!flag1 && isCv) {
       if (isCv) {
         let formData = new FormData();
         formData.append("cv", isCv);
@@ -443,8 +442,8 @@ export const FreelanceProfileView = () => {
         axios
           .post(`api/v1/user/asset/cv `, formData)
           .then((res) => {
-            initialFun()
-            setIsCv({})
+            initialFun();
+            setIsCv({});
             if (res) {
               setShow(false);
             }
@@ -452,7 +451,6 @@ export const FreelanceProfileView = () => {
           .catch((err) => {
             // console.log(err);
           });
-
       }
 
       if (!flag1) {
@@ -473,16 +471,9 @@ export const FreelanceProfileView = () => {
     }
   };
 
-
-
-
   const ProfileExp = () => {
-
-
     // const values = Object.values(profileExp)
-    console.log(profileExp, 'values');
-
-
+    console.log(profileExp, "values");
 
     // console.log(profileData, "profileAfter");
     delete profileData.data.expYears;
@@ -491,24 +482,30 @@ export const FreelanceProfileView = () => {
     delete profileData.data.id;
     delete profileData.data.email;
 
-
-
     profileExp.duration = durationData;
 
-    console.log(durationData, "duration")
+    console.log(durationData, "duration");
 
     let myExperienceData = [...isExperienceData, profileExp];
     // console.log(myExperienceData, "experience");
 
     profileData.data.experience = myExperienceData;
 
-    console.log(profileExp, "profile")
+    console.log(profileExp, "profile");
 
-    if (profileExp.profession && profileExp.companyName && profileExp.jobIndustry && profileExp.jobFunction && profileExp.duration.gte && profileExp.duration.lte && profileExp.description) {
+    if (
+      profileExp.profession &&
+      profileExp.companyName &&
+      profileExp.jobIndustry &&
+      profileExp.jobFunction &&
+      profileExp.duration.gte &&
+      profileExp.duration.lte &&
+      profileExp.description
+    ) {
       axios
         .post(`api/v1/user/freelancer`, profileData.data)
         .then((res) => {
-          setProfileExp({})
+          setProfileExp({});
           setTimeout(() => {
             initialFun();
           }, 1000);
@@ -519,36 +516,35 @@ export const FreelanceProfileView = () => {
         .catch((err) => {
           // console.log(err);
         });
-    }
-    else {
-      let newErrors = {}
+    } else {
+      let newErrors = {};
       if (!profileExp.companyName) {
-        newErrors.companyName = 'companyName is required';
+        newErrors.companyName = "companyName is required";
       }
       if (!profileExp.description) {
-        newErrors.description = 'description is required';
+        newErrors.description = "description is required";
       }
       if (!profileExp.jobFunction) {
-        newErrors.jobFunction = 'jobFunction is required';
+        newErrors.jobFunction = "jobFunction is required";
       }
       if (!profileExp.jobIndustry) {
-        newErrors.jobIndustry = 'jobIndustry is required';
+        newErrors.jobIndustry = "jobIndustry is required";
       }
       if (!profileExp.profession) {
-        newErrors.profession = 'profession is required';
+        newErrors.profession = "profession is required";
       }
       if (!profileExp.duration.gte) {
-        newErrors.startDate = 'Start Date is Required';
+        newErrors.startDate = "Start Date is Required";
       }
       if (!profileExp.duration.lte) {
-        newErrors.endDate = 'End Date is Required';
+        newErrors.endDate = "End Date is Required";
       }
 
-      console.log(newErrors)
-      setError(newErrors)
+      console.log(newErrors);
+      setError(newErrors);
     }
   };
-  console.log('error', error);
+  console.log("error", error);
 
   const deleteExperienceData = (id) => {
     axios
@@ -589,14 +585,19 @@ export const FreelanceProfileView = () => {
     delete profileData.data.email;
     delete profileData.data.id;
 
-    console.log(isEducation, "educatatooad")
+    console.log(isEducation, "educatatooad");
 
-    if (isEducation.educationLevel && isEducation.institute && isEducation.major && isEducation.duration.lte && isEducation.duration.gte) {
-
+    if (
+      isEducation.educationLevel &&
+      isEducation.institute &&
+      isEducation.major &&
+      isEducation.duration.lte &&
+      isEducation.duration.gte
+    ) {
       axios
         .post(`api/v1/user/freelancer`, profileData.data)
         .then((res) => {
-          setIsEducation({})
+          setIsEducation({});
           setTimeout(() => {
             initialFun();
           }, 1000);
@@ -609,30 +610,27 @@ export const FreelanceProfileView = () => {
         .catch((err) => {
           // console.log(err);
         });
-    }
-    else {
-      let newErrors = {}
+    } else {
+      let newErrors = {};
       if (!isEducation.educationLevel) {
-        newErrors.educationLevel = 'Education Level is required';
+        newErrors.educationLevel = "Education Level is required";
       }
       if (!isEducation.institute) {
-        newErrors.institute = 'Institute is required';
+        newErrors.institute = "Institute is required";
       }
       if (!isEducation.major) {
-        newErrors.major = 'Major is required';
+        newErrors.major = "Major is required";
       }
       if (!isEducation.duration.startDate) {
-        newErrors.startDate = 'Start Date is required';
+        newErrors.startDate = "Start Date is required";
       }
       if (!isEducation.duration.endDate) {
-        newErrors.endDate = 'End Date is required';
+        newErrors.endDate = "End Date is required";
       }
 
-
-      console.log(newErrors)
-      setError(newErrors)
+      console.log(newErrors);
+      setError(newErrors);
     }
-
   };
 
   // const educationData = (id) => {
@@ -648,7 +646,7 @@ export const FreelanceProfileView = () => {
   // };
 
   const achievementFunc = () => {
-    console.log(profileData.data.id, "odddd")
+    console.log(profileData.data.id, "odddd");
     isAchievement.certificate = profileData.data.id;
     let myAchievementData = [...isAchievementData, isAchievement];
     profileData.data.achievement = myAchievementData;
@@ -658,15 +656,15 @@ export const FreelanceProfileView = () => {
     delete profileData.data.email;
     delete profileData.data.id;
 
-    console.log(isAchievement, "isAcheig")
+    console.log(isAchievement, "isAcheig");
 
     if (isAchievement.title && isAchievement.description) {
       if (isAchievement.achievement || isAchievement.certificate) {
         axios
           .post(`api/v1/user/freelancer`, profileData.data)
           .then((res) => {
-            setIsAchievement({})
-            setError({})
+            setIsAchievement({});
+            setError({});
             setTimeout(() => {
               initialFun();
             }, 1000);
@@ -678,43 +676,38 @@ export const FreelanceProfileView = () => {
           .catch((err) => {
             // console.log(err);
           });
-      }
-      else {
-        let newErrors = {}
+      } else {
+        let newErrors = {};
         if (!isAchievement.title) {
-          newErrors.title = 'Title is required';
+          newErrors.title = "Title is required";
         }
         if (!isAchievement.description) {
-          newErrors.description = 'Description is required';
+          newErrors.description = "Description is required";
         }
         if (!isAchievement.certificate) {
-          newErrors.certificate = 'Certificate is required';
+          newErrors.certificate = "Certificate is required";
         }
 
-        console.log(newErrors)
-        setError(newErrors)
+        console.log(newErrors);
+        setError(newErrors);
       }
-    }
-    else {
-      let newErrors = {}
+    } else {
+      let newErrors = {};
       if (!isAchievement.title) {
-        newErrors.title = 'Title is required';
+        newErrors.title = "Title is required";
       }
       if (!isAchievement.description) {
-        newErrors.description = 'Description is required';
+        newErrors.description = "Description is required";
       }
       if (!isAchievement.certificate) {
-        newErrors.certificate = 'Certificate is required';
+        newErrors.certificate = "Certificate is required";
       }
-      console.log(newErrors)
-      setError(newErrors)
+      console.log(newErrors);
+      setError(newErrors);
     }
-
-  }
-
+  };
 
   const achievementData = (id) => {
-
     axios
       .get(`http://localhost:3000/v1/achievement/${id}`)
       .then((res) => {
@@ -727,7 +720,7 @@ export const FreelanceProfileView = () => {
   };
 
   const updateAchievementData = (id) => {
-    console.log(id, "idd")
+    console.log(id, "idd");
     if (!isEditAchievementData.file) {
       let formdata = new FormData();
       Object.entries(isEditAchievementData).map(([key, value]) => {
@@ -798,16 +791,16 @@ export const FreelanceProfileView = () => {
     delete profileData.data.id;
     delete profileData.data.email;
 
-    let flag = Object.values(isLanguage)
+    let flag = Object.values(isLanguage);
 
-    let flag1 = flag.some((e, i) => e == "")
+    let flag1 = flag.some((e, i) => e == "");
 
     if (!flag1) {
       axios
         .post(`api/v1/user/freelancer`, profileData.data)
         .then((res) => {
-          setIsLanguage({})
-          setError({})
+          setIsLanguage({});
+          setError({});
           setTimeout(() => {
             initialFun();
           }, 1000);
@@ -818,20 +811,19 @@ export const FreelanceProfileView = () => {
         .catch((err) => {
           // console.log(err);
         });
-    }
-    else {
-      let newErrors = {}
+    } else {
+      let newErrors = {};
       if (!isLanguage.languageType) {
-        newErrors.languageType = 'Language Type is required';
+        newErrors.languageType = "Language Type is required";
       }
       if (!isLanguage.examLevel) {
-        newErrors.examLevel = 'Exam Level is required';
+        newErrors.examLevel = "Exam Level is required";
       }
       if (!isLanguage.gradingLevel) {
-        newErrors.gradingLevel = 'grading Level is required';
+        newErrors.gradingLevel = "grading Level is required";
       }
-      console.log(newErrors)
-      setError(newErrors)
+      console.log(newErrors);
+      setError(newErrors);
     }
 
     // axios
@@ -1006,9 +998,8 @@ export const FreelanceProfileView = () => {
       console.log(editIsExperienceData1, "titlllllllllllllllle");
 
       const updateProfileExp = (props) => {
-
-        console.log(editIsExperienceData1, "dataaa")
-        console.log(isEditExperienceData, 'dataaEdit')
+        console.log(editIsExperienceData1, "dataaa");
+        console.log(isEditExperienceData, "dataaEdit");
 
         const expData = {
           id: experienceId,
@@ -1041,15 +1032,15 @@ export const FreelanceProfileView = () => {
         };
 
         let newData = [...isExperienceData];
-        console.log(newData, "newData")
-        console.log(experienceId, "IDDD")
+        console.log(newData, "newData");
+        console.log(experienceId, "IDDD");
 
         newData = newData.filter((e, i) => {
           return !e.clicked;
         });
         newData.push(expData);
 
-        console.log(newData, "newData")
+        console.log(newData, "newData");
 
         // console.log(newData, "newDaataaa");
 
@@ -1112,8 +1103,8 @@ export const FreelanceProfileView = () => {
                         onChange={(e) =>
                           (editIsExperienceData1.title = e.target.value)
                         }
-                      //   value={user.number}
-                      //   onChange={getUserData}
+                        //   value={user.number}
+                        //   onChange={getUserData}
                       />
                     </fieldset>
                   </Col>
@@ -1130,7 +1121,7 @@ export const FreelanceProfileView = () => {
                         onChange={(e) =>
                           (editIsExperienceData1.companyName = e.target.value)
                         }
-                      //   onChange={getUserData}
+                        //   onChange={getUserData}
                       />
                     </fieldset>
                   </Col>
@@ -1368,12 +1359,14 @@ export const FreelanceProfileView = () => {
 
   const deleteExperienceProfileData = (props) => {
     // console.log(props?.props?.id);
-    const newData = isExperienceData?.filter((x, ind) => ind !== props);
+    const newData = isExperienceData?.filter((x, ind) => ind !== props.index);
     console.log(newData, "data");
     axios
       .post(`api/v1/user/freelancer`, { experience: newData })
       .then((res) => {
         let data = res.data;
+
+        props.onHide();
 
         setTimeout(() => {
           initialFun();
@@ -1423,7 +1416,7 @@ export const FreelanceProfileView = () => {
 
             <Button
               style={{ background: "none", color: "#39BEC1" }}
-              onClick={() => deleteExperienceProfileData(props.index)}
+              onClick={() => deleteExperienceProfileData(props)}
             >
               Confirm
             </Button>
@@ -1499,15 +1492,13 @@ export const FreelanceProfileView = () => {
         };
         // console.log(EducationData, 'EducationData');
 
-
-
         if (CertificationData.certificate) {
           const formdata = new FormData();
           formdata.append("education-cert", CertificationData.certificate);
 
-          console.log(formdata, "formdATA")
-          console.log(CertificationData, "certification")
-          console.log(EducationData.id, "iddddd")
+          console.log(formdata, "formdATA");
+          console.log(CertificationData, "certification");
+          console.log(EducationData.id, "iddddd");
           axios
             .put(
               `api/v1/user/freelancer/asset/education-cert?id=${props.props.id}`,
@@ -1559,7 +1550,6 @@ export const FreelanceProfileView = () => {
           .catch((err) => {
             console.log(err);
           });
-
       };
 
       return (
@@ -1593,7 +1583,7 @@ export const FreelanceProfileView = () => {
                         <option
                           selected={
                             isEditEducationData?.educationLevel ===
-                              "Education Level"
+                            "Education Level"
                               ? true
                               : false
                           }
@@ -1603,7 +1593,7 @@ export const FreelanceProfileView = () => {
                         <option
                           selected={
                             isEditEducationData?.educationLevel ===
-                              "Associate Degree"
+                            "Associate Degree"
                               ? true
                               : false
                           }
@@ -1613,7 +1603,7 @@ export const FreelanceProfileView = () => {
                         <option
                           selected={
                             isEditEducationData?.educationLevel ===
-                              "Bachelor Degree"
+                            "Bachelor Degree"
                               ? true
                               : false
                           }
@@ -1623,7 +1613,7 @@ export const FreelanceProfileView = () => {
                         <option
                           selected={
                             isEditEducationData?.educationLevel ===
-                              "Master Degree"
+                            "Master Degree"
                               ? true
                               : false
                           }
@@ -1633,7 +1623,7 @@ export const FreelanceProfileView = () => {
                         <option
                           selected={
                             isEditEducationData?.educationLevel ===
-                              "Doctorate Degree"
+                            "Doctorate Degree"
                               ? true
                               : false
                           }
@@ -1859,14 +1849,16 @@ export const FreelanceProfileView = () => {
   };
   // delete
   const deleteProfileEducationData = (event) => {
-    // console.log(event, "event");
-    const newData = isEducationData?.filter((x) => x?.id != event.id);
+    console.log(event, "eventsssss");
+    const newData = isEducationData?.filter((x, i) => i != event.index);
     // console.log(newData, "data");
     axios
       .post(`api/v1/user/freelancer`, { education: newData })
       .then((res) => {
+        event.onHide();
         // console.log(res.data, 'eeeeeeeeeeeeee');
         let data = res.data;
+        // event.onHide()
         setTimeout(() => {
           initialFun();
         }, 1000);
@@ -1915,7 +1907,7 @@ export const FreelanceProfileView = () => {
 
             <Button
               style={{ background: "none", color: "#39BEC1" }}
-              onClick={() => deleteProfileEducationData(props.props)}
+              onClick={() => deleteProfileEducationData(props)}
             >
               Confirm
             </Button>
@@ -1961,7 +1953,7 @@ export const FreelanceProfileView = () => {
       // console.log(editIsAchievementData1, "editIsAchievementData1");
 
       const updateProfileExp = (props) => {
-        console.log(props, "props")
+        console.log(props, "props");
         // console.log(props, "propsss");
         const achData = {
           id: props.props.id,
@@ -1980,7 +1972,9 @@ export const FreelanceProfileView = () => {
           );
           axios
             .put(
-              `api/v1/user/freelancer/asset/achievement-cert?id=${props.props.id ?? props.props.certificate}`,
+              `api/v1/user/freelancer/asset/achievement-cert?id=${
+                props.props.id ?? props.props.certificate
+              }`,
               formdata
             )
             .then((res) => {
@@ -2025,7 +2019,6 @@ export const FreelanceProfileView = () => {
           .catch((err) => {
             console.log(err);
           });
-
       };
 
       return (
@@ -2090,8 +2083,8 @@ export const FreelanceProfileView = () => {
                         id="customFile"
                         // value={isEditAchievementData?.achievement}
                         onChange={(e) =>
-                        (editIsAchievementCertificate.certificate =
-                          e.target.files[0])
+                          (editIsAchievementCertificate.certificate =
+                            e.target.files[0])
                         }
                       />
                     </fieldset>
@@ -2677,8 +2670,8 @@ export const FreelanceProfileView = () => {
                         onChange={(e) =>
                           (editIsLangugeData1.gradingLevel = e.target.value)
                         }
-                      //   value={user.number}
-                      //   onChange={getUserData}
+                        //   value={user.number}
+                        //   onChange={getUserData}
                       />
                     </fieldset>
                   </Col>
@@ -2915,7 +2908,7 @@ export const FreelanceProfileView = () => {
 
                               fontWeight: "bolder",
                             }}
-                          />
+                          />{" "}
                           {profileData?.data?.role || "Freelancer"}
                         </li>
                         <li>
@@ -2925,11 +2918,11 @@ export const FreelanceProfileView = () => {
                               color: "#39BEC1",
                               fontWeight: "bolder",
                             }}
-                          />
+                          />{" "}
                           {profileData?.data?.city && profileData?.data?.country
                             ? profileData?.data?.city +
-                            "," +
-                            profileData?.data?.country
+                              "," +
+                              profileData?.data?.country
                             : "Nugegada, Srilanka"}
                         </li>
                       </ul>
@@ -3015,10 +3008,14 @@ export const FreelanceProfileView = () => {
                                       firstName: e.target.value,
                                     })
                                   }
-                                //   value={user.number}
-                                //   onChange={getUserData}
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
                                 />
-                                {error && error.firstName && <p style={{ color: 'red' }}>{error.firstName}</p>}
+                                {error && error.firstName && (
+                                  <p style={{ color: "red" }}>
+                                    {error.firstName}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3043,10 +3040,14 @@ export const FreelanceProfileView = () => {
                                       lastName: e.target.value,
                                     })
                                   }
-                                //   value={user.number}
-                                //   onChange={getUserData}
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
                                 />
-                                {error && error.lastName && <p style={{ color: 'red' }}>{error.lastName}</p>}
+                                {error && error.lastName && (
+                                  <p style={{ color: "red" }}>
+                                    {error.lastName}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
                           </Row>
@@ -3071,10 +3072,12 @@ export const FreelanceProfileView = () => {
                                       idCard: e.target.value,
                                     })
                                   }
-                                //   value={user.number}
-                                //   onChange={getUserData}
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
                                 />
-                                {error && error.idCard && <p style={{ color: 'red' }}>{error.idCard}</p>}
+                                {error && error.idCard && (
+                                  <p style={{ color: "red" }}>{error.idCard}</p>
+                                )}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3097,8 +3100,8 @@ export const FreelanceProfileView = () => {
                                       visaPermit: e.target.value,
                                     })
                                   }
-                                //   value={user.number}
-                                //   onChange={getUserData}
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
                                 />
                                 {/* <Form.Select
                                   aria-label="Default select example"
@@ -3108,7 +3111,11 @@ export const FreelanceProfileView = () => {
                                   <option>Yes</option>
                                   <option>No</option>
                                 </Form.Select> */}
-                                {error && error.visaPermit && <p style={{ color: 'red' }}>{error.visaPermit}</p>}
+                                {error && error.visaPermit && (
+                                  <p style={{ color: "red" }}>
+                                    {error.visaPermit}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
                           </Row>
@@ -3162,7 +3169,9 @@ export const FreelanceProfileView = () => {
                                 <option>Female</option>
                                 <option>Other</option>
                               </Form.Select>
-                              {error && error.gender && <p style={{ color: 'red' }}>{error.gender}</p>}
+                              {error && error.gender && (
+                                <p style={{ color: "red" }}>{error.gender}</p>
+                              )}
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -3183,7 +3192,9 @@ export const FreelanceProfileView = () => {
                                 }
                                 className="form-control"
                               />
-                              {error && error.aboutMe && <p style={{ color: 'red' }}>{error.aboutMe}</p>}
+                              {error && error.aboutMe && (
+                                <p style={{ color: "red" }}>{error.aboutMe}</p>
+                              )}
                             </fieldset>
                           </Col>
                           <Row>
@@ -3209,10 +3220,14 @@ export const FreelanceProfileView = () => {
                                       phoneNumber: e.target.value,
                                     })
                                   }
-                                //   value={user.number}
-                                //   onChange={getUserData}
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
                                 />
-                                {error && error.phoneNumber && <p style={{ color: 'red' }}>{error.phoneNumber}</p>}
+                                {error && error.phoneNumber && (
+                                  <p style={{ color: "red" }}>
+                                    {error.phoneNumber}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3234,10 +3249,12 @@ export const FreelanceProfileView = () => {
                                       dob: e.target.value,
                                     })
                                   }
-                                //   value={user.number}
-                                //   onChange={getUserData}
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
                                 />
-                                {error && error.dob && <p style={{ color: 'red' }}>{error.dob}</p>}
+                                {error && error.dob && (
+                                  <p style={{ color: "red" }}>{error.dob}</p>
+                                )}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3265,7 +3282,11 @@ export const FreelanceProfileView = () => {
                                   //   onChange={getUserData}
                                   required
                                 />
-                                {error && error.country && <p style={{ color: 'red' }}>{error.country}</p>}
+                                {error && error.country && (
+                                  <p style={{ color: "red" }}>
+                                    {error.country}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3293,7 +3314,9 @@ export const FreelanceProfileView = () => {
                                   }
                                   required
                                 />
-                                {error && error.city && <p style={{ color: 'red' }}>{error.city}</p>}
+                                {error && error.city && (
+                                  <p style={{ color: "red" }}>{error.city}</p>
+                                )}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3316,10 +3339,14 @@ export const FreelanceProfileView = () => {
                                       address: e.target.value,
                                     })
                                   }
-                                //   value={user.number}
-                                //   onChange={getUserData}
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
                                 />
-                                {error && error.address && <p style={{ color: 'red' }}>{error.address}</p>}
+                                {error && error.address && (
+                                  <p style={{ color: "red" }}>
+                                    {error.address}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3343,11 +3370,13 @@ export const FreelanceProfileView = () => {
                                         state: e.target.value,
                                       })
                                     }
-                                  //   value={user.number}
-                                  //   onChange={getUserData}
+                                    //   value={user.number}
+                                    //   onChange={getUserData}
                                   />
                                 </div>
-                                {error && error.state && <p style={{ color: 'red' }}>{error.state}</p>}
+                                {error && error.state && (
+                                  <p style={{ color: "red" }}>{error.state}</p>
+                                )}
                               </fieldset>
                             </Col>
                           </Row>
@@ -3362,10 +3391,10 @@ export const FreelanceProfileView = () => {
                               </label>
                               <Form.Select
                                 aria-label="Default select example"
-                              // value={profileData?.salaryRange || ""}
-                              // onChange={(e) =>
-                              //   setIsSalaryRange({...isSalaryRange, })
-                              // }
+                                // value={profileData?.salaryRange || ""}
+                                // onChange={(e) =>
+                                //   setIsSalaryRange({...isSalaryRange, })
+                                // }
                               >
                                 <option hidden="">Choose...</option>
                                 <option>per month basis</option>
@@ -3414,7 +3443,9 @@ export const FreelanceProfileView = () => {
                                   //   onChange={getUserData}
                                   required
                                 />
-                                {error && error.lte && <p style={{ color: 'red' }}>{error.lte}</p>}
+                                {error && error.lte && (
+                                  <p style={{ color: "red" }}>{error.lte}</p>
+                                )}
                               </Col>
                               <Col lg="6">
                                 <label
@@ -3441,7 +3472,9 @@ export const FreelanceProfileView = () => {
                                   //   onChange={getUserData
                                   required
                                 />
-                                {error && error.gte && <p style={{ color: 'red' }}>{error.gte}</p>}
+                                {error && error.gte && (
+                                  <p style={{ color: "red" }}>{error.gte}</p>
+                                )}
                               </Col>
                             </Row>
                           </Container>
@@ -3458,7 +3491,7 @@ export const FreelanceProfileView = () => {
                                 className="form-control"
                                 id="customFile"
                                 onChange={(e) => {
-                                  setIsCv(e.target.files[0])
+                                  setIsCv(e.target.files[0]);
                                 }}
                               />
                               {/* <input
@@ -3500,7 +3533,7 @@ export const FreelanceProfileView = () => {
 
                 <hr className="mt-2" />
                 <Container>
-                  <Row className="align-items-center row">
+                  <Row className="align-items-center br">
                     <Col>
                       <div className="p3">
                         <h2 className="text-xl font-semibold">Full Name</h2>
@@ -3542,7 +3575,7 @@ export const FreelanceProfileView = () => {
                       </div>
                     </Col>
                   </Row>
-                  <Row className="align-items-center row pt-4">
+                  <Row className="align-items-center row pt-4 br">
                     <Col>
                       <div className="p3">
                         <h2 className="text-xl font-semibold">Gender</h2>
@@ -3673,7 +3706,11 @@ export const FreelanceProfileView = () => {
                                 //   onChange={getUserData}
                                 placeholder="Gia"
                               />
-                              {error && error.profession && <p style={{ color: 'red' }}>{error.profession}</p>}
+                              {error && error.profession && (
+                                <p style={{ color: "red" }}>
+                                  {error.profession}
+                                </p>
+                              )}
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -3700,7 +3737,11 @@ export const FreelanceProfileView = () => {
                                 placeholder="Jay 
                 "
                               />
-                              {error && error.companyName && <p style={{ color: 'red' }}>{error.companyName}</p>}
+                              {error && error.companyName && (
+                                <p style={{ color: "red" }}>
+                                  {error.companyName}
+                                </p>
+                              )}
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -3755,7 +3796,11 @@ export const FreelanceProfileView = () => {
                                 <option>Engineerings</option>
                                 <option>Others</option>
                               </Form.Select>
-                              {error && error.jobIndustry && <p style={{ color: 'red' }}>{error.jobIndustry}</p>}
+                              {error && error.jobIndustry && (
+                                <p style={{ color: "red" }}>
+                                  {error.jobIndustry}
+                                </p>
+                              )}
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -3800,7 +3845,11 @@ export const FreelanceProfileView = () => {
                                 <option>Engineering / Architect</option>
                                 <option>Others</option>
                               </Form.Select>
-                              {error && error.jobFunction && <p style={{ color: 'red' }}>{error.jobFunction}</p>}
+                              {error && error.jobFunction && (
+                                <p style={{ color: "red" }}>
+                                  {error.jobFunction}
+                                </p>
+                              )}
                             </fieldset>
                           </Col>
                           <Row>
@@ -3844,7 +3893,11 @@ export const FreelanceProfileView = () => {
                                   placeholder="A Service Like No Other
                 "
                                 />
-                                {error && error.startDate && <p style={{ color: 'red' }}>{error.startDate}</p>}
+                                {error && error.startDate && (
+                                  <p style={{ color: "red" }}>
+                                    {error.startDate}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -3874,7 +3927,11 @@ export const FreelanceProfileView = () => {
                 "
                                   required
                                 />
-                                {error && error.endDate && <p style={{ color: 'red' }}>{error.endDate}</p>}
+                                {error && error.endDate && (
+                                  <p style={{ color: "red" }}>
+                                    {error.endDate}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
                             <Col lg="12">
@@ -3897,8 +3954,11 @@ export const FreelanceProfileView = () => {
                                     })
                                   }
                                 />
-                                {error && error.description && <p style={{ color: 'red' }}>{error.description}</p>}
-
+                                {error && error.description && (
+                                  <p style={{ color: "red" }}>
+                                    {error.description}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
                           </Row>
@@ -3934,7 +3994,7 @@ export const FreelanceProfileView = () => {
                       <Row>
                         {isExperienceData.length > 0 &&
                           isExperienceData.map((event, index) => {
-                            console.log(event, "event")
+                            console.log(event, "event");
                             // console.log(event, "event");
 
                             return (
@@ -3986,9 +4046,9 @@ export const FreelanceProfileView = () => {
                                               {event?.isCurrent === true
                                                 ? "Present"
                                                 : event?.duration.lte.substring(
-                                                  0,
-                                                  10
-                                                )}
+                                                    0,
+                                                    10
+                                                  )}
                                             </h2>
                                           </div>
                                         </Col>
@@ -4129,7 +4189,11 @@ export const FreelanceProfileView = () => {
                                 <option>PhD</option>
                                 <option>Others</option>
                               </Form.Select>
-                              {error && error.educationLevel && <p style={{ color: 'red' }}>{error.educationLevel}</p>}
+                              {error && error.educationLevel && (
+                                <p style={{ color: "red" }}>
+                                  {error.educationLevel}
+                                </p>
+                              )}
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -4155,7 +4219,11 @@ export const FreelanceProfileView = () => {
                                 //   onChange={getUserData}
                                 placeholder="Jay "
                               />
-                              {error && error.institute && <p style={{ color: 'red' }}>{error.institute}</p>}
+                              {error && error.institute && (
+                                <p style={{ color: "red" }}>
+                                  {error.institute}
+                                </p>
+                              )}
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -4180,7 +4248,9 @@ export const FreelanceProfileView = () => {
                                 <option>Computer Science</option>
                                 <option>Phsycology</option>
                               </Form.Select>
-                              {error && error.major && <p style={{ color: 'red' }}>{error.major}</p>}
+                              {error && error.major && (
+                                <p style={{ color: "red" }}>{error.major}</p>
+                              )}
                             </fieldset>
                           </Col>
 
@@ -4209,7 +4279,11 @@ export const FreelanceProfileView = () => {
                                   placeholder="A Service Like No Other
                 "
                                 />
-                                {error && error.startDate && <p style={{ color: 'red' }}>{error.startDate}</p>}
+                                {error && error.startDate && (
+                                  <p style={{ color: "red" }}>
+                                    {error.startDate}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -4237,7 +4311,11 @@ export const FreelanceProfileView = () => {
                                   placeholder="Gia (PVT) LTD"
                                   required
                                 />
-                                {error && error.endDate && <p style={{ color: 'red' }}>{error.endDate}</p>}
+                                {error && error.endDate && (
+                                  <p style={{ color: "red" }}>
+                                    {error.endDate}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
                             <Col lg="6">
@@ -4395,6 +4473,7 @@ export const FreelanceProfileView = () => {
                                           <MyVerticallyCenteredModalEducationDelete
                                             show={modalShowEducationDelete}
                                             props={event}
+                                            index={index}
                                             onHide={() => modalshow3(event)}
                                           />
                                         )}
@@ -4466,7 +4545,9 @@ export const FreelanceProfileView = () => {
                                 //   onChange={getUserData}
                                 placeholder="Gia"
                               />
-                              {error && error.title && <p style={{ color: 'red' }}>{error.title}</p>}
+                              {error && error.title && (
+                                <p style={{ color: "red" }}>{error.title}</p>
+                              )}
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -4487,7 +4568,11 @@ export const FreelanceProfileView = () => {
                                 placeholder="Description"
                                 className="form-control"
                               />
-                              {error && error.description && <p style={{ color: 'red' }}>{error.description}</p>}
+                              {error && error.description && (
+                                <p style={{ color: "red" }}>
+                                  {error.description}
+                                </p>
+                              )}
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -4509,7 +4594,11 @@ export const FreelanceProfileView = () => {
                                 class="form-control"
                                 id="customFile"
                               />
-                              {error && error.certificate && <p style={{ color: 'red' }}>{error.certificate}</p>}
+                              {error && error.certificate && (
+                                <p style={{ color: "red" }}>
+                                  {error.certificate}
+                                </p>
+                              )}
                             </fieldset>
                           </Col>
                         </div>
@@ -4544,7 +4633,7 @@ export const FreelanceProfileView = () => {
                       <Row className="align-items-center">
                         {isAchievementData.length > 0 &&
                           isAchievementData.map((event, index) => {
-                            console.log(event, "acheivement")
+                            console.log(event, "acheivement");
                             return (
                               <>
                                 <Col lg="6" key={index}>
@@ -4772,7 +4861,11 @@ export const FreelanceProfileView = () => {
                                 <option value="Vietnamese">Vietnamese</option>
                                 <option value="Others">Others</option>
                               </Form.Select>
-                              {error && error.languageType && <p style={{ color: 'red' }}>{error.languageType}</p>}
+                              {error && error.languageType && (
+                                <p style={{ color: "red" }}>
+                                  {error.languageType}
+                                </p>
+                              )}
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -4798,7 +4891,11 @@ export const FreelanceProfileView = () => {
                                 //   onChange={getUserData}
                                 placeholder="Jay"
                               />
-                              {error && error.examLevel && <p style={{ color: 'red' }}>{error.examLevel}</p>}
+                              {error && error.examLevel && (
+                                <p style={{ color: "red" }}>
+                                  {error.examLevel}
+                                </p>
+                              )}
                             </fieldset>
                           </Col>
                           <Col lg="12">
@@ -4820,10 +4917,14 @@ export const FreelanceProfileView = () => {
                                     gradingLevel: e.target.value,
                                   })
                                 }
-                              //   value={user.number}
-                              //   onChange={getUserData}
+                                //   value={user.number}
+                                //   onChange={getUserData}
                               />
-                              {error && error.gradingLevel && <p style={{ color: 'red' }}>{error.gradingLevel}</p>}
+                              {error && error.gradingLevel && (
+                                <p style={{ color: "red" }}>
+                                  {error.gradingLevel}
+                                </p>
+                              )}
                             </fieldset>
                           </Col>
                         </div>
@@ -4878,7 +4979,7 @@ export const FreelanceProfileView = () => {
                                       {event?.gradingLevel}
                                     </td>
                                     <td>
-                                      <div className="p-3 webkit">
+                                      <div>
                                         <div className="inline-flex">
                                           <div className="w-10">
                                             <button

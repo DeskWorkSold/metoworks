@@ -1,6 +1,7 @@
 // import logo from './logo.svg';
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import React from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { Topnav } from "./components/Topnav";
 import { Footer } from "./components/Footer";
 import { Home } from "./components/Routes/Home";
@@ -35,11 +36,34 @@ import { FreelanceMainSavedJobs } from "./components/Routes/FreelanceMainSavedJo
 import { FreelancerSheduled } from "./components/Routes/FreelancerSheduled";
 import { FreelanceMainOffer } from "./components/Routes/FreelanceMainOffer";
 import FacebookInUI from "./components/Routes/facebook";
+import { Navigate } from "react-router-dom";
 
 function App() {
+  const navigate = useNavigate();
+
+  const getToken = async () => {
+    let token = await localStorage.getItem("access-token");
+    let userType = await localStorage.getItem("userType");
+
+    if (token && userType == "freelancer") {
+      navigate("/FreelancerProfile" + `?id=${token.substring(0, 20)}`, {
+        state: token,
+      });
+    }
+    if (token && userType === "recruiter") {
+      navigate("/CompanyProfile" + `?id=${token.substring(0, 20)}`, {
+        state: token,
+      });
+    }
+  };
+
+  React.useEffect(() => {
+    getToken();
+  }, []);
+
   return (
     <>
-      <Topnav  />
+      <Topnav />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/FindProfessions" element={<FindProfession />} />
@@ -57,7 +81,7 @@ function App() {
         <Route path="/FreeContact" element={<Contact />} />
         <Route path="/Login" element={<LoaginMain />} />
         <Route path="/Signup" element={<MainSignin />} />
-        <Route path="/facebook" element={<FacebookInUI/>} /> 
+        <Route path="/facebook" element={<FacebookInUI />} />
         {/* Recruiter */}
         <Route path="/CompanyProfile" element={<CompanyProfile />} />
         <Route path="/PublishedJob" element={<MainPublishJobs />} />

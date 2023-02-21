@@ -2505,11 +2505,13 @@ export const PublishedJob = () => {
                                             0,
                                             10
                                           )}
-                                          &nbsp;&nbsp;&nbsp;Expiry Date :{" "}
-                                          {items?._source?.expiryDate.substring(
-                                            0,
-                                            10
-                                          )}
+                                          <span className="mrdg">
+                                            Expiry Date :{" "}
+                                            {items?._source?.expiryDate.substring(
+                                              0,
+                                              10
+                                            )}
+                                          </span>
                                         </p>
                                       </div>
                                     </div>
@@ -2652,21 +2654,17 @@ export const PublishedJob = () => {
                             : 4
                         ),
                       }).map((_, index) => {
-                        
-                          
-                       return <button
-                          className="pagination py-2 px-3"
-                          key={index}
-                          onClick={() => handlePageChange(index + 1)}
-                          disabled={currentPage === index + 1}
-                        >
-                          {index + 1}
-                        </button>
-                        
-                      
-                    })
-                    
-                    }
+                        return (
+                          <button
+                            className="pagination py-2 px-3"
+                            key={index}
+                            onClick={() => handlePageChange(index + 1)}
+                            disabled={currentPage === index + 1}
+                          >
+                            {index + 1}
+                          </button>
+                        );
+                      })}
                       {/* <BsArrowRight className="text-2xl"   /> */}
                     </div>
                   </Col>
