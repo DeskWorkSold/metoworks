@@ -35,12 +35,10 @@ function MyVerticallyCenteredModal2(props) {
     educationLevel: "",
     empType: "",
     projectTimeline: { gte: "", lte: "" },
-    postedDate: `${date.getDate()}-${
-      date.getMonth() + 1
-    }-${date.getFullYear()}`,
-    expiryDate: `${date.getDate()}-${
-      date.getMonth() + 1
-    }-${date.getFullYear()}`,
+    postedDate: `${date.getDate()}-${date.getMonth() + 1
+      }-${date.getFullYear()}`,
+    expiryDate: `${date.getDate()}-${date.getMonth() + 1
+      }-${date.getFullYear()}`,
     madeOfWork: "",
     noOfOpenings: "",
     salaryCurrency: "",
@@ -228,85 +226,7 @@ function MyVerticallyCenteredModal2(props) {
       });
   };
 
-  const [success, setSuccess] = useState(false);
 
-  // const [errors, setErrors] = useState({
-  //   title: '',
-  //   industry: '',
-  //   jobFunction: '',
-  //   jobSubFunction: '',
-  //   location: '',
-  //   description: '',
-  //   requirements: '',
-  //   educationLevel: '',
-  //   profession: '',
-  //   madeOfWork: '',
-  //   noOfOpenings: '',
-  //   salaryCurrency: '',
-  //   salaryType: '',
-  //   salaryPayFreq: '',
-  //   lte: '',
-  //   gte: '',
-  //   lte: '',
-  //   gte: '',
-  //   isEmail: '',
-
-  // });
-  const validateForm = () => {
-    let newErrors = {};
-    if (!jobData.title) {
-      newErrors.title = "Job Title is required";
-    } else if (!jobData.industry) {
-      newErrors.industry = "Job industry is required";
-    } else if (!jobData.jobFunction) {
-      newErrors.jobFunction = "Job jobFunction is required";
-    } else if (!jobData.jobSubFunction) {
-      newErrors.jobSubFunction = "Job jobSubFunction is required";
-    } else if (!jobData.location) {
-      newErrors.location = "Job location is required";
-    } else if (!jobData.description) {
-      newErrors.description = "Job DESCRIPTION is required";
-    } else if (!jobData.requirements) {
-      newErrors.requirements = "Job requirements is required";
-    } else if (!jobData.educationLevel) {
-      newErrors.educationLevel = "Job educationLevel is required";
-    } else if (!jobData.profession) {
-      newErrors.profession = "Job profession is required";
-    } else if (!jobData.madeOfWork) {
-      newErrors.madeOfWork = "Job madeOfWork is required";
-    } else if (!jobData.noOfOpenings) {
-      newErrors.noOfOpenings = "Job noOfOpenings is required";
-    } else if (!jobData.salaryCurrency) {
-      newErrors.salaryCurrency = "Job salaryCurrency is required";
-    } else if (!jobData.salaryType) {
-      newErrors.salaryType = "Job salaryCurrency is required";
-    } else if (!jobData.salaryPayFreq) {
-      newErrors.salaryPayFreq = "Job salaryCurrency is required";
-    } else if (!isProjectTimeline.gte) {
-      newErrors.gte = "Job gte is required";
-    } else if (!isProjectTimeline.lte) {
-      newErrors.lte = "Job lte is required";
-    } else if (!isSalaryRange.gte) {
-      newErrors.name = "Job gte is required";
-    } else if (!isSalaryRange.lte) {
-      newErrors.gte = "Job lte is required";
-    } else if (!isEmail) {
-      newErrors.isEmail = "Email is required";
-    } else if (!/\S+@\S+\.\S+/.test(isEmail)) {
-      newErrors.email = "Email address is invalid";
-    }
-
-    setErrors(newErrors);
-    console.log(Object.keys(newErrors).length === 0, "validation");
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (validateForm()) {
-      setSuccess(true);
-    }
-  };
 
   return (
     <Modal
@@ -660,7 +580,7 @@ function MyVerticallyCenteredModal2(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUAL–NO SET HOURS OR DAYS OF WORK</option>
+                    <option>CASUALâ€“NO SET HOURS OR DAYS OF WORK</option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -1131,9 +1051,8 @@ function MyVerticallyCenteredModal2(props) {
                       //   value={user.name}
                       //   onChange={getUserData}
                       disabled
-                      value={`${date.getDate()}-${
-                        date.getMonth() + 1
-                      }-${date.getFullYear()}`}
+                      value={`${date.getDate()}-${date.getMonth() + 1
+                        }-${date.getFullYear()}`}
                       placeholder="Enter No. of Openings"
                       // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
                       required
@@ -1203,9 +1122,9 @@ function MyVerticallyCenteredModal2(props) {
 
 
 export const Interview = () => {
-  const [modalShowGoogFunc,setModalShowGoogFunc] = useState(false);
-  const [modalShowNotQuiteFunc,setModalShowNotQuiteFunc] = useState(false);
-  const [modalShowToKeepFunc,setModalShowToKeepFunc] = useState(false);
+  const [modalShowGoogFunc, setModalShowGoogFunc] = useState(false);
+  const [modalShowNotQuiteFunc, setModalShowNotQuiteFunc] = useState(false);
+  const [modalShowToKeepFunc, setModalShowToKeepFunc] = useState(false);
 
   const [show, setShow] = useState(false);
   const [smShow, setSmShow] = useState(false);
@@ -1218,11 +1137,11 @@ export const Interview = () => {
   const [filteredCategory, setFilteredCategory] = useState("");
   const [selectedValue, setSelectedValue] = useState('')
   const [isCount, setIsCount] = useState('')
-  const [interviewFilterdData ,setInterviewFilterdData] = useState('')
+  const [interviewFilterdData, setInterviewFilterdData] = useState('')
   // console.log(isCount, 'isCount');
   const handleSelectChange = (event) => {
     let data = event.target.value
-    if(data) {
+    if (data) {
       setInterviewFilterdData(interviewData.filter(filter => {
         return filter.internalState == data
       }))
@@ -1258,11 +1177,11 @@ export const Interview = () => {
         let count = res.data.count
         // setPageCount(Math.ceil(count / param.size))
         setIsCount(count)
-      //  if(selectedValue) {
-      //   setInterviewData(data.map((e) => {
-      //     return selectedValue == e.internalState
-      //   }))
-      //  }
+        //  if(selectedValue) {
+        //   setInterviewData(data.map((e) => {
+        //     return selectedValue == e.internalState
+        //   }))
+        //  }
         setInterviewData(data);
         setInterviewFilterdData(data)
         let filteredData = data.map((items) => {
@@ -1280,26 +1199,26 @@ export const Interview = () => {
     for (let item of data) {
       // console.log(item, 'iteeeeeeeeeeeeeeeeeeeeeeem');
       let image = item?.freelancer?.files?.thumbnail
-  //  console.log(image, 'imaaaaaaaaaaaaaaaaaaage');
-   const imagePath = image?.split(".");
-  //  console.log(imagePath, 'imagePath');
+      //  console.log(image, 'imaaaaaaaaaaaaaaaaaaage');
+      const imagePath = image?.split(".");
+      //  console.log(imagePath, 'imagePath');
 
-   if (imagePath?.length && image?.match(/\.(jpg|jpeg|png|gif)$/i)) {
-    // alert('sdf')
-    axios.get(`/api/v1/user/asset/thumbnail/${imagePath?.[0]}?mimeType=.${imagePath?.[1]}`)
-    .then((res) => {
-      const response = res.arrayBuffer();
-      let base64ImageString = Buffer.from(response, 'binary').toString('base64')
-      let srcValue = `data:image/${imagePath?.[1]};base64,`+base64ImageString;
-      temArray.push({ img: srcValue, id: item?.id });
-      setProfileImg(srcValue)
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-   }
-  }
-   
+      if (imagePath?.length && image?.match(/\.(jpg|jpeg|png|gif)$/i)) {
+        // alert('sdf')
+        axios.get(`/api/v1/user/asset/thumbnail/${imagePath?.[0]}?mimeType=.${imagePath?.[1]}`)
+          .then((res) => {
+            const response = res.arrayBuffer();
+            let base64ImageString = Buffer.from(response, 'binary').toString('base64')
+            let srcValue = `data:image/${imagePath?.[1]};base64,` + base64ImageString;
+            temArray.push({ img: srcValue, id: item?.id });
+            setProfileImg(srcValue)
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }
+
   }
 
   function MyVerticallyCenteredModalFunc(props) {
@@ -1317,7 +1236,7 @@ export const Interview = () => {
         </Modal.Header>
         <Modal.Body>
           <p>
-          Success!
+            Success!
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -1346,12 +1265,12 @@ export const Interview = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-          Not Quit
+            Not Quit
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
-          Success
+            Success
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -1380,12 +1299,12 @@ export const Interview = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-          Goot To Keep
+            Goot To Keep
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
-     Success
+            Success
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -1406,45 +1325,45 @@ export const Interview = () => {
   };
   const GoodToFitFunc = (event) => {
     let EventData = event.clicked = true
-  let value = {
+    let value = {
       "value": "GOOD_FIT"
     }
     axios
-    .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
-    .then((res) => {
-      console.log(res, "Initial Data");
-      let data = res.data.data;
-      if(res) {
-        // Modalshowgoogfunc(true)
-        // console.log(EventData, 'EventData');
-        Modalshowgoogfunc(EventData)
-        searchFunc()
+      .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
+      .then((res) => {
+        console.log(res, "Initial Data");
+        let data = res.data.data;
+        if (res) {
+          // Modalshowgoogfunc(true)
+          // console.log(EventData, 'EventData');
+          Modalshowgoogfunc(EventData)
+          searchFunc()
 
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
   }
-  const  GoodToKeepFunc = (event) => {
+  const GoodToKeepFunc = (event) => {
     let EventData = event.clicked = true
     let value = {
       "value": "GOOD_TO_KEEP"
     }
     axios
-    .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
-    .then((res) => {
-      console.log(res, "Initial Data");
-      let data = res.data.data;
-      if(res) {
-        ModalgootTokeepfunc(EventData)
-        searchFunc()
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
+      .then((res) => {
+        console.log(res, "Initial Data");
+        let data = res.data.data;
+        if (res) {
+          ModalgootTokeepfunc(EventData)
+          searchFunc()
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   const NotQuiteFunc = (event) => {
@@ -1454,18 +1373,18 @@ export const Interview = () => {
       "value": "NOT_QUITE"
     }
     axios
-    .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
-    .then((res) => {
-      console.log(res, "Initial Data");
-      let data = res.data.data;
-      if(res) {
-        Modalnotquitfunc(EventData)
-        searchFunc()
-      }
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .post(`api/v1/interview/freelancer/match?id=${event.id}`, value)
+      .then((res) => {
+        console.log(res, "Initial Data");
+        let data = res.data.data;
+        if (res) {
+          Modalnotquitfunc(EventData)
+          searchFunc()
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function MyVerticallyCenteredModal(props) {
@@ -1490,7 +1409,7 @@ export const Interview = () => {
           <Modal.Body className="webkit">
             <h2 className="text-2xl font-bold">10 Tokens</h2>
             <p className="text-lg" style={{ color: "#C1C1C1" }}>
-              10 Tokens to View ProÃ¯Â¬Âle
+              10 Tokens to View ProÃƒÂ¯Ã‚Â¬Ã‚Âle
             </p>
             <div style={{ display: "inline-grid" }}>
               <Button
@@ -1525,6 +1444,7 @@ export const Interview = () => {
     }
   };
 
+  const [errors, setErrors] = useState()
   function MyVerticallyCenteredModal1(props) {
     // console.log(props, "props")
     const [arrangeInterview, setArrangeInterview] = useState({
@@ -1532,41 +1452,37 @@ export const Interview = () => {
       type: "",
       location: '',
       notes: '',
-      id : props?.id?.id
+      id: props?.id?.id
     })
-  
-  //   const data = {
-  //     "id": props.id.id,
-  //     "timestamp": "2023-12-01T07:20:53+0000",
-  //     "type": "IN_PERSON",
-  //     "location": "421 7b, Paker Street, NY",
-  //     "notes": "hey this is some special notes for you"
-  // }
-    // console.log('arrangeInterview', arrangeInterview);
+    let values = Object.values(arrangeInterview);
+    values = values.every((e, i) => e !== "");
     const submitArrangeInterView = () => {
-    
-      // console.log(arrangeInterview, "arrange")
-  
-      axios.post(`/api/v1/interview/applicants/arrange`, arrangeInterview).then((res) => {
-        if (res.data) {
-      props.onHide()
+      if (values) {
+        axios.post(`/api/v1/interview/applicants/arrange`, arrangeInterview).then((res) => {
+          if (res.data) {
+            props.onHide()
+          }
+        }).catch((error) => {
+          console.log(error, "error")
+        })
+      }
+      else {
+        let newErrors = {};
+        if (!arrangeInterview.timestamp) {
+          newErrors.timestamp = "Job Time is required";
         }
-      }).catch((error) => {
-        console.log(error, "error")
-      })
-  
-  
-      // onScheduleApplicant({
-      //   id: currentApplicant?.id,
-      //   timestamp: arrangeInterview.timestamp,
-      //   type: arrangeInterview.type,
-      //   location: arrangeInterview.location,
-      //   notes: arrangeInterview.notes,
-      // })
-      // console.log('currentApplicant', currentApplicant.id);
+        if (!arrangeInterview.type) {
+          newErrors.type = "Job type is required";
+        }
+        if (!arrangeInterview.location) {
+          newErrors.location = "Job location is required";
+        }
+        if (!arrangeInterview.notes) {
+          newErrors.notes = "Job notes is required";
+        }
+        setErrors(newErrors)
+      }
     }
-  
-  
     return (
       <Modal
         {...props}
@@ -1594,6 +1510,7 @@ export const Interview = () => {
                   type={"datetime-local"}
                   onChange={(e) => setArrangeInterview({ ...arrangeInterview, timestamp: e.target.value })}
                 />
+                {errors && errors.timestamp && (<p style={{ color: "red" }}>{errors.timestamp}</p>)}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1601,7 +1518,7 @@ export const Interview = () => {
                 <label className="text-lg" style={{ width: "100%" }}>
                   Interview Type
                 </label>
-  
+
                 <Form.Select aria-label="Default select example" value={arrangeInterview.interviewType} onChange={(e) => setArrangeInterview({ ...arrangeInterview, type: e.target.value })}>
                   <option value="DEFAULT" disabled="">
                     Select Type
@@ -1609,6 +1526,7 @@ export const Interview = () => {
                   <option>ONLINE</option>
                   <option>IN_PERSON</option>
                 </Form.Select>
+                {errors && errors.type && (<p style={{ color: "red" }}>{errors.type}</p>)}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1616,7 +1534,7 @@ export const Interview = () => {
                 <label className="text-lg" style={{ width: "100%" }}>
                   Interview Location / Link
                 </label>
-  
+
                 <input
                   style={{ width: "100%" }}
                   className="form-control"
@@ -1626,6 +1544,7 @@ export const Interview = () => {
                   placeholder="  "
                   required
                 />
+                {errors && errors.location && (<p style={{ color: "red" }}>{errors.location}</p>)}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1633,7 +1552,7 @@ export const Interview = () => {
                 <label className="text-lg" style={{ width: "100%" }}>
                   Other
                 </label>
-  
+
                 <input
                   style={{ width: "100%" }}
                   className="form-control"
@@ -1643,6 +1562,7 @@ export const Interview = () => {
                   placeholder=" "
                   required
                 />
+                {errors && errors.notes && (<p style={{ color: "red" }}>{errors.notes}</p>)}
               </fieldset>
             </Col>
           </div>
@@ -1654,7 +1574,7 @@ export const Interview = () => {
           >
             Cancel
           </Button>
-  
+
           <Button
             style={{ background: "none", color: "#39BEC1" }}
             onClick={() =>
@@ -1680,27 +1600,45 @@ export const Interview = () => {
 
   function MyVerticallyCenteredModal3(props) {
     // console.log(props, 'prrrrrrrrrrrrrrrrrrrrrrrrrps');
-  const [jobOffer, setJobOffer] = useState({
-     joiningDate: "",
+    const [jobOffer, setJobOffer] = useState({
+      joiningDate: "",
       jobTitle: "",
       salary: "",
       interviewId: props?.props?.id,
       msg: ''
-  })
-  
-  const JobOfferFunc = () => {
-    axios.post(`api/v1/interview/offer`, jobOffer).then((res) => {
-      if (res.data) {
-     props.onHide()
-      }
-    }).catch((error) => {
-      console.log(error, "error")
     })
-    
-  }
-  
-  
-  
+
+    let values = Object.values(jobOffer);
+    values = values.every((e, i) => e !== "");
+    console.log('values', values);
+    const JobOfferFunc = () => {
+      if (values) {
+        axios.post(`api/v1/interview/offer`, jobOffer).then((res) => {
+          if (res.data) {
+            props.onHide()
+          }
+        }).catch((error) => {
+          console.log(error, "error")
+        })
+      }
+      else {
+        let newErrors = {};
+        if (!jobOffer.joiningDate) {
+          newErrors.joiningDate = "Job joiningDate is required";
+        }
+        if (!jobOffer.jobTitle) {
+          newErrors.jobTitle = "Job jobTitle is required";
+        }
+        if (!jobOffer.salary) {
+          newErrors.salary = "Job salary is required";
+        }
+        if (!jobOffer.msg) {
+          newErrors.msg = "Job msg is required";
+        }
+        setErrors(newErrors)
+      }
+    }
+
     return (
       <Modal
         {...props}
@@ -1726,10 +1664,11 @@ export const Interview = () => {
                   className="form-control"
                   name="date"
                   type={"datetime-local"}
-                  onChange={(e) => setJobOffer({...jobOffer, joiningDate : e.target.value})}
+                  onChange={(e) => setJobOffer({ ...jobOffer, joiningDate: e.target.value })}
                 //   value={user.number}
                 //   onChange={getUserData}
                 />
+                {errors && errors.joiningDate && (<p style={{ color: "red" }}>{errors.joiningDate}</p>)}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1737,16 +1676,17 @@ export const Interview = () => {
                 <label className="text-lg" style={{ width: "100%" }}>
                   Job Title
                 </label>
-  
+
                 <input
                   style={{ width: "100%" }}
                   className="form-control"
                   name="date"
                   type={"text"}
-                  onChange={(e) => setJobOffer({...jobOffer, jobTitle : e.target.value})}
+                  onChange={(e) => setJobOffer({ ...jobOffer, jobTitle: e.target.value })}
                 //   value={user.number}
                 //   onChange={getUserData}
                 />
+                {errors && errors.jobTitle && (<p style={{ color: "red" }}>{errors.jobTitle}</p>)}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1754,7 +1694,7 @@ export const Interview = () => {
                 <label className="text-lg" style={{ width: "100%" }}>
                   Salary
                 </label>
-  
+
                 <input
                   style={{ width: "100%" }}
                   className="form-control"
@@ -1764,8 +1704,9 @@ export const Interview = () => {
                   //   onChange={getUserData}
                   placeholder="  "
                   required
-                  onChange={(e) => setJobOffer({...jobOffer, salary : e.target.value})}
+                  onChange={(e) => setJobOffer({ ...jobOffer, salary: e.target.value })}
                 />
+                {errors && errors.salary && (<p style={{ color: "red" }}>{errors.salary}</p>)}
               </fieldset>
             </Col>
             <Col lg="12">
@@ -1773,7 +1714,7 @@ export const Interview = () => {
                 <label className="text-lg" style={{ width: "100%" }}>
                   Message
                 </label>
-  
+
                 <input
                   style={{ width: "100%" }}
                   className="form-control"
@@ -1782,9 +1723,10 @@ export const Interview = () => {
                   //   value={user.name}
                   //   onChange={getUserData}
                   placeholder=" "
-                  onChange={(e) => setJobOffer({...jobOffer, msg : e.target.value})}
+                  onChange={(e) => setJobOffer({ ...jobOffer, msg: e.target.value })}
                   required
                 />
+                {errors && errors.msg && (<p style={{ color: "red" }}>{errors.msg}</p>)}
               </fieldset>
             </Col>
           </div>
@@ -1796,7 +1738,7 @@ export const Interview = () => {
           >
             Cancel
           </Button>
-  
+
           <Button
             style={{ background: "none", color: "#39BEC1" }}
             onClick={() => JobOfferFunc(props)}
@@ -1819,12 +1761,12 @@ export const Interview = () => {
   };
 
   const saveBookMarkFunc = (event) => {
-  axios.post(`api/v1/user/recruiter/save-freelancer/${event.id}`).then((res) => {
-     console.log(res, 'data save succesfully');
-  }).catch((error) => {
-    console.log(error, "error")
-  })
-  
+    axios.post(`api/v1/user/recruiter/save-freelancer/${event.id}`).then((res) => {
+      console.log(res, 'data save succesfully');
+    }).catch((error) => {
+      console.log(error, "error")
+    })
+
   }
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -2043,12 +1985,12 @@ export const Interview = () => {
                                               Good Fit
                                             </Button>
                                             {events.clicked == true && (
-                                            <MyVerticallyCenteredModalFunc
-        show={modalShowGoogFunc}
-        props={events}
-        onHide={() => Modalshowgoogfunc(events)}
-      />
-      )}
+                                              <MyVerticallyCenteredModalFunc
+                                                show={modalShowGoogFunc}
+                                                props={events}
+                                                onHide={() => Modalshowgoogfunc(events)}
+                                              />
+                                            )}
 
                                             <Button
                                               // onClick={handleShow}
@@ -2065,13 +2007,13 @@ export const Interview = () => {
                                               Not Quite
                                             </Button>
                                             {events.clicked == true && (
-                                                                                    <MyVerticallyCenteredModalNotQuitFunc
-        show={modalShowNotQuiteFunc}
-        props={events}
-        onHide={() => Modalnotquitfunc (events)}
-      />
-      
-      )}
+                                              <MyVerticallyCenteredModalNotQuitFunc
+                                                show={modalShowNotQuiteFunc}
+                                                props={events}
+                                                onHide={() => Modalnotquitfunc(events)}
+                                              />
+
+                                            )}
                                             <Button
                                               className="text-white border-rounded px-3 mx-3 py-3 w-40"
                                               style={{
@@ -2080,19 +2022,19 @@ export const Interview = () => {
                                                 marginTop: "10px",
                                                 marginBottom: "10px",
                                               }}
-                                             onClick={() => GoodToKeepFunc(events)}
-                                             disabled={events.match == 'GOOT_TO_KEEP' ? true : false}
+                                              onClick={() => GoodToKeepFunc(events)}
+                                              disabled={events.match == 'GOOT_TO_KEEP' ? true : false}
                                             >
                                               Good to Keep
                                             </Button>
                                             {events.clicked == true && (
-                                            <MyVerticallyCenteredModalGootToKeepFunc
-        show={modalShowToKeepFunc}
-        props={events}
-        onHide={() => ModalgootTokeepfunc (events)}
-      />
-      
-      )}
+                                              <MyVerticallyCenteredModalGootToKeepFunc
+                                                show={modalShowToKeepFunc}
+                                                props={events}
+                                                onHide={() => ModalgootTokeepfunc(events)}
+                                              />
+
+                                            )}
                                             {/* <Button
                                     className="border-rounded text-2xl"
                                     style={{
@@ -2106,14 +2048,14 @@ export const Interview = () => {
                                         </div>
                                       </Col>
                                       <Col lg="2" className="webkit">
-                                        {profileImg.length > 0 ?  
-                                        <div style={{ width: '150px',  height: '150px', borderRadius: '50%',  background: '#512DA8',  fontSize: '35px',  color: '#fff',  textAlign: 'center', lineHeight: '150px',  margin: '20px 0'}}>{events.freelancer.firstName.substring(0, 1)}</div>
-                                      :
-                                      <Image
-                                      style={{ width: "100%" }}
-                                      src={profileImg ? profileImg : require("../../../assets/Profile.png")}
-                                    />
-                                      }
+                                        {profileImg.length > 0 ?
+                                          <div style={{ width: '150px', height: '150px', borderRadius: '50%', background: '#512DA8', fontSize: '35px', color: '#fff', textAlign: 'center', lineHeight: '150px', margin: '20px 0' }}>{events.freelancer.firstName.substring(0, 1)}</div>
+                                          :
+                                          <Image
+                                            style={{ width: "100%" }}
+                                            src={profileImg ? profileImg : require("../../../assets/Profile.png")}
+                                          />
+                                        }
                                       </Col>
                                       <Col lg="7">
                                         <h2 className="py-3">
@@ -2161,12 +2103,12 @@ export const Interview = () => {
                                             VIEW PROFILE
                                           </Button>
                                           {events.clicked == true && (
-                                          <MyVerticallyCenteredModal
-                                            show={modalShow}
-                                            props={events}
-                                            onHide={() => token (events)}
-                                          />                                       
-      )}
+                                            <MyVerticallyCenteredModal
+                                              show={modalShow}
+                                              props={events}
+                                              onHide={() => token(events)}
+                                            />
+                                          )}
                                         </div>
                                       </Col>
                                     </Row>
@@ -2232,14 +2174,14 @@ export const Interview = () => {
                                             >
                                               ARRANGE INTERVIEW
                                             </Button>
-                                          
-      {events.clicked == true && (
-                                            <MyVerticallyCenteredModal1
-                                              show={lgShow}
-                                              props={events}
-                                              onHide={() => setlgshow(events)}
-                                              id={events}
-                                            />
+
+                                            {events.clicked == true && (
+                                              <MyVerticallyCenteredModal1
+                                                show={lgShow}
+                                                props={events}
+                                                onHide={() => setlgshow(events)}
+                                                id={events}
+                                              />
                                             )}
                                           </div>
                                         </Col>
@@ -2261,19 +2203,19 @@ export const Interview = () => {
                                               OFFER
                                             </Button>
                                             {events.clicked == true && (
-                                                <MyVerticallyCenteredModal3
-                                            props={events}
-                                              show={OfferShow}
-                                              onHide={() => setoffershow(events)}
-                                            />
-                                            
+                                              <MyVerticallyCenteredModal3
+                                                props={events}
+                                                show={OfferShow}
+                                                onHide={() => setoffershow(events)}
+                                              />
+
                                             )}
 
                                           </div>
                                         </Col>
                                       </Row>
                                     </Container>
-                    </div>
+                                  </div>
                                 </div>
                               </Col>
                             </Row>

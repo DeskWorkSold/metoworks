@@ -260,6 +260,7 @@ export const FreelanceFindWork = () => {
   const [minSalary, setMinSalary] = useState('');
   const [maxSalary, setMaxSalary] = useState('');
   const [jobFunction, setJobFunction] = useState('');
+  const [modeofWork, setModeOfWork] = useState('')
   const [minExperience, setMinExperience] = useState('');
   const [maxExperience, setMaxExperience] = useState('');
   const searchFun = () => {
@@ -268,15 +269,14 @@ export const FreelanceFindWork = () => {
       "filter": []
   };
 
-  if(jobIndustry) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobIndustry":jobIndustry}}}});
-  if(city) reqBody?.filter?.push({"term": {"city":city}});
-  if(jobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobFunction":jobFunction}}}});
-  if(jobFunction && subJobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobSubFunction":subJobFunction}}}});
+  if(jobIndustry) reqBody?.filter?.push({"term": {"industry": jobIndustry}});
+  if(jobFunction) reqBody?.filter?.push({"term": {"jobFunction": jobFunction}});
+  if(jobFunction && subJobFunction) reqBody?.filter?.push({"term": {"jobSubFunction": subJobFunction}});
+  if(modeofWork) reqBody?.filter?.push({"term": {"modeOfWork": modeofWork}});
   if(minSalary && maxSalary) reqBody?.filter?.push({"range":{"salaryRange":{"gte":minSalary,"lte":maxSalary}}});
-  if(minExperience && maxExperience) reqBody?.filter?.push( {"range":{"expYears":{"gte":minExperience,"lte":maxExperience}}});
-  if(educationLevel) reqBody?.filter?.push({"nested":{"path":"education","query":{"term":{"education.educationLevel":educationLevel}}}});
-  if(languageType) reqBody?.filter?.push({"nested":{"path":"language","query":{"term":{"language.languageType":languageType}}}});
-  console.log(reqBody, 'eeeeeeeeeeeee');
+  if(city) reqBody?.filter?.push({"term": {"location": city}});
+
+  // console.log(reqBody, 'eeeeeeeeeeeee');
     axios
       .post(`api/v1/search/job-post?from=0&size=4`, reqBody)
       .then((res) => {
@@ -294,6 +294,21 @@ export const FreelanceFindWork = () => {
     setSearchData(null);
   };
 
+const SavedJob = (events) => {
+  console.log(events, 'events');
+  axios
+  .post(`api/v1/user/freelancer/saved-jobs/${events._id}`)
+  .then((res) => {
+    // console.log(res, "Initial Data");
+    // let data = res.data.data.data;
+    console.log(res, "success");
+    // setIsProfileData(data)
+    // setSearchData(data);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+};
 
 
   return (
@@ -333,7 +348,7 @@ export const FreelanceFindWork = () => {
         </Row>
         {searchShow === true ? (
           <>
-             <Row className="align-items-center">
+           <Row className="align-items-center">
               <Col lg="5">
                 <div className="p-3">
                   <Col lg="12">
@@ -568,7 +583,8 @@ export const FreelanceFindWork = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Mode of Work
                       </label>
-                      <Form.Select aria-label="Default select example">
+                      <Form.Select aria-label="Default select example"
+                      onChange={(e) => setModeOfWork(e.target.value)}>
                         <option>Select Mode of Work</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -714,194 +730,165 @@ export const FreelanceFindWork = () => {
               />
             </div>
           </Col>
-        </Row>{" "}
-        {searchData?.data?.length > 0 &&
-          searchData?.data?.map((values, keys) => {
-            console.log(values, "values");
-            return (
-              <Row>
-                <Col lg="12" key={keys}>
-                  <div className="p-3">
-                    <div className="boxshad">
-                      <Row>
-                        <Col lg="7">
-                          {/* <p
-                                className="py-2"
-                                style={{
-                                  float: "right",
-                                  color: "#7A7979",
-                                  fontSize: "20px",
-                                  display: "flex",
-                                }}
-                              >
-                                <BsBookmark /> Bookmark
-                              </p> */}
-                          <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                            {values?._source?.title}
-                          </h2>
-                          <p style={{ color: "#7A7979" }} className="text-lg">
-                            {values?._source?.empType}
-                          </p>
-                        </Col>
-                        <Col lg="5" className="webkit-right">
-                          <Button
-                            className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
-                            style={{ background: "#39BEC1", border: "none" }}
-                            onClick={() => applyFunc(values)}
-                            // onClick={() => setModalShowGoogFunc(true)}
-                          >
-                            APPLY
-                          </Button>
-                          <MyVerticallyCenteredModalFunc
-        show={modalShowGoogFunc}
-        onHide={() => setModalShowGoogFunc(false)}
-      />
-                          <Button
-                            onClick={() => modalshow(values)}
-                            className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
-                            style={{ background: "#C1C1C1", border: "none" }}
-                          >
-                            VIEW MORE DETAIL
-                          </Button>
-                          {values.clicked == true && (
-                            <MyVerticallyCenteredModal
-                              show={modalShow}
-                              props={values}
-                              onHide={() => modalshow(values)}
-                            />
-                          )}
-                          {/* <Button
-                                className="text-white border-rounded py-2 px-3 w-48"
-                                style={{ background: "#39BEC1", border: "none" }}
-                              >
-                                apply
-                              </Button>
-                              <Button
-                                className="text-white border-rounded py-2 px-3 w-48 mx-2"
-                                style={{ background: "#39BEC1", border: "none" }}
-                              >
-                                view more details
-                              </Button> */}
-                          <p style={{ color: "#7A7979" }} className="text-lg">
-                            Posted Date :{" "}
-                            {values?._source?.postedDate.substring(0, 10)}
-                            &nbsp;&nbsp; &nbsp;&nbsp;
-                            <span>
-                              Expiry Date :{" "}
-                              {values?._source?.expiryDate.substring(0, 10)}
-                            </span>
-                          </p>
-                        </Col>
-                      </Row>
-                      <Row className="align-items-center block-for-res">
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Company Name
-                            </h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {values?._source?.companyName}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Job Industry
-                            </h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {values?._source?.industry}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Salary Range
-                            </h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {values?._source?.salaryRange?.gte +
-                                " - " +
-                                values?._source?.salaryRange?.lte}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">Location</h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {values?._source?.location}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              No. of candidates
-                            </h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {values?._source?.noOfOpenings}
-                            </h2>
-                          </div>
-                        </Col>
-                      </Row>
-                      <hr className="my-2" />
-                      <Row className="align-items-center">
-                        <Col lg="10">
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Job Description
-                            </h2>
-                            <h2
-                              className="text-l py-3"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {values?._source?.description}
-                            </h2>
-                          </div>
-                        </Col>
+        </Row>
+        {searchData && searchData?.length > 0 ? 
+        searchData?.map((values, keys) => {
+          console.log(values, 'vaaaaaaaluee');
+          return (
+            <Row>
+              <Col lg="12" key={keys}>
+                <div className="p-3">
+                  <div className="boxshad">
+                    <Row>
+                      <Col lg="7">
+                        
+                        <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
+                          {values?._source?.title}
+                        </h2>
+                        <p style={{ color: "#7A7979" }} className="text-lg">
+                          {values?._source?.empType}
+                        </p>
+                      </Col>
+                      <Col lg="5" className="webkit-right">
+                        <Button
+                          className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
+                          style={{ background: "#39BEC1", border: "none" }}
+                        >
+                          APPLY
+                        </Button>
 
-                        <Col lg="2">
-                          <p
-                            className="py-2"
-                            style={{
-                              float: "right",
-                              color: "#7A7979",
-                              fontSize: "25px",
-                              display: "flex",
-                            }}
+                        <Button
+                          onClick={() => modalshow(values)}
+                          className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
+                          style={{ background: "#C1C1C1", border: "none" }}
+                        >
+                          VIEW MORE DETAIL
+                        </Button>
+                        {values.clicked == true && (
+                          <MyVerticallyCenteredModal
+                            show={modalShow}
+                            props={values}
+                            onHide={() => modalshow(values)}
+                          />
+                        )}
+                  
+                        <p style={{ color: "#7A7979" }} className="text-lg">
+                          Posted Date :
+                          {values?._source?.postedDate.substring(0, 10)}
+                          &nbsp;&nbsp; &nbsp;&nbsp;
+                          <span>
+                            Expiry Date :
+                            {values?._source?.expiryDate.substring(0, 10)}
+                          </span>
+                        </p>
+                      </Col>
+                    </Row>
+                    <Row className="align-items-center block-for-res">
+                      <Col>
+                        <div className="p3 py-3">
+                          <h2 className="text-lg font-semibold">
+                            Company Name
+                          </h2>
+                          <h2
+                            className="text-lg"
+                            style={{ color: "#7A7979" }}
                           >
-                            <BsBookmark onClick={() => saveJob(values)} />
-                          </p>
-                          {/* <Button
-                                className="text-white border-rounded px-3"
-                                style={{ background: "#39BEC1", border: "none" }}
-                              >
-                                View Profile
-                              </Button> */}
-                        </Col>
-                      </Row>
-                    </div>
+                            {values?._source?.companyName}
+                          </h2>
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className="p3 py-3">
+                          <h2 className="text-lg font-semibold">
+                            Job Industry
+                          </h2>
+                          <h2
+                            className="text-lg"
+                            style={{ color: "#7A7979" }}
+                          >
+                            {values?._source?.industry}
+                          </h2>
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className="p3 py-3">
+                          <h2 className="text-lg font-semibold">
+                            Salary Range
+                          </h2>
+                          <h2
+                            className="text-lg"
+                            style={{ color: "#7A7979" }}
+                          >
+                            {values?._source?.salaryRange?.gte +
+                              " - " +
+                              values?._source?.salaryRange?.lte}
+                          </h2>
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className="p3 py-3">
+                          <h2 className="text-lg font-semibold">Location</h2>
+                          <h2
+                            className="text-lg"
+                            style={{ color: "#7A7979" }}
+                          >
+                            {values?._source?.location}
+                          </h2>
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className="p3 py-3">
+                          <h2 className="text-lg font-semibold">
+                            No. of candidates
+                          </h2>
+                          <h2
+                            className="text-lg"
+                            style={{ color: "#7A7979" }}
+                          >
+                            {values?._source?.noOfOpenings}
+                          </h2>
+                        </div>
+                      </Col>
+                    </Row>
+                    <hr className="my-2" />
+                    <Row className="align-items-center">
+                      <Col lg="10">
+                        <div className="p3 py-3">
+                          <h2 className="text-lg font-semibold">
+                            Job Description
+                          </h2>
+                          <h2
+                            className="text-l py-3"
+                            style={{ color: "#7A7979" }}
+                          >
+                            {values?._source?.description.replace(
+                              /(<([^>]+)>)/gi,
+                              ""
+                            )}
+                          </h2>
+                        </div>
+                      </Col>
+
+                      <Col lg="2">
+                        <p
+                          className="py-2"
+                          style={{
+                            float: "right",
+                            color: "#7A7979",
+                            fontSize: "25px",
+                            display: "flex",
+                          }}
+                        >
+                          <BsBookmark onClick={() => SavedJob(values)} />
+                        </p>
+                      </Col>
+                    </Row>
                   </div>
-                </Col>
-              </Row>
-            );
-          })}
+                </div>
+              </Col>
+            </Row>
+          )
+        }) : <div style={{textAlign : 'center'}}> <h1 style={{fontSize : '3vh', fontWeight : 'bolder'}}> No Opportunities Found </h1> </div>}
       </Container>
     </Container>
   );

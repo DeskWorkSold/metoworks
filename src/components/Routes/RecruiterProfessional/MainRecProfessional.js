@@ -1924,9 +1924,8 @@ export const MainRecProfessional = () => {
       <Container>
         <Row className="align-items-center">
         {searchData && searchData?.length > 0 ? searchData?.length > 0 && searchData?.map((event, data) => {
-          console.log(event, 'eeeeeeeeeeeeeeeeeeeeeeeeee');
           return (
-            <Col lg="12">
+            <Col lg="12" keys={data}>
             <div className="m-3">
               <div className="boxshad py-3">
                 <Row className="align-items-center">
