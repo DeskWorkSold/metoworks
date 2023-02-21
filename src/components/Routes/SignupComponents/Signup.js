@@ -3,7 +3,7 @@ import { Col, Container, Row, Image, FormCheck, Button } from "react-bootstrap";
 import { BsFacebook, BsLinkedin } from "react-icons/bs";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { BrowserRouter as Route, Router, Link, Switch } from "react-router-dom";
-
+import FacebookInUI from "../facebook";
 import "react-tabs/style/react-tabs.css";
 import axios from "../../../utils/axios.api";
 
@@ -73,6 +73,16 @@ export const Signup = () => {
         });
     }
   };
+  const [isFacebook, setIsFacebook] = useState(false)
+
+  const facebookSignUp = () => {
+    if(isFacebook == true) {
+      setIsFacebook(false)
+    } else {
+      setIsFacebook(true)
+    }
+  }
+
   return (
     <Container>
       <Row className="align-items-center">
@@ -465,7 +475,9 @@ export const Signup = () => {
                         <BsFacebook
                           className="text-7xl"
                           style={{ color: "#4267B2" }}
+                          onClick={facebookSignUp}
                         />
+                        {isFacebook && <FacebookInUI type={"signUp"} style={{top:-50}} />}
                       </Col>
                       <Col lg="1"></Col>
                     </Row>

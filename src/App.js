@@ -34,6 +34,7 @@ import { FreelanceMainJobApply } from "./components/Routes/FreelanceMainJobApply
 import { FreelanceMainSavedJobs } from "./components/Routes/FreelanceMainSavedJobs";
 import { FreelancerSheduled } from "./components/Routes/FreelancerSheduled";
 import { FreelanceMainOffer } from "./components/Routes/FreelanceMainOffer";
+import FacebookInUI from "./components/Routes/facebook";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
         <Route path="/FreeContact" element={<Contact />} />
         <Route path="/Login" element={<LoaginMain />} />
         <Route path="/Signup" element={<MainSignin />} />
+        <Route path="/facebook" element={<FacebookInUI/>} /> 
         {/* Recruiter */}
         <Route path="/CompanyProfile" element={<CompanyProfile />} />
         <Route path="/PublishedJob" element={<MainPublishJobs />} />

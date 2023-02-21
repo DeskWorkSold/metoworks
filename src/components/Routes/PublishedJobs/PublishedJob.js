@@ -1,6 +1,14 @@
 import React, { useState, Component, useCallback } from "react";
 import { Container, Button, Row, Col, Image, Form } from "react-bootstrap";
-import { BsBookmark, BsCoin, BsPencilSquare, BsReceipt } from "react-icons/bs";
+import {
+  BsArrowBarLeft,
+  BsArrowLeft,
+  BsArrowRight,
+  BsBookmark,
+  BsCoin,
+  BsPencilSquare,
+  BsReceipt,
+} from "react-icons/bs";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 // import Button from 'react-bootstrap/Button';
@@ -660,7 +668,7 @@ function MyVerticallyCenteredModal(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUAL–NO SET HOURS OR DAYS OF WORK</option>
+                    <option>CASUALâ€“NO SET HOURS OR DAYS OF WORK</option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -1200,6 +1208,7 @@ function MyVerticallyCenteredModal(props) {
     </Modal>
   );
 }
+
 export const PublishedJob = () => {
   const data = [
     { id: 1, name: "Item 1" },
@@ -1219,10 +1228,20 @@ export const PublishedJob = () => {
     { id: 15, name: "Item 15" },
   ];
 
+  const [mySize, setMySize] = useState(4);
+  const [fromData, setFromData] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 2;
+  const itemsPerPage = 4;
   const totalItems = data.length;
   const handlePageChange = (pageNumber) => {
+    console.log(pageNumber, "pageNumbers");
+
+    let from = (pageNumber - 1) * 4;
+
+    setFromData(from);
+    setTimeout(() => {
+      initialFun();
+    }, 500);
     setCurrentPage(pageNumber);
   };
 
@@ -1244,11 +1263,24 @@ export const PublishedJob = () => {
     { id: 15, name: "Item 15" },
   ];
   const [currentPage1, setCurrentPage1] = useState(1);
-  const itemsPerPage1 = 2;
+  const itemsPerPage1 = 4;
   const totalItems1 = data1.length;
+
+  console.log(fromData, "dataaaa");
+
   const handlePageChange1 = (pageNumber1) => {
+    console.log(pageNumber1, "pageNumberssssssss");
+
+    let from = (pageNumber1 - 1) * 4;
+
+    setFromData(from);
+    setTimeout(() => {
+      initialFun();
+    }, 500);
+
     setCurrentPage1(pageNumber1);
   };
+  console.log(fromData, "fromData");
   const [modalShowPublish, setModalShowPublish] = React.useState(false);
   const [show, setShow] = useState(false);
   const [show1, setShow1] = useState(false);
@@ -1268,6 +1300,7 @@ export const PublishedJob = () => {
   const handleShow3 = () => setShow3(true);
   const [modalShow, setModalShow] = React.useState(false);
   const [searchData, setSearchData] = useState({});
+  const [count, setCount] = useState(null);
 
   const [userId, setUserId] = useState("");
   const [isToken, setIsToken] = useState({});
@@ -1306,21 +1339,26 @@ export const PublishedJob = () => {
 
   const [isEmail, setIsEmail] = useState("");
   const [isProfileData, setIsProfileData] = useState({});
+
   // console.log(isProfileData, 'fucccccccccccccccccccccccccccccccccccccccccccccking');
   const initialFun = () => {
     axios
-      .get(`api/v1/job-post?from=0&size=4&submitted=true`)
+      .get(`api/v1/job-post?from=${fromData}&size=${mySize}&submitted=true`)
       .then((res) => {
         let data = res.data.data.data;
-        let expdata = data.filter((e, i) => {
-          return e._source.createdAt === new Date().getDate();
-        });
+        // let expdata = data.filter((e, i) => {
+        //   return e._source.createdAt === new Date().getDate();
+        // });
         setSearchData(data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  useEffect(() => {}, [currentPage, currentPage1]);
+
+  console.log(searchData, "dataaa");
 
   const date = new Date();
   console.log(searchData, "daaaaaaaaataaaaaaaaaaaa");
@@ -1329,6 +1367,8 @@ export const PublishedJob = () => {
       .get(`api/v1/job-post?from=0&size=4&submitted=true`)
       .then((res) => {
         let data = res.data.data.data;
+        let count = res.data.data.count;
+        setCount(count);
         let expdata = data.filter((e, i) => {
           return e._source.createdAt === new Date().getDate();
         });
@@ -1338,6 +1378,8 @@ export const PublishedJob = () => {
         console.log(err);
       });
   }, []);
+
+  console.log(count, "count");
 
   const isDate = searchData[0]?._source?.createdAt;
   console.log(isDate, "daaaaaaaaaaaaaaaaaaaaateeeeeeeeeeeeeee");
@@ -1484,7 +1526,7 @@ export const PublishedJob = () => {
           >
             <Modal.Header closeButton>
               <Modal.Title style={{ color: "black" }}>
-              Edit Job
+                Edit Recruiter Profile
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -2277,6 +2319,8 @@ export const PublishedJob = () => {
 
   console.log(searchData, "search");
 
+  console.log(currentPage, "currentPage");
+
   const modalshow = (items) => {
     console.log(items, "funtion items");
     if (items.clicked == true) {
@@ -2309,6 +2353,7 @@ export const PublishedJob = () => {
               <h2 className="text-3xl robot">Published jobs</h2>
               <div
                 style={{
+                  float: "right",
                   display: "flex",
                   alignItems: "center",
                 }}
@@ -2365,13 +2410,14 @@ export const PublishedJob = () => {
                 <Row>
                   {searchData.length > 0 &&
                     searchData
-                      ?.filter((items, index) => {
-                        console.log(items, "items");
-                        const startIndex = (currentPage - 1) * itemsPerPage;
-                        const endIndex = startIndex + itemsPerPage;
-                        return index >= startIndex && index < endIndex;
-                      })
+                      // ?.filter((items, index) => {
+                      //   console.log(items, "items");
+                      //   const startIndex = (currentPage - 1) * itemsPerPage;
+                      //   const endIndex = startIndex + itemsPerPage;
+                      //   return index >= startIndex && index < endIndex;
+                      // })
                       .map((items, keys) => {
+                        console.log(items, "itemsss");
                         let expiry = items._source.expiryDate;
 
                         expiry = new Date(expiry);
@@ -2386,7 +2432,6 @@ export const PublishedJob = () => {
                             timeDifference / 1000 / 60 / 60 / 24
                           );
                         }
-
                         if (expired > 0) {
                           return (
                             <Col lg="12" key={keys}>
@@ -2510,9 +2555,12 @@ export const PublishedJob = () => {
                                             style={{ color: "#7A7979" }}
                                           >
                                             HKD{" "}
-                                            {items?._source?.salaryRange.gte} -
-                                            HKD{" "}
-                                            {items?._source?.salaryRange.lte}
+                                            {items?._source?.salaryRange &&
+                                              items?._source?.salaryRange
+                                                .gte}{" "}
+                                            - HKD{" "}
+                                            {items?._source?.salaryRange &&
+                                              items?._source?.salaryRange.lte}
                                           </h2>
                                         </div>
                                       </Col>
@@ -2570,7 +2618,7 @@ export const PublishedJob = () => {
                                         </div>
                                       </Col>
                                       <Col lg="1">
-                                        <div className="p-3">
+                                        <div>
                                           <Button
                                             className="text-lg mr-3"
                                             style={{
@@ -2593,11 +2641,20 @@ export const PublishedJob = () => {
                 </Row>
                 <Row>
                   <Col>
-                    <div className="dddrrr">
+                    <div className="dddrrr align-items-center">
+                      {/* <BsArrowLeft className="text-2xl" /> */}
                       {Array.from({
-                        length: Math.ceil(totalItems / itemsPerPage),
-                      }).map((_, index) => (
-                        <button
+                        length: Math.ceil(
+                          currentPage + 1 < count / 4 && currentPage > 3
+                            ? currentPage + 4
+                            : currentPage + 4 > count / 4
+                            ? Math.ceil(count / 4)
+                            : 4
+                        ),
+                      }).map((_, index) => {
+                        
+                          
+                       return <button
                           className="pagination py-2 px-3"
                           key={index}
                           onClick={() => handlePageChange(index + 1)}
@@ -2605,7 +2662,12 @@ export const PublishedJob = () => {
                         >
                           {index + 1}
                         </button>
-                      ))}
+                        
+                      
+                    })
+                    
+                    }
+                      {/* <BsArrowRight className="text-2xl"   /> */}
                     </div>
                   </Col>
                 </Row>
@@ -2615,30 +2677,32 @@ export const PublishedJob = () => {
                 <Row>
                   {searchData.length > 0 &&
                     searchData
-                      ?.filter((items, index1) => {
-                        console.log(items, "items");
-                        const startIndex1 = (currentPage1 - 1) * itemsPerPage1;
-                        const endIndex1 = startIndex1 + itemsPerPage1;
-                        return index1 >= startIndex1 && index1 < endIndex1;
-                      })
+                      // ?.filter((items, index1) => {
+                      //   console.log(items, "items");
+                      //   const startIndex1 = (currentPage1 - 1) * itemsPerPage1;
+                      //   const endIndex1 = startIndex1 + itemsPerPage1;
+                      //   return index1 >= startIndex1 && index1 < endIndex1;
+                      // })
                       .map((items, key) => {
                         console.log(items, "expiredItem");
-
-                        let expiry = items._source.expiryDate;
-
-                        expiry = new Date(expiry);
                         let expired = "";
-                        console.log(typeof expiry, "expiry");
-                        if (expiry) {
-                          let time = expiry.getTime();
-                          let todayTime = new Date().getTime();
-                          let timeDifference = time - todayTime;
+                        if (items._source && items._source.expiryDate) {
+                          let expiry = items._source.expiryDate;
 
-                          expired = Math.floor(
-                            timeDifference / 1000 / 60 / 60 / 24
-                          );
+                          expiry = new Date(expiry);
+                          console.log(typeof expiry, "expiry");
+
+                          if (expiry) {
+                            let time = expiry.getTime();
+                            let todayTime = new Date().getTime();
+                            let timeDifference = time - todayTime;
+
+                            expired = Math.floor(
+                              timeDifference / 1000 / 60 / 60 / 24
+                            );
+                          }
+                          console.log(expired, "expired");
                         }
-                        console.log(expired, "expired");
 
                         if (expired < 0) {
                           return (
@@ -2710,15 +2774,17 @@ export const PublishedJob = () => {
                                           )}
                                           <p>
                                             Posted Date :{" "}
-                                            {items?._source?.createdAt.substring(
-                                              0,
-                                              10
-                                            )}
+                                            {items?._source?.createdAt &&
+                                              items?._source?.createdAt.substring(
+                                                0,
+                                                10
+                                              )}
                                             &nbsp;&nbsp;&nbsp;Expiry Date :{" "}
-                                            {items?._source?.expiryDate.substring(
-                                              0,
-                                              10
-                                            )}
+                                            {items?._source?.expiryDate &&
+                                              items?._source?.expiryDate.substring(
+                                                0,
+                                                10
+                                              )}
                                           </p>
                                         </div>
                                       </div>
@@ -2764,9 +2830,12 @@ export const PublishedJob = () => {
                                               style={{ color: "#7A7979" }}
                                             >
                                               HKD{" "}
-                                              {items?._source?.salaryRange.gte}{" "}
+                                              {items?._source?.salaryRange &&
+                                                items?._source?.salaryRange
+                                                  .gte}{" "}
                                               - HKD{" "}
-                                              {items?._source?.salaryRange.lte}
+                                              {items?._source?.salaryRange &&
+                                                items?._source?.salaryRange.lte}
                                             </h2>
                                           </div>
                                         </Col>
@@ -2849,8 +2918,16 @@ export const PublishedJob = () => {
                 <Row>
                   <Col>
                     <div className="dddrrr">
+                      {/* <BsArrowBarLeft /> */}
                       {Array.from({
-                        length: Math.ceil(totalItems1 / itemsPerPage1),
+                        length: Math.ceil(
+                          currentPage1 + 4 > count / 4
+                            ? Math.floor(count / 4)
+                            : currentPage1 + 1 < Math.floor(count / 4) &&
+                              currentPage1 > 3
+                            ? currentPage1 + 4
+                            : 4
+                        ),
                       }).map((_, index1) => (
                         <button
                           className="pagination py-2 px-3"

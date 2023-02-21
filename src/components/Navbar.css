@@ -64,6 +64,11 @@
         font-size: 18px;
     }
 }
+@media only screen and (min-width: 600px) {
+    .navbar-expand-lg .navbar-nav .nav-link{
+        font-size: 14px;
+    }
+}
 @media only screen and (max-width: 992px){
     
 #navbarScroll .navbar-nav {

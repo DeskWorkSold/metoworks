@@ -226,6 +226,7 @@ function MyVerticallyCenteredModal2(props) {
       });
   };
 
+  console.log(jobData,"jobData")
 
 
   return (
@@ -1142,6 +1143,9 @@ export const Interview = () => {
   const handleSelectChange = (event) => {
     let data = event.target.value
     if (data) {
+
+      console.log("hello",data)
+
       setInterviewFilterdData(interviewData.filter(filter => {
         return filter.internalState == data
       }))
@@ -1161,6 +1165,14 @@ export const Interview = () => {
     searchFunc()
   }, [])
 
+
+  useEffect(()=>{
+      if(selectedValue == "DEFAULT"){
+        setSelectedValue("")
+        searchFunc()
+      }
+  },[selectedValue])
+
   // useEffect(() => {
   //   searchFunc()
   // }, [selectedValue])
@@ -1169,7 +1181,7 @@ export const Interview = () => {
 
     // console.log('data', data);
     axios
-      .get(`api/v1/interview?stage=applied&size=80&from=10`)
+      .get(`api/v1/interview?stage=applied&size=80&from=10`, isInput)
       .then((res) => {
         console.log(res, "Initial Data");
         let data = res.data.data;
@@ -1186,6 +1198,8 @@ export const Interview = () => {
         setInterviewFilterdData(data)
         let filteredData = data.map((items) => {
           return items.job.title
+
+
         });
         setFilteredCategory([...new Set(filteredData)]);
       })
@@ -1193,6 +1207,9 @@ export const Interview = () => {
         console.log(err);
       });
   };
+
+
+console.log(interviewData,"dataaaaa")
 
   const ThumblailFunc = (data) => {
     let temArray = [];
@@ -1760,6 +1777,8 @@ export const Interview = () => {
     }
   };
 
+console.log(selectedValue,"selected")
+
   const saveBookMarkFunc = (event) => {
     axios.post(`api/v1/user/recruiter/save-freelancer/${event.id}`).then((res) => {
       console.log(res, 'data save succesfully');
@@ -1768,6 +1787,14 @@ export const Interview = () => {
     })
 
   }
+
+const getAllData = () => {
+  setSelectedValue("")
+  searchFunc()
+}
+
+let count = 0
+
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -1910,26 +1937,57 @@ export const Interview = () => {
           <h2 className="text-2xl">{interviewFilterdData ? interviewFilterdData.length : 0} Total Candidates</h2>
         </div>
         <Accordion defaultActiveKey="0" flush>
+          
           {filteredCategory.length > 0 &&
             filteredCategory.map((items, keys) => {
+              
+
+              
+
+              interviewFilterdData && interviewFilterdData.map((e,i)=>{
+
+                console.log(e.job.title,"title")
+
+                if(e.job.title == items){
+                  count = count + 1
+                }
+                
+
+              })
+              
+
               return (
                 <Accordion.Item eventKey={keys} key={keys}>
                   <Accordion.Header>
                     {items} &#160;&#160;&#160;
+                    
+
+                    
                     <span
                       className="fontpxx"
                       style={{ color: "rgb(148,147,147)", float: "right" }}
                     >
-                      (02 Candidates)
+                        {`${count}candidate`}
                     </span>
                   </Accordion.Header>
                   <Accordion.Body>
+                    {/* {
+                         selectedValue && selectedValue == "DEFAULT" ? getAllData() : ""
+                    } */}
                     {interviewFilterdData
                       .filter((filter) => {
-                        return filter.job.title === items || filter.internalState == selectedValue
+                        
+                        if(filter.job.title === items && filter.internalState == selectedValue){
+
+                         return filter
+                        }
                       })
                       .map((events, key) => {
                         console.log(profileImg, 'resourece not found');
+                        
+                         
+                        
+
                         // console.log(events, 'eventsevents');
                         return (
                           <Container key={key}>
