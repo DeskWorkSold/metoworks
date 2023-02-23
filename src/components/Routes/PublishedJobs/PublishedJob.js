@@ -668,7 +668,7 @@ function MyVerticallyCenteredModal(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUALâ€“NO SET HOURS OR DAYS OF WORK</option>
+                    <option>CASUALÃ¢â‚¬â€œNO SET HOURS OR DAYS OF WORK</option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -1318,6 +1318,7 @@ export const PublishedJob = () => {
     companyLocation: "",
     description: "",
   });
+  const [errors, setErrors] = useState();
 
   // console.log(profileData, 'profile Data');
   useEffect(() => {
@@ -1405,6 +1406,7 @@ export const PublishedJob = () => {
   };
 
   // Published edit
+  const [success, setSuccess] = useState(false);
 
   // edit
   const MyVerticallyCenteredModalPublish = useCallback(
@@ -1438,7 +1440,7 @@ export const PublishedJob = () => {
       };
 
       const profileFunc = () => {
-        console.log(isProjectTimeline?.gte, "my name is odho");
+        // console.log(isProjectTimeline?.gte, "my name is odho");
         // let currentDate = new Date();
         const data = {
           title: jobData.title ? jobData.title : props?.props?._source?.title,
@@ -1499,22 +1501,151 @@ export const PublishedJob = () => {
               : props?.props?._source?.salaryRange.lte,
           },
         };
-        console.log(data, "dataa");
-        axios
-          .patch(`api/v1/job-post?id=${props.props._id}`, data)
-          .then((res) => {
-            console.log(res, "profile data successfully added");
-            if (res) {
-              // profileFunc(false);
-              setTimeout(() => {
-                initialFun();
-              }, 1000);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+
+        let values = Object.values(data);
+
+        // console.log(values,"values")
+        values = values.every((e, i) => e !== "");
+
+        // console.log(data, "dataa");
+        if (values) {
+          axios
+            .patch(`api/v1/job-post?id=${props.props._id}`, data)
+            .then((res) => {
+              console.log(res, "profile data successfully added");
+              if (res) {
+                // profileFunc(false);
+                setTimeout(() => {
+                  initialFun();
+                }, 1000);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          let newErrors = {};
+          if (!data.title) {
+            newErrors.title = "Job Title is required";
+          }
+          if (!jobData.industry) {
+            newErrors.industry = "Job industry is required";
+          }
+          if (!jobData.jobFunction) {
+            newErrors.jobFunction = "Job jobFunction is required";
+          }
+          if (!jobData.jobSubFunction) {
+            newErrors.jobSubFunction = "Job jobSubFunction is required";
+          }
+          if (!jobData.location) {
+            newErrors.location = "Job location is required";
+          }
+          if (!jobData.description) {
+            newErrors.description = "Job DESCRIPTION is required";
+          }
+          if (!jobData.requirements) {
+            newErrors.requirements = "Job requirements is required";
+          }
+          if (!jobData.educationLevel) {
+            newErrors.educationLevel = "Job educationLevel is required";
+          }
+          if (!jobData.profession) {
+            newErrors.profession = "Job profession is required";
+          }
+          if (!jobData.madeOfWork) {
+            newErrors.madeOfWork = "Job madeOfWork is required";
+          }
+          if (!jobData.noOfOpenings) {
+            newErrors.noOfOpenings = "Job noOfOpenings is required";
+          }
+          if (!jobData.salaryCurrency) {
+            newErrors.salaryCurrency = "Job salaryCurrency is required";
+          }
+          if (!jobData.salaryType) {
+            newErrors.salaryType = "Job salaryCurrency is required";
+          }
+          if (!jobData.salaryPayFreq) {
+            newErrors.salaryPayFreq = "Job salaryCurrency is required";
+          }
+          if (!isProjectTimeline.projectTimelinegte) {
+            newErrors.gte = "Job gte is required";
+          }
+          if (!isProjectTimeline.projectTimelinelte) {
+            newErrors.lte = "Job lte is required";
+          }
+          if (!isSalaryRange.salaryRangegte) {
+            newErrors.gte = "Job gte is required";
+          }
+          if (!isSalaryRange.salaryRangelte) {
+            newErrors.lte = "Job lte is required";
+          }
+          if (!isEmail) {
+            newErrors.isEmail = "Email is required";
+          }
+          if (!/\S+@\S+\.\S+/.test(isEmail)) {
+            newErrors.email = "Email address is invalid";
+          }
+          console.log(newErrors);
+          setErrors(newErrors);
+        }
       };
+
+      const validateForm = () => {
+        let newErrors = {};
+        if (!jobData.title) {
+          newErrors.title = "Job Title is required";
+        } else if (!jobData.industry) {
+          newErrors.industry = "Job industry is required";
+        } else if (!jobData.jobFunction) {
+          newErrors.jobFunction = "Job jobFunction is required";
+        } else if (!jobData.jobSubFunction) {
+          newErrors.jobSubFunction = "Job jobSubFunction is required";
+        } else if (!jobData.location) {
+          newErrors.location = "Job location is required";
+        } else if (!jobData.description) {
+          newErrors.description = "Job DESCRIPTION is required";
+        } else if (!jobData.requirements) {
+          newErrors.requirements = "Job requirements is required";
+        } else if (!jobData.educationLevel) {
+          newErrors.educationLevel = "Job educationLevel is required";
+        } else if (!jobData.profession) {
+          newErrors.profession = "Job profession is required";
+        } else if (!jobData.modeOfWork) {
+          newErrors.modeOfWork = "Job madeOfWork is required";
+        } else if (!jobData.noOfOpenings) {
+          newErrors.noOfOpenings = "Job noOfOpenings is required";
+        } else if (!jobData.salaryCurrency) {
+          newErrors.salaryCurrency = "Job salaryCurrency is required";
+        } else if (!jobData.salaryType) {
+          newErrors.salaryType = "Job salaryCurrency is required";
+        } else if (!jobData.salaryPayFreq) {
+          newErrors.salaryPayFreq = "Job salaryCurrency is required";
+        } else if (!isProjectTimeline.gte) {
+          newErrors.projectTimelinegte = "Job gte is required";
+        } else if (!isProjectTimeline.lte) {
+          newErrors.projectTimelinelte = "Job lte is required";
+        } else if (!isSalaryRange.gte) {
+          newErrors.salaryRangegte = "Job gte is required";
+        } else if (!isSalaryRange.lte) {
+          newErrors.salaryRangelte = "Job lte is required";
+        } else if (!isEmail) {
+          newErrors.isEmail = "Email is required";
+        } else if (!/\S+@\S+\.\S+/.test(isEmail)) {
+          newErrors.email = "Email address is invalid";
+        }
+
+        setErrors(newErrors);
+        console.log(Object.keys(newErrors).length === 0, "validation");
+        return Object.keys(newErrors).length === 0;
+      };
+
+      const handleSubmit = (event) => {
+        event.preventDefault();
+        if (validateForm()) {
+          setSuccess(true);
+        }
+      };
+
       return (
         <div>
           <Modal
@@ -1548,6 +1679,9 @@ export const PublishedJob = () => {
                           //   onChange={getUserData}
                           placeholder={props.props._source.title}
                         />
+                        {errors && errors.title && (
+                          <p style={{ color: "red" }}>{errors.title}</p>
+                        )}
                       </fieldset>
                     </Col>
                     <Col lg="12">
@@ -1595,6 +1729,9 @@ export const PublishedJob = () => {
                           <option>Engineerings</option>
                           <option>Others</option>
                         </Form.Select>
+                        {errors && errors.industry && (
+                          <p style={{ color: "red" }}>{errors.industry}</p>
+                        )}
                         {/* <input
               style={{ width: "100%" }}
               className="form-control"
@@ -1641,6 +1778,9 @@ export const PublishedJob = () => {
                           <option>Engineering / Architect</option>
                           <option>Others</option>
                         </Form.Select>
+                        {errors && errors.jobFunction && (
+                          <p style={{ color: "red" }}>{errors.jobFunction}</p>
+                        )}
                         {/* <input
               style={{ width: "100%" }}
               className="form-control"
@@ -1681,6 +1821,11 @@ export const PublishedJob = () => {
                             Internal Audit
                           </option>
                         </Form.Select>
+                        {errors && errors.jobSubFunction && (
+                          <p style={{ color: "red" }}>
+                            {errors.jobSubFunction}
+                          </p>
+                        )}
                         {/* <input
               style={{ width: "100%" }}
               className="form-control"
@@ -1729,6 +1874,9 @@ export const PublishedJob = () => {
                           <option>Asia Pacific (APAC)</option>
                           <option>Others</option>
                         </Form.Select>
+                        {errors && errors.location && (
+                          <p style={{ color: "red" }}>{errors.location}</p>
+                        )}
                         {/* <input
               style={{ width: "100%" }}
               className="form-control"
@@ -1766,6 +1914,9 @@ export const PublishedJob = () => {
                           }}
                         />
                       </fieldset>
+                      {errors && errors.description && (
+                        <p style={{ color: "red" }}>{errors.description}</p>
+                      )}
                     </Col>
                     <Col lg="12">
                       <fieldset>
@@ -1792,6 +1943,9 @@ export const PublishedJob = () => {
                           }}
                         />
                       </fieldset>
+                      {errors && errors.requirements && (
+                        <p style={{ color: "red" }}>{errors.requirements}</p>
+                      )}
                     </Col>
                     {/* <Col lg="12">
               <fieldset>
@@ -1835,6 +1989,11 @@ export const PublishedJob = () => {
                           <option>PHD</option>
                           <option>OTHER</option>
                         </Form.Select>
+                        {errors && errors.educationLevel && (
+                          <p style={{ color: "red" }}>
+                            {errors.educationLevel}
+                          </p>
+                        )}
                         {/* <input
               style={{ width: "100%" }}
               className="form-control"
@@ -1861,10 +2020,15 @@ export const PublishedJob = () => {
                             Select Employment Type
                           </option>
                           <option>PART TIME</option>
-                          <option>CASUALâ€“NO SET HOURS OR DAYS OF WORK</option>
+                          <option>
+                            CASUALÃ¢â‚¬â€œNO SET HOURS OR DAYS OF WORK
+                          </option>
                           <option>PROJECT BASED</option>
                           <option>OTHER</option>
                         </Form.Select>
+                        {errors && errors.empType && (
+                          <p style={{ color: "red" }}>{errors.empType}</p>
+                        )}
                         {/* <input
               style={{ width: "100%" }}
               className="form-control"
@@ -1908,6 +2072,11 @@ export const PublishedJob = () => {
                             required
                           />
                         </Col>
+                        {errors && errors.projectTimelinegte && (
+                          <p style={{ color: "red" }}>
+                            {errors.projectTimelinegte}
+                          </p>
+                        )}
                         <Col>
                           <label
                             className="text-l"
@@ -1930,6 +2099,11 @@ export const PublishedJob = () => {
                             required
                           />
                         </Col>
+                        {errors && errors.projectTimelinelte && (
+                          <p style={{ color: "red" }}>
+                            {errors.projectTimelinelte}
+                          </p>
+                        )}
                       </Row>
                     </Container>
                     <Col lg="12">
@@ -1951,6 +2125,9 @@ export const PublishedJob = () => {
                         />
                       </fieldset>
                     </Col>
+                    {errors && errors.profession && (
+                      <p style={{ color: "red" }}>{errors.profession}</p>
+                    )}
                     {/* <Container>
               <Row>
                 <Col lg="6">
@@ -2011,6 +2188,9 @@ export const PublishedJob = () => {
               required
             /> */}
                       </fieldset>
+                      {errors && errors.modeOfWork && (
+                        <p style={{ color: "red" }}>{errors.modeOfWork}</p>
+                      )}
                     </Col>
                     <Col lg="12">
                       <fieldset>
@@ -2033,6 +2213,9 @@ export const PublishedJob = () => {
                           required
                         />
                       </fieldset>
+                      {errors && errors.noOfOpenings && (
+                        <p style={{ color: "red" }}>{errors.noOfOpenings}</p>
+                      )}
                     </Col>
                     <Col lg="12">
                       <fieldset>
@@ -2069,6 +2252,9 @@ export const PublishedJob = () => {
               required
             /> */}
                       </fieldset>
+                      {errors && errors.salaryCurrency && (
+                        <p style={{ color: "red" }}>{errors.salaryCurrency}</p>
+                      )}
                     </Col>
                     <Container>
                       <Row>
@@ -2093,6 +2279,11 @@ export const PublishedJob = () => {
                             required
                           />
                         </Col>
+                        {errors && errors.salaryRangegte && (
+                          <p style={{ color: "red" }}>
+                            {errors.salaryRangegte}
+                          </p>
+                        )}
                         <Col lg="6">
                           <label
                             className="text-l"
@@ -2115,6 +2306,11 @@ export const PublishedJob = () => {
                             required
                           />
                         </Col>
+                        {errors && errors.salaryRangelte && (
+                          <p style={{ color: "red" }}>
+                            {errors.salaryRangelte}
+                          </p>
+                        )}
                       </Row>
                     </Container>
                     <Col lg="12">
@@ -2166,6 +2362,9 @@ export const PublishedJob = () => {
                           Others
                         </label>
                       </fieldset>
+                      {errors && errors.salaryType && (
+                        <p style={{ color: "red" }}>{errors.salaryType}</p>
+                      )}
                     </Col>
                     <Col lg="12">
                       <fieldset className="dflexx">
@@ -2243,6 +2442,9 @@ export const PublishedJob = () => {
                           Others
                         </label>
                       </fieldset>
+                      {errors && errors.salaryPayFreq && (
+                        <p style={{ color: "red" }}>{errors.salaryPayFreq}</p>
+                      )}
                     </Col>
 
                     <Row>
@@ -2290,6 +2492,9 @@ export const PublishedJob = () => {
                         </fieldset>
                       </Col>
                     </Row>
+                    {errors && errors.isEmail && (
+                      <p style={{ color: "red" }}>{errors.isEmail}</p>
+                    )}
                   </div>
                 </Col>
               </Row>

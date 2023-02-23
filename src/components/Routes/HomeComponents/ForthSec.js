@@ -57,7 +57,7 @@ export const ForthSec = () => {
                   <h3 className="font-semibold text-3xl text-black">
                     Freelancers
                   </h3>
-                  <h3 className="font-semibold text-4xl text-white">
+                  <h3 className="font-semibold text-2xl text-white">
                     John Larson
                   </h3>
                   <p className="text-white text-lg px-2 p-2">
@@ -80,7 +80,7 @@ export const ForthSec = () => {
                   <h3 className="font-semibold text-3xl text-black">
                     Freelancers
                   </h3>
-                  <h3 className="font-semibold text-4xl text-white">
+                  <h3 className="font-semibold text-2xl text-white">
                     John Larson
                   </h3>
                   <p className="text-white text-lg px-2 p-2">
@@ -103,7 +103,7 @@ export const ForthSec = () => {
                   <h3 className="font-semibold text-3xl text-black">
                     Freelancers
                   </h3>
-                  <h3 className="font-semibold text-4xl text-white">
+                  <h3 className="font-semibold text-2xl text-white">
                     John Larson
                   </h3>
                   <p className="text-white text-lg px-2 p-2">
@@ -127,7 +127,7 @@ export const ForthSec = () => {
                   <h3 className="font-semibold text-3xl text-black">
                     Freelancers
                   </h3>
-                  <h3 className="font-semibold text-4xl text-white">
+                  <h3 className="font-semibold text-2xl text-white">
                     John Larson
                   </h3>
                   <p className="text-white text-lg px-2 p-2">
@@ -150,7 +150,7 @@ export const ForthSec = () => {
                   <h3 className="font-semibold text-3xl text-black">
                     Freelancers
                   </h3>
-                  <h3 className="font-semibold text-4xl text-white">
+                  <h3 className="font-semibold text-2xl text-white">
                     John Larson
                   </h3>
                   <p className="text-white text-lg px-2 p-2">
@@ -175,7 +175,7 @@ export const ForthSec = () => {
                   <h3 className="font-semibold text-3xl text-black">
                     Freelancers
                   </h3>
-                  <h3 className="font-semibold text-4xl text-white">
+                  <h3 className="font-semibold text-2xl text-white">
                     John Larson
                   </h3>
                   <p className="text-white text-lg px-2 p-2">
@@ -198,7 +198,7 @@ export const ForthSec = () => {
                   <h3 className="font-semibold text-3xl text-black">
                     Freelancers
                   </h3>
-                  <h3 className="font-semibold text-4xl text-white">
+                  <h3 className="font-semibold text-2xl text-white">
                     John Larson
                   </h3>
                   <p className="text-white text-lg px-2 p-2">
@@ -222,7 +222,7 @@ export const ForthSec = () => {
                   <h3 className="font-semibold text-3xl text-black">
                     Freelancers
                   </h3>
-                  <h3 className="font-semibold text-4xl text-white">
+                  <h3 className="font-semibold text-2xl text-white">
                     John Larson
                   </h3>
                   <p className="text-white text-lg px-2 p-2">
@@ -259,8 +259,7 @@ export const ForthSec = () => {
                   dol ipsum quia sit amet
                 </p>
                 <div className="pt-5 pb-3">
-                  <Link to='Login'>
-
+                  <Link to="Login">
                     <button
                       className="text-white px-5 p-2"
                       style={{

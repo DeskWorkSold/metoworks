@@ -23,7 +23,7 @@ import Modal from "react-bootstrap/Modal";
 // import React, { Component } from 'react';
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
+import Toast from "react-bootstrap/Toast";
 import axios from "../../../utils/axios.api";
 import Accordion from "react-bootstrap/Accordion";
 
@@ -1215,52 +1215,6 @@ function MyVerticallyCenteredModal2(props) {
   );
 }
 
-function MyVerticallyCenteredModal(props) {
-  return (
-    <div>
-      <Modal
-        id="modal"
-        {...props}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header>
-          {/* <Modal.Title
-            id="contained-modal-title-vcenter"
-            className="text-center"
-          >
-            Post A Job
-          </Modal.Title> */}
-        </Modal.Header>
-        <Modal.Body className="webkit">
-          <h2 className="text-2xl font-bold">10 Tokens</h2>
-          <p className="text-lg" style={{ color: "#C1C1C1" }}>
-            10 Tokens to View Proﬁle
-          </p>
-          <div style={{ display: "inline-grid" }}>
-            <Button
-              className="text-white border-rounded px-5 py-3 mx-2"
-              style={{ background: "#39BEC1", border: "none" }}
-              onClick={props.onHide}
-            >
-              YES
-            </Button>
-            <Button
-              className="border-rounded px-5 py-3 mx-2"
-              style={{ background: "none", color: "#C1C1C1" }}
-              onClick={props.onHide}
-            >
-              NO
-            </Button>
-          </div>
-        </Modal.Body>
-        <Modal.Footer></Modal.Footer>
-      </Modal>
-    </div>
-  );
-}
-
 function MyVerticallyCenteredModal1(props) {
   return (
     <Modal
@@ -1375,6 +1329,7 @@ function MyVerticallyCenteredModal1(props) {
   );
 }
 export const MainRecProfessional = () => {
+  const [showToast, setShowToast] = useState(false);
   const [show, setShow] = useState(false);
 
   const [searchShow, setSearchShow] = useState(false);
@@ -1485,6 +1440,101 @@ export const MainRecProfessional = () => {
     setSearchData(null);
   };
 
+  function MyVerticallyCenteredModalToast(props) {
+    return (
+      <Modal
+        {...props}
+        size="sm"
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+        // centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Modal heading
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h4>Centered Modal</h4>
+          <p>
+            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
+            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
+            ac consectetur ac, vestibulum at eros.
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  const modalshowtoast = (event) => {
+    // console.log(items, "funtion items");
+    if (event.clicked == true) {
+      event.clicked = false;
+      setShowToast(false);
+    } else {
+      setShowToast(true);
+      event.clicked = true;
+    }
+  };
+
+  function MyVerticallyCenteredModal(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header>
+            {/* <Modal.Title
+              id="contained-modal-title-vcenter"
+              className="text-center"
+            >
+              Post A Job
+            </Modal.Title> */}
+          </Modal.Header>
+          <Modal.Body className="webkit">
+            <h2 className="text-2xl font-bold">10 Tokens</h2>
+            <p className="text-lg" style={{ color: "#C1C1C1" }}>
+              10 Tokens to View Proﬁle
+            </p>
+            <div style={{ display: "inline-grid" }}>
+              <Button
+                className="text-white border-rounded px-5 py-3 mx-2"
+                style={{ background: "#39BEC1", border: "none" }}
+                onClick={props.onHide}
+              >
+                YES
+              </Button>
+              <Button
+                className="border-rounded px-5 py-3 mx-2"
+                style={{ background: "none", color: "#C1C1C1" }}
+                onClick={props.onHide}
+              >
+                NO
+              </Button>
+            </div>
+          </Modal.Body>
+          <Modal.Footer></Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+
+  const modalshow = (event) => {
+    // console.log(items, "funtion items");
+    if (event.clicked == true) {
+      event.clicked = false;
+      setModalShow(false);
+    } else {
+      setModalShow(true);
+      event.clicked = true;
+    }
+  };
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -1993,6 +2043,7 @@ export const MainRecProfessional = () => {
                           >
                             <Button
                               className="border-rounded text-2xl"
+                              onClick={() => modalshowtoast(event)}
                               style={{
                                 background: "none",
                                 color: "#C1C1C1",
@@ -2000,8 +2051,16 @@ export const MainRecProfessional = () => {
                             >
                               <BsBookmark />
                             </Button>
+                            {event.clicked == true && (
+                              <MyVerticallyCenteredModalToast
+                                show={showToast}
+                                props={event}
+                                onHide={() => modalshowtoast(event)}
+                              />
+                            )}
                           </div>
                         </Col>
+
                         <Col lg="2" className="webkit">
                           <Image
                             className="imgprofile"
@@ -2038,7 +2097,7 @@ export const MainRecProfessional = () => {
                           <div className="webkit" style={{ display: "grid" }}>
                             <Button
                               variant="primary"
-                              onClick={() => setModalShow(true)}
+                              onClick={() => modalshow(event)}
                               className="text-white border-rounded px-3 py-3 mx-2"
                               style={{
                                 background: "#39BEC1",
@@ -2047,10 +2106,12 @@ export const MainRecProfessional = () => {
                             >
                               VIEW PROFILE
                             </Button>
-                            <MyVerticallyCenteredModal
-                              show={modalShow}
-                              onHide={() => setModalShow(false)}
-                            />
+                            {event.clicked == true && (
+                              <MyVerticallyCenteredModal
+                                show={modalShow}
+                                onHide={() => modalshow(event)}
+                              />
+                            )}
                           </div>
                         </Col>
                       </Row>

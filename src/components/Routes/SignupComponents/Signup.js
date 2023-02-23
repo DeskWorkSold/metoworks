@@ -4,7 +4,10 @@ import { BsFacebook, BsLinkedin } from "react-icons/bs";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { BrowserRouter as Route, Router, Link, Switch } from "react-router-dom";
 import FacebookInUI from "../facebook";
+import LinkedInUI from "../linkedin";
 import "react-tabs/style/react-tabs.css";
+
+import Modal from "react-bootstrap/Modal";
 import axios from "../../../utils/axios.api";
 
 export const Signup = () => {
@@ -34,14 +37,14 @@ export const Signup = () => {
         lastName: freelancerSignupData.lastName,
         email: freelancerSignupData.email,
         password: freelancerSignupData.password,
-        type : 'freelancer'
+        type: "freelancer",
       };
       axios
         .post(`api/v1/user/register?type=${obj.type}`, obj)
         .then((res) => {
           console.log(res);
-          let id = res.data.user.id
-          localStorage.setItem('id', id)
+          let id = res.data.user.id;
+          localStorage.setItem("id", id);
         })
         .catch((error) => {
           console.log(error);
@@ -56,32 +59,45 @@ export const Signup = () => {
         lastName: recruiterSignupData.lastName,
         email: recruiterSignupData.email,
         password: recruiterSignupData.password,
-        type : "recruiter",
-        companyName : 'Codesk'
+        type: "recruiter",
+        companyName: "Codesk",
       };
-      // const {firstName, lastName, email, password } = module 
-      console.log(obj1, 'model');
-      console.log(obj1.type, 'type');
+      // const {firstName, lastName, email, password } = module
+      console.log(obj1, "model");
+      console.log(obj1.type, "type");
       axios
         .post(`api/v1/user/register?type=${obj1.type}`, obj1)
         .then((res) => {
           console.log(res);
-
         })
         .catch((error) => {
           console.log(error);
         });
     }
   };
-  const [isFacebook, setIsFacebook] = useState(false)
+  const [isFacebook, setIsFacebook] = useState(false);
+  const [isLinkedin, setIsLinkedin] = useState(false);
+  const [count, setCount] = useState(0);
 
   const facebookSignUp = () => {
-    if(isFacebook == true) {
-      setIsFacebook(false)
+    if (isFacebook == true) {
+      setIsFacebook(false);
     } else {
-      setIsFacebook(true)
+      setIsFacebook(true);
     }
-  }
+  };
+  const linkedinSignUp = () => {
+    if (isLinkedin == true) {
+      setIsLinkedin(false);
+    } else {
+      setIsLinkedin(true);
+    }
+  };
+
+  React.useEffect(() => {
+    setIsFacebook(false);
+    setIsLinkedin(false);
+  }, [isFacebook, isLinkedin]);
 
   return (
     <Container>
@@ -286,6 +302,55 @@ export const Signup = () => {
                             </p>
                           </Col>
                         </div>
+                        <div className="dflex py-3">
+                          <Row className="webkit">
+                            <Col lg="1"></Col>
+                            <Col lg="4">
+                              <BsLinkedin
+                                className="text-7xl pos-abs"
+                                style={{ color: "#0077B5" }}
+                                onClick={linkedinSignUp}
+                              />
+                              {isLinkedin && (
+                                <LinkedInUI
+                                  type={"signUp"}
+                                  style={{ top: -50 }}
+                                />
+                              )}
+                            </Col>
+                            <Col
+                              lg="2"
+                              className="marres"
+                              style={{ marginTop: "35px" }}
+                            >
+                              <hr className="hr" style={{ width: "60px" }} />
+                            </Col>
+                            <Col lg="4">
+                              <BsFacebook
+                                className="text-7xl pos-abs"
+                                style={{ color: "#4267B2" }}
+                                onClick={facebookSignUp}
+                              />
+                              {isFacebook && (
+                                <FacebookInUI
+                                  type={"signUp"}
+                                  style={{ top: -50 }}
+                                />
+                              )}
+                            </Col>
+                            <Col lg="1"></Col>
+                          </Row>
+                          <div className="pt-40">
+                            <p className="py-2">
+                              Already have an Account?
+                              <span
+                                style={{ color: "#6A489C", fontWeight: "bold" }}
+                              >
+                                <Link to="/Login"> Log in</Link>
+                              </span>
+                            </p>
+                          </div>
+                        </div>
                       </Container>
                     </TabPanel>
 
@@ -444,52 +509,17 @@ export const Signup = () => {
                                 SIGN UP
                               </Button>
                             </div>
-                            <p
+                            {/* <p
                               className="pt-2 text-xl"
                               style={{ color: "#7A7979" }}
                             >
                               OR
-                            </p>
+                            </p> */}
                           </Col>
                         </div>
                       </Container>
                     </TabPanel>
                   </Tabs>
-                  <div className="dflex py-3">
-                    <Row className="webkit">
-                      <Col lg="1"></Col>
-                      <Col lg="4">
-                        <BsLinkedin
-                          className="text-7xl"
-                          style={{ color: "#0077B5" }}
-                        />
-                      </Col>
-                      <Col
-                        lg="2"
-                        className="marres"
-                        style={{ marginTop: "35px" }}
-                      >
-                        <hr className="hr" style={{ width: "60px" }} />
-                      </Col>
-                      <Col lg="4">
-                        <BsFacebook
-                          className="text-7xl"
-                          style={{ color: "#4267B2" }}
-                          onClick={facebookSignUp}
-                        />
-                        {isFacebook && <FacebookInUI type={"signUp"} style={{top:-50}} />}
-                      </Col>
-                      <Col lg="1"></Col>
-                    </Row>
-                    <div className="pt-40">
-                      <p className="py-2">
-                        Already have an Account?
-                        <span style={{ color: "#6A489C", fontWeight: "bold" }}>
-                          <Link to="/Login"> Log in</Link>
-                        </span>
-                      </p>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

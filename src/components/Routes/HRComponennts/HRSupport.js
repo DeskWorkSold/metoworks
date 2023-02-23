@@ -25,7 +25,7 @@ export const HRSupport = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-1/4"
                     src={require("../../../assets/support1.png")}
@@ -49,7 +49,7 @@ export const HRSupport = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-1/4"
                     src={require("../../../assets/support2.png")}
@@ -73,7 +73,7 @@ export const HRSupport = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-1/4"
                     src={require("../../../assets/support3.png")}
@@ -100,7 +100,7 @@ export const HRSupport = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-1/4"
                     src={require("../../../assets/support4.png")}
@@ -124,7 +124,7 @@ export const HRSupport = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-1/4"
                     src={require("../../../assets/support5.png")}
@@ -150,7 +150,7 @@ export const HRSupport = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-1/4"
                     src={require("../../../assets/support6.png")}
@@ -179,7 +179,7 @@ export const HRSupport = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-1/4"
                     src={require("../../../assets/support7.png")}
@@ -203,7 +203,7 @@ export const HRSupport = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-1/4"
                     src={require("../../../assets/support8.png")}
@@ -227,7 +227,7 @@ export const HRSupport = () => {
               }}
             >
               <div>
-                <div className="h-28">
+                <div>
                   <Image
                     className="w-1/4"
                     src={require("../../../assets/support9.png")}

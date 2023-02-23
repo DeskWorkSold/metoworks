@@ -19,12 +19,14 @@ export const FreelanceSavedJobs = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [searchData, setSearchData] = useState({});
+  const [applyShow, setApplyShow] = useState(false);
+  const [applyShowError, setApplyShowError] = useState(false);
 
   useEffect(() => {
     initialFun();
   }, []);
 
-  const initialFun = () => {
+  const initialFun = (props) => {
     axios
 
       .get(`api/v1/user/freelancer/saved-jobs`)
@@ -33,7 +35,27 @@ export const FreelanceSavedJobs = () => {
         let data = res.data;
         console.log(data, "daaaaaaaaataaaaaaaaaaaa");
         // setIsProfileData(data)
-        setSearchData(data);
+        if (props && props.id) {
+          setSearchData(
+            data &&
+              data.length > 0 &&
+              data.map((e, i) => {
+                if (e.id == props.id) {
+                  return {
+                    ...e,
+                    clicked: e.clicked ? false : true,
+                  };
+                } else {
+                  return {
+                    ...e,
+                    clicked: false,
+                  };
+                }
+              })
+          );
+        } else {
+          setSearchData(data);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -60,14 +82,21 @@ export const FreelanceSavedJobs = () => {
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data;
-        initialFun();
+        setApplyShow(true);
+        initialFun(event);
         // setIsProfileData(data)
       })
       .catch((err) => {
+        setApplyShowError(true);
+        initialFun(event);
         console.log(err);
       });
   };
-
+  const closeBookmark = (props) => {
+    setApplyShow(false);
+    setApplyShowError(false);
+    initialFun(props);
+  };
   function MyVerticallyCenteredModal(props) {
     // console.log(props, "proooooooooops");
     return (
@@ -206,6 +235,72 @@ export const FreelanceSavedJobs = () => {
     }
   };
 
+  function MyVerticallyCenteredModalApply(props) {
+    return (
+      <Modal
+        {...props}
+        size="sm"
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+        // centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">Apply</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h2>Apply Successfully</h2>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => closeBookmark(props)}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  function MyVerticallyCenteredModalApplyError(props) {
+    return (
+      <Modal
+        {...props}
+        size="sm"
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+        // centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Job Applied
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h2 class="text-red-700">already Applied Job</h2>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => closeBookmark(props)}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  // const applyshow = (items) => {
+  //   console.log(items, "funtion items");
+  //   if (items.clicked == true) {
+  //     items.clicked = false;
+  //     setApplyShow(false);
+  //   } else {
+  //     setApplyShow(true);
+  //     items.clicked = true;
+  //   }
+  // };
+
+  // const applyshowerror = (items) => {
+  //   console.log(items, "funtion items");
+  //   if (items.clicked == true) {
+  //     items.clicked = false;
+  //     setApplyShowError(false);
+  //   } else {
+  //     setApplyShowError(true);
+  //     items.clicked = true;
+  //   }
+  // };
+
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -263,6 +358,18 @@ export const FreelanceSavedJobs = () => {
                           >
                             APPLY
                           </Button>
+                          {items.clicked && applyShow && (
+                            <MyVerticallyCenteredModalApply
+                              show={items.clicked}
+                              props={items}
+                            />
+                          )}
+                          {items.clicked && applyShowError && (
+                            <MyVerticallyCenteredModalApplyError
+                              show={applyShowError}
+                              props={items}
+                            />
+                          )}
                           <Button
                             onClick={() => modalshow(items)}
                             className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"

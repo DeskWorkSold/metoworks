@@ -2217,7 +2217,7 @@ export const Interview = () => {
                                             </div>
                                           </div>
                                         </Col>
-                                        <Col lg="2" className="webkit">
+                                        <Col lg="2" className="webkit cond">
                                           {profileImg.length > 0 ? (
                                             <div
                                               style={{

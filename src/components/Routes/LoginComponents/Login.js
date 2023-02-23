@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Image, FormCheck, Button } from "react-bootstrap";
 import { BsFacebook, BsLinkedin } from "react-icons/bs";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { BrowserRouter as Route, Router, Link, Switch } from "react-router-dom";
-
+import LinkedInUI from "../linkedin";
 import "react-tabs/style/react-tabs.css";
 import { Navigation } from "swiper";
 import { useNavigate } from "react-router-dom/dist";
 import axios from "../../../utils/axios.api";
+import FacebookInUI from "../facebook";
 
 export const Login = () => {
   const [freelancerData, setFreelancerData] = useState({
@@ -21,6 +22,7 @@ export const Login = () => {
   });
 
   const [validation, setValidation] = useState("");
+  const [isLinkedin, setIsLinkedin] = useState(false);
   // console.log(recruiterData, 'recruiterData dataaaaaa');
 
   // npm catch clean --force
@@ -90,6 +92,19 @@ export const Login = () => {
       setValidation(isValidate);
     }
   };
+
+  const callBackFun = (res) => {
+    console.log(res, "res");
+    setIsFacebook(false);
+    setIsLinkedin(false);
+  };
+
+  const [isFacebook, setIsFacebook] = useState(false);
+
+  React.useEffect(() => {
+    setIsFacebook(false);
+    setIsLinkedin(false);
+  }, [setIsFacebook, setIsLinkedin]);
 
   return (
     <Container>
@@ -229,6 +244,60 @@ export const Login = () => {
                             </p>
                           </Col>
                         </div>
+                        <div className="dflex py-3">
+                          <Row className="webkit">
+                            <Col lg="1"></Col>
+                            <Col lg="4">
+                              <BsLinkedin
+                                className="text-7xl"
+                                style={{ color: "#0077B5" }}
+                                onClick={() =>
+                                  setIsLinkedin(isLinkedin ? false : true)
+                                }
+                              />
+                              {isLinkedin && (
+                                <LinkedInUI
+                                  type={"signup"}
+                                  callBackFun={callBackFun}
+                                  style={{ top: -50 }}
+                                />
+                              )}
+                            </Col>
+                            <Col
+                              lg="2"
+                              className="marres"
+                              style={{ marginTop: "35px" }}
+                            >
+                              <hr className="hr" style={{ width: "60px" }} />
+                            </Col>
+                            <Col lg="4">
+                              <BsFacebook
+                                className="text-7xl"
+                                style={{ color: "#4267B2" }}
+                                onClick={() =>
+                                  setIsFacebook(isFacebook ? false : true)
+                                }
+                              />
+                              {isFacebook && (
+                                <FacebookInUI
+                                  type={"signUp"}
+                                  style={{ top: -50 }}
+                                />
+                              )}
+                            </Col>
+                            <Col lg="1"></Col>
+                          </Row>
+                          <div className="pt-40">
+                            <p className="py-2">
+                              Not a member?{" "}
+                              <span
+                                style={{ color: "#6A489C", fontWeight: "bold" }}
+                              >
+                                <Link to="/Signup">Sign up</Link>
+                              </span>
+                            </p>
+                          </div>
+                        </div>
                       </Container>
                     </TabPanel>
 
@@ -323,50 +392,25 @@ export const Login = () => {
                               </Button>
                               {/* </Link> */}
                             </div>
-                            <p
+                            {/* <p
                               className="pt-2 text-xl"
                               style={{ color: "#7A7979" }}
                             >
                               OR
-                            </p>
+                            </p> */}
                           </Col>
                         </div>
+                        <p className="py-2">
+                          Not a member?{" "}
+                          <span
+                            style={{ color: "#6A489C", fontWeight: "bold" }}
+                          >
+                            <Link to="/Signup">Sign up</Link>
+                          </span>
+                        </p>
                       </Container>
                     </TabPanel>
                   </Tabs>
-                  <div className="dflex py-3">
-                    <Row className="webkit">
-                      <Col lg="1"></Col>
-                      <Col lg="4">
-                        <BsLinkedin
-                          className="text-7xl"
-                          style={{ color: "#0077B5" }}
-                        />
-                      </Col>
-                      <Col
-                        lg="2"
-                        className="marres"
-                        style={{ marginTop: "35px" }}
-                      >
-                        <hr className="hr" style={{ width: "60px" }} />
-                      </Col>
-                      <Col lg="4">
-                        <BsFacebook
-                          className="text-7xl"
-                          style={{ color: "#4267B2" }}
-                        />
-                      </Col>
-                      <Col lg="1"></Col>
-                    </Row>
-                    <div className="pt-40">
-                      <p className="py-2">
-                        Not a member?{" "}
-                        <span style={{ color: "#6A489C", fontWeight: "bold" }}>
-                          <Link to="/Signup">Sign up</Link>
-                        </span>
-                      </p>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>

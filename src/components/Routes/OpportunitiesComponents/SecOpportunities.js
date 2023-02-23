@@ -28,29 +28,29 @@ export const SecOpportunities = () => {
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-  const [jobIndustry, setJobIndustry] = useState('')
-  const [jobFunction, setJobFunction] = useState('')
-  const [subJobFunction, setSubJobFunction] = useState('')
-  const [profession, setProfession] = useState('')
-  const [companyName, setCompanyName] = useState('')
+  const [jobIndustry, setJobIndustry] = useState("");
+  const [jobFunction, setJobFunction] = useState("");
+  const [subJobFunction, setSubJobFunction] = useState("");
+  const [profession, setProfession] = useState("");
+  const [companyName, setCompanyName] = useState("");
   const [salaryRange, setSalaryRange] = useState({
-    gte : '',
-    lte : ''
-  })
-  const [location, setLocation] = useState('')
+    gte: "",
+    lte: "",
+  });
+  const [location, setLocation] = useState("");
   const [searchShow, setSearchShow] = useState(false);
   const [modalShow, setModalShow] = React.useState(false);
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-  const [languageType, setLanguage] = useState('');
-  const [educationLevel, setEducationLevel] = useState('');
-  const [city, setCity] = useState('');
-  const [minSalary, setMinSalary] = useState('');
-  const [maxSalary, setMaxSalary] = useState('');
-  const [maxExperience, setMaxExperience] = useState('');
-  const [modeofWork, setModeOfWork] = useState('')
+  const [languageType, setLanguage] = useState("");
+  const [educationLevel, setEducationLevel] = useState("");
+  const [city, setCity] = useState("");
+  const [minSalary, setMinSalary] = useState("");
+  const [maxSalary, setMaxSalary] = useState("");
+  const [maxExperience, setMaxExperience] = useState("");
+  const [modeofWork, setModeOfWork] = useState("");
   const [isSearch, setIsSearch] = useState({
     keyword: "",
   });
@@ -59,20 +59,25 @@ export const SecOpportunities = () => {
 
   const searchFun = () => {
     const reqBody = {
-      "keyword": isSearch.keyword,
-      "filter": []
-  };
+      keyword: isSearch.keyword,
+      filter: [],
+    };
 
-  if(jobIndustry) reqBody?.filter?.push({"term": {"industry": jobIndustry}});
-  if(jobFunction) reqBody?.filter?.push({"term": {"jobFunction": jobFunction}});
-  if(jobFunction && subJobFunction) reqBody?.filter?.push({"term": {"jobSubFunction": subJobFunction}});
-  if(modeofWork) reqBody?.filter?.push({"term": {"modeOfWork": modeofWork}});
-  if(minSalary && maxSalary) reqBody?.filter?.push({"range":{"salaryRange":{"gte":minSalary,"lte":maxSalary}}});
-  if(city) reqBody?.filter?.push({"term": {"location": city}});
+    if (jobIndustry) reqBody?.filter?.push({ term: { industry: jobIndustry } });
+    if (jobFunction)
+      reqBody?.filter?.push({ term: { jobFunction: jobFunction } });
+    if (jobFunction && subJobFunction)
+      reqBody?.filter?.push({ term: { jobSubFunction: subJobFunction } });
+    if (modeofWork) reqBody?.filter?.push({ term: { modeOfWork: modeofWork } });
+    if (minSalary && maxSalary)
+      reqBody?.filter?.push({
+        range: { salaryRange: { gte: minSalary, lte: maxSalary } },
+      });
+    if (city) reqBody?.filter?.push({ term: { location: city } });
 
-  // console.log(reqBody, 'eeeeeeeeeeeee');
+    // console.log(reqBody, 'eeeeeeeeeeeee');
     axios
-      .post(`api/v1/search/job-post?from=0&size=4`, reqBody)
+      .post(`api/v1/search/job-post?from=0&size=10`, reqBody)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data.data;
@@ -232,6 +237,21 @@ export const SecOpportunities = () => {
       values.clicked = true;
     }
   };
+
+  const applyJobFunc = (values) => {
+    axios
+      .post(`api/v1/interview/apply?jobId=${values._id}`)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data.data.data;
+        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+        // setIsProfileData(data)
+        setSearchData();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -270,7 +290,7 @@ export const SecOpportunities = () => {
         </Row>
         {searchShow === true ? (
           <>
-           <Row className="align-items-center">
+            <Row className="align-items-center">
               <Col lg="5">
                 <div className="p-3">
                   <Col lg="12">
@@ -278,8 +298,10 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Industry
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setJobIndustry(e.target.value)}>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setJobIndustry(e.target.value)}
+                      >
                         <option hidden="">Select Job Industry</option>
                         <option>Universities / Education</option>
                         <option>Manufacturing</option>
@@ -331,8 +353,10 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Function
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) =>setJobFunction(e.target.value)}>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setJobFunction(e.target.value)}
+                      >
                         <option hidden="">Select Job Function</option>
                         <option>HR &amp; Admin</option>
                         <option>General Management</option>
@@ -372,8 +396,9 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Sub Job Function
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setSubJobFunction(e.target.value)}
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setSubJobFunction(e.target.value)}
                       >
                         <option hidden="">Select Sub Job Function</option>
                       </Form.Select>
@@ -417,8 +442,9 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Language
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setLanguage(e.target.value)}
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setLanguage(e.target.value)}
                       >
                         <option hidden="">Select Language</option>
                         <option value="English">English</option>
@@ -480,8 +506,7 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Company Name
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      >
+                      <Form.Select aria-label="Default select example">
                         <option>Enter Company Name</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -505,8 +530,10 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Mode of Work
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setModeOfWork(e.target.value)}>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setModeOfWork(e.target.value)}
+                      >
                         <option>Select Mode of Work</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -536,7 +563,7 @@ export const SecOpportunities = () => {
                           className="form-control"
                           name="Email"
                           type={"email"}
-                      onChange={(e) => setMinSalary(e.target.value)}
+                          onChange={(e) => setMinSalary(e.target.value)}
                           //   value={user.number}
                           //   onChange={getUserData}
                           placeholder="Enter Min Salary 
@@ -550,7 +577,7 @@ export const SecOpportunities = () => {
                           type={"email"}
                           //   value={user.number}
                           //   onChange={getUserData}
-                      onChange={(e) =>setMaxSalary(e.target.value)}
+                          onChange={(e) => setMaxSalary(e.target.value)}
                           placeholder="Enter Max Salary 
 
                 "
@@ -594,8 +621,9 @@ export const SecOpportunities = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Location
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setCity(e.target.value)}
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setCity(e.target.value)}
                       >
                         <option hidden="">Select Job Location</option>
                         <option>Central and Western</option>
@@ -653,163 +681,172 @@ export const SecOpportunities = () => {
             </div>
           </Col>
         </Row>
-        {searchData && searchData?.length > 0 ? 
-        searchData?.map((values, keys) => {
-          return (
-            <Row>
-              <Col lg="12" key={keys}>
-                <div className="p-3">
-                  <div className="boxshad">
-                    <Row>
-                      <Col lg="7">
-                        
-                        <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                          {values?._source?.title}
-                        </h2>
-                        <p style={{ color: "#7A7979" }} className="text-lg">
-                          {values?._source?.empType}
-                        </p>
-                      </Col>
-                      <Col lg="5" className="webkit-right">
-                        <Button
-                          className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
-                          style={{ background: "#39BEC1", border: "none" }}
-                        >
-                          APPLY
-                        </Button>
+        {searchData && searchData?.length > 0 ? (
+          searchData?.map((values, keys) => {
+            return (
+              <Row>
+                <Col lg="12" key={keys}>
+                  <div className="p-3">
+                    <div className="boxshad">
+                      <Row>
+                        <Col lg="7">
+                          <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
+                            {values?._source?.title}
+                          </h2>
+                          <p style={{ color: "#7A7979" }} className="text-lg">
+                            {values?._source?.empType}
+                          </p>
+                        </Col>
+                        <Col lg="5" className="webkit-right">
+                          <Button
+                            className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
+                            style={{ background: "#39BEC1", border: "none" }}
+                            onClick={() => applyJobFunc(values)}
+                          >
+                            APPLY
+                          </Button>
 
-                        <Button
-                          onClick={() => modalshow(values)}
-                          className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
-                          style={{ background: "#C1C1C1", border: "none" }}
-                        >
-                          VIEW MORE DETAIL
-                        </Button>
-                        {values.clicked == true && (
-                          <MyVerticallyCenteredModal
-                            show={modalShow}
-                            props={values}
-                            onHide={() => modalshow(values)}
-                          />
-                        )}
-                  
-                        <p style={{ color: "#7A7979" }} className="text-lg">
-                          Posted Date :
-                          {values?._source?.postedDate.substring(0, 10)}
-                          &nbsp;&nbsp; &nbsp;&nbsp;
-                          <span>
-                            Expiry Date :
-                            {values?._source?.expiryDate.substring(0, 10)}
-                          </span>
-                        </p>
-                      </Col>
-                    </Row>
-                    <Row className="align-items-center block-for-res">
-                      <Col>
-                        <div className="p3 py-3">
-                          <h2 className="text-lg font-semibold">
-                            Company Name
-                          </h2>
-                          <h2
-                            className="text-lg"
-                            style={{ color: "#7A7979" }}
+                          <Button
+                            onClick={() => modalshow(values)}
+                            className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
+                            style={{ background: "#C1C1C1", border: "none" }}
                           >
-                            {values?._source?.companyName}
-                          </h2>
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="p3 py-3">
-                          <h2 className="text-lg font-semibold">
-                            Job Industry
-                          </h2>
-                          <h2
-                            className="text-lg"
-                            style={{ color: "#7A7979" }}
-                          >
-                            {values?._source?.industry}
-                          </h2>
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="p3 py-3">
-                          <h2 className="text-lg font-semibold">
-                            Salary Range
-                          </h2>
-                          <h2
-                            className="text-lg"
-                            style={{ color: "#7A7979" }}
-                          >
-                            {values?._source?.salaryRange?.gte +
-                              " - " +
-                              values?._source?.salaryRange?.lte}
-                          </h2>
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="p3 py-3">
-                          <h2 className="text-lg font-semibold">Location</h2>
-                          <h2
-                            className="text-lg"
-                            style={{ color: "#7A7979" }}
-                          >
-                            {values?._source?.location}
-                          </h2>
-                        </div>
-                      </Col>
-                      <Col>
-                        <div className="p3 py-3">
-                          <h2 className="text-lg font-semibold">
-                            No. of candidates
-                          </h2>
-                          <h2
-                            className="text-lg"
-                            style={{ color: "#7A7979" }}
-                          >
-                            {values?._source?.noOfOpenings}
-                          </h2>
-                        </div>
-                      </Col>
-                    </Row>
-                    <hr className="my-2" />
-                    <Row className="align-items-center">
-                      <Col lg="10">
-                        <div className="p3 py-3">
-                          <h2 className="text-lg font-semibold">
-                            Job Description
-                          </h2>
-                          <h2
-                            className="text-l py-3"
-                            style={{ color: "#7A7979" }}
-                          >
-                            {values?._source?.description.replace(
-                              /(<([^>]+)>)/gi,
-                              ""
-                            )}
-                          </h2>
-                        </div>
-                      </Col>
+                            VIEW MORE DETAIL
+                          </Button>
+                          {values.clicked == true && (
+                            <MyVerticallyCenteredModal
+                              show={modalShow}
+                              props={values}
+                              onHide={() => modalshow(values)}
+                            />
+                          )}
 
-                      <Col lg="2">
-                        <p
-                          className="py-2"
-                          style={{
-                            float: "right",
-                            color: "#7A7979",
-                            fontSize: "25px",
-                            display: "flex",
-                          }}
-                        >
-                          <BsBookmark />
-                        </p>
-                      </Col>
-                    </Row>
+                          <p style={{ color: "#7A7979" }} className="text-lg">
+                            Posted Date :
+                            {values?._source?.postedDate.substring(0, 10)}
+                            &nbsp;&nbsp; &nbsp;&nbsp;
+                            <span>
+                              Expiry Date :
+                              {values?._source?.expiryDate.substring(0, 10)}
+                            </span>
+                          </p>
+                        </Col>
+                      </Row>
+                      <Row className="align-items-center block-for-res">
+                        <Col>
+                          <div className="p3 py-3">
+                            <h2 className="text-lg font-semibold">
+                              Company Name
+                            </h2>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {values?._source?.companyName}
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col>
+                          <div className="p3 py-3">
+                            <h2 className="text-lg font-semibold">
+                              Job Industry
+                            </h2>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {values?._source?.industry}
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col>
+                          <div className="p3 py-3">
+                            <h2 className="text-lg font-semibold">
+                              Salary Range
+                            </h2>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {values?._source?.salaryRange?.gte +
+                                " - " +
+                                values?._source?.salaryRange?.lte}
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col>
+                          <div className="p3 py-3">
+                            <h2 className="text-lg font-semibold">Location</h2>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {values?._source?.location}
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col>
+                          <div className="p3 py-3">
+                            <h2 className="text-lg font-semibold">
+                              No. of candidates
+                            </h2>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {values?._source?.noOfOpenings}
+                            </h2>
+                          </div>
+                        </Col>
+                      </Row>
+                      <hr className="my-2" />
+                      <Row className="align-items-center">
+                        <Col lg="10">
+                          <div className="p3 py-3">
+                            <h2 className="text-lg font-semibold">
+                              Job Description
+                            </h2>
+                            <h2
+                              className="text-l py-3"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {values?._source?.description.replace(
+                                /(<([^>]+)>)/gi,
+                                ""
+                              )}
+                            </h2>
+                          </div>
+                        </Col>
+
+                        <Col lg="2">
+                          <p
+                            className="py-2"
+                            style={{
+                              float: "right",
+                              color: "#7A7979",
+                              fontSize: "25px",
+                              display: "flex",
+                            }}
+                          >
+                            <BsBookmark />
+                          </p>
+                        </Col>
+                      </Row>
+                    </div>
                   </div>
-                </div>
-              </Col>
-            </Row>
-          )
-        }) : <div style={{textAlign : 'center'}}> <h1 style={{fontSize : '3vh', fontWeight : 'bolder'}}> No Job Found </h1> </div>} 
+                </Col>
+              </Row>
+            );
+          })
+        ) : (
+          <div style={{ textAlign: "center" }}>
+            {" "}
+            <h1 style={{ fontSize: "3vh", fontWeight: "bolder" }}>
+              {" "}
+              No Job Found{" "}
+            </h1>{" "}
+          </div>
+        )}
       </Container>
     </Container>
   );

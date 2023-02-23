@@ -333,8 +333,49 @@ fieldset input ,textarea{
   width: 85% !important;
  }
 }
+.box-center{
+  text-align: -webkit-center;
+  display: grid;
+}
+.close{
+  float: right;
+}
+.text-3xl{
+    
+  font-size: 1.240rem;
+}
+@media (min-width: 600px) and (max-width: 681px){
+  .text-3xl{
+    
+    font-size: 1.440rem;
+  }
+  .box-center{
+    display: block;
+    text-align: -webkit-center;
+  }
+  .fontpxx{
+    font-size: 10px !important;
+  }
+}
+/* .pos-abs{
+position: absolute;
+} */
 @media only screen and (max-width: 992px) {
   
+/* .pos-abs{
+  position: absolute;
+  } */
+  .cond img{
+    width: 40% !important;
+  }
+  .block-for-res .col{
+    margin-top: 20px;
+  }
+.close{
+  float: none;
+  text-align: center;
+}
+
   .boxshad .imgprofile{
     width: 70% !important;
   }
@@ -375,9 +416,7 @@ fieldset input ,textarea{
   .fontpx{
     font-size: 14px !important;
   }
-  .fontpxx{
-    font-size: 10px !important;
-  }
+  
 .w-half{
   width: auto !important;
 }
@@ -387,10 +426,7 @@ fieldset input ,textarea{
   .webkit-right{
     text-align: -webkit-center !important;
   }
-  .text-3xl{
-    
-    font-size: 1.440rem;
-  }
+  
   .boxshad ul{
     /* font-size: 20px !important; */
     padding-top: 20px;
@@ -405,6 +441,8 @@ fieldset input ,textarea{
       }
       .About_main_images_search{
         width: 340px;
+        
+    margin-top: 11px;
         background-color: #f7f7f7;
         height: 50px;
         border-radius: 5px;
@@ -461,6 +499,7 @@ p{
   font-size: 16px !important;
 }
     .d-flex-for-res{
+      justify-content: center;
         display: flex !important;
     }
     .d-flex span{
@@ -479,19 +518,19 @@ p{
         font-size: 14px;
     }
     .bg1{
-        height: 375px !important;
+        height: 466px !important;
     }
 
     .bg2{
-        height: 375px !important;
+        height: 466px !important;
     }
 
     .bg3{
-        height: 375px !important;
+        height: 466px !important;
     }
 
     .bg4{
-        height: 375px !important;
+        height: 466px !important;
     }
     .bg{
         background-size: cover !important;
@@ -573,44 +612,50 @@ p{
   .bg2{
     background-image: url(assets/02.png);
       /* background-size: contain; */
-    /* background-repeat: round; */
-    padding: 22px;
-    height: 413px;
-    display: flex;
-    background-repeat: round;
-    align-items: center;
-    text-align: center;
+      height: 413px;
+      /* z-index: 2; */
+      /* background: white; */
+      display: inline-flex;
+      padding: 34px;
+      background-repeat: round;
+      align-items: center;
+      text-align: -webkit-center;
+      justify-content: center;
   }
 
   .bg3{
     background-image: url(assets/03.png);
-      /* background-size: contain; */
-    /* background-repeat: round; */
-    padding: 22px;
     height: 413px;
-    display: flex;
-    background-repeat: round;
-    align-items: center;
-    text-align: center;
+      /* z-index: 2; */
+      /* background: white; */
+      display: inline-flex;
+      padding: 34px;
+      background-repeat: round;
+      align-items: center;
+      text-align: -webkit-center;
+      justify-content: center;
   }
 
   .bg4{
     background-image: url(assets/04.png);
       /* background-size: contain; */
-    /* background-repeat: round; */
-    padding: 22px;
-    height: 413px;
-    display: flex;
-    background-repeat: round;
-    align-items: center;
-    text-align: center;
-  }
+      height: 413px;
+      /* z-index: 2; */
+      /* background: white; */
+      display: inline-flex;
+      padding: 34px;
+      background-repeat: round;
+      align-items: center;
+      text-align: -webkit-center;
+      justify-content: center;
+}
+  
   .test{
     background-image: url(assets/testimonial.png);
     /* background-size: contain; */
-  /* background-repeat: round; */
-  padding: 22px;
+   padding: 22px;
   /* height: 413px; */
+  border-radius: 41px;
   /* display: flex; */
   background-repeat: round;
   align-items: center;
@@ -692,8 +737,8 @@ p{
   .test .testmen{
     text-align: -webkit-center;
     background: white;
-    border-radius: 160px;
-    width: 197px;
+    border-radius: 199px;
+     /* width: 197px; */
   }
   .test1 .testmen{
     text-align: -webkit-center;

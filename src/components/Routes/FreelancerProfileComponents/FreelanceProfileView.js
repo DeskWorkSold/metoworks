@@ -190,6 +190,7 @@ export const FreelanceProfileView = () => {
   const [profileImg, setProfileImg] = useState("");
   const navigate = useNavigate();
   const [thumbnail, setThumbnail] = useState("");
+  const [error, setError] = useState("");
   // console.log(thumbnail, "thumbnail");
 
   // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
@@ -352,9 +353,7 @@ export const FreelanceProfileView = () => {
       });
   };
 
-  const [error, setError] = useState();
   const profileFunc = () => {
-    console.log(profileData, "data");
     let myData = {
       aboutMe: profileData.aboutMe ?? profileData.data.aboutMe,
       address: profileData.address ?? profileData.data.address,
@@ -377,13 +376,13 @@ export const FreelanceProfileView = () => {
     };
 
     let flagData = { ...myData };
-    console.log(flagData, "data");
+    // console.log(flagData, "data");
     delete flagData.isIdCardPublic;
-    flagData.firstName = "";
+    // flagData.firstName = "";
     let flag = Object.values(flagData);
     let flag1 = flag.some((e, i) => e == "");
-    console.log(flag1, "falg1");
-    console.log(flagData, "flagDATA");
+    // console.log(flag1, "falg1");
+    // console.log(flagData, "flagDATA");
     if (flag1) {
       let newErrors = {};
       if (!myData.aboutMe) {
@@ -432,7 +431,7 @@ export const FreelanceProfileView = () => {
       if (!myData.salaryRange.gte) {
         newErrors.salaryRange = "start Date is Required";
       }
-      console.log(newErrors, "newError");
+      // console.log(newErrors, "newError");
       setError(newErrors);
     } else if (!flag1 && isCv) {
       if (isCv) {
@@ -449,7 +448,7 @@ export const FreelanceProfileView = () => {
             }
           })
           .catch((err) => {
-            // console.log(err);
+            console.log(err);
           });
       }
 
@@ -465,7 +464,7 @@ export const FreelanceProfileView = () => {
             }
           })
           .catch((err) => {
-            // console.log(err);
+            console.log(err);
           });
       }
     }
@@ -540,11 +539,11 @@ export const FreelanceProfileView = () => {
         newErrors.endDate = "End Date is Required";
       }
 
-      console.log(newErrors);
+      // console.log(newErrors);
       setError(newErrors);
     }
   };
-  console.log("error", error);
+  // console.log("error", error);
 
   const deleteExperienceData = (id) => {
     axios
@@ -656,7 +655,7 @@ export const FreelanceProfileView = () => {
     delete profileData.data.email;
     delete profileData.data.id;
 
-    console.log(isAchievement, "isAcheig");
+    // console.log(isAchievement, "isAcheig");
 
     if (isAchievement.title && isAchievement.description) {
       if (isAchievement.achievement || isAchievement.certificate) {
@@ -995,7 +994,7 @@ export const FreelanceProfileView = () => {
         isCurrent: isChecked,
         description: "",
       };
-      console.log(editIsExperienceData1, "titlllllllllllllllle");
+      // console.log(editIsExperienceData1, "titlllllllllllllllle");
 
       const updateProfileExp = (props) => {
         console.log(editIsExperienceData1, "dataaa");
@@ -1032,46 +1031,73 @@ export const FreelanceProfileView = () => {
         };
 
         let newData = [...isExperienceData];
-        console.log(newData, "newData");
-        console.log(experienceId, "IDDD");
 
         newData = newData.filter((e, i) => {
           return !e.clicked;
         });
         newData.push(expData);
-
-        console.log(newData, "newData");
-
         // console.log(newData, "newDaataaa");
 
         // let arrayData = [isEditExperienceData]
         // const newData = [isEditExperienceData]?.filter((x) => x?.id != experienceId);
         // newData?.push(expData);
         // console.log(newData,"data")
+        let values = Object.values(expData);
 
-        axios
-          .post(`api/v1/user/freelancer`, { experience: newData })
-          .then((res) => {
-            // console.log(res.data, 'eeeeeeeeeeeeee');
-            let data = res.data;
-            console.log(res, "profile edit data successfully added");
-            // ProfileExpData(userId);
-            if (data) {
-              props.onHide();
-              setShow(false);
-              setTimeout(() => {
-                initialFun();
-              }, 1000);
-              setTimeout(() => {
-                setUpdate(!update);
-              }, 2000);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        // console.log(values,"values")
+        values = values.every((e, i) => e !== "");
+        if (values) {
+          axios
+            .post(`api/v1/user/freelancer`, { experience: newData })
+            .then((res) => {
+              // console.log(res.data, 'eeeeeeeeeeeeee');
+              let data = res.data;
+              console.log(res, "profile edit data successfully added");
+              // ProfileExpData(userId);
+              if (data) {
+                props.onHide();
+                setShow(false);
+                setTimeout(() => {
+                  initialFun();
+                }, 1000);
+                setTimeout(() => {
+                  setUpdate(!update);
+                }, 2000);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          let newErrors = {};
+          if (!profileExp.companyName) {
+            newErrors.companyName = "companyName is required";
+          }
+          if (!profileExp.description) {
+            newErrors.description = "description is required";
+          }
+          if (!profileExp.jobFunction) {
+            newErrors.jobFunction = "jobFunction is required";
+          }
+          if (!profileExp.jobIndustry) {
+            newErrors.jobIndustry = "jobIndustry is required";
+          }
+          if (!profileExp.profession) {
+            newErrors.profession = "profession is required";
+          }
+          if (!profileExp.duration.gte) {
+            newErrors.startDate = "Start Date is Required";
+          }
+          if (!profileExp.duration.lte) {
+            newErrors.endDate = "End Date is Required";
+          }
+
+          // console.log(newErrors);
+          setError(newErrors);
+        }
       };
 
+      // console.log(props, 'eeeeeeeeeeeeeee');
       return (
         <div>
           <Modal
@@ -1099,7 +1125,7 @@ export const FreelanceProfileView = () => {
                         className="form-control"
                         name="fname"
                         type={"text"}
-                        placeholder={props?.props?.title}
+                        placeholder={props?.props?.profession}
                         onChange={(e) =>
                           (editIsExperienceData1.title = e.target.value)
                         }
@@ -1107,6 +1133,9 @@ export const FreelanceProfileView = () => {
                         //   onChange={getUserData}
                       />
                     </fieldset>
+                    {error && error.profession && (
+                      <p style={{ color: "red" }}>{error.profession}</p>
+                    )}
                   </Col>
                   <Col lg="12">
                     <fieldset>
@@ -1124,6 +1153,9 @@ export const FreelanceProfileView = () => {
                         //   onChange={getUserData}
                       />
                     </fieldset>
+                    {error && error.companyName && (
+                      <p style={{ color: "red" }}>{error.companyName}</p>
+                    )}
                   </Col>
                   <Col lg="12">
                     <fieldset>
@@ -1171,6 +1203,9 @@ export const FreelanceProfileView = () => {
                         <option>Others</option>
                       </Form.Select>
                     </fieldset>
+                    {error && error.jobIndustry && (
+                      <p style={{ color: "red" }}>{error.jobIndustry}</p>
+                    )}
                   </Col>
                   <Col lg="12">
                     <fieldset>
@@ -1207,6 +1242,9 @@ export const FreelanceProfileView = () => {
                         <option>Others</option>
                       </Form.Select>
                     </fieldset>
+                    {error && error.jobFunction && (
+                      <p style={{ color: "red" }}>{error.jobFunction}</p>
+                    )}
                   </Col>
                   <Row>
                     <Col lg="12" className="pt-3">
@@ -1256,6 +1294,9 @@ export const FreelanceProfileView = () => {
                           placeholder="A Service Like No Other"
                         />
                       </fieldset>
+                      {error && error.startDate && (
+                        <p style={{ color: "red" }}>{error.startDate}</p>
+                      )}
                     </Col>
                     <Col lg="6">
                       <fieldset>
@@ -1288,6 +1329,9 @@ export const FreelanceProfileView = () => {
                           required
                         />
                       </fieldset>
+                      {error && error.endDate && (
+                        <p style={{ color: "red" }}>{error.endDate}</p>
+                      )}
                     </Col>
                     <Col lg="12">
                       <fieldset>
@@ -1309,6 +1353,9 @@ export const FreelanceProfileView = () => {
                           }
                         />
                       </fieldset>
+                      {error && error.description && (
+                        <p style={{ color: "red" }}>{error.description}</p>
+                      )}
                     </Col>
                   </Row>
                 </div>
@@ -1492,13 +1539,16 @@ export const FreelanceProfileView = () => {
         };
         // console.log(EducationData, 'EducationData');
 
+        let value = Object.values(EducationData);
+        let data = value.every((e) => e !== "");
+
         if (CertificationData.certificate) {
           const formdata = new FormData();
           formdata.append("education-cert", CertificationData.certificate);
 
-          console.log(formdata, "formdATA");
-          console.log(CertificationData, "certification");
-          console.log(EducationData.id, "iddddd");
+          // console.log(formdata, "formdATA");
+          // console.log(CertificationData, "certification");
+          // console.log(EducationData.id, "iddddd");
           axios
             .put(
               `api/v1/user/freelancer/asset/education-cert?id=${props.props.id}`,
@@ -1530,26 +1580,48 @@ export const FreelanceProfileView = () => {
         newData.push(EducationData);
         // console.log(newData, "newDaataaa");
         // console.log(isEditEducationData, 'dataaaaaaaaaaaaaaaaaaa');
-        axios
-          .post(`api/v1/user/freelancer`, { education: newData })
-          .then((res) => {
-            // alert(isEditExperienceData.profession)
-            // console.log(res, "education edit data successfully added");
-            if (res) {
-              setShow6(false);
-              props.onHide();
-              setTimeout(() => {
+        if (data) {
+          axios
+            .post(`api/v1/user/freelancer`, { education: newData })
+            .then((res) => {
+              // alert(isEditExperienceData.profession)
+              // console.log(res, "education edit data successfully added");
+              if (res) {
+                setShow6(false);
+                props.onHide();
+                setTimeout(() => {
+                  initialFun();
+                }, 1000);
+                setTimeout(() => {
+                  setUpdate(!update);
+                }, 2000);
                 initialFun();
-              }, 1000);
-              setTimeout(() => {
-                setUpdate(!update);
-              }, 2000);
-              initialFun();
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          let newErrors = {};
+          if (!isEducation.educationLevel) {
+            newErrors.educationLevel = "Education Level is required";
+          }
+          if (!isEducation.institute) {
+            newErrors.institute = "Institute is required";
+          }
+          if (!isEducation.major) {
+            newErrors.major = "Major is required";
+          }
+          if (!isEducation.duration.startDate) {
+            newErrors.startDate = "Start Date is required";
+          }
+          if (!isEducation.duration.endDate) {
+            newErrors.endDate = "End Date is required";
+          }
+
+          // console.log(newErrors);
+          setError(newErrors);
+        }
       };
 
       return (
@@ -1650,6 +1722,9 @@ export const FreelanceProfileView = () => {
                         </option>
                       </Form.Select>
                     </fieldset>
+                    {error && error.educationLevel && (
+                      <p style={{ color: "red" }}>{error.educationLevel}</p>
+                    )}
                   </Col>
                   <Col lg="12">
                     <fieldset>
@@ -1669,6 +1744,9 @@ export const FreelanceProfileView = () => {
                         placeholder={isEditEducationData?.institute}
                       />
                     </fieldset>
+                    {error && error.institute && (
+                      <p style={{ color: "red" }}>{error.institute}</p>
+                    )}
                   </Col>
                   <Col lg="12">
                     <fieldset>
@@ -1720,7 +1798,9 @@ export const FreelanceProfileView = () => {
                       </Form.Select>
                     </fieldset>
                   </Col>
-
+                  {error && error.major && (
+                    <p style={{ color: "red" }}>{error.major}</p>
+                  )}
                   <Row>
                     <Col lg="6">
                       <fieldset>
@@ -1752,6 +1832,9 @@ export const FreelanceProfileView = () => {
                 "
                         />
                       </fieldset>
+                      {error && error.startDate && (
+                        <p style={{ color: "red" }}>{error.startDate}</p>
+                      )}
                     </Col>
                     <Col lg="6">
                       <fieldset>
@@ -1784,6 +1867,9 @@ export const FreelanceProfileView = () => {
                           required
                         />
                       </fieldset>
+                      {error && error.endDate && (
+                        <p style={{ color: "red" }}>{error.endDate}</p>
+                      )}
                     </Col>
                     <Col lg="6">
                       <fieldset>
@@ -1950,6 +2036,9 @@ export const FreelanceProfileView = () => {
       const editIsAchievementCertificate = {
         certificate: "",
       };
+
+      const value = Object.values(editIsAchievementData1);
+      let data = value.every((e) => e !== "");
       // console.log(editIsAchievementData1, "editIsAchievementData1");
 
       const updateProfileExp = (props) => {
@@ -1992,6 +2081,11 @@ export const FreelanceProfileView = () => {
             .catch((err) => {
               console.log(err);
             });
+        } else {
+          let newErrors = {};
+          if (!editIsAchievementCertificate.certificate) {
+            newErrors.certificate = "file required";
+          }
         }
         let newData = [...isAchievementData];
         newData = newData.filter((e, i) => {
@@ -2000,25 +2094,41 @@ export const FreelanceProfileView = () => {
         newData.push(achData);
         // console.log(newData, "newDaataaa");
         // console.log(isEditEducationData, 'dataaaaaaaaaaaaaaaaaaa');
-        axios
-          .post(`api/v1/user/freelancer`, { achievement: newData })
-          .then((res) => {
-            // alert(isEditExperienceData.profession)
-            // console.log(res, "education edit data successfully added");
-            if (res) {
-              setShow7(false);
-              props.onHide();
-              setTimeout(() => {
-                initialFun();
-              }, 1000);
-              setTimeout(() => {
-                setUpdate(!update);
-              }, 1500);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        if (data) {
+          axios
+            .post(`api/v1/user/freelancer`, { achievement: newData })
+            .then((res) => {
+              // alert(isEditExperienceData.profession)
+              // console.log(res, "education edit data successfully added");
+              if (res) {
+                setShow7(false);
+                props.onHide();
+                setTimeout(() => {
+                  initialFun();
+                }, 1000);
+                setTimeout(() => {
+                  setUpdate(!update);
+                }, 1500);
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          let newErrors = {};
+          if (!isAchievement.title) {
+            newErrors.title = "Title is required";
+          }
+          if (!isAchievement.description) {
+            newErrors.description = "Description is required";
+          }
+          if (!isAchievement.certificate) {
+            newErrors.certificate = "Certificate is required";
+          }
+
+          // console.log(newErrors);
+          setError(newErrors);
+        }
       };
 
       return (
@@ -2058,6 +2168,9 @@ export const FreelanceProfileView = () => {
                       />
                     </fieldset>
                   </Col>
+                  {error && error.title && (
+                    <p style={{ color: "red" }}>{error.title}</p>
+                  )}
                   <Col lg="12">
                     <fieldset>
                       <label className="text-lg" style={{ width: "100%" }}>
@@ -2072,6 +2185,9 @@ export const FreelanceProfileView = () => {
                       />
                     </fieldset>
                   </Col>
+                  {error && error.description && (
+                    <p style={{ color: "red" }}>{error.description}</p>
+                  )}
                   <Col lg="12">
                     <fieldset>
                       <label className="text-lg" style={{ width: "100%" }}>
@@ -2088,6 +2204,9 @@ export const FreelanceProfileView = () => {
                         }
                       />
                     </fieldset>
+                    {error && error.certificate && (
+                      <p style={{ color: "red" }}>{error.certificate}</p>
+                    )}
                   </Col>
                 </div>
               </Row>
@@ -2253,30 +2372,47 @@ export const FreelanceProfileView = () => {
         });
         newData.push(langData);
 
+        let value = Object.values(langData);
+        let data = data.every((e) => e !== "");
+
         // let arrayData = [isEditExperienceData]
         // const newData = [isEditExperienceData]?.filter((x) => x?.id != experienceId);
         // newData?.push(expData);
         // console.log(newData,"data")
-
-        axios
-          .post(`api/v1/user/freelancer`, { language: newData })
-          .then((res) => {
-            // console.log(res.data, 'eeeeeeeeeeeeee');
-            let data = res.data;
-            // console.log(res, "profile edit data successfully added");
-            // ProfileExpData(userId);
-            setShow7(false);
-            props.onHide();
-            setTimeout(() => {
-              initialFun();
-            }, 1000);
-            setTimeout(() => {
-              setUpdate(!update);
-            }, 1500);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        if (data) {
+          axios
+            .post(`api/v1/user/freelancer`, { language: newData })
+            .then((res) => {
+              // console.log(res.data, 'eeeeeeeeeeeeee');
+              let data = res.data;
+              // console.log(res, "profile edit data successfully added");
+              // ProfileExpData(userId);
+              setShow7(false);
+              props.onHide();
+              setTimeout(() => {
+                initialFun();
+              }, 1000);
+              setTimeout(() => {
+                setUpdate(!update);
+              }, 1500);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          let newErrors = {};
+          if (!isLanguage.languageType) {
+            newErrors.languageType = "Language Type is required";
+          }
+          if (!isLanguage.examLevel) {
+            newErrors.examLevel = "Exam Level is required";
+          }
+          if (!isLanguage.gradingLevel) {
+            newErrors.gradingLevel = "grading Level is required";
+          }
+          console.log(newErrors);
+          setError(newErrors);
+        }
       };
 
       return (
@@ -2622,6 +2758,9 @@ export const FreelanceProfileView = () => {
                         </option>
                       </Form.Select>
                     </fieldset>
+                    {error && error.languageType && (
+                      <p style={{ color: "red" }}>{error.languageType}</p>
+                    )}
                   </Col>
                   <Col lg="12">
                     <fieldset>
@@ -2648,6 +2787,9 @@ export const FreelanceProfileView = () => {
                         placeholder={props?.props?.examLevel}
                       />
                     </fieldset>
+                    {error && error.examLevel && (
+                      <p style={{ color: "red" }}>{error.examLevel}</p>
+                    )}
                   </Col>
                   <Col lg="12">
                     <fieldset>
@@ -2674,6 +2816,9 @@ export const FreelanceProfileView = () => {
                         //   onChange={getUserData}
                       />
                     </fieldset>
+                    {error && error.gradingLevel && (
+                      <p style={{ color: "red" }}>{error.gradingLevel}</p>
+                    )}
                   </Col>
                 </div>
               </Row>
@@ -3570,7 +3715,7 @@ export const FreelanceProfileView = () => {
                         <h2 className="text-xl font-semibold">Date of Birth</h2>
 
                         <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.data?.dob}
+                          {profileData?.data?.dob.substring(0, 10)}
                         </h2>
                       </div>
                     </Col>
@@ -4723,52 +4868,6 @@ export const FreelanceProfileView = () => {
                               </>
                             );
                           })}
-
-                        {/* <hr className="my-2" /> */}
-                        {/* <Col lg="6">
-                          <div className="p3">
-                            <h2 className="text-xl font-semibold">EXCEL</h2>
-                            <p className="text-lg" style={{ color: "#7A7979" }}>
-                              It has survived t is a long established fact that
-                              a reader will be distracted by the readable
-                              content of a page when looking at its layout. The
-                              point of using Lorem Ipsum is that it has a
-                              more-or-less normal distribution of letters.
-                            </p>
-                          </div>
-                        </Col>
-                        <Col lg="3">
-                          <div className="p-3 webkit">
-                            <Button
-                              className="text-white border-rounded px-3 py-2"
-                              style={{ background: "#39BEC1", border: "none" }}
-                            >
-                              see certificate
-                            </Button>
-                          </div>
-                        </Col>
-                        <Col lg="3">
-                          <div className="p-3 webkit">
-                            <div className="inline-flex">
-                              <div className="w-10">
-                                <BiEdit
-                                  style={{
-                                    color: "#39BEC1",
-                                    fontSize: "30px",
-                                  }}
-                                />
-                              </div>
-                              <div className="w-10">
-                                <ImBin
-                                  style={{
-                                    color: "#39BEC1",
-                                    fontSize: "30px",
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                        </Col> */}
                       </Row>
                     </Col>
                   </Row>

@@ -104,6 +104,7 @@ export const FreelanceFindWork = () => {
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data;
+
         searchFun();
         // setIsProfileData(data)
       })
@@ -157,7 +158,10 @@ export const FreelanceFindWork = () => {
                   <li>
                     <p className="text-lg">
                       <span className="font-semibold">Description :</span>
-                      {props?.props?._source?.description}
+                      {props?.props?._source?.description.replace(
+                        /(<([^>]+)>)/gi,
+                        ""
+                      )}
                     </p>
                   </li>
                   <li>
@@ -249,6 +253,8 @@ export const FreelanceFindWork = () => {
 
   const [subJobFunction, setSubJobFunction] = useState("");
   const [jobIndustry, setJobIndustry] = useState("");
+  const [smShow, setSmShow] = useState(false);
+  const [smShowError, setSmShowError] = useState(false);
   const [languageType, setLanguage] = useState("");
   const [educationLevel, setEducationLevel] = useState("");
   const [city, setCity] = useState("");
@@ -258,7 +264,11 @@ export const FreelanceFindWork = () => {
   const [modeofWork, setModeOfWork] = useState("");
   const [minExperience, setMinExperience] = useState("");
   const [maxExperience, setMaxExperience] = useState("");
-  const searchFun = () => {
+  const [applyShow, setApplyShow] = useState(false);
+  const [applyShowError, setApplyShowError] = useState(false);
+
+  const searchFun = (props) => {
+    console.log(props, "props");
     const reqBody = {
       keyword: isSearch.keyword,
       filter: [],
@@ -278,13 +288,34 @@ export const FreelanceFindWork = () => {
 
     // console.log(reqBody, 'eeeeeeeeeeeee');
     axios
-      .post(`api/v1/search/job-post?from=0&size=4`, reqBody)
+      .post(`api/v1/search/job-post?from=0&size=20`, reqBody)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data.data;
-        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+
+        if (props && props._id) {
+          setSearchData(
+            data &&
+              data.length > 0 &&
+              data.map((e, i) => {
+                if (e._id == props._id) {
+                  return {
+                    ...e,
+                    clicked: e.clicked ? false : true,
+                  };
+                } else {
+                  return {
+                    ...e,
+                    clicked: false,
+                  };
+                }
+              })
+          );
+        } else {
+          setSearchData(data);
+        }
+
         // setIsProfileData(data)
-        setSearchData(data);
       })
       .catch((err) => {
         console.log(err);
@@ -294,21 +325,179 @@ export const FreelanceFindWork = () => {
     setSearchData(null);
   };
 
+  const closeBookmark = (props) => {
+    console.log(props, "propssssss");
+    searchFun(props);
+    setApplyShow(false);
+    setSmShow(false);
+    setSmShowError(false);
+    setApplyShowError(false);
+  };
+
   const SavedJob = (events) => {
-    console.log(events, "events");
+    console.log("hello");
     axios
       .post(`api/v1/user/freelancer/saved-jobs/${events._id}`)
       .then((res) => {
-        // console.log(res, "Initial Data");
-        // let data = res.data.data.data;
-        console.log(res, "success");
-        // setIsProfileData(data)
-        // setSearchData(data);
+        setSmShow(true);
+        searchFun(events);
+
+        return;
       })
       .catch((err) => {
-        console.log(err);
+        setSmShowError(true);
       });
   };
+  const applyJobFunc = (values) => {
+    // console.log(values._id, "values");
+    axios
+      .post(`api/v1/interview/apply?jobId=${values._id}`)
+      .then((res) => {
+        values.clicked = true;
+        searchFun(values);
+        setJobFunction(true);
+      })
+
+      .catch((err) => {
+        console.log(err);
+        searchFun(values);
+        setApplyShowError(true);
+      });
+  };
+
+  function MyVerticallyCenteredModalToast(props) {
+    return (
+      <Modal
+        {...props}
+        size="sm"
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+        // centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">Bookmark</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h2>successfully added</h2>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => closeBookmark(props)}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  function MyVerticallyCenteredModalError(props) {
+    return (
+      <Modal
+        {...props}
+        size="sm"
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+        // centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">Bookmark</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h2 class="text-red-700">already saved or any internal error</h2>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => closeBookmark(props)}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  const smshow = (values) => {
+    if (values.clicked == true) {
+      values.clicked = false;
+      setSmShow(false);
+    } else {
+      setSmShow(true);
+      values.clicked = true;
+    }
+  };
+
+  const smshowerror = (values) => {
+    setSmShowError(true);
+    searchFun(values);
+
+    console.log(values, "funtion items");
+    // if (values.clicked == true) {
+    //   values.clicked = false;
+    //   setSmShowError(false);
+    // } else {
+    //   setSmShowError(true);
+    //   values.clicked = true;
+    // }
+  };
+
+  function MyVerticallyCenteredModalApply(props) {
+    return (
+      <Modal
+        {...props}
+        size="sm"
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+        // centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">Apply</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h2>Apply Successfully</h2>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={props.onHide}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  function MyVerticallyCenteredModalApplyError(props) {
+    return (
+      <Modal
+        {...props}
+        size="sm"
+        dialogClassName="modal-90w"
+        aria-labelledby="example-custom-modal-styling-title"
+        // centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Job Applied
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <h2 class="text-red-700">already Applied Job</h2>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => closeBookmark(props)}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  }
+  const applyshow = (values) => {
+    console.log(values, "funtion items");
+    if (values.clicked == true) {
+      values.clicked = false;
+      setApplyShow(false);
+    } else {
+      setApplyShow(true);
+      values.clicked = true;
+    }
+  };
+
+  const applyshowerror = (values) => {
+    console.log(values, "funtion items");
+    if (values.clicked == true) {
+      values.clicked = false;
+      setApplyShowError(false);
+    } else {
+      setApplyShowError(true);
+      values.clicked = true;
+    }
+  };
+
+  console.log(smShowError, "error");
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -758,10 +947,24 @@ export const FreelanceFindWork = () => {
                           <Button
                             className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
                             style={{ background: "#39BEC1", border: "none" }}
+                            onClick={() => applyJobFunc(values)}
                           >
                             APPLY
                           </Button>
-
+                          {values.clicked && applyShow && (
+                            <MyVerticallyCenteredModalApply
+                              show={values.clicked}
+                              props={values}
+                              onHide={() => applyshow(values)}
+                            />
+                          )}
+                          {values.clicked && applyShowError && (
+                            <MyVerticallyCenteredModalApplyError
+                              show={applyShowError}
+                              props={values}
+                              onHide={() => applyshowerror(values)}
+                            />
+                          )}
                           <Button
                             onClick={() => modalshow(values)}
                             className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
@@ -886,6 +1089,19 @@ export const FreelanceFindWork = () => {
                           >
                             <BsBookmark onClick={() => SavedJob(values)} />
                           </p>
+                          {values.clicked && smShow && (
+                            <MyVerticallyCenteredModalToast
+                              show={values.clicked}
+                              props={values}
+                            />
+                          )}
+                          {smShowError && values.clicked && (
+                            <MyVerticallyCenteredModalError
+                              show={smShowError}
+                              props={values}
+                              onHide={() => smshowerror(values)}
+                            />
+                          )}
                         </Col>
                       </Row>
                     </div>

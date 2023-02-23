@@ -18,7 +18,6 @@ export const Agreement = () => {
               style={{
                 borderRadius: "10px",
                 border: "1px solid #313131",
-                height: "450px",
 
                 marginTop: "10px",
               }}
@@ -48,7 +47,6 @@ export const Agreement = () => {
               style={{
                 borderRadius: "10px",
                 border: "1px solid #313131",
-                height: "450px",
 
                 marginTop: "10px",
               }}
@@ -78,7 +76,6 @@ export const Agreement = () => {
               style={{
                 borderRadius: "10px",
                 border: "1px solid #313131",
-                height: "450px",
 
                 marginTop: "10px",
               }}
