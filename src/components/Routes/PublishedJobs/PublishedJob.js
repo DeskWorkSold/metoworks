@@ -20,6 +20,7 @@ import { useNavigate } from "react-router-dom/dist";
 
 import { useEffect } from "react";
 import axios from "../../../utils/axios.api";
+import Loader from "../../../assets/loader.gif";
 
 function MyVerticallyCenteredModal(props) {
   const [isSalaryRange, setisSalaryRange] = useState({
@@ -1320,14 +1321,26 @@ export const PublishedJob = () => {
   });
   const [errors, setErrors] = useState();
 
+  const navigate = useNavigate();
+
   // console.log(profileData, 'profile Data');
   useEffect(() => {
+    checkAuth();
     setIsToken(localStorage.getItem("access-token"));
     // let id = localStorage.getItem('id')
     setUserId();
-    initialFun();
+    setTimeout(() => {
+      initialFun();
+    }, 1000);
     // profileImageFunc()
   }, []);
+
+  const checkAuth = async () => {
+    const token = await localStorage.getItem("access-token");
+    if (!token) {
+      navigate("/login");
+    }
+  };
 
   const [isSalaryRange, setisSalaryRange] = useState({
     gte: "",
@@ -2610,291 +2623,24 @@ export const PublishedJob = () => {
                 <Tab>ACTIVE JOBS</Tab>
                 <Tab>EXPIRED JOBS</Tab>
               </TabList>
-
-              <TabPanel>
-                <Row>
-                  {searchData.length > 0 &&
-                    searchData
-                      // ?.filter((items, index) => {
-                      //   console.log(items, "items");
-                      //   const startIndex = (currentPage - 1) * itemsPerPage;
-                      //   const endIndex = startIndex + itemsPerPage;
-                      //   return index >= startIndex && index < endIndex;
-                      // })
-                      .map((items, keys) => {
-                        console.log(items, "itemsss");
-                        let expiry = items._source.expiryDate;
-
-                        expiry = new Date(expiry);
-                        let expired = "";
-                        console.log(typeof expiry, "expiry");
-                        if (expiry) {
-                          let time = expiry.getTime();
-                          let todayTime = new Date().getTime();
-                          let timeDifference = time - todayTime;
-
-                          expired = Math.floor(
-                            timeDifference / 1000 / 60 / 60 / 24
-                          );
-                        }
-                        if (expired > 0) {
-                          return (
-                            <Col lg="12" key={keys}>
-                              <div className="m-3">
-                                <div className="boxshad">
-                                  <div
-                                    style={{
-                                      // display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "space-between",
-                                    }}
-                                    className="des-flex"
-                                  >
-                                    <div style={{ display: "block" }}>
-                                      <h2
-                                        className="text-3xl robot"
-                                        style={{ color: "#39BEC1" }}
-                                      >
-                                        {items?._source?.title}
-                                      </h2>
-                                      <p style={{ color: "#7A7979" }}>
-                                        {items?._source?.empType}
-                                      </p>
-                                    </div>
-                                    <div
-                                      style={{
-                                        float: "right",
-                                        display: "flex",
-                                        alignItems: "center",
-                                      }}
-                                      className="p-3 webkit"
-                                    >
-                                      <div style={{ display: "block" }}>
-                                        <Button
-                                          style={{
-                                            background: "none",
-                                            color: "#39BEC1",
-                                          }}
-                                          //   onClick={props.post}
-                                        >
-                                          ACTIVE
-                                        </Button>
-                                        <Button
-                                          onClick={handleShow}
-                                          className="text-white border-rounded px-3"
-                                          style={{
-                                            background: "#39BEC1",
-                                            border: "none",
-                                            marginTop: "10px",
-                                            marginBottom: "10px",
-                                          }}
-                                        >
-                                          <div
-                                            className="inline-flex"
-                                            style={{ fontSize: "20px" }}
-                                            onClick={() => btnEdit(items)}
-                                          >
-                                            <BsPencilSquare /> &nbsp; Edit Job
-                                          </div>
-                                        </Button>
-                                        {items.clicked == true && (
-                                          <MyVerticallyCenteredModalPublish
-                                            show={modalShowPublish}
-                                            props={items}
-                                            onHide={() => modalshow(items)}
-                                          />
-                                        )}
-                                        <p>
-                                          Posted Date :{" "}
-                                          {items?._source?.createdAt.substring(
-                                            0,
-                                            10
-                                          )}
-                                          <span className="mrdg">
-                                            Expiry Date :{" "}
-                                            {items?._source?.expiryDate.substring(
-                                              0,
-                                              10
-                                            )}
-                                          </span>
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <Container>
-                                    <Row className="align-items-center block-for-res">
-                                      <Col>
-                                        <div className="p3">
-                                          <h2 className="text-xl font-semibold">
-                                            Company Name
-                                          </h2>
-
-                                          <h2
-                                            className="text-lg"
-                                            style={{ color: "#7A7979" }}
-                                          >
-                                            {items?._source?.companyName}
-                                          </h2>
-                                        </div>
-                                      </Col>
-                                      <Col>
-                                        <div className="p3">
-                                          <h2 className="text-xl font-semibold">
-                                            Job Industry
-                                          </h2>
-
-                                          <h2
-                                            className="text-lg"
-                                            style={{ color: "#7A7979" }}
-                                          >
-                                            {items?._source?.industry}
-                                          </h2>
-                                        </div>
-                                      </Col>
-                                      <Col>
-                                        <div className="p3">
-                                          <h2 className="text-xl font-semibold">
-                                            Salary Range
-                                          </h2>
-
-                                          <h2
-                                            className="text-lg"
-                                            style={{ color: "#7A7979" }}
-                                          >
-                                            HKD{" "}
-                                            {items?._source?.salaryRange &&
-                                              items?._source?.salaryRange
-                                                .gte}{" "}
-                                            - HKD{" "}
-                                            {items?._source?.salaryRange &&
-                                              items?._source?.salaryRange.lte}
-                                          </h2>
-                                        </div>
-                                      </Col>
-                                      <Col>
-                                        <div className="p3">
-                                          <h2 className="text-xl font-semibold">
-                                            Location
-                                          </h2>
-
-                                          <h2
-                                            className="text-lg"
-                                            style={{ color: "#7A7979" }}
-                                          >
-                                            {items?._source?.location}
-                                          </h2>
-                                        </div>
-                                      </Col>
-                                      <Col>
-                                        <div className="p3">
-                                          <h2 className="text-xl font-semibold">
-                                            No. of candidates
-                                          </h2>
-
-                                          <h2
-                                            className="text-lg"
-                                            style={{ color: "#7A7979" }}
-                                          >
-                                            {items?._source?.noOfOpenings}
-                                          </h2>
-                                        </div>
-                                      </Col>
-                                    </Row>
-                                  </Container>
-
-                                  <hr style={{ border: "1px solid" }} />
-                                  <Container>
-                                    <Row className="align-items-center">
-                                      <Col lg="11">
-                                        <div className="pt-3">
-                                          <h2 className="text-xl font-semibold">
-                                            Company Description
-                                          </h2>
-
-                                          <h2
-                                            className="text-lg font-semibold"
-                                            style={{ color: "#7A7979" }}
-                                          >
-                                            <Content
-                                              data={items?._source?.description.replace(
-                                                /(<([^>]+)>)/gi,
-                                                ""
-                                              )}
-                                            />
-                                          </h2>
-                                        </div>
-                                      </Col>
-                                      <Col lg="1">
-                                        <div>
-                                          <Button
-                                            className="text-lg mr-3"
-                                            style={{
-                                              background: "none",
-                                              color: "#FF0000",
-                                            }}
-                                          >
-                                            CLOSE
-                                          </Button>
-                                        </div>
-                                      </Col>
-                                    </Row>
-                                  </Container>
-                                </div>
-                              </div>
-                            </Col>
-                          );
-                        }
-                      })}
-                </Row>
-                <Row>
-                  <Col>
-                    <div className="dddrrr align-items-center">
-                      {/* <BsArrowLeft className="text-2xl" /> */}
-                      {Array.from({
-                        length: Math.ceil(
-                          currentPage + 1 < count / 4 && currentPage > 3
-                            ? currentPage + 4
-                            : currentPage + 4 > count / 4
-                            ? Math.ceil(count / 4)
-                            : 4
-                        ),
-                      }).map((_, index) => {
-                        return (
-                          <button
-                            className="pagination py-2 px-3"
-                            key={index}
-                            onClick={() => handlePageChange(index + 1)}
-                            disabled={currentPage === index + 1}
-                          >
-                            {index + 1}
-                          </button>
-                        );
-                      })}
-                      {/* <BsArrowRight className="text-2xl"   /> */}
-                    </div>
-                  </Col>
-                </Row>
-              </TabPanel>
-
-              <TabPanel>
-                <Row>
-                  {searchData.length > 0 &&
-                    searchData
-                      // ?.filter((items, index1) => {
-                      //   console.log(items, "items");
-                      //   const startIndex1 = (currentPage1 - 1) * itemsPerPage1;
-                      //   const endIndex1 = startIndex1 + itemsPerPage1;
-                      //   return index1 >= startIndex1 && index1 < endIndex1;
-                      // })
-                      .map((items, key) => {
-                        console.log(items, "expiredItem");
-                        let expired = "";
-                        if (items._source && items._source.expiryDate) {
+              {searchData.length > 0 && searchData ? (
+                <TabPanel>
+                  <Row>
+                    {searchData.length > 0 &&
+                      searchData
+                        // ?.filter((items, index) => {
+                        //   console.log(items, "items");
+                        //   const startIndex = (currentPage - 1) * itemsPerPage;
+                        //   const endIndex = startIndex + itemsPerPage;
+                        //   return index >= startIndex && index < endIndex;
+                        // })
+                        .map((items, keys) => {
+                          console.log(items, "itemsss");
                           let expiry = items._source.expiryDate;
 
                           expiry = new Date(expiry);
+                          let expired = "";
                           console.log(typeof expiry, "expiry");
-
                           if (expiry) {
                             let time = expiry.getTime();
                             let todayTime = new Date().getTime();
@@ -2904,13 +2650,9 @@ export const PublishedJob = () => {
                               timeDifference / 1000 / 60 / 60 / 24
                             );
                           }
-                          console.log(expired, "expired");
-                        }
-
-                        if (expired < 0) {
-                          return (
-                            <div>
-                              <Col lg="12" key={key}>
+                          if (expired > 0) {
+                            return (
+                              <Col lg="12" key={keys}>
                                 <div className="m-3">
                                   <div className="boxshad">
                                     <div
@@ -2932,15 +2674,8 @@ export const PublishedJob = () => {
                                           {items?._source?.empType}
                                         </p>
                                       </div>
-                                      <div
-                                        style={{
-                                          float: "right",
-                                          display: "flex",
-                                          alignItems: "center",
-                                        }}
-                                        className="p-3 webkit"
-                                      >
-                                        <div style={{ display: "block" }}>
+                                      <div className="p-3 webkit posting">
+                                        <div>
                                           <Button
                                             style={{
                                               background: "none",
@@ -2975,21 +2710,21 @@ export const PublishedJob = () => {
                                               onHide={() => modalshow(items)}
                                             />
                                           )}
-                                          <p>
-                                            Posted Date :{" "}
-                                            {items?._source?.createdAt &&
-                                              items?._source?.createdAt.substring(
-                                                0,
-                                                10
-                                              )}
-                                            &nbsp;&nbsp;&nbsp;Expiry Date :{" "}
-                                            {items?._source?.expiryDate &&
-                                              items?._source?.expiryDate.substring(
-                                                0,
-                                                10
-                                              )}
-                                          </p>
                                         </div>
+                                        <p>
+                                          Posted Date :{" "}
+                                          {items?._source?.createdAt.substring(
+                                            0,
+                                            10
+                                          )}
+                                          <span className="mrdg">
+                                            Expiry Date :{" "}
+                                            {items?._source?.expiryDate.substring(
+                                              0,
+                                              10
+                                            )}
+                                          </span>
+                                        </p>
                                       </div>
                                     </div>
                                     <Container>
@@ -3096,7 +2831,7 @@ export const PublishedJob = () => {
                                           </div>
                                         </Col>
                                         <Col lg="1">
-                                          <div className="p-3">
+                                          <div>
                                             <Button
                                               className="text-lg mr-3"
                                               style={{
@@ -3113,38 +2848,330 @@ export const PublishedJob = () => {
                                   </div>
                                 </div>
                               </Col>
-                            </div>
+                            );
+                          }
+                        })}
+                  </Row>
+                  <Row>
+                    <Col>
+                      <div className="dddrrr align-items-center">
+                        {/* <BsArrowLeft className="text-2xl" /> */}
+                        {Array.from({
+                          length: Math.ceil(
+                            currentPage + 1 < count / 4 && currentPage > 3
+                              ? currentPage + 4
+                              : currentPage + 4 > count / 4
+                              ? Math.ceil(count / 4)
+                              : 4
+                          ),
+                        }).map((_, index) => {
+                          return (
+                            <button
+                              className="pagination py-2 px-3"
+                              key={index}
+                              onClick={() => handlePageChange(index + 1)}
+                              disabled={currentPage === index + 1}
+                            >
+                              {index + 1}
+                            </button>
                           );
-                        }
-                      })}
-                </Row>
-                <Row>
-                  <Col>
-                    <div className="dddrrr">
-                      {/* <BsArrowBarLeft /> */}
-                      {Array.from({
-                        length: Math.ceil(
-                          currentPage1 + 4 > count / 4
-                            ? Math.floor(count / 4)
-                            : currentPage1 + 1 < Math.floor(count / 4) &&
-                              currentPage1 > 3
-                            ? currentPage1 + 4
-                            : 4
-                        ),
-                      }).map((_, index1) => (
-                        <button
-                          className="pagination py-2 px-3"
-                          key={index1}
-                          onClick={() => handlePageChange1(index1 + 1)}
-                          disabled={currentPage1 === index1 + 1}
-                        >
-                          {index1 + 1}
-                        </button>
-                      ))}
-                    </div>
-                  </Col>
-                </Row>
-              </TabPanel>
+                        })}
+                        {/* <BsArrowRight className="text-2xl"   /> */}
+                      </div>
+                    </Col>
+                  </Row>
+                </TabPanel>
+              ) : (
+                <div
+                  style={{
+                    height: "100vh",
+                    width: "100vw",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <img src={Loader} style={{ width: 180, height: 180 }} />{" "}
+                </div>
+              )}
+              {searchData.length > 0 && searchData ? (
+                <TabPanel>
+                  <Row>
+                    {searchData.length > 0 &&
+                      searchData
+                        // ?.filter((items, index1) => {
+                        //   console.log(items, "items");
+                        //   const startIndex1 = (currentPage1 - 1) * itemsPerPage1;
+                        //   const endIndex1 = startIndex1 + itemsPerPage1;
+                        //   return index1 >= startIndex1 && index1 < endIndex1;
+                        // })
+                        .map((items, key) => {
+                          console.log(items, "expiredItem");
+                          let expired = "";
+                          if (items._source && items._source.expiryDate) {
+                            let expiry = items._source.expiryDate;
+
+                            expiry = new Date(expiry);
+                            console.log(typeof expiry, "expiry");
+
+                            if (expiry) {
+                              let time = expiry.getTime();
+                              let todayTime = new Date().getTime();
+                              let timeDifference = time - todayTime;
+
+                              expired = Math.floor(
+                                timeDifference / 1000 / 60 / 60 / 24
+                              );
+                            }
+                            console.log(expired, "expired");
+                          }
+
+                          if (expired < 0) {
+                            return (
+                              <div>
+                                <Col lg="12" key={key}>
+                                  <div className="m-3">
+                                    <div className="boxshad">
+                                      <div
+                                        style={{
+                                          // display: "flex",
+                                          alignItems: "center",
+                                          justifyContent: "space-between",
+                                        }}
+                                        className="des-flex"
+                                      >
+                                        <div style={{ display: "block" }}>
+                                          <h2
+                                            className="text-3xl robot"
+                                            style={{ color: "#39BEC1" }}
+                                          >
+                                            {items?._source?.title}
+                                          </h2>
+                                          <p style={{ color: "#7A7979" }}>
+                                            {items?._source?.empType}
+                                          </p>
+                                        </div>
+                                        <div className="p-3 webkit posting">
+                                          <div>
+                                            <Button
+                                              style={{
+                                                background: "none",
+                                                color: "#39BEC1",
+                                              }}
+                                              //   onClick={props.post}
+                                            >
+                                              ACTIVE
+                                            </Button>
+                                            <Button
+                                              onClick={handleShow}
+                                              className="text-white border-rounded px-3"
+                                              style={{
+                                                background: "#39BEC1",
+                                                border: "none",
+                                                marginTop: "10px",
+                                                marginBottom: "10px",
+                                              }}
+                                            >
+                                              <div
+                                                className="inline-flex"
+                                                style={{ fontSize: "20px" }}
+                                                onClick={() => btnEdit(items)}
+                                              >
+                                                <BsPencilSquare /> &nbsp; Edit
+                                                Job
+                                              </div>
+                                            </Button>
+                                            {items.clicked == true && (
+                                              <MyVerticallyCenteredModalPublish
+                                                show={modalShowPublish}
+                                                props={items}
+                                                onHide={() => modalshow(items)}
+                                              />
+                                            )}
+                                          </div>
+                                          <p>
+                                            Posted Date :{" "}
+                                            {items?._source?.createdAt &&
+                                              items?._source?.createdAt.substring(
+                                                0,
+                                                10
+                                              )}
+                                            &nbsp;&nbsp;&nbsp;Expiry Date :{" "}
+                                            {items?._source?.expiryDate &&
+                                              items?._source?.expiryDate.substring(
+                                                0,
+                                                10
+                                              )}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <Container>
+                                        <Row className="align-items-center block-for-res">
+                                          <Col>
+                                            <div className="p3">
+                                              <h2 className="text-xl font-semibold">
+                                                Company Name
+                                              </h2>
+
+                                              <h2
+                                                className="text-lg"
+                                                style={{ color: "#7A7979" }}
+                                              >
+                                                {items?._source?.companyName}
+                                              </h2>
+                                            </div>
+                                          </Col>
+                                          <Col>
+                                            <div className="p3">
+                                              <h2 className="text-xl font-semibold">
+                                                Job Industry
+                                              </h2>
+
+                                              <h2
+                                                className="text-lg"
+                                                style={{ color: "#7A7979" }}
+                                              >
+                                                {items?._source?.industry}
+                                              </h2>
+                                            </div>
+                                          </Col>
+                                          <Col>
+                                            <div className="p3">
+                                              <h2 className="text-xl font-semibold">
+                                                Salary Range
+                                              </h2>
+
+                                              <h2
+                                                className="text-lg"
+                                                style={{ color: "#7A7979" }}
+                                              >
+                                                HKD{" "}
+                                                {items?._source?.salaryRange &&
+                                                  items?._source?.salaryRange
+                                                    .gte}{" "}
+                                                - HKD{" "}
+                                                {items?._source?.salaryRange &&
+                                                  items?._source?.salaryRange
+                                                    .lte}
+                                              </h2>
+                                            </div>
+                                          </Col>
+                                          <Col>
+                                            <div className="p3">
+                                              <h2 className="text-xl font-semibold">
+                                                Location
+                                              </h2>
+
+                                              <h2
+                                                className="text-lg"
+                                                style={{ color: "#7A7979" }}
+                                              >
+                                                {items?._source?.location}
+                                              </h2>
+                                            </div>
+                                          </Col>
+                                          <Col>
+                                            <div className="p3">
+                                              <h2 className="text-xl font-semibold">
+                                                No. of candidates
+                                              </h2>
+
+                                              <h2
+                                                className="text-lg"
+                                                style={{ color: "#7A7979" }}
+                                              >
+                                                {items?._source?.noOfOpenings}
+                                              </h2>
+                                            </div>
+                                          </Col>
+                                        </Row>
+                                      </Container>
+
+                                      <hr style={{ border: "1px solid" }} />
+                                      <Container>
+                                        <Row className="align-items-center">
+                                          <Col lg="11">
+                                            <div className="pt-3">
+                                              <h2 className="text-xl font-semibold">
+                                                Company Description
+                                              </h2>
+
+                                              <h2
+                                                className="text-lg font-semibold"
+                                                style={{ color: "#7A7979" }}
+                                              >
+                                                <Content
+                                                  data={items?._source?.description.replace(
+                                                    /(<([^>]+)>)/gi,
+                                                    ""
+                                                  )}
+                                                />
+                                              </h2>
+                                            </div>
+                                          </Col>
+                                          <Col lg="1">
+                                            <div className="p-3">
+                                              <Button
+                                                className="text-lg mr-3"
+                                                style={{
+                                                  background: "none",
+                                                  color: "#FF0000",
+                                                }}
+                                              >
+                                                CLOSE
+                                              </Button>
+                                            </div>
+                                          </Col>
+                                        </Row>
+                                      </Container>
+                                    </div>
+                                  </div>
+                                </Col>
+                              </div>
+                            );
+                          }
+                        })}
+                  </Row>
+                  <Row>
+                    <Col>
+                      <div className="dddrrr">
+                        {/* <BsArrowBarLeft /> */}
+                        {Array.from({
+                          length: Math.ceil(
+                            currentPage1 + 4 > count / 4
+                              ? Math.floor(count / 4)
+                              : currentPage1 + 1 < Math.floor(count / 4) &&
+                                currentPage1 > 3
+                              ? currentPage1 + 4
+                              : 4
+                          ),
+                        }).map((_, index1) => (
+                          <button
+                            className="pagination py-2 px-3"
+                            key={index1}
+                            onClick={() => handlePageChange1(index1 + 1)}
+                            disabled={currentPage1 === index1 + 1}
+                          >
+                            {index1 + 1}
+                          </button>
+                        ))}
+                      </div>
+                    </Col>
+                  </Row>
+                </TabPanel>
+              ) : (
+                <div
+                  style={{
+                    height: "100vh",
+                    width: "100vw",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <img src={Loader} style={{ width: 180, height: 180 }} />{" "}
+                </div>
+              )}
             </Tabs>
           </Container>
         </Row>

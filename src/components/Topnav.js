@@ -18,13 +18,16 @@ import IconButton from "@mui/material/IconButton";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useNavigate } from "react-router-dom/dist";
-import profilePicture from "../assets/profile-picture.png";
+// import profilePicture from "../assets/profile-picture.png";
+import profilePicture from "../assets/Profile.png";
 
 export const Topnav = () => {
   const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [userType, setUserType] = React.useState("");
   const [profileImage, setProfileImage] = useState("");
+  const [isNavLink, setIsNavLink] = useState("About Me2Works");
+  const [isHrNavLink, setIsHrNavLink] = useState("HRSolutions");
   console.log(userType, "eeeeeeeeeeeeeeeee");
 
   const handleMenu = (event) => {
@@ -95,51 +98,107 @@ export const Topnav = () => {
         <Navbar.Collapse id="navbarScroll">
           <Nav className="ml-auto my-2" navbarScroll>
             {!isToken && (
-              <Nav.Link>
-                <Link to="/FindProfessions">Find Professionals</Link>
-              </Nav.Link>
+              // <Nav.Link >
+              <Link className="nav-link" to="/FindProfessions">
+                Find Professionals
+              </Link>
+              // </Nav.Link>
             )}
             {!isToken && (
-              <Nav.Link>
-                <Link to="/Opportunities">Find Opportunities</Link>
-              </Nav.Link>
+              // <Nav.Link href="#Opportunities">
+              <Link className="nav-link" to="/Opportunities">
+                Find Opportunities
+              </Link>
+              // </Nav.Link>
             )}
 
-            <NavDropdown title="About Me2Works" id="navbarScrollingDropdown">
+            <NavDropdown title={isNavLink} id="navbarScrollingDropdown">
               <NavDropdown.Item>
-                <Link to="/AboutMe">About Me2Works</Link>
+                <Link
+                  to="/AboutMe"
+                  onClick={() => setIsNavLink("About Me2Works")}
+                >
+                  About Me2Works
+                </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to="/HelpSupport">Help & Support</Link>
+                <Link
+                  to="/HelpSupport"
+                  onClick={() => setIsNavLink("Help & Support")}
+                >
+                  Help & Support
+                </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to="/HowWork">How it works</Link>
+                <Link
+                  to="/HowWork"
+                  onClick={() => setIsNavLink("How it works")}
+                >
+                  How it works
+                </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to="/OurStory">Our Story</Link>
+                <Link to="/OurStory" onClick={() => setIsNavLink("Our Story")}>
+                  Our Story
+                </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to="/WhyMeWorks">Why Me2Works</Link>
+                <Link
+                  to="/WhyMeWorks"
+                  onClick={() => setIsNavLink("Why Me2Works")}
+                >
+                  Why Me2Works
+                </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to="/MemberPlans">Membership Plans</Link>
+                <Link
+                  to="/MemberPlans"
+                  onClick={() => setIsNavLink("Membership Plans")}
+                >
+                  Membership Plans
+                </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to="/ExtendKnowledge">Extend Knowledge</Link>
+                <Link
+                  to="/ExtendKnowledge"
+                  onClick={() => setIsNavLink("Extend Knowledge")}
+                >
+                  Extend Knowledge
+                </Link>
               </NavDropdown.Item>
             </NavDropdown>
-            <NavDropdown title="HRSolutions" id="navbarScrollingDropdown">
+            <NavDropdown title={isHrNavLink} id="navbarScrollingDropdown">
               <NavDropdown.Item>
-                <Link to="/Agreement">Agreement</Link>
+                <Link
+                  to="/Agreement"
+                  onClick={() => setIsHrNavLink("Agreement")}
+                >
+                  Agreement
+                </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to="/HRsupport">HR Support </Link>
+                <Link
+                  to="/HRsupport"
+                  onClick={() => setIsHrNavLink("HR Support")}
+                >
+                  HR Support{" "}
+                </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to="/Enterprice">Enterprise Solutions</Link>
+                <Link
+                  to="/Enterprice"
+                  onClick={() => setIsHrNavLink("Enterprise Solutions")}
+                >
+                  Enterprise Solutions
+                </Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to="/FreeContact">Contact</Link>
+                <Link
+                  to="/FreeContact"
+                  onClick={() => setIsHrNavLink("FreeContact")}
+                >
+                  Contact
+                </Link>
               </NavDropdown.Item>
             </NavDropdown>
             {!isToken && !isToken?.length > 0 ? (
@@ -174,9 +233,7 @@ export const Topnav = () => {
                       color="inherit"
                     >
                       <Image
-                        src={
-                          profileImage ? profileImage : { uri: profilePicture }
-                        }
+                        src={profileImage ? profileImage : profilePicture}
                       />
                       {/* <AccountCircle /> */}
                     </IconButton>
@@ -206,7 +263,6 @@ export const Topnav = () => {
                       </Link>
                       <Link
                         to={isToken && `/Login`}
-                        href="/Signup"
                         onClick={() => logutFunc()}
                       >
                         <MenuItem>SignOut</MenuItem>

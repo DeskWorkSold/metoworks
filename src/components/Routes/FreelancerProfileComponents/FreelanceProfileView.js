@@ -43,6 +43,8 @@ import { Link, useNavigate } from "react-router-dom";
 import ModelComponents from "../ModelComponents/ModelComponents";
 import { duration, FormGroup, Stack, Switch, Typography } from "@mui/material";
 import { styled } from "@mui/material";
+import profilePicture from "../../../assets/profilePicture.png";
+import Loader from "../../../assets/loader.gif";
 
 // import { Buffer } from 'buffer'
 
@@ -121,7 +123,7 @@ export const FreelanceProfileView = () => {
   // .log(durationData, 'durationData');
   const [checked, setChecked] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  // console.log(userId, "ID");
+
   const [isCheckBox, setIsCheckBox] = useState("false");
   const [profileData, setProfileData] = useState({
     firstName: "",
@@ -148,7 +150,6 @@ export const FreelanceProfileView = () => {
   const [experienceId, setExperienceId] = useState("");
   const [editProfileExp, setEditProfileExp] = useState({});
   const [isEducation, setIsEducation] = useState({});
-  // console.log(isEducation.certificate, "certificaaaaaaaaaaateeeee");
   const [isAchievement, setIsAchievement] = useState({});
   const [isLanguage, setIsLanguage] = useState({
     languageType: "",
@@ -191,16 +192,7 @@ export const FreelanceProfileView = () => {
   const navigate = useNavigate();
   const [thumbnail, setThumbnail] = useState("");
   const [error, setError] = useState("");
-  // console.log(thumbnail, "thumbnail");
-
-  // console.log(profileExp, "daaaaaaaaaataaaaaaaaaaaa");
-  // console.log(profileData, "profileData");
-  // console.log(isEditLanguageData, "isEditLanguageData");
-  // <<<<<<< HEAD
-  // console.log(profImg, 'cvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
-  // console.log(profImg, "cvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
-  // >>>>>>> 68b259780b29502607921aefd10965f6add7a1ed
-
+  const [isLoader, setIsLoader] = useState({});
   const AntSwitch = styled(Switch)(({ theme }) => ({
     width: 28,
     height: 16,
@@ -250,10 +242,6 @@ export const FreelanceProfileView = () => {
     checkAuth();
     setUserId();
     initialFun();
-    // ProfileExpData(id);
-    // educationData(id);
-    achievementData();
-    LanguageData();
   }, []);
 
   const checkAuth = async () => {
@@ -300,7 +288,10 @@ export const FreelanceProfileView = () => {
       .get(`/api/v1/user/freelancer`)
       .then((res) => {
         let data = res.data;
-        console.log(data, "dataaaaaaa");
+        // console.log(data, "dataaaaaaa");
+        setTimeout(() => {
+          setIsLoader(true);
+        }, 1000);
         setProfileData(data);
         setIsExperienceData(data.data.experience);
         setIsAchievementData(data.data.achievement);
@@ -336,21 +327,22 @@ export const FreelanceProfileView = () => {
   console.log(isCv, "cvvvv");
 
   const profileImageFunc = () => {
-    axios
-      .get(`api/v1/user/asset/thumbnail`, { responseType: "arraybuffer" })
-      .then((res) => {
-        let buffer = require("buffer");
-        const data = `data:${
-          res.headers["content-type"]
-        };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
-        // console.log("res", res);
-        // console.log("imagee", data);
-        setProfileImg(data);
-        localStorage.setItem("profileImg", data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    setTimeout(() => {
+      axios
+        .get(`api/v1/user/asset/thumbnail`, { responseType: "arraybuffer" })
+        .then((res) => {
+          let buffer = require("buffer");
+          const data = `data:${
+            res.headers["content-type"]
+          };base64,${new buffer.Buffer(res.data, "binary").toString("base64")}`;
+          setProfileImg(data);
+          localStorage.setItem("profileImg", data);
+          // initialFun()
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }, 2000);
   };
 
   const profileFunc = () => {
@@ -632,18 +624,6 @@ export const FreelanceProfileView = () => {
     }
   };
 
-  // const educationData = (id) => {
-  //   axios
-  //     .get(`http://localhost:3000/v1/education/${id}`)
-  //     .then((res) => {
-  //       let data = Object.values(res.data.data);
-  //       setIsEducationData(data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
   const achievementFunc = () => {
     console.log(profileData.data.id, "odddd");
     isAchievement.certificate = profileData.data.id;
@@ -706,18 +686,6 @@ export const FreelanceProfileView = () => {
     }
   };
 
-  const achievementData = (id) => {
-    axios
-      .get(`http://localhost:3000/v1/achievement/${id}`)
-      .then((res) => {
-        let data = Object.values(res.data.data);
-        setIsAchievementData(data);
-      })
-      .catch((err) => {
-        // console.log(err);
-      });
-  };
-
   const updateAchievementData = (id) => {
     console.log(id, "idd");
     if (!isEditAchievementData.file) {
@@ -728,15 +696,12 @@ export const FreelanceProfileView = () => {
       axios
         .put(`api/v1/user/freelancer/asset/achievement-cert?id=${id}`, formdata)
         .then((res) => {
-          // alert(isEditExperienceData.profession)
-          // console.log(res, "education edit data successfully added");
           if (res) {
             setShow7(false);
-            achievementData(userId);
           }
         })
         .catch((err) => {
-          // console.log(err);
+          console.log(err);
         });
     } else {
       axios
@@ -749,7 +714,6 @@ export const FreelanceProfileView = () => {
           // console.log(res, "education edit data successfully added");
           if (res) {
             setShow7(false);
-            achievementData(userId);
           }
         })
         .catch((err) => {
@@ -757,23 +721,6 @@ export const FreelanceProfileView = () => {
         });
     }
   };
-
-  const deleteAchievementData = (id) => {
-    axios
-      .delete(`http://localhost:3000/v1/achievement/${id}`)
-      .then((res) => {
-        let data = Object.values(res.data.data);
-        if (data) {
-          achievementData(userId);
-        }
-        // setIsLanguageData(data);
-      })
-      .catch((err) => {
-        // console.log(err);
-      });
-  };
-
-  // console.log(isEditExperienceData,"edit")
 
   const LanguageFunc = () => {
     // console.log(isLanguage, "language");
@@ -824,58 +771,6 @@ export const FreelanceProfileView = () => {
       console.log(newErrors);
       setError(newErrors);
     }
-
-    // axios
-    //   .post(`http://localhost:3000/v1/language`, isLanguage)
-    //   .then((res) => {
-    //     console.log(res, "profile data successfully added");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
-  };
-
-  const LanguageData = (id) => {
-    axios
-      .get(`http://localhost:3000/v1/language/${id}`)
-      .then((res) => {
-        let data = Object.values(res.data.data);
-        setIsLanguageData(data);
-      })
-      .catch((err) => {
-        // console.log(err);
-      });
-  };
-
-  const updateLanguageData = (id) => {
-    axios
-      .put(`http://localhost:3000/v1/language/${id}`, isEditLanguageData)
-      .then((res) => {
-        // alert(isEditExperienceData.profession)
-        // console.log(res, "profile edit data successfully added");
-        if (res) {
-          setShow8(true);
-          LanguageData(userId);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const deleteLanguageData = (id) => {
-    axios
-      .delete(`http://localhost:3000/v1/language/${id}`)
-      .then((res) => {
-        // let data = Object.values(res.data.data);
-        // setIsLanguageData(data);
-        if (res) {
-          LanguageData(userId);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
   };
 
   const updateProfileImage = (event) => {
@@ -904,13 +799,10 @@ export const FreelanceProfileView = () => {
   };
 
   const FileUploadComponent = () => {
-    // alert('clicked')s
     const fileParams = ({ meta }) => {
       return { url: "https://httpbin.org/post" };
     };
-    const onFileChange = ({ meta, file }, status) => {
-      // console.log(status, meta, file);
-    };
+    const onFileChange = ({ meta, file }, status) => {};
     const onSubmit = (files, allFiles) => {
       allFiles.forEach((f) => f.remove());
     };
@@ -928,7 +820,7 @@ export const FreelanceProfileView = () => {
           <Image
             onClick={() => FileUploadComponent()}
             style={{ width: "100%", height: "100%", borderRadius: "100%" }}
-            src={profileImg}
+            src={profileImg ? profileImg : profilePicture}
           />
           <input
             style={{ display: "none" }}
@@ -3000,255 +2892,259 @@ export const FreelanceProfileView = () => {
         </Row>
       </Container>
       <hr className="my-2" />
-      <Container>
-        <Row className="align-item-center">
-          <Col lg="12">
-            <div className="m-3">
-              <div className="boxshad py-5">
-                <Row className="align-items-center">
-                  <Col lg="2" className="webkit">
-                    <button>
-                      <FileUploadComponent />
-                    </button>
-                  </Col>
-                  <Col lg="4">
-                    <h2 className="text-3xl py-3 robot">
-                      {profileData?.data?.firstName +
-                        " " +
-                        profileData?.data?.lastName}
-                      <br />
-                      <span className="text-xl" style={{ color: "#6A489C" }}>
-                        Web Developer
-                      </span>
-                    </h2>
-                    <a href={`${isCv}`} target="_blank" rel="noreferrer">
-                      <Button
-                        // variant="primary"
-                        // onClick={() => setModalShow(true)}
-                        // onClick={() =>
-                        //   (window.location.href = `http://103.1.179.231:3000/${isCv}`)
-                        // }
-
-                        className="text-white border-rounded px-3"
-                        style={{ background: "#39BEC1", border: "none" }}
-                      >
-                        <div
-                          className="inline-flex"
-                          style={{ fontSize: "18px" }}
-                        >
-                          <BsReceiptCutoff />
-                          &nbsp; VIEW CV
-                        </div>
-                      </Button>
-                    </a>
-                  </Col>
-                  <Col lg="3">
-                    <div className="text-left">
-                      <ul style={{ color: "#6A489C", fontSize: "16px" }}>
-                        <li>
-                          <FontAwesomeIcon
-                            icon={faHome}
-                            style={{
-                              color: "#39BEC1",
-
-                              fontWeight: "bolder",
-                            }}
-                          />{" "}
-                          {profileData?.data?.role || "Freelancer"}
-                        </li>
-                        <li>
-                          <FontAwesomeIcon
-                            icon={faLocationDot}
-                            style={{
-                              color: "#39BEC1",
-                              fontWeight: "bolder",
-                            }}
-                          />{" "}
-                          {profileData?.data?.city && profileData?.data?.country
-                            ? profileData?.data?.city +
-                              "," +
-                              profileData?.data?.country
-                            : "Nugegada, Srilanka"}
-                        </li>
-                      </ul>
-                    </div>
-                  </Col>
-                  <Col lg="3">
-                    <div className="webkit" style={{ display: "grid" }}>
-                      <h2 className="text-l font-semibold">Open to Work :</h2>
-                      <Form.Check
-                        type="switch"
-                        id="custom-switch"
-                        defaultChecked={profileData?.data?.isOpenToWork}
-                        onClick={() => getOpenWork()}
-                      />
-                      <h2 className="text-2xl font-semibold pt-2">
-                        Salary Range
+      {isLoader == true && profileData ? (
+        <Container>
+          <Row className="align-item-center">
+            <Col lg="12">
+              <div className="m-3">
+                <div className="boxshad py-5">
+                  <Row className="align-items-center">
+                    <Col lg="2" className="webkit">
+                      <button>
+                        <FileUploadComponent />
+                      </button>
+                    </Col>
+                    <Col lg="4">
+                      <h2 className="text-3xl py-3 robot">
+                        {profileData?.data?.firstName +
+                          " " +
+                          profileData?.data?.lastName}
+                        <br />
+                        <span className="text-xl" style={{ color: "#6A489C" }}>
+                          Web Developer
+                        </span>
                       </h2>
+                      <a href={`${isCv}`} target="_blank" rel="noreferrer">
+                        <Button
+                          className="text-white border-rounded px-3"
+                          style={{ background: "#39BEC1", border: "none" }}
+                        >
+                          <div
+                            className="inline-flex"
+                            style={{ fontSize: "18px" }}
+                          >
+                            <BsReceiptCutoff />
+                            &nbsp; VIEW CV
+                          </div>
+                        </Button>
+                      </a>
+                    </Col>
+                    <Col lg="3">
+                      <div className="text-left">
+                        <ul style={{ color: "#6A489C", fontSize: "16px" }}>
+                          <li>
+                            <FontAwesomeIcon
+                              icon={faHome}
+                              style={{
+                                color: "#39BEC1",
 
-                      {/* <MyVerticallyCenteredModal
+                                fontWeight: "bolder",
+                              }}
+                            />{" "}
+                            {profileData?.data?.role || "Freelancer"}
+                          </li>
+                          <li>
+                            <FontAwesomeIcon
+                              icon={faLocationDot}
+                              style={{
+                                color: "#39BEC1",
+                                fontWeight: "bolder",
+                              }}
+                            />{" "}
+                            {profileData?.data?.city &&
+                            profileData?.data?.country
+                              ? profileData?.data?.city +
+                                "," +
+                                profileData?.data?.country
+                              : "Nugegada, Srilanka"}
+                          </li>
+                        </ul>
+                      </div>
+                    </Col>
+                    <Col lg="3">
+                      <div className="webkit" style={{ display: "grid" }}>
+                        <h2 className="text-lg font-semibold">
+                          Open to Work :
+                        </h2>
+                        <Form.Check
+                          type="switch"
+                          id="custom-switch"
+                          defaultChecked={profileData?.data?.isOpenToWork}
+                          onClick={() => getOpenWork()}
+                        />
+                        <h2 className="text-2xl font-semibold pt-2">
+                          Salary Range
+                        </h2>
+
+                        {/* <MyVerticallyCenteredModal
                         show={modalShow}
                         onHide={() => setModalShow(false)}
                       /> */}
 
-                      <h2 style={{ color: "#7A7979" }} className="text-xl">
-                        HKD ${profileData?.data?.salaryRange?.gte} - $
-                        {profileData?.data?.salaryRange?.lte}
-                      </h2>
-                    </div>
-                  </Col>
-                </Row>
+                        <h2 style={{ color: "#7A7979" }} className="text-xl">
+                          HKD ${profileData?.data?.salaryRange?.gte} - $
+                          {profileData?.data?.salaryRange?.lte}
+                        </h2>
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
               </div>
-            </div>
-          </Col>
+            </Col>
 
-          <Col lg="12">
-            <div className="m-3">
-              <div className="boxshad">
-                <h2 style={{ float: "right" }}>
-                  <Button
-                    onClick={handleShow}
-                    className="text-white border-rounded px-3"
-                    style={{
-                      background: "none",
-                      border: "none",
-                    }}
-                  >
-                    <BiEdit style={{ color: "#39BEC1", fontSize: "30px" }} />
-                  </Button>
-                  <Modal
-                    show={show}
-                    onHide={handleClose}
-                    backdrop="static"
-                    keyboard={false}
-                  >
-                    <Modal.Header closeButton>
-                      <Modal.Title style={{ color: "black" }}>
-                        Profile
-                      </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Row>
-                        <div className="p-3">
-                          <Row>
-                            <Col lg="6">
-                              <fieldset>
-                                <label
-                                  className="text-lg"
-                                  style={{ width: "100%" }}
-                                >
-                                  First Name
-                                </label>
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  name="fname"
-                                  type={"text"}
-                                  placeholder={
-                                    profileData?.data?.firstName || ""
-                                  }
-                                  onChange={(e) =>
-                                    setProfileData({
-                                      ...profileData,
-                                      firstName: e.target.value,
-                                    })
-                                  }
-                                  //   value={user.number}
-                                  //   onChange={getUserData}
-                                />
-                                {error && error.firstName && (
-                                  <p style={{ color: "red" }}>
-                                    {error.firstName}
-                                  </p>
-                                )}
-                              </fieldset>
-                            </Col>
-                            <Col lg="6">
-                              <fieldset>
-                                <label
-                                  className="text-lg"
-                                  style={{ width: "100%" }}
-                                >
-                                  Last Name
-                                </label>
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  name="fname"
-                                  type={"text"}
-                                  placeholder={
-                                    profileData?.data?.lastName || ""
-                                  }
-                                  onChange={(e) =>
-                                    setProfileData({
-                                      ...profileData,
-                                      lastName: e.target.value,
-                                    })
-                                  }
-                                  //   value={user.number}
-                                  //   onChange={getUserData}
-                                />
-                                {error && error.lastName && (
-                                  <p style={{ color: "red" }}>
-                                    {error.lastName}
-                                  </p>
-                                )}
-                              </fieldset>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col lg="6">
-                              <fieldset>
-                                <label
-                                  className="text-lg"
-                                  style={{ width: "100%" }}
-                                >
-                                  Identity Card
-                                </label>
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  name="fname"
-                                  type={"text"}
-                                  placeholder={profileData?.data?.idCard || ""}
-                                  onChange={(e) =>
-                                    setProfileData({
-                                      ...profileData,
-                                      idCard: e.target.value,
-                                    })
-                                  }
-                                  //   value={user.number}
-                                  //   onChange={getUserData}
-                                />
-                                {error && error.idCard && (
-                                  <p style={{ color: "red" }}>{error.idCard}</p>
-                                )}
-                              </fieldset>
-                            </Col>
-                            <Col lg="6">
-                              <fieldset>
-                                <label
-                                  className="text-lg"
-                                  style={{ width: "100%" }}
-                                >
-                                  Visa/HK Permit
-                                </label>
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  name="visaPermit"
-                                  type={"text"}
-                                  placeholder={profileData?.data?.idCard || ""}
-                                  onChange={(e) =>
-                                    setProfileData({
-                                      ...profileData,
-                                      visaPermit: e.target.value,
-                                    })
-                                  }
-                                  //   value={user.number}
-                                  //   onChange={getUserData}
-                                />
-                                {/* <Form.Select
+            <Col lg="12">
+              <div className="m-3">
+                <div className="boxshad">
+                  <h2 style={{ float: "right" }}>
+                    <Button
+                      onClick={handleShow}
+                      className="text-white border-rounded px-3"
+                      style={{
+                        background: "none",
+                        border: "none",
+                      }}
+                    >
+                      <BiEdit style={{ color: "#39BEC1", fontSize: "30px" }} />
+                    </Button>
+                    <Modal
+                      show={show}
+                      onHide={handleClose}
+                      backdrop="static"
+                      keyboard={false}
+                    >
+                      <Modal.Header closeButton>
+                        <Modal.Title style={{ color: "black" }}>
+                          Profile
+                        </Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Row>
+                          <div className="p-3">
+                            <Row>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    First Name
+                                  </label>
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    name="fname"
+                                    type={"text"}
+                                    placeholder={
+                                      profileData?.data?.firstName || ""
+                                    }
+                                    onChange={(e) =>
+                                      setProfileData({
+                                        ...profileData,
+                                        firstName: e.target.value,
+                                      })
+                                    }
+                                    //   value={user.number}
+                                    //   onChange={getUserData}
+                                  />
+                                  {error && error.firstName && (
+                                    <p style={{ color: "red" }}>
+                                      {error.firstName}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    Last Name
+                                  </label>
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    name="fname"
+                                    type={"text"}
+                                    placeholder={
+                                      profileData?.data?.lastName || ""
+                                    }
+                                    onChange={(e) =>
+                                      setProfileData({
+                                        ...profileData,
+                                        lastName: e.target.value,
+                                      })
+                                    }
+                                    //   value={user.number}
+                                    //   onChange={getUserData}
+                                  />
+                                  {error && error.lastName && (
+                                    <p style={{ color: "red" }}>
+                                      {error.lastName}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    Identity Card
+                                  </label>
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    name="fname"
+                                    type={"text"}
+                                    placeholder={
+                                      profileData?.data?.idCard || ""
+                                    }
+                                    onChange={(e) =>
+                                      setProfileData({
+                                        ...profileData,
+                                        idCard: e.target.value,
+                                      })
+                                    }
+                                    //   value={user.number}
+                                    //   onChange={getUserData}
+                                  />
+                                  {error && error.idCard && (
+                                    <p style={{ color: "red" }}>
+                                      {error.idCard}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    Visa/HK Permit
+                                  </label>
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    name="visaPermit"
+                                    type={"text"}
+                                    placeholder={
+                                      profileData?.data?.idCard || ""
+                                    }
+                                    onChange={(e) =>
+                                      setProfileData({
+                                        ...profileData,
+                                        visaPermit: e.target.value,
+                                      })
+                                    }
+                                    //   value={user.number}
+                                    //   onChange={getUserData}
+                                  />
+                                  {/* <Form.Select
                                   aria-label="Default select example"
                                  
                                 >
@@ -3256,299 +3152,311 @@ export const FreelanceProfileView = () => {
                                   <option>Yes</option>
                                   <option>No</option>
                                 </Form.Select> */}
-                                {error && error.visaPermit && (
-                                  <p style={{ color: "red" }}>
-                                    {error.visaPermit}
-                                  </p>
-                                )}
-                              </fieldset>
-                            </Col>
-                          </Row>
-                          <Row>
-                            <Col lg="12">
-                              <FormGroup style={{ float: "left" }}>
-                                <Stack
-                                  direction="row"
-                                  spacing={1}
-                                  alignItems="center"
-                                >
-                                  <Typography
-                                    style={{
-                                      color: "#000000",
-                                      fontSize: "14px",
-                                    }}
+                                  {error && error.visaPermit && (
+                                    <p style={{ color: "red" }}>
+                                      {error.visaPermit}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                            </Row>
+                            <Row>
+                              <Col lg="12">
+                                <FormGroup style={{ float: "left" }}>
+                                  <Stack
+                                    direction="row"
+                                    spacing={1}
+                                    alignItems="center"
                                   >
-                                    <b>Make Identity Public</b>
-                                  </Typography>
-                                  <AntSwitch
-                                    checked={checked}
-                                    onClick={(event) =>
-                                      HandleVisaPermitChange(event)
-                                    }
-                                    defaultChecked={isIdPublic}
-                                    inputProps={{ "aria-label": "ant design" }}
-                                  />
-                                </Stack>
-                              </FormGroup>
-                            </Col>
-                          </Row>
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Gender
-                              </label>
-                              <Form.Select
-                                aria-label="Default select example"
-                                onChange={(e) =>
-                                  setProfileData({
-                                    ...profileData,
-                                    gender: e.target.value,
-                                  })
-                                }
-                              >
-                                <option hidden="">Choose...</option>
-                                <option>Male</option>
-                                <option>Female</option>
-                                <option>Other</option>
-                              </Form.Select>
-                              {error && error.gender && (
-                                <p style={{ color: "red" }}>{error.gender}</p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                About Me
-                              </label>
-                              <textarea
-                                placeholder={profileData?.data?.aboutMe || ""}
-                                onChange={(e) =>
-                                  setProfileData({
-                                    ...profileData,
-                                    aboutMe: e.target.value,
-                                  })
-                                }
-                                className="form-control"
-                              />
-                              {error && error.aboutMe && (
-                                <p style={{ color: "red" }}>{error.aboutMe}</p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Row>
-                            <Col lg="6">
+                                    <Typography
+                                      style={{
+                                        color: "#000000",
+                                        fontSize: "14px",
+                                      }}
+                                    >
+                                      <b>Make Identity Public</b>
+                                    </Typography>
+                                    <AntSwitch
+                                      checked={checked}
+                                      onClick={(event) =>
+                                        HandleVisaPermitChange(event)
+                                      }
+                                      defaultChecked={isIdPublic}
+                                      inputProps={{
+                                        "aria-label": "ant design",
+                                      }}
+                                    />
+                                  </Stack>
+                                </FormGroup>
+                              </Col>
+                            </Row>
+                            <Col lg="12">
                               <fieldset>
                                 <label
                                   className="text-lg"
                                   style={{ width: "100%" }}
                                 >
-                                  Phone Number
+                                  Gender
                                 </label>
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  name="phone"
-                                  type={"text"}
-                                  placeholder={
-                                    profileData?.data?.phoneNumber || ""
-                                  }
+                                <Form.Select
+                                  aria-label="Default select example"
                                   onChange={(e) =>
                                     setProfileData({
                                       ...profileData,
-                                      phoneNumber: e.target.value,
+                                      gender: e.target.value,
                                     })
                                   }
-                                  //   value={user.number}
-                                  //   onChange={getUserData}
+                                >
+                                  <option hidden="">Choose...</option>
+                                  <option>Male</option>
+                                  <option>Female</option>
+                                  <option>Other</option>
+                                </Form.Select>
+                                {error && error.gender && (
+                                  <p style={{ color: "red" }}>{error.gender}</p>
+                                )}
+                              </fieldset>
+                            </Col>
+                            <Col lg="12">
+                              <fieldset>
+                                <label
+                                  className="text-lg"
+                                  style={{ width: "100%" }}
+                                >
+                                  About Me
+                                </label>
+                                <textarea
+                                  placeholder={profileData?.data?.aboutMe || ""}
+                                  onChange={(e) =>
+                                    setProfileData({
+                                      ...profileData,
+                                      aboutMe: e.target.value,
+                                    })
+                                  }
+                                  className="form-control"
                                 />
-                                {error && error.phoneNumber && (
+                                {error && error.aboutMe && (
                                   <p style={{ color: "red" }}>
-                                    {error.phoneNumber}
+                                    {error.aboutMe}
                                   </p>
                                 )}
                               </fieldset>
                             </Col>
-                            <Col lg="6">
-                              <fieldset>
-                                <label
-                                  className="text-lg"
-                                  style={{ width: "100%" }}
-                                >
-                                  Date of Birth
-                                </label>
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  name="email"
-                                  type={"date"}
-                                  onChange={(e) =>
-                                    setProfileData({
-                                      ...profileData,
-                                      dob: e.target.value,
-                                    })
-                                  }
-                                  //   value={user.number}
-                                  //   onChange={getUserData}
-                                />
-                                {error && error.dob && (
-                                  <p style={{ color: "red" }}>{error.dob}</p>
-                                )}
-                              </fieldset>
-                            </Col>
-                            <Col lg="6">
-                              <fieldset>
-                                <label
-                                  className="text-lg"
-                                  style={{ width: "100%" }}
-                                >
-                                  Country (Time Zone)
-                                </label>
-
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  type={"text"}
-                                  name="firstname"
-                                  placeholder={profileData?.data?.country || ""}
-                                  onChange={(e) =>
-                                    setProfileData({
-                                      ...profileData,
-                                      country: e.target.value,
-                                    })
-                                  }
-                                  //   value={user.name}
-                                  //   onChange={getUserData}
-                                  required
-                                />
-                                {error && error.country && (
-                                  <p style={{ color: "red" }}>
-                                    {error.country}
-                                  </p>
-                                )}
-                              </fieldset>
-                            </Col>
-                            <Col lg="6">
-                              <fieldset>
-                                <label
-                                  className="text-lg"
-                                  style={{ width: "100%" }}
-                                >
-                                  City
-                                </label>
-
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  type={"text"}
-                                  name="lastname"
-                                  //   value={user.email}
-                                  //   onChange={getUserData}
-                                  placeholder={profileData?.data?.city || ""}
-                                  onChange={(e) =>
-                                    setProfileData({
-                                      ...profileData,
-                                      city: e.target.value,
-                                    })
-                                  }
-                                  required
-                                />
-                                {error && error.city && (
-                                  <p style={{ color: "red" }}>{error.city}</p>
-                                )}
-                              </fieldset>
-                            </Col>
-                            <Col lg="6">
-                              <fieldset>
-                                <label
-                                  className="text-lg"
-                                  style={{ width: "100%" }}
-                                >
-                                  Address
-                                </label>
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  name="Email"
-                                  type={"text"}
-                                  placeholder={profileData?.data?.address || ""}
-                                  onChange={(e) =>
-                                    setProfileData({
-                                      ...profileData,
-                                      address: e.target.value,
-                                    })
-                                  }
-                                  //   value={user.number}
-                                  //   onChange={getUserData}
-                                />
-                                {error && error.address && (
-                                  <p style={{ color: "red" }}>
-                                    {error.address}
-                                  </p>
-                                )}
-                              </fieldset>
-                            </Col>
-                            <Col lg="6">
-                              <fieldset>
-                                <label
-                                  className="text-lg"
-                                  style={{ width: "100%" }}
-                                >
-                                  State
-                                </label>
-                                <div style={{ display: "flex" }}>
+                            <Row>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    Phone Number
+                                  </label>
                                   <input
                                     style={{ width: "100%" }}
                                     className="form-control"
-                                    name="minwork"
+                                    name="phone"
                                     type={"text"}
-                                    placeholder={profileData?.data?.state || ""}
+                                    placeholder={
+                                      profileData?.data?.phoneNumber || ""
+                                    }
                                     onChange={(e) =>
                                       setProfileData({
                                         ...profileData,
-                                        state: e.target.value,
+                                        phoneNumber: e.target.value,
                                       })
                                     }
                                     //   value={user.number}
                                     //   onChange={getUserData}
                                   />
-                                </div>
-                                {error && error.state && (
-                                  <p style={{ color: "red" }}>{error.state}</p>
-                                )}
-                              </fieldset>
-                            </Col>
-                          </Row>
+                                  {error && error.phoneNumber && (
+                                    <p style={{ color: "red" }}>
+                                      {error.phoneNumber}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    Date of Birth
+                                  </label>
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    name="email"
+                                    type={"date"}
+                                    onChange={(e) =>
+                                      setProfileData({
+                                        ...profileData,
+                                        dob: e.target.value,
+                                      })
+                                    }
+                                    //   value={user.number}
+                                    //   onChange={getUserData}
+                                  />
+                                  {error && error.dob && (
+                                    <p style={{ color: "red" }}>{error.dob}</p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    Country (Time Zone)
+                                  </label>
 
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Salary Range
-                              </label>
-                              <Form.Select
-                                aria-label="Default select example"
-                                // value={profileData?.salaryRange || ""}
-                                // onChange={(e) =>
-                                //   setIsSalaryRange({...isSalaryRange, })
-                                // }
-                              >
-                                <option hidden="">Choose...</option>
-                                <option>per month basis</option>
-                                <option>per project basis</option>
-                                <option>negotiable</option>
-                                <option>others</option>
-                              </Form.Select>
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    type={"text"}
+                                    name="firstname"
+                                    placeholder={
+                                      profileData?.data?.country || ""
+                                    }
+                                    onChange={(e) =>
+                                      setProfileData({
+                                        ...profileData,
+                                        country: e.target.value,
+                                      })
+                                    }
+                                    //   value={user.name}
+                                    //   onChange={getUserData}
+                                    required
+                                  />
+                                  {error && error.country && (
+                                    <p style={{ color: "red" }}>
+                                      {error.country}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    City
+                                  </label>
 
-                              {/* <input
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    type={"text"}
+                                    name="lastname"
+                                    //   value={user.email}
+                                    //   onChange={getUserData}
+                                    placeholder={profileData?.data?.city || ""}
+                                    onChange={(e) =>
+                                      setProfileData({
+                                        ...profileData,
+                                        city: e.target.value,
+                                      })
+                                    }
+                                    required
+                                  />
+                                  {error && error.city && (
+                                    <p style={{ color: "red" }}>{error.city}</p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    Address
+                                  </label>
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    name="Email"
+                                    type={"text"}
+                                    placeholder={
+                                      profileData?.data?.address || ""
+                                    }
+                                    onChange={(e) =>
+                                      setProfileData({
+                                        ...profileData,
+                                        address: e.target.value,
+                                      })
+                                    }
+                                    //   value={user.number}
+                                    //   onChange={getUserData}
+                                  />
+                                  {error && error.address && (
+                                    <p style={{ color: "red" }}>
+                                      {error.address}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    State
+                                  </label>
+                                  <div style={{ display: "flex" }}>
+                                    <input
+                                      style={{ width: "100%" }}
+                                      className="form-control"
+                                      name="minwork"
+                                      type={"text"}
+                                      placeholder={
+                                        profileData?.data?.state || ""
+                                      }
+                                      onChange={(e) =>
+                                        setProfileData({
+                                          ...profileData,
+                                          state: e.target.value,
+                                        })
+                                      }
+                                      //   value={user.number}
+                                      //   onChange={getUserData}
+                                    />
+                                  </div>
+                                  {error && error.state && (
+                                    <p style={{ color: "red" }}>
+                                      {error.state}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                            </Row>
+
+                            <Col lg="12">
+                              <fieldset>
+                                <label
+                                  className="text-lg"
+                                  style={{ width: "100%" }}
+                                >
+                                  Salary Range
+                                </label>
+                                <Form.Select
+                                  aria-label="Default select example"
+                                  // value={profileData?.salaryRange || ""}
+                                  // onChange={(e) =>
+                                  //   setIsSalaryRange({...isSalaryRange, })
+                                  // }
+                                >
+                                  <option hidden="">Choose...</option>
+                                  <option>per month basis</option>
+                                  <option>per project basis</option>
+                                  <option>negotiable</option>
+                                  <option>others</option>
+                                </Form.Select>
+
+                                {/* <input
                 style={{ width: "100%" }}
                 className="form-control"
                 type={"text"}
@@ -3559,87 +3467,87 @@ export const FreelanceProfileView = () => {
                 "
                 required
               /> */}
-                            </fieldset>
-                          </Col>
-                          <Container>
-                            <Row>
-                              <Col lg="6">
+                              </fieldset>
+                            </Col>
+                            <Container>
+                              <Row>
+                                <Col lg="6">
+                                  <label
+                                    className="text-lg"
+                                    style={{ color: "#7A7979" }}
+                                  >
+                                    Min :
+                                  </label>
+                                  <input
+                                    placeholder={
+                                      profileData?.data?.salaryRange.lte || ""
+                                    }
+                                    onChange={(e) =>
+                                      setIsSalaryRange({
+                                        ...isSalaryRange,
+                                        lte: e.target.value,
+                                      })
+                                    }
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    type={"number"}
+                                    name="firstname"
+                                    //   value={user.name}
+                                    //   onChange={getUserData}
+                                    required
+                                  />
+                                  {error && error.lte && (
+                                    <p style={{ color: "red" }}>{error.lte}</p>
+                                  )}
+                                </Col>
+                                <Col lg="6">
+                                  <label
+                                    className="text-lg"
+                                    style={{ color: "#7A7979" }}
+                                  >
+                                    Max :
+                                  </label>
+                                  <input
+                                    placeholder={
+                                      profileData?.data?.salaryRange.gte || ""
+                                    }
+                                    onChange={(e) =>
+                                      setIsSalaryRange({
+                                        ...isSalaryRange,
+                                        gte: e.target.value,
+                                      })
+                                    }
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    type={"number"}
+                                    name="firstname"
+                                    //   value={user.name}
+                                    //   onChange={getUserData
+                                    required
+                                  />
+                                  {error && error.gte && (
+                                    <p style={{ color: "red" }}>{error.gte}</p>
+                                  )}
+                                </Col>
+                              </Row>
+                            </Container>
+                            <Col lg="6">
+                              <fieldset>
                                 <label
                                   className="text-lg"
-                                  style={{ color: "#7A7979" }}
+                                  style={{ width: "100%" }}
                                 >
-                                  Min :
+                                  Upload CV
                                 </label>
                                 <input
-                                  placeholder={
-                                    profileData?.data?.salaryRange.lte || ""
-                                  }
-                                  onChange={(e) =>
-                                    setIsSalaryRange({
-                                      ...isSalaryRange,
-                                      lte: e.target.value,
-                                    })
-                                  }
-                                  style={{ width: "100%" }}
+                                  type="file"
                                   className="form-control"
-                                  type={"number"}
-                                  name="firstname"
-                                  //   value={user.name}
-                                  //   onChange={getUserData}
-                                  required
+                                  id="customFile"
+                                  onChange={(e) => {
+                                    setIsCv(e.target.files[0]);
+                                  }}
                                 />
-                                {error && error.lte && (
-                                  <p style={{ color: "red" }}>{error.lte}</p>
-                                )}
-                              </Col>
-                              <Col lg="6">
-                                <label
-                                  className="text-lg"
-                                  style={{ color: "#7A7979" }}
-                                >
-                                  Max :
-                                </label>
-                                <input
-                                  placeholder={
-                                    profileData?.data?.salaryRange.gte || ""
-                                  }
-                                  onChange={(e) =>
-                                    setIsSalaryRange({
-                                      ...isSalaryRange,
-                                      gte: e.target.value,
-                                    })
-                                  }
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  type={"number"}
-                                  name="firstname"
-                                  //   value={user.name}
-                                  //   onChange={getUserData
-                                  required
-                                />
-                                {error && error.gte && (
-                                  <p style={{ color: "red" }}>{error.gte}</p>
-                                )}
-                              </Col>
-                            </Row>
-                          </Container>
-                          <Col lg="6">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Upload CV
-                              </label>
-                              <input
-                                type="file"
-                                className="form-control"
-                                id="customFile"
-                                onChange={(e) => {
-                                  setIsCv(e.target.files[0]);
-                                }}
-                              />
-                              {/* <input
+                                {/* <input
                                       style={{ width: "100%" }}
                                       className="form-control"
                                       name="Email"
@@ -3649,134 +3557,136 @@ export const FreelanceProfileView = () => {
                                       placeholder="Huston
                 "
                                     /> */}
-                            </fieldset>
-                          </Col>
+                              </fieldset>
+                            </Col>
+                          </div>
+                        </Row>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button
+                          variant="secondary"
+                          onClick={handleClose}
+                          style={{ background: "none", color: "#C1C1C1" }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          onClick={profileFunc}
+                          variant="primary"
+                          style={{ background: "none", color: "#39BEC1" }}
+                        >
+                          Save
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  </h2>
+                  <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
+                    Profile
+                  </h2>
+
+                  <hr className="mt-2" />
+                  <Container>
+                    <Row className="align-items-center br">
+                      <Col>
+                        <div className="p3">
+                          <h2 className="text-xl font-semibold">Full Name</h2>
+
+                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
+                            {profileData?.data?.firstName +
+                              " " +
+                              profileData?.data?.lastName}
+                          </h2>
                         </div>
-                      </Row>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button
-                        variant="secondary"
-                        onClick={handleClose}
-                        style={{ background: "none", color: "#C1C1C1" }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        onClick={profileFunc}
-                        variant="primary"
-                        style={{ background: "none", color: "#39BEC1" }}
-                      >
-                        Save
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
-                </h2>
-                <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                  Profile
-                </h2>
+                      </Col>
+                      <Col>
+                        <div className="p3">
+                          <h2 className="text-xl font-semibold">
+                            Visa / HK Permit
+                          </h2>
 
-                <hr className="mt-2" />
-                <Container>
-                  <Row className="align-items-center br">
-                    <Col>
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">Full Name</h2>
+                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
+                            {profileData?.data?.visaPermit}
+                          </h2>
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className="p3">
+                          <h2 className="text-xl font-semibold">Phone</h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.data?.firstName +
-                            " " +
-                            profileData?.data?.lastName}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col>
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">
-                          Visa / HK Permit
-                        </h2>
+                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
+                            {profileData?.data?.phoneNumber}
+                          </h2>
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className="p3">
+                          <h2 className="text-xl font-semibold">
+                            Date of Birth
+                          </h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.data?.visaPermit}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col>
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">Phone</h2>
+                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
+                            {profileData?.data?.dob.substring(0, 10)}
+                          </h2>
+                        </div>
+                      </Col>
+                    </Row>
+                    <Row className="align-items-center row pt-4 br">
+                      <Col>
+                        <div className="p3">
+                          <h2 className="text-xl font-semibold">Gender</h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.data?.phoneNumber}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col>
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">Date of Birth</h2>
+                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
+                            {profileData?.data?.gender}
+                          </h2>
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className="p3">
+                          <h2 className="text-xl font-semibold">Country</h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.data?.dob.substring(0, 10)}
-                        </h2>
-                      </div>
-                    </Col>
-                  </Row>
-                  <Row className="align-items-center row pt-4 br">
-                    <Col>
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">Gender</h2>
+                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
+                            {profileData?.data?.country}
+                          </h2>
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className="p3">
+                          <h2 className="text-xl font-semibold">City</h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.data?.gender}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col>
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">Country</h2>
+                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
+                            {profileData?.data?.city}
+                          </h2>
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className="p3">
+                          <h2 className="text-xl font-semibold">Address</h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.data?.country}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col>
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">City</h2>
+                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
+                            {profileData?.data?.address}
+                          </h2>
+                        </div>
+                      </Col>
+                      <Col>
+                        <div className="p3">
+                          <h2 className="text-xl font-semibold">State</h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.data?.city}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col>
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">Address</h2>
+                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
+                            {profileData?.data?.state}
+                          </h2>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Container>
+                  <Container>
+                    <Row className="align-items-center">
+                      <Col lg="12">
+                        <div className="p3">
+                          <h2 className="text-xl font-semibold">About Me</h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.data?.address}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col>
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">State</h2>
-
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.data?.state}
-                        </h2>
-                      </div>
-                    </Col>
-                  </Row>
-                </Container>
-                <Container>
-                  <Row className="align-items-center">
-                    <Col lg="12">
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">About Me</h2>
-
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.data?.aboutMe ||
-                            `It has survived t is a long established fact that a
+                          <h2 className="text-lg" style={{ color: "#7A7979" }}>
+                            {profileData?.data?.aboutMe ||
+                              `It has survived t is a long established fact that a
                           reader will be distracted by the readable content of a
                           page when looking at its layout. The point of using
                           Lorem Ipsum is that it has a more-or-less normal
@@ -3789,293 +3699,911 @@ export const FreelanceProfileView = () => {
                           more-or-less normal distribution of letters, as
                           opposed to using 'Content here, content here', making
                           it look like readable English.`}
-                        </h2>
-                      </div>
-                    </Col>
-                  </Row>
-                </Container>
+                          </h2>
+                        </div>
+                      </Col>
+                    </Row>
+                  </Container>
+                </div>
               </div>
-            </div>
-          </Col>
+            </Col>
 
-          <Col lg="12">
-            <div className="m-3">
-              <div className="boxshad">
-                <h2 style={{ float: "right" }}>
-                  <Button
-                    onClick={handleShow1}
-                    className="text-white border-rounded px-3"
-                    style={{
-                      background: "none",
-                      border: "none",
-                    }}
-                  >
-                    <AiOutlinePlusCircle
-                      style={{ color: "#39BEC1", fontSize: "30px" }}
-                    />
-                  </Button>
-                  <Modal
-                    show={show1}
-                    onHide={handleClose1}
-                    backdrop="static"
-                    keyboard={false}
-                  >
-                    <Modal.Header closeButton>
-                      <Modal.Title style={{ color: "black" }}>
-                        Experience
-                      </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Row>
-                        <div className="p-3">
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Profession
-                              </label>
-                              <input
-                                style={{ width: "100%" }}
-                                className="form-control"
-                                name="fname"
-                                type={"text"}
-                                onChange={(e) =>
-                                  setProfileExp({
-                                    ...profileExp,
-                                    profession: e.target.value,
-                                  })
-                                }
-                                //   value={user.number}
-                                //   onChange={getUserData}
-                                placeholder="Gia"
-                              />
-                              {error && error.profession && (
-                                <p style={{ color: "red" }}>
-                                  {error.profession}
-                                </p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Company Name
-                              </label>
-                              <input
-                                style={{ width: "100%" }}
-                                className="form-control"
-                                name="lname"
-                                value={profileExp?.companyName}
-                                onChange={(e) =>
-                                  setProfileExp({
-                                    ...profileExp,
-                                    companyName: e.target.value,
-                                  })
-                                }
-                                //   value={user.number}
-                                //   onChange={getUserData}
-                                placeholder="Jay 
-                "
-                              />
-                              {error && error.companyName && (
-                                <p style={{ color: "red" }}>
-                                  {error.companyName}
-                                </p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Job Industry
-                              </label>
-                              <Form.Select
-                                aria-label="Default select example"
-                                value={profileExp?.jobIndustry || "Jay"}
-                                onChange={(e) =>
-                                  setProfileExp({
-                                    ...profileExp,
-                                    jobIndustry: e.target.value,
-                                  })
-                                }
-                              >
-                                <option hidden="">Job Industry</option>
-                                <option>Universities / Education</option>
-                                <option>Manufacturing</option>
-                                <option>Security</option>
-                                <option>Real Estate</option>
-                                <option>
-                                  Professional Consultings (Legal, HR, Finance
-                                  etc.)
-                                </option>
-                                <option>Banking and Finance</option>
-                                <option>
-                                  Beauty Care and Health / Welness / Fitness
-                                </option>
-                                <option>Government / Public Utilities</option>
-                                <option>
-                                  Hospitality / Travel / Airlines / Clubhouse
-                                </option>
-                                <option>
-                                  IT / R&amp;D / Cyber Security /
-                                  Telecommunication / Science
-                                </option>
-                                <option>Retail</option>
-                                <option>Insurance</option>
-                                <option>
-                                  Logistics / Transportaton / Supply Chain
-                                </option>
-                                <option>F&amp;B / Wine &amp; Spriits</option>
-                                <option>
-                                  Logistics / Transportaton / Supply Chain
-                                </option>
-                                <option>Medical / Pharmacy / Hospital</option>
-                                <option>Engineerings</option>
-                                <option>Others</option>
-                              </Form.Select>
-                              {error && error.jobIndustry && (
-                                <p style={{ color: "red" }}>
-                                  {error.jobIndustry}
-                                </p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Job Function
-                              </label>
-                              <Form.Select
-                                aria-label="Default select example"
-                                value={profileExp?.jobFunction || "Jay"}
-                                onChange={(e) =>
-                                  setProfileExp({
-                                    ...profileExp,
-                                    jobFunction: e.target.value,
-                                  })
-                                }
-                              >
-                                <option hidden="">Job Function</option>
-                                <option>HR &amp; Admin</option>
-                                <option>General Management</option>
-                                <option>Finance and Accounting</option>
-                                <option>Sales and Marketing</option>
-                                <option>
-                                  Banking and Financial Institue Professionals
-                                </option>
-                                <option>
-                                  Insurance Professionals (back-end functions)
-                                </option>
-                                <option>
-                                  IT Professionals (Specific Fields)
-                                </option>
-                                <option>Manufacturing</option>
-                                <option>
-                                  Real Estate (Surveyers / reasearchers etc.)
-                                </option>
-                                <option>Finance and Accounting</option>
-                                <option>Professional Designers</option>
-                                <option>Lecturers / Teachers</option>
-                                <option>Engineering / Architect</option>
-                                <option>Others</option>
-                              </Form.Select>
-                              {error && error.jobFunction && (
-                                <p style={{ color: "red" }}>
-                                  {error.jobFunction}
-                                </p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Row>
-                            <Col lg="12" className="pt-3">
-                              <span
-                                style={{
-                                  display: "inline-flex",
-                                  color: "#7A7979",
-                                }}
-                              >
-                                <FormCheck
-                                  id="check"
-                                  color="blue"
-                                  onChange={checkBoxHandleChange}
-                                />
-                                &#160;&#160;I am currently working in this role
-                              </span>
-                            </Col>
-                            <Col lg="6">
+            <Col lg="12">
+              <div className="m-3">
+                <div className="boxshad">
+                  <h2 style={{ float: "right" }}>
+                    <Button
+                      onClick={handleShow1}
+                      className="text-white border-rounded px-3"
+                      style={{
+                        background: "none",
+                        border: "none",
+                      }}
+                    >
+                      <AiOutlinePlusCircle
+                        style={{ color: "#39BEC1", fontSize: "30px" }}
+                      />
+                    </Button>
+                    <Modal
+                      show={show1}
+                      onHide={handleClose1}
+                      backdrop="static"
+                      keyboard={false}
+                    >
+                      <Modal.Header closeButton>
+                        <Modal.Title style={{ color: "black" }}>
+                          Experience
+                        </Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Row>
+                          <div className="p-3">
+                            <Col lg="12">
                               <fieldset>
                                 <label
                                   className="text-lg"
                                   style={{ width: "100%" }}
                                 >
-                                  Start Date
+                                  Profession
                                 </label>
                                 <input
                                   style={{ width: "100%" }}
                                   className="form-control"
-                                  name="email"
-                                  type={"date"}
-                                  // value={profileExp?.startDate || "startDate"}
+                                  name="fname"
+                                  type={"text"}
                                   onChange={(e) =>
-                                    setDurationData({
-                                      ...durationData,
-                                      gte: e.target.value,
+                                    setProfileExp({
+                                      ...profileExp,
+                                      profession: e.target.value,
                                     })
                                   }
                                   //   value={user.number}
                                   //   onChange={getUserData}
-                                  placeholder="A Service Like No Other
-                "
+                                  placeholder="Gia"
                                 />
-                                {error && error.startDate && (
+                                {error && error.profession && (
                                   <p style={{ color: "red" }}>
-                                    {error.startDate}
+                                    {error.profession}
                                   </p>
                                 )}
                               </fieldset>
                             </Col>
-                            <Col lg="6">
+                            <Col lg="12">
                               <fieldset>
                                 <label
                                   className="text-lg"
                                   style={{ width: "100%" }}
                                 >
-                                  End Date
+                                  Company Name
                                 </label>
-
                                 <input
                                   style={{ width: "100%" }}
                                   className="form-control"
-                                  type={"date"}
-                                  name="firstname"
-                                  // value={profileExp?.endDate || "startDate"}
+                                  name="lname"
+                                  value={profileExp?.companyName}
                                   onChange={(e) =>
-                                    setDurationData({
-                                      ...durationData,
-                                      lte: e.target.value,
+                                    setProfileExp({
+                                      ...profileExp,
+                                      companyName: e.target.value,
                                     })
                                   }
-                                  //   value={user.name}
+                                  //   value={user.number}
                                   //   onChange={getUserData}
-                                  placeholder="Gia (PVT) LTD
+                                  placeholder="Jay 
                 "
-                                  required
                                 />
-                                {error && error.endDate && (
+                                {error && error.companyName && (
                                   <p style={{ color: "red" }}>
-                                    {error.endDate}
+                                    {error.companyName}
                                   </p>
+                                )}
+                              </fieldset>
+                            </Col>
+                            <Col lg="12">
+                              <fieldset>
+                                <label
+                                  className="text-lg"
+                                  style={{ width: "100%" }}
+                                >
+                                  Job Industry
+                                </label>
+                                <Form.Select
+                                  aria-label="Default select example"
+                                  value={profileExp?.jobIndustry || "Jay"}
+                                  onChange={(e) =>
+                                    setProfileExp({
+                                      ...profileExp,
+                                      jobIndustry: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option hidden="">Job Industry</option>
+                                  <option>Universities / Education</option>
+                                  <option>Manufacturing</option>
+                                  <option>Security</option>
+                                  <option>Real Estate</option>
+                                  <option>
+                                    Professional Consultings (Legal, HR, Finance
+                                    etc.)
+                                  </option>
+                                  <option>Banking and Finance</option>
+                                  <option>
+                                    Beauty Care and Health / Welness / Fitness
+                                  </option>
+                                  <option>Government / Public Utilities</option>
+                                  <option>
+                                    Hospitality / Travel / Airlines / Clubhouse
+                                  </option>
+                                  <option>
+                                    IT / R&amp;D / Cyber Security /
+                                    Telecommunication / Science
+                                  </option>
+                                  <option>Retail</option>
+                                  <option>Insurance</option>
+                                  <option>
+                                    Logistics / Transportaton / Supply Chain
+                                  </option>
+                                  <option>F&amp;B / Wine &amp; Spriits</option>
+                                  <option>
+                                    Logistics / Transportaton / Supply Chain
+                                  </option>
+                                  <option>Medical / Pharmacy / Hospital</option>
+                                  <option>Engineerings</option>
+                                  <option>Others</option>
+                                </Form.Select>
+                                {error && error.jobIndustry && (
+                                  <p style={{ color: "red" }}>
+                                    {error.jobIndustry}
+                                  </p>
+                                )}
+                              </fieldset>
+                            </Col>
+                            <Col lg="12">
+                              <fieldset>
+                                <label
+                                  className="text-lg"
+                                  style={{ width: "100%" }}
+                                >
+                                  Job Function
+                                </label>
+                                <Form.Select
+                                  aria-label="Default select example"
+                                  value={profileExp?.jobFunction || "Jay"}
+                                  onChange={(e) =>
+                                    setProfileExp({
+                                      ...profileExp,
+                                      jobFunction: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option hidden="">Job Function</option>
+                                  <option>HR &amp; Admin</option>
+                                  <option>General Management</option>
+                                  <option>Finance and Accounting</option>
+                                  <option>Sales and Marketing</option>
+                                  <option>
+                                    Banking and Financial Institue Professionals
+                                  </option>
+                                  <option>
+                                    Insurance Professionals (back-end functions)
+                                  </option>
+                                  <option>
+                                    IT Professionals (Specific Fields)
+                                  </option>
+                                  <option>Manufacturing</option>
+                                  <option>
+                                    Real Estate (Surveyers / reasearchers etc.)
+                                  </option>
+                                  <option>Finance and Accounting</option>
+                                  <option>Professional Designers</option>
+                                  <option>Lecturers / Teachers</option>
+                                  <option>Engineering / Architect</option>
+                                  <option>Others</option>
+                                </Form.Select>
+                                {error && error.jobFunction && (
+                                  <p style={{ color: "red" }}>
+                                    {error.jobFunction}
+                                  </p>
+                                )}
+                              </fieldset>
+                            </Col>
+                            <Row>
+                              <Col lg="12" className="pt-3">
+                                <span
+                                  style={{
+                                    display: "inline-flex",
+                                    color: "#7A7979",
+                                  }}
+                                >
+                                  <FormCheck
+                                    id="check"
+                                    color="blue"
+                                    onChange={checkBoxHandleChange}
+                                  />
+                                  &#160;&#160;I am currently working in this
+                                  role
+                                </span>
+                              </Col>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    Start Date
+                                  </label>
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    name="email"
+                                    type={"date"}
+                                    // value={profileExp?.startDate || "startDate"}
+                                    onChange={(e) =>
+                                      setDurationData({
+                                        ...durationData,
+                                        gte: e.target.value,
+                                      })
+                                    }
+                                    //   value={user.number}
+                                    //   onChange={getUserData}
+                                    placeholder="A Service Like No Other
+                "
+                                  />
+                                  {error && error.startDate && (
+                                    <p style={{ color: "red" }}>
+                                      {error.startDate}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    End Date
+                                  </label>
+
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    type={"date"}
+                                    name="firstname"
+                                    // value={profileExp?.endDate || "startDate"}
+                                    onChange={(e) =>
+                                      setDurationData({
+                                        ...durationData,
+                                        lte: e.target.value,
+                                      })
+                                    }
+                                    //   value={user.name}
+                                    //   onChange={getUserData}
+                                    placeholder="Gia (PVT) LTD
+                "
+                                    required
+                                  />
+                                  {error && error.endDate && (
+                                    <p style={{ color: "red" }}>
+                                      {error.endDate}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                              <Col lg="12">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    Description
+                                  </label>
+
+                                  <textarea
+                                    placeholder="Description"
+                                    className="form-control"
+                                    value={profileExp?.description}
+                                    onChange={(e) =>
+                                      setProfileExp({
+                                        ...profileExp,
+                                        description: e.target.value,
+                                      })
+                                    }
+                                  />
+                                  {error && error.description && (
+                                    <p style={{ color: "red" }}>
+                                      {error.description}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                            </Row>
+                          </div>
+                        </Row>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button
+                          variant="secondary"
+                          onClick={handleClose1}
+                          style={{ background: "none", color: "#C1C1C1" }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          variant="primary"
+                          style={{ background: "none", color: "#39BEC1" }}
+                          onClick={() => ProfileExp()}
+                        >
+                          Save
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  </h2>
+                  <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
+                    Experience
+                  </h2>
+
+                  <hr className="mt-2" />
+                  <Container>
+                    <Row className="align-items-center row">
+                      <Col>
+                        <Row>
+                          {isExperienceData.length > 0 &&
+                            isExperienceData.map((event, index) => {
+                              console.log(event, "event");
+                              // console.log(event, "event");
+
+                              return (
+                                <>
+                                  <Col
+                                    lg="8"
+                                    style={{ display: "flex" }}
+                                    key={index}
+                                  >
+                                    <div className="MuiTimelineSeparator-root css-11tgw8h">
+                                      <span className="MuiTimelineDot-root MuiTimelineDot-filled MuiTimelineDot-filledGrey timeline-dot css-a7d0u7"></span>
+                                      <span className="MuiTimelineConnector-root css-idv8vo"></span>
+                                    </div>
+                                    <div className="MuiTypography-root MuiTypography-body1 MuiTimelineContent-root MuiTimelineContent-positionRight css-18ki27g">
+                                      <div className="CV-job">
+                                        <Row className="align-items-center pt-2">
+                                          <Col lg="6">
+                                            <div className="p3">
+                                              <h2 className="text-xl font-semibold">
+                                                {event?.title ??
+                                                  event.profession}
+                                              </h2>
+
+                                              <h2
+                                                className="text-lg"
+                                                style={{ color: "#7A7979" }}
+                                              >
+                                                {event?.companyName}
+                                              </h2>
+                                            </div>
+                                          </Col>
+                                          <Col lg="6">
+                                            <div className="p3">
+                                              <h2
+                                                className="text-xl"
+                                                style={{ color: "#6A489C" }}
+                                              >
+                                                {event?.jobFunction}
+                                              </h2>
+
+                                              <h2
+                                                className="text-lg"
+                                                style={{ color: "#7A7979" }}
+                                              >
+                                                {event?.duration.gte.substring(
+                                                  0,
+                                                  10
+                                                )}{" "}
+                                                -
+                                                {event?.isCurrent === true
+                                                  ? "Present"
+                                                  : event?.duration.lte.substring(
+                                                      0,
+                                                      10
+                                                    )}
+                                              </h2>
+                                            </div>
+                                          </Col>
+                                        </Row>
+
+                                        <h2
+                                          className="text-lg pt-2"
+                                          style={{ color: "#7A7979" }}
+                                        >
+                                          {event?.description}
+                                        </h2>
+                                      </div>
+                                    </div>
+                                  </Col>
+                                  <Col lg="4">
+                                    <div className="p-3 webkit">
+                                      <div className="inline-flex">
+                                        <div className="w-10">
+                                          <button
+                                            onClick={handleShow5}
+                                            className="text-white border-rounded"
+                                            style={{
+                                              background: "none",
+                                              border: "none",
+                                            }}
+                                          >
+                                            <BiEdit
+                                              onClick={() => btnEdit(event)}
+                                              style={{
+                                                color: "#39BEC1",
+                                                fontSize: "30px",
+                                              }}
+                                            />
+                                          </button>
+                                          {event.clicked == true && (
+                                            <MyVerticallyCenteredModal
+                                              show={modalShow}
+                                              props={event}
+                                              onHide={() => modalshow(event)}
+                                            />
+                                          )}
+                                        </div>
+                                        <div className="w-10">
+                                          <button
+                                            onClick={handleShow10}
+                                            className="text-white border-rounded"
+                                            style={{
+                                              background: "none",
+                                              border: "none",
+                                            }}
+                                          >
+                                            <ImBin
+                                              style={{
+                                                cursor: "pointer",
+                                                color: "#39BEC1",
+                                                fontSize: "30px",
+                                              }}
+                                              data-toggle="modal"
+                                              onClick={() => btnDelete(event)}
+                                            />
+                                          </button>
+                                          {event.clicked == true && (
+                                            <MyVerticallyCenteredModalDelete
+                                              show={modalShowDelete}
+                                              props={event}
+                                              index={index}
+                                              onHide={() => modalshow1(event)}
+                                            />
+                                          )}
+                                          <div></div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </Col>
+                                </>
+                              );
+                            })}
+                        </Row>
+                      </Col>
+                    </Row>
+                  </Container>
+                </div>
+              </div>
+            </Col>
+
+            <Col lg="12">
+              <div className="m-3">
+                <div className="boxshad">
+                  <h2 style={{ float: "right" }}>
+                    <Button
+                      onClick={handleShow2}
+                      className="text-white border-rounded px-3"
+                      style={{
+                        background: "none",
+                        border: "none",
+                      }}
+                    >
+                      <AiOutlinePlusCircle
+                        style={{ color: "#39BEC1", fontSize: "30px" }}
+                      />
+                    </Button>
+                    <Modal
+                      show={show2}
+                      onHide={handleClose2}
+                      backdrop="static"
+                      keyboard={false}
+                    >
+                      <Modal.Header closeButton>
+                        <Modal.Title style={{ color: "black" }}>
+                          Education
+                        </Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Row>
+                          <div className="p-3">
+                            <Col lg="12">
+                              <fieldset>
+                                <label
+                                  className="text-lg"
+                                  style={{ width: "100%" }}
+                                >
+                                  Education Level
+                                </label>
+                                <Form.Select
+                                  aria-label="Default select example"
+                                  onChange={(e) =>
+                                    setIsEducation({
+                                      ...isEducation,
+                                      educationLevel: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option hidden="">Education Level</option>
+                                  <option>Associate Degree</option>
+                                  <option>Bachelor Degree</option>
+                                  <option>Master Degree</option>
+                                  <option>Doctorate Degree</option>
+                                  <option>PhD</option>
+                                  <option>Others</option>
+                                </Form.Select>
+                                {error && error.educationLevel && (
+                                  <p style={{ color: "red" }}>
+                                    {error.educationLevel}
+                                  </p>
+                                )}
+                              </fieldset>
+                            </Col>
+                            <Col lg="12">
+                              <fieldset>
+                                <label
+                                  className="text-lg"
+                                  style={{ width: "100%" }}
+                                >
+                                  Institute
+                                </label>
+                                <input
+                                  style={{ width: "100%" }}
+                                  className="form-control"
+                                  name="institute"
+                                  type={"text"}
+                                  onChange={(e) =>
+                                    setIsEducation({
+                                      ...isEducation,
+                                      institute: e.target.value,
+                                    })
+                                  }
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
+                                  placeholder="Jay "
+                                />
+                                {error && error.institute && (
+                                  <p style={{ color: "red" }}>
+                                    {error.institute}
+                                  </p>
+                                )}
+                              </fieldset>
+                            </Col>
+                            <Col lg="12">
+                              <fieldset>
+                                <label
+                                  className="text-lg"
+                                  style={{ width: "100%" }}
+                                >
+                                  Major
+                                </label>
+                                <Form.Select
+                                  aria-label="Default select example"
+                                  onChange={(e) =>
+                                    setIsEducation({
+                                      ...isEducation,
+                                      major: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option hidden="">Major</option>
+                                  <option>Masters of Law</option>
+                                  <option>Computer Science</option>
+                                  <option>Phsycology</option>
+                                </Form.Select>
+                                {error && error.major && (
+                                  <p style={{ color: "red" }}>{error.major}</p>
+                                )}
+                              </fieldset>
+                            </Col>
+
+                            <Row>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    Start Date
+                                  </label>
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    name="email"
+                                    onChange={(e) =>
+                                      setDurationData({
+                                        ...durationData,
+                                        gte: e.target.value,
+                                      })
+                                    }
+                                    type={"date"}
+                                    //   value={user.number}
+                                    //   onChange={getUserData}
+                                    placeholder="A Service Like No Other
+                "
+                                  />
+                                  {error && error.startDate && (
+                                    <p style={{ color: "red" }}>
+                                      {error.startDate}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    End Date
+                                  </label>
+
+                                  <input
+                                    style={{ width: "100%" }}
+                                    className="form-control"
+                                    type={"date"}
+                                    name="firstname"
+                                    onChange={(e) =>
+                                      setDurationData({
+                                        ...durationData,
+                                        lte: e.target.value,
+                                      })
+                                    }
+                                    //   value={user.name}
+                                    //   onChange={getUserData}
+                                    placeholder="Gia (PVT) LTD"
+                                    required
+                                  />
+                                  {error && error.endDate && (
+                                    <p style={{ color: "red" }}>
+                                      {error.endDate}
+                                    </p>
+                                  )}
+                                </fieldset>
+                              </Col>
+                              <Col lg="6">
+                                <fieldset>
+                                  <label
+                                    className="text-lg"
+                                    style={{ width: "100%" }}
+                                  >
+                                    Upload Certification
+                                  </label>
+
+                                  <input
+                                    type="file"
+                                    onChange={(e) => {
+                                      setIsEducation({
+                                        ...isEducation,
+                                        certificate: e.target.files[0],
+                                      });
+                                    }}
+                                    class="form-control"
+                                    id="customFile"
+                                  />
+                                </fieldset>
+                              </Col>
+                            </Row>
+                          </div>
+                        </Row>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button
+                          variant="secondary"
+                          onClick={handleClose2}
+                          style={{ background: "none", color: "#C1C1C1" }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          variant="primary"
+                          style={{ background: "none", color: "#39BEC1" }}
+                          onClick={() => educationFunc()}
+                        >
+                          Save
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  </h2>
+                  <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
+                    Education
+                  </h2>
+                  <hr className="mt-2" />
+                  {isEducationData.length > 0 &&
+                    isEducationData.map((event, index) => {
+                      // console.log(event, 'eveeeeeeent');
+                      return (
+                        <>
+                          <Container key={index}>
+                            <Row className="align-items-center row">
+                              <Col>
+                                <Row className="align-items-center">
+                                  <Col lg="3">
+                                    <div className="p3">
+                                      <h2 className="text-xl font-semibold">
+                                        {event.institute}
+                                      </h2>
+
+                                      <h2
+                                        className="text-lg"
+                                        style={{ color: "#7A7979" }}
+                                      >
+                                        {event.educationLevel}
+                                      </h2>
+                                    </div>
+                                  </Col>
+                                  <Col lg="3">
+                                    <div className="p3">
+                                      <h2
+                                        className="text-xl"
+                                        style={{ color: "#6A489C" }}
+                                      >
+                                        {event.major}
+                                      </h2>
+
+                                      <h2
+                                        className="text-lg"
+                                        style={{ color: "#7A7979" }}
+                                      >
+                                        {event.duration.gte.substring(0, 10) +
+                                          " - " +
+                                          event.duration.lte.substring(0, 10)}
+                                      </h2>
+                                    </div>
+                                  </Col>
+                                  <Col lg="3">
+                                    {event?.certificate ? (
+                                      <div className="p-3 webkit">
+                                        <Button
+                                          className="text-white border-rounded px-3 py-2"
+                                          style={{
+                                            background: "#39BEC1",
+                                            border: "none",
+                                          }}
+                                          onClick={() =>
+                                            (window.location.href = `http://103.1.179.231:3000/${event.certificate}`)
+                                          }
+                                        >
+                                          see certificate
+                                        </Button>
+                                      </div>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </Col>
+                                  <Col lg="3">
+                                    <div className="p-3 webkit">
+                                      <div className="inline-flex">
+                                        <div className="w-10">
+                                          <button
+                                            onClick={handleShow6}
+                                            className="text-white border-rounded"
+                                            style={{
+                                              background: "none",
+                                              border: "none",
+                                            }}
+                                          >
+                                            <BiEdit
+                                              onClick={() =>
+                                                btnEducationEdit(event)
+                                              }
+                                              style={{
+                                                color: "#39BEC1",
+                                                fontSize: "30px",
+                                              }}
+                                            />
+                                          </button>
+                                          {event.clicked == true && (
+                                            <MyVerticallyCenteredModalEducation
+                                              show={modalShowEducation}
+                                              props={event}
+                                              onHide={() => modalshow2(event)}
+                                            />
+                                          )}
+                                        </div>
+                                        <div className="w-10">
+                                          <ImBin
+                                            style={{
+                                              cursor: "pointer",
+                                              color: "#39BEC1",
+                                              fontSize: "30px",
+                                            }}
+                                            onClick={() =>
+                                              btnEducationDelete(event)
+                                            }
+                                          />
+                                          {event.clicked == true && (
+                                            <MyVerticallyCenteredModalEducationDelete
+                                              show={modalShowEducationDelete}
+                                              props={event}
+                                              index={index}
+                                              onHide={() => modalshow3(event)}
+                                            />
+                                          )}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </Col>
+                                </Row>
+                              </Col>
+                            </Row>
+                          </Container>
+                        </>
+                      );
+                    })}
+                </div>
+              </div>
+            </Col>
+
+            <Col lg="12">
+              <div className="m-3">
+                <div className="boxshad">
+                  <h2 style={{ float: "right" }}>
+                    <Button
+                      onClick={handleShow3}
+                      className="text-white border-rounded px-3"
+                      style={{
+                        background: "none",
+                        border: "none",
+                      }}
+                    >
+                      <AiOutlinePlusCircle
+                        style={{ color: "#39BEC1", fontSize: "30px" }}
+                      />
+                    </Button>
+                    <Modal
+                      show={show3}
+                      onHide={handleClose3}
+                      backdrop="static"
+                      keyboard={false}
+                    >
+                      <Modal.Header closeButton>
+                        <Modal.Title style={{ color: "black" }}>
+                          Achievements
+                        </Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Row>
+                          <div className="p-3">
+                            <Col lg="12">
+                              <fieldset>
+                                <label
+                                  className="text-lg"
+                                  style={{ width: "100%" }}
+                                >
+                                  Title
+                                </label>
+                                <input
+                                  style={{ width: "100%" }}
+                                  className="form-control"
+                                  name="fname"
+                                  type={"text"}
+                                  onChange={(e) =>
+                                    setIsAchievement({
+                                      ...isAchievement,
+                                      title: e.target.value,
+                                    })
+                                  }
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
+                                  placeholder="Gia"
+                                />
+                                {error && error.title && (
+                                  <p style={{ color: "red" }}>{error.title}</p>
                                 )}
                               </fieldset>
                             </Col>
@@ -4087,17 +4615,15 @@ export const FreelanceProfileView = () => {
                                 >
                                   Description
                                 </label>
-
                                 <textarea
-                                  placeholder="Description"
-                                  className="form-control"
-                                  value={profileExp?.description}
                                   onChange={(e) =>
-                                    setProfileExp({
-                                      ...profileExp,
+                                    setIsAchievement({
+                                      ...isAchievement,
                                       description: e.target.value,
                                     })
                                   }
+                                  placeholder="Description"
+                                  className="form-control"
                                 />
                                 {error && error.description && (
                                   <p style={{ color: "red" }}>
@@ -4106,364 +4632,7 @@ export const FreelanceProfileView = () => {
                                 )}
                               </fieldset>
                             </Col>
-                          </Row>
-                        </div>
-                      </Row>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button
-                        variant="secondary"
-                        onClick={handleClose1}
-                        style={{ background: "none", color: "#C1C1C1" }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="primary"
-                        style={{ background: "none", color: "#39BEC1" }}
-                        onClick={() => ProfileExp()}
-                      >
-                        Save
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
-                </h2>
-                <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                  Experience
-                </h2>
-
-                <hr className="mt-2" />
-                <Container>
-                  <Row className="align-items-center row">
-                    <Col>
-                      <Row>
-                        {isExperienceData.length > 0 &&
-                          isExperienceData.map((event, index) => {
-                            console.log(event, "event");
-                            // console.log(event, "event");
-
-                            return (
-                              <>
-                                <Col
-                                  lg="8"
-                                  style={{ display: "flex" }}
-                                  key={index}
-                                >
-                                  <div className="MuiTimelineSeparator-root css-11tgw8h">
-                                    <span className="MuiTimelineDot-root MuiTimelineDot-filled MuiTimelineDot-filledGrey timeline-dot css-a7d0u7"></span>
-                                    <span className="MuiTimelineConnector-root css-idv8vo"></span>
-                                  </div>
-                                  <div className="MuiTypography-root MuiTypography-body1 MuiTimelineContent-root MuiTimelineContent-positionRight css-18ki27g">
-                                    <div className="CV-job">
-                                      <Row className="align-items-center pt-2">
-                                        <Col lg="6">
-                                          <div className="p3">
-                                            <h2 className="text-xl font-semibold">
-                                              {event?.title ?? event.profession}
-                                            </h2>
-
-                                            <h2
-                                              className="text-lg"
-                                              style={{ color: "#7A7979" }}
-                                            >
-                                              {event?.companyName}
-                                            </h2>
-                                          </div>
-                                        </Col>
-                                        <Col lg="6">
-                                          <div className="p3">
-                                            <h2
-                                              className="text-xl"
-                                              style={{ color: "#6A489C" }}
-                                            >
-                                              {event?.jobFunction}
-                                            </h2>
-
-                                            <h2
-                                              className="text-lg"
-                                              style={{ color: "#7A7979" }}
-                                            >
-                                              {event?.duration.gte.substring(
-                                                0,
-                                                10
-                                              )}{" "}
-                                              -
-                                              {event?.isCurrent === true
-                                                ? "Present"
-                                                : event?.duration.lte.substring(
-                                                    0,
-                                                    10
-                                                  )}
-                                            </h2>
-                                          </div>
-                                        </Col>
-                                      </Row>
-
-                                      <h2
-                                        className="text-lg pt-2"
-                                        style={{ color: "#7A7979" }}
-                                      >
-                                        {event?.description}
-                                      </h2>
-                                    </div>
-                                  </div>
-                                </Col>
-                                <Col lg="4">
-                                  <div className="p-3 webkit">
-                                    <div className="inline-flex">
-                                      <div className="w-10">
-                                        <button
-                                          onClick={handleShow5}
-                                          className="text-white border-rounded"
-                                          style={{
-                                            background: "none",
-                                            border: "none",
-                                          }}
-                                        >
-                                          <BiEdit
-                                            onClick={() => btnEdit(event)}
-                                            style={{
-                                              color: "#39BEC1",
-                                              fontSize: "30px",
-                                            }}
-                                          />
-                                        </button>
-                                        {event.clicked == true && (
-                                          <MyVerticallyCenteredModal
-                                            show={modalShow}
-                                            props={event}
-                                            onHide={() => modalshow(event)}
-                                          />
-                                        )}
-                                      </div>
-                                      <div className="w-10">
-                                        <button
-                                          onClick={handleShow10}
-                                          className="text-white border-rounded"
-                                          style={{
-                                            background: "none",
-                                            border: "none",
-                                          }}
-                                        >
-                                          <ImBin
-                                            style={{
-                                              cursor: "pointer",
-                                              color: "#39BEC1",
-                                              fontSize: "30px",
-                                            }}
-                                            data-toggle="modal"
-                                            onClick={() => btnDelete(event)}
-                                          />
-                                        </button>
-                                        {event.clicked == true && (
-                                          <MyVerticallyCenteredModalDelete
-                                            show={modalShowDelete}
-                                            props={event}
-                                            index={index}
-                                            onHide={() => modalshow1(event)}
-                                          />
-                                        )}
-                                        <div></div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </Col>
-                              </>
-                            );
-                          })}
-                      </Row>
-                    </Col>
-                  </Row>
-                </Container>
-              </div>
-            </div>
-          </Col>
-
-          <Col lg="12">
-            <div className="m-3">
-              <div className="boxshad">
-                <h2 style={{ float: "right" }}>
-                  <Button
-                    onClick={handleShow2}
-                    className="text-white border-rounded px-3"
-                    style={{
-                      background: "none",
-                      border: "none",
-                    }}
-                  >
-                    <AiOutlinePlusCircle
-                      style={{ color: "#39BEC1", fontSize: "30px" }}
-                    />
-                  </Button>
-                  <Modal
-                    show={show2}
-                    onHide={handleClose2}
-                    backdrop="static"
-                    keyboard={false}
-                  >
-                    <Modal.Header closeButton>
-                      <Modal.Title style={{ color: "black" }}>
-                        Education
-                      </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Row>
-                        <div className="p-3">
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Education Level
-                              </label>
-                              <Form.Select
-                                aria-label="Default select example"
-                                onChange={(e) =>
-                                  setIsEducation({
-                                    ...isEducation,
-                                    educationLevel: e.target.value,
-                                  })
-                                }
-                              >
-                                <option hidden="">Education Level</option>
-                                <option>Associate Degree</option>
-                                <option>Bachelor Degree</option>
-                                <option>Master Degree</option>
-                                <option>Doctorate Degree</option>
-                                <option>PhD</option>
-                                <option>Others</option>
-                              </Form.Select>
-                              {error && error.educationLevel && (
-                                <p style={{ color: "red" }}>
-                                  {error.educationLevel}
-                                </p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Institute
-                              </label>
-                              <input
-                                style={{ width: "100%" }}
-                                className="form-control"
-                                name="institute"
-                                type={"text"}
-                                onChange={(e) =>
-                                  setIsEducation({
-                                    ...isEducation,
-                                    institute: e.target.value,
-                                  })
-                                }
-                                //   value={user.number}
-                                //   onChange={getUserData}
-                                placeholder="Jay "
-                              />
-                              {error && error.institute && (
-                                <p style={{ color: "red" }}>
-                                  {error.institute}
-                                </p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Major
-                              </label>
-                              <Form.Select
-                                aria-label="Default select example"
-                                onChange={(e) =>
-                                  setIsEducation({
-                                    ...isEducation,
-                                    major: e.target.value,
-                                  })
-                                }
-                              >
-                                <option hidden="">Major</option>
-                                <option>Masters of Law</option>
-                                <option>Computer Science</option>
-                                <option>Phsycology</option>
-                              </Form.Select>
-                              {error && error.major && (
-                                <p style={{ color: "red" }}>{error.major}</p>
-                              )}
-                            </fieldset>
-                          </Col>
-
-                          <Row>
-                            <Col lg="6">
-                              <fieldset>
-                                <label
-                                  className="text-lg"
-                                  style={{ width: "100%" }}
-                                >
-                                  Start Date
-                                </label>
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  name="email"
-                                  onChange={(e) =>
-                                    setDurationData({
-                                      ...durationData,
-                                      gte: e.target.value,
-                                    })
-                                  }
-                                  type={"date"}
-                                  //   value={user.number}
-                                  //   onChange={getUserData}
-                                  placeholder="A Service Like No Other
-                "
-                                />
-                                {error && error.startDate && (
-                                  <p style={{ color: "red" }}>
-                                    {error.startDate}
-                                  </p>
-                                )}
-                              </fieldset>
-                            </Col>
-                            <Col lg="6">
-                              <fieldset>
-                                <label
-                                  className="text-lg"
-                                  style={{ width: "100%" }}
-                                >
-                                  End Date
-                                </label>
-
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  type={"date"}
-                                  name="firstname"
-                                  onChange={(e) =>
-                                    setDurationData({
-                                      ...durationData,
-                                      lte: e.target.value,
-                                    })
-                                  }
-                                  //   value={user.name}
-                                  //   onChange={getUserData}
-                                  placeholder="Gia (PVT) LTD"
-                                  required
-                                />
-                                {error && error.endDate && (
-                                  <p style={{ color: "red" }}>
-                                    {error.endDate}
-                                  </p>
-                                )}
-                              </fieldset>
-                            </Col>
-                            <Col lg="6">
+                            <Col lg="12">
                               <fieldset>
                                 <label
                                   className="text-lg"
@@ -4471,90 +4640,74 @@ export const FreelanceProfileView = () => {
                                 >
                                   Upload Certification
                                 </label>
-
                                 <input
                                   type="file"
                                   onChange={(e) => {
-                                    setIsEducation({
-                                      ...isEducation,
-                                      certificate: e.target.files[0],
+                                    setIsAchievement({
+                                      ...isAchievement,
+                                      achievement: e.target.files[0],
                                     });
                                   }}
                                   class="form-control"
                                   id="customFile"
                                 />
+                                {error && error.certificate && (
+                                  <p style={{ color: "red" }}>
+                                    {error.certificate}
+                                  </p>
+                                )}
                               </fieldset>
                             </Col>
-                          </Row>
-                        </div>
-                      </Row>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button
-                        variant="secondary"
-                        onClick={handleClose2}
-                        style={{ background: "none", color: "#C1C1C1" }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="primary"
-                        style={{ background: "none", color: "#39BEC1" }}
-                        onClick={() => educationFunc()}
-                      >
-                        Save
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
-                </h2>
-                <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                  Education
-                </h2>
-                <hr className="mt-2" />
-                {isEducationData.length > 0 &&
-                  isEducationData.map((event, index) => {
-                    // console.log(event, 'eveeeeeeent');
-                    return (
-                      <>
-                        <Container key={index}>
-                          <Row className="align-items-center row">
-                            <Col>
-                              <Row className="align-items-center">
-                                <Col lg="3">
-                                  <div className="p3">
-                                    <h2 className="text-xl font-semibold">
-                                      {event.institute}
-                                    </h2>
+                          </div>
+                        </Row>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button
+                          variant="secondary"
+                          onClick={handleClose3}
+                          style={{ background: "none", color: "#C1C1C1" }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          variant="primary"
+                          style={{ background: "none", color: "#39BEC1" }}
+                          onClick={() => achievementFunc()}
+                        >
+                          Save
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  </h2>
+                  <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
+                    Achievements
+                  </h2>
 
-                                    <h2
-                                      className="text-lg"
-                                      style={{ color: "#7A7979" }}
-                                    >
-                                      {event.educationLevel}
-                                    </h2>
-                                  </div>
-                                </Col>
-                                <Col lg="3">
-                                  <div className="p3">
-                                    <h2
-                                      className="text-xl"
-                                      style={{ color: "#6A489C" }}
-                                    >
-                                      {event.major}
-                                    </h2>
+                  <hr className="mt-2" />
+                  <Container>
+                    <Row className="align-items-center row">
+                      <Col>
+                        <Row className="align-items-center">
+                          {isAchievementData.length > 0 &&
+                            isAchievementData.map((event, index) => {
+                              console.log(event, "acheivement");
+                              return (
+                                <>
+                                  <Col lg="6" key={index}>
+                                    <div className="p3">
+                                      <h2 className="text-xl font-semibold">
+                                        {event?.title}
+                                      </h2>
 
-                                    <h2
-                                      className="text-lg"
-                                      style={{ color: "#7A7979" }}
-                                    >
-                                      {event.duration.gte.substring(0, 10) +
-                                        " - " +
-                                        event.duration.lte.substring(0, 10)}
-                                    </h2>
-                                  </div>
-                                </Col>
-                                <Col lg="3">
-                                  {event?.certificate ? (
+                                      <p
+                                        className="text-lg"
+                                        style={{ color: "#7A7979" }}
+                                      >
+                                        {event?.description}
+                                      </p>
+                                    </div>
+                                  </Col>
+                                  <Col lg="3">
                                     <div className="p-3 webkit">
                                       <Button
                                         className="text-white border-rounded px-3 py-2"
@@ -4563,580 +4716,343 @@ export const FreelanceProfileView = () => {
                                           border: "none",
                                         }}
                                         onClick={() =>
-                                          (window.location.href = `http://103.1.179.231:3000/${event.certificate}`)
+                                          (window.location.href = `http://localhost:3000${event.achievement}`)
                                         }
                                       >
                                         see certificate
                                       </Button>
                                     </div>
-                                  ) : (
-                                    ""
-                                  )}
-                                </Col>
-                                <Col lg="3">
-                                  <div className="p-3 webkit">
-                                    <div className="inline-flex">
-                                      <div className="w-10">
-                                        <button
-                                          onClick={handleShow6}
-                                          className="text-white border-rounded"
-                                          style={{
-                                            background: "none",
-                                            border: "none",
-                                          }}
-                                        >
-                                          <BiEdit
-                                            onClick={() =>
-                                              btnEducationEdit(event)
-                                            }
+                                  </Col>
+                                  <Col lg="3">
+                                    <div className="p-3 webkit">
+                                      <div className="inline-flex">
+                                        <div className="w-10">
+                                          <button
+                                            onClick={handleShow7}
+                                            className="text-white border-rounded"
                                             style={{
-                                              color: "#39BEC1",
-                                              fontSize: "30px",
+                                              background: "none",
+                                              border: "none",
                                             }}
-                                          />
-                                        </button>
-                                        {event.clicked == true && (
-                                          <MyVerticallyCenteredModalEducation
-                                            show={modalShowEducation}
-                                            props={event}
-                                            onHide={() => modalshow2(event)}
-                                          />
-                                        )}
-                                      </div>
-                                      <div className="w-10">
-                                        <ImBin
-                                          style={{
-                                            cursor: "pointer",
-                                            color: "#39BEC1",
-                                            fontSize: "30px",
-                                          }}
-                                          onClick={() =>
-                                            btnEducationDelete(event)
-                                          }
-                                        />
-                                        {event.clicked == true && (
-                                          <MyVerticallyCenteredModalEducationDelete
-                                            show={modalShowEducationDelete}
-                                            props={event}
-                                            index={index}
-                                            onHide={() => modalshow3(event)}
-                                          />
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-                                </Col>
-                              </Row>
-                            </Col>
-                          </Row>
-                        </Container>
-                      </>
-                    );
-                  })}
-              </div>
-            </div>
-          </Col>
-
-          <Col lg="12">
-            <div className="m-3">
-              <div className="boxshad">
-                <h2 style={{ float: "right" }}>
-                  <Button
-                    onClick={handleShow3}
-                    className="text-white border-rounded px-3"
-                    style={{
-                      background: "none",
-                      border: "none",
-                    }}
-                  >
-                    <AiOutlinePlusCircle
-                      style={{ color: "#39BEC1", fontSize: "30px" }}
-                    />
-                  </Button>
-                  <Modal
-                    show={show3}
-                    onHide={handleClose3}
-                    backdrop="static"
-                    keyboard={false}
-                  >
-                    <Modal.Header closeButton>
-                      <Modal.Title style={{ color: "black" }}>
-                        Achievements
-                      </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Row>
-                        <div className="p-3">
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Title
-                              </label>
-                              <input
-                                style={{ width: "100%" }}
-                                className="form-control"
-                                name="fname"
-                                type={"text"}
-                                onChange={(e) =>
-                                  setIsAchievement({
-                                    ...isAchievement,
-                                    title: e.target.value,
-                                  })
-                                }
-                                //   value={user.number}
-                                //   onChange={getUserData}
-                                placeholder="Gia"
-                              />
-                              {error && error.title && (
-                                <p style={{ color: "red" }}>{error.title}</p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Description
-                              </label>
-                              <textarea
-                                onChange={(e) =>
-                                  setIsAchievement({
-                                    ...isAchievement,
-                                    description: e.target.value,
-                                  })
-                                }
-                                placeholder="Description"
-                                className="form-control"
-                              />
-                              {error && error.description && (
-                                <p style={{ color: "red" }}>
-                                  {error.description}
-                                </p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Upload Certification
-                              </label>
-                              <input
-                                type="file"
-                                onChange={(e) => {
-                                  setIsAchievement({
-                                    ...isAchievement,
-                                    achievement: e.target.files[0],
-                                  });
-                                }}
-                                class="form-control"
-                                id="customFile"
-                              />
-                              {error && error.certificate && (
-                                <p style={{ color: "red" }}>
-                                  {error.certificate}
-                                </p>
-                              )}
-                            </fieldset>
-                          </Col>
-                        </div>
-                      </Row>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button
-                        variant="secondary"
-                        onClick={handleClose3}
-                        style={{ background: "none", color: "#C1C1C1" }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="primary"
-                        style={{ background: "none", color: "#39BEC1" }}
-                        onClick={() => achievementFunc()}
-                      >
-                        Save
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
-                </h2>
-                <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                  Achievements
-                </h2>
-
-                <hr className="mt-2" />
-                <Container>
-                  <Row className="align-items-center row">
-                    <Col>
-                      <Row className="align-items-center">
-                        {isAchievementData.length > 0 &&
-                          isAchievementData.map((event, index) => {
-                            console.log(event, "acheivement");
-                            return (
-                              <>
-                                <Col lg="6" key={index}>
-                                  <div className="p3">
-                                    <h2 className="text-xl font-semibold">
-                                      {event?.title}
-                                    </h2>
-
-                                    <p
-                                      className="text-lg"
-                                      style={{ color: "#7A7979" }}
-                                    >
-                                      {event?.description}
-                                    </p>
-                                  </div>
-                                </Col>
-                                <Col lg="3">
-                                  <div className="p-3 webkit">
-                                    <Button
-                                      className="text-white border-rounded px-3 py-2"
-                                      style={{
-                                        background: "#39BEC1",
-                                        border: "none",
-                                      }}
-                                      onClick={() =>
-                                        (window.location.href = `http://localhost:3000${event.achievement}`)
-                                      }
-                                    >
-                                      see certificate
-                                    </Button>
-                                  </div>
-                                </Col>
-                                <Col lg="3">
-                                  <div className="p-3 webkit">
-                                    <div className="inline-flex">
-                                      <div className="w-10">
-                                        <button
-                                          onClick={handleShow7}
-                                          className="text-white border-rounded"
-                                          style={{
-                                            background: "none",
-                                            border: "none",
-                                          }}
-                                        >
-                                          <BiEdit
-                                            onClick={() =>
-                                              btnAchieveEdit(event)
-                                            }
-                                            style={{
-                                              color: "#39BEC1",
-                                              fontSize: "30px",
-                                            }}
-                                          />
-                                        </button>
-                                        {event.clicked == true && (
-                                          <MyVerticallyCenteredModalAchievement
-                                            show={modalShowAchievement}
-                                            props={event}
-                                            index={index}
-                                            onHide={() => modalshow5(event)}
-                                          />
-                                        )}
-                                      </div>
-                                      <div className="w-10">
-                                        <ImBin
-                                          style={{
-                                            cursor: "pointer",
-                                            color: "#39BEC1",
-                                            fontSize: "30px",
-                                          }}
-                                          onClick={() =>
-                                            btnAchieveDelete(event)
-                                          }
-                                        />
-                                      </div>
-                                      {event.clicked == true && (
-                                        <MyVerticallyCenteredModalAchievementDelete
-                                          show={modalShowAchievementDelete}
-                                          props={event}
-                                          index={index}
-                                          onHide={() => modalshow6(event)}
-                                        />
-                                      )}
-                                    </div>
-                                  </div>
-                                </Col>
-                              </>
-                            );
-                          })}
-                      </Row>
-                    </Col>
-                  </Row>
-                </Container>
-              </div>
-            </div>
-          </Col>
-
-          <Col lg="12">
-            <div className="m-3">
-              <div className="boxshad">
-                <h2 style={{ float: "right" }}>
-                  <Button
-                    onClick={handleShow4}
-                    className="text-white border-rounded px-3"
-                    style={{
-                      background: "none",
-                      border: "none",
-                    }}
-                  >
-                    <AiOutlinePlusCircle
-                      style={{ color: "#39BEC1", fontSize: "30px" }}
-                    />
-                  </Button>
-                  <Modal
-                    show={show4}
-                    onHide={handleClose4}
-                    backdrop="static"
-                    keyboard={false}
-                  >
-                    <Modal.Header closeButton>
-                      <Modal.Title style={{ color: "black" }}>
-                        Languages
-                      </Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                      <Row>
-                        <div className="p-3">
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Language Type
-                              </label>
-                              <Form.Select
-                                aria-label="Default select example"
-                                onClick={(e) =>
-                                  setIsLanguage({
-                                    ...isLanguage,
-                                    languageType: e.target.value,
-                                  })
-                                }
-                              >
-                                <option hidden="">Language Type</option>
-                                <option value="English">English</option>
-                                <option value="Arabic">Arabic</option>
-                                <option value="Spanish">Spanish</option>
-                                <option value="Hindi">Hindi</option>
-                                <option value="Cantonese">Cantonese</option>
-                                <option value="French">French</option>
-                                <option value="German">German</option>
-                                <option value="Italian">Italian</option>
-                                <option value="Japanese">Japanese</option>
-                                <option value="Korean">Korean</option>
-                                <option value="Mandarin">Mandarin</option>
-                                <option value="Bengali">Bengali</option>
-                                <option value="Burmese">Burmese</option>
-                                <option value="Czech">Czech</option>
-                                <option value="Dutch">Dutch</option>
-                                <option value="Greek">Greek</option>
-                                <option value="Hakka">Hakka</option>
-                                <option value="Hungarian">Hungarian</option>
-                                <option value="Hunnanese">Hunnanese</option>
-                                <option value="Malay/Indonesian">
-                                  Malay/Indonesian
-                                </option>
-                                <option value="Nepali">Nepali</option>
-                                <option value="Portuguese">Portuguese</option>
-                                <option value="Russian">Russian</option>
-                                <option value="Shanghainese">
-                                  Shanghainese
-                                </option>
-                                <option value="Swedish">Swedish</option>
-                                <option value="Tagalog">Tagalog</option>
-                                <option value="Telugu">Telugu</option>
-                                <option value="Thai">Thai</option>
-                                <option value="Turkish">Turkish</option>
-                                <option value="Vietnamese">Vietnamese</option>
-                                <option value="Others">Others</option>
-                              </Form.Select>
-                              {error && error.languageType && (
-                                <p style={{ color: "red" }}>
-                                  {error.languageType}
-                                </p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Exam Level
-                              </label>
-                              <input
-                                style={{ width: "100%" }}
-                                className="form-control"
-                                name="lname"
-                                type={"text"}
-                                onChange={(e) =>
-                                  setIsLanguage({
-                                    ...isLanguage,
-                                    examLevel: e.target.value,
-                                  })
-                                }
-                                //   value={user.number}
-                                //   onChange={getUserData}
-                                placeholder="Jay"
-                              />
-                              {error && error.examLevel && (
-                                <p style={{ color: "red" }}>
-                                  {error.examLevel}
-                                </p>
-                              )}
-                            </fieldset>
-                          </Col>
-                          <Col lg="12">
-                            <fieldset>
-                              <label
-                                className="text-lg"
-                                style={{ width: "100%" }}
-                              >
-                                Grading Level
-                              </label>
-                              <input
-                                style={{ width: "100%" }}
-                                className="form-control"
-                                name="lname"
-                                type={"number"}
-                                onChange={(e) =>
-                                  setIsLanguage({
-                                    ...isLanguage,
-                                    gradingLevel: e.target.value,
-                                  })
-                                }
-                                //   value={user.number}
-                                //   onChange={getUserData}
-                              />
-                              {error && error.gradingLevel && (
-                                <p style={{ color: "red" }}>
-                                  {error.gradingLevel}
-                                </p>
-                              )}
-                            </fieldset>
-                          </Col>
-                        </div>
-                      </Row>
-                    </Modal.Body>
-                    <Modal.Footer>
-                      <Button
-                        variant="secondary"
-                        onClick={handleClose4}
-                        style={{ background: "none", color: "#C1C1C1" }}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="primary"
-                        style={{ background: "none", color: "#39BEC1" }}
-                        onClick={() => LanguageFunc()}
-                      >
-                        Save
-                      </Button>
-                    </Modal.Footer>
-                  </Modal>
-                </h2>
-                <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                  Languages
-                </h2>
-
-                <hr className="mt-2" />
-                <Container>
-                  <Row className="align-items-center row">
-                    <Col>
-                      <Table responsive>
-                        <thead className="webkit text-lg">
-                          <tr>
-                            <th></th>
-                            <th style={{ color: "#6A489C" }}>Exam Level</th>
-                            <th style={{ color: "#6A489C" }}>Grading Level</th>
-                            <th></th>
-                          </tr>
-                        </thead>
-                        <tbody className="webkit text-l">
-                          {isLanguageData.length > 0 &&
-                            isLanguageData.map((event, index) => {
-                              return (
-                                <>
-                                  <tr key={index}>
-                                    <td>{event?.languageType}</td>
-                                    <td style={{ color: "#7A7979" }}>
-                                      {event?.examLevel}
-                                    </td>
-                                    <td style={{ color: "#7A7979" }}>
-                                      {event?.gradingLevel}
-                                    </td>
-                                    <td>
-                                      <div>
-                                        <div className="inline-flex">
-                                          <div className="w-10">
-                                            <button
-                                              onClick={handleShow8}
-                                              className="text-white border-rounded"
+                                          >
+                                            <BiEdit
+                                              onClick={() =>
+                                                btnAchieveEdit(event)
+                                              }
                                               style={{
-                                                background: "none",
-                                                border: "none",
+                                                color: "#39BEC1",
+                                                fontSize: "30px",
                                               }}
-                                            >
-                                              <BiEdit
+                                            />
+                                          </button>
+                                          {event.clicked == true && (
+                                            <MyVerticallyCenteredModalAchievement
+                                              show={modalShowAchievement}
+                                              props={event}
+                                              index={index}
+                                              onHide={() => modalshow5(event)}
+                                            />
+                                          )}
+                                        </div>
+                                        <div className="w-10">
+                                          <ImBin
+                                            style={{
+                                              cursor: "pointer",
+                                              color: "#39BEC1",
+                                              fontSize: "30px",
+                                            }}
+                                            onClick={() =>
+                                              btnAchieveDelete(event)
+                                            }
+                                          />
+                                        </div>
+                                        {event.clicked == true && (
+                                          <MyVerticallyCenteredModalAchievementDelete
+                                            show={modalShowAchievementDelete}
+                                            props={event}
+                                            index={index}
+                                            onHide={() => modalshow6(event)}
+                                          />
+                                        )}
+                                      </div>
+                                    </div>
+                                  </Col>
+                                </>
+                              );
+                            })}
+                        </Row>
+                      </Col>
+                    </Row>
+                  </Container>
+                </div>
+              </div>
+            </Col>
+
+            <Col lg="12">
+              <div className="m-3">
+                <div className="boxshad">
+                  <h2 style={{ float: "right" }}>
+                    <Button
+                      onClick={handleShow4}
+                      className="text-white border-rounded px-3"
+                      style={{
+                        background: "none",
+                        border: "none",
+                      }}
+                    >
+                      <AiOutlinePlusCircle
+                        style={{ color: "#39BEC1", fontSize: "30px" }}
+                      />
+                    </Button>
+                    <Modal
+                      show={show4}
+                      onHide={handleClose4}
+                      backdrop="static"
+                      keyboard={false}
+                    >
+                      <Modal.Header closeButton>
+                        <Modal.Title style={{ color: "black" }}>
+                          Languages
+                        </Modal.Title>
+                      </Modal.Header>
+                      <Modal.Body>
+                        <Row>
+                          <div className="p-3">
+                            <Col lg="12">
+                              <fieldset>
+                                <label
+                                  className="text-lg"
+                                  style={{ width: "100%" }}
+                                >
+                                  Language Type
+                                </label>
+                                <Form.Select
+                                  aria-label="Default select example"
+                                  onClick={(e) =>
+                                    setIsLanguage({
+                                      ...isLanguage,
+                                      languageType: e.target.value,
+                                    })
+                                  }
+                                >
+                                  <option hidden="">Language Type</option>
+                                  <option value="English">English</option>
+                                  <option value="Arabic">Arabic</option>
+                                  <option value="Spanish">Spanish</option>
+                                  <option value="Hindi">Hindi</option>
+                                  <option value="Cantonese">Cantonese</option>
+                                  <option value="French">French</option>
+                                  <option value="German">German</option>
+                                  <option value="Italian">Italian</option>
+                                  <option value="Japanese">Japanese</option>
+                                  <option value="Korean">Korean</option>
+                                  <option value="Mandarin">Mandarin</option>
+                                  <option value="Bengali">Bengali</option>
+                                  <option value="Burmese">Burmese</option>
+                                  <option value="Czech">Czech</option>
+                                  <option value="Dutch">Dutch</option>
+                                  <option value="Greek">Greek</option>
+                                  <option value="Hakka">Hakka</option>
+                                  <option value="Hungarian">Hungarian</option>
+                                  <option value="Hunnanese">Hunnanese</option>
+                                  <option value="Malay/Indonesian">
+                                    Malay/Indonesian
+                                  </option>
+                                  <option value="Nepali">Nepali</option>
+                                  <option value="Portuguese">Portuguese</option>
+                                  <option value="Russian">Russian</option>
+                                  <option value="Shanghainese">
+                                    Shanghainese
+                                  </option>
+                                  <option value="Swedish">Swedish</option>
+                                  <option value="Tagalog">Tagalog</option>
+                                  <option value="Telugu">Telugu</option>
+                                  <option value="Thai">Thai</option>
+                                  <option value="Turkish">Turkish</option>
+                                  <option value="Vietnamese">Vietnamese</option>
+                                  <option value="Others">Others</option>
+                                </Form.Select>
+                                {error && error.languageType && (
+                                  <p style={{ color: "red" }}>
+                                    {error.languageType}
+                                  </p>
+                                )}
+                              </fieldset>
+                            </Col>
+                            <Col lg="12">
+                              <fieldset>
+                                <label
+                                  className="text-lg"
+                                  style={{ width: "100%" }}
+                                >
+                                  Exam Level
+                                </label>
+                                <input
+                                  style={{ width: "100%" }}
+                                  className="form-control"
+                                  name="lname"
+                                  type={"text"}
+                                  onChange={(e) =>
+                                    setIsLanguage({
+                                      ...isLanguage,
+                                      examLevel: e.target.value,
+                                    })
+                                  }
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
+                                  placeholder="Jay"
+                                />
+                                {error && error.examLevel && (
+                                  <p style={{ color: "red" }}>
+                                    {error.examLevel}
+                                  </p>
+                                )}
+                              </fieldset>
+                            </Col>
+                            <Col lg="12">
+                              <fieldset>
+                                <label
+                                  className="text-lg"
+                                  style={{ width: "100%" }}
+                                >
+                                  Grading Level
+                                </label>
+                                <input
+                                  style={{ width: "100%" }}
+                                  className="form-control"
+                                  name="lname"
+                                  type={"number"}
+                                  onChange={(e) =>
+                                    setIsLanguage({
+                                      ...isLanguage,
+                                      gradingLevel: e.target.value,
+                                    })
+                                  }
+                                  //   value={user.number}
+                                  //   onChange={getUserData}
+                                />
+                                {error && error.gradingLevel && (
+                                  <p style={{ color: "red" }}>
+                                    {error.gradingLevel}
+                                  </p>
+                                )}
+                              </fieldset>
+                            </Col>
+                          </div>
+                        </Row>
+                      </Modal.Body>
+                      <Modal.Footer>
+                        <Button
+                          variant="secondary"
+                          onClick={handleClose4}
+                          style={{ background: "none", color: "#C1C1C1" }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button
+                          variant="primary"
+                          style={{ background: "none", color: "#39BEC1" }}
+                          onClick={() => LanguageFunc()}
+                        >
+                          Save
+                        </Button>
+                      </Modal.Footer>
+                    </Modal>
+                  </h2>
+                  <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
+                    Languages
+                  </h2>
+
+                  <hr className="mt-2" />
+                  <Container>
+                    <Row className="align-items-center row">
+                      <Col>
+                        <Table responsive>
+                          <thead className="webkit text-lg">
+                            <tr>
+                              <th></th>
+                              <th style={{ color: "#6A489C" }}>Exam Level</th>
+                              <th style={{ color: "#6A489C" }}>
+                                Grading Level
+                              </th>
+                              <th></th>
+                            </tr>
+                          </thead>
+                          <tbody className="webkit text-l">
+                            {isLanguageData.length > 0 &&
+                              isLanguageData.map((event, index) => {
+                                return (
+                                  <>
+                                    <tr key={index}>
+                                      <td>{event?.languageType}</td>
+                                      <td style={{ color: "#7A7979" }}>
+                                        {event?.examLevel}
+                                      </td>
+                                      <td style={{ color: "#7A7979" }}>
+                                        {event?.gradingLevel}
+                                      </td>
+                                      <td>
+                                        <div>
+                                          <div className="inline-flex">
+                                            <div className="w-10">
+                                              <button
+                                                onClick={handleShow8}
+                                                className="text-white border-rounded"
                                                 style={{
+                                                  background: "none",
+                                                  border: "none",
+                                                }}
+                                              >
+                                                <BiEdit
+                                                  style={{
+                                                    color: "#39BEC1",
+                                                    fontSize: "30px",
+                                                  }}
+                                                  onClick={() =>
+                                                    btnLanguageEdit(event)
+                                                  }
+                                                />
+                                              </button>
+                                              {event.clicked == true && (
+                                                <MyVerticallyCenteredModalLanguage
+                                                  show={modalShowLanguage}
+                                                  props={event}
+                                                  index={index}
+                                                  onHide={() =>
+                                                    modalshow7(event)
+                                                  }
+                                                />
+                                              )}
+                                            </div>
+                                            <div className="w-10">
+                                              <ImBin
+                                                style={{
+                                                  cursor: "pointer",
                                                   color: "#39BEC1",
                                                   fontSize: "30px",
                                                 }}
                                                 onClick={() =>
-                                                  btnLanguageEdit(event)
+                                                  btnLanguageDelete(event)
                                                 }
                                               />
-                                            </button>
+                                            </div>
                                             {event.clicked == true && (
-                                              <MyVerticallyCenteredModalLanguage
-                                                show={modalShowLanguage}
+                                              <MyVerticallyCenteredModalLanguageDelete
+                                                show={modalShowLanguageDelete}
                                                 props={event}
                                                 index={index}
-                                                onHide={() => modalshow7(event)}
+                                                onHide={() => modalshow8(event)}
                                               />
                                             )}
                                           </div>
-                                          <div className="w-10">
-                                            <ImBin
-                                              style={{
-                                                cursor: "pointer",
-                                                color: "#39BEC1",
-                                                fontSize: "30px",
-                                              }}
-                                              onClick={() =>
-                                                btnLanguageDelete(event)
-                                              }
-                                            />
-                                          </div>
-                                          {event.clicked == true && (
-                                            <MyVerticallyCenteredModalLanguageDelete
-                                              show={modalShowLanguageDelete}
-                                              props={event}
-                                              index={index}
-                                              onHide={() => modalshow8(event)}
-                                            />
-                                          )}
                                         </div>
-                                      </div>
-                                    </td>
-                                  </tr>
-                                </>
-                              );
-                            })}
+                                      </td>
+                                    </tr>
+                                  </>
+                                );
+                              })}
 
-                          {/* <tr>
+                            {/* <tr>
                             <td>Hindi</td>
                             <td style={{ color: "#7A7979" }}>fgfg</td>
                             <td style={{ color: "#7A7979" }}>65</td>
@@ -5191,16 +5107,30 @@ export const FreelanceProfileView = () => {
                               </div>
                             </td>
                           </tr> */}
-                        </tbody>
-                      </Table>
-                    </Col>
-                  </Row>
-                </Container>
+                          </tbody>
+                        </Table>
+                      </Col>
+                    </Row>
+                  </Container>
+                </div>
               </div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+            </Col>
+          </Row>
+        </Container>
+      ) : (
+        <div
+          style={{
+            height: "100vh",
+            width: "100vw",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {" "}
+          <img src={Loader} style={{ width: 180, height: 180 }} />{" "}
+        </div>
+      )}
     </Container>
   );
 };

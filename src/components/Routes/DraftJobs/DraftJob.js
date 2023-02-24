@@ -15,6 +15,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useNavigate } from "react-router-dom/dist";
 import axios from "../../../utils/axios.api";
+import Loader from "../../../assets/loader.gif";
 
 function MyVerticallyCenteredModal(props) {
   const [isSalaryRange, setisSalaryRange] = useState({
@@ -206,7 +207,7 @@ function MyVerticallyCenteredModal(props) {
       setErrors(newErrors);
     }
   };
-  console.log("errors", errors);
+  // console.log("errors", errors);
   const draftFunc = () => {
     axios
       .post("api/v1/job-post", jobData)
@@ -233,28 +234,6 @@ function MyVerticallyCenteredModal(props) {
 
   const [success, setSuccess] = useState(false);
 
-  // const [errors, setErrors] = useState({
-  //   title: '',
-  //   industry: '',
-  //   jobFunction: '',
-  //   jobSubFunction: '',
-  //   location: '',
-  //   description: '',
-  //   requirements: '',
-  //   educationLevel: '',
-  //   profession: '',
-  //   madeOfWork: '',
-  //   noOfOpenings: '',
-  //   salaryCurrency: '',
-  //   salaryType: '',
-  //   salaryPayFreq: '',
-  //   lte: '',
-  //   gte: '',
-  //   lte: '',
-  //   gte: '',
-  //   isEmail: '',
-
-  // });
   const validateForm = () => {
     let newErrors = {};
     if (!jobData.title) {
@@ -663,7 +642,9 @@ function MyVerticallyCenteredModal(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUALÃ¢â‚¬â€œNO SET HOURS OR DAYS OF WORK</option>
+                    <option>
+                      CASUALÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“NO SET HOURS OR DAYS OF WORK
+                    </option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -1270,7 +1251,6 @@ export const DraftJob = () => {
   const [isEmail, setIsEmail] = useState("");
 
   const [isProfileData, setIsProfileData] = useState({});
-  console.log(draftData, "draft Daaaaaaaaataa");
 
   const date = new Date();
   const initialFun = () => {
@@ -1285,6 +1265,19 @@ export const DraftJob = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    const token = await localStorage.getItem("access-token");
+    if (!token) {
+      navigate("/login");
+    }
   };
 
   useEffect(() => {
@@ -1955,7 +1948,7 @@ export const DraftJob = () => {
                           </option>
                           <option>PART TIME</option>
                           <option>
-                            CASUALÃ¢â‚¬â€œNO SET HOURS OR DAYS OF WORK
+                            CASUALÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“NO SET HOURS OR DAYS OF WORK
                           </option>
                           <option>PROJECT BASED</option>
                           <option>OTHER</option>
@@ -2610,7 +2603,8 @@ export const DraftJob = () => {
               </div>
             </div>
           </Col>
-          {draftData.length &&
+          {draftData.length && draftData ? (
+            draftData.length &&
             draftData.map((event, keys) => {
               return (
                 <Col lg="12">
@@ -2636,18 +2630,11 @@ export const DraftJob = () => {
                             {event._source.modeOfWork}{" "}
                           </p>
                         </div>
-                        <div
-                          style={{
-                            float: "right",
-                            display: "flex",
-                            alignItems: "center",
-                          }}
-                          className="p-3 webkit"
-                        >
-                          <div style={{ display: "block" }}>
+                        <div className="p-3 webkit posting">
+                          <div>
                             <Button
                               // onClick={handleShow}
-                              className="text-white border-rounded px-3"
+                              className="text-white border-rounded px-3 mxxxx"
                               style={{
                                 background: "#39BEC1",
                                 border: "none",
@@ -2687,7 +2674,7 @@ export const DraftJob = () => {
                             )}
                             <Button
                               onClick={handleShow}
-                              className="text-white border-rounded px-3 mx-3"
+                              className="text-white border-rounded px-3"
                               style={{
                                 background: "#39BEC1",
                                 border: "none",
@@ -2710,15 +2697,15 @@ export const DraftJob = () => {
                                 onHide={() => modalshow(event)}
                               />
                             )}
-                            <p>
-                              Posted Date :{" "}
-                              {event._source.createdAt?.substring(0, 10)}{" "}
-                              <span className="mrdg">
-                                Expiry Date :
-                                {event._source.expiryDate?.substring(0, 10)}
-                              </span>
-                            </p>
                           </div>
+                          <p>
+                            Posted Date :{" "}
+                            {event._source.createdAt?.substring(0, 10)}{" "}
+                            <span className="mrdg">
+                              Expiry Date :
+                              {event._source.expiryDate?.substring(0, 10)}
+                            </span>
+                          </p>
                         </div>
                       </div>
                       <Container>
@@ -2830,7 +2817,21 @@ export const DraftJob = () => {
                   </div>
                 </Col>
               );
-            })}
+            })
+          ) : (
+            <div
+              style={{
+                height: "100vh",
+                width: "100vw",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {" "}
+              <img src={Loader} style={{ width: 180, height: 180 }} />{" "}
+            </div>
+          )}
         </Row>
       </Container>
     </Container>

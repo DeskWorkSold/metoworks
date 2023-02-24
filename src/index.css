@@ -184,8 +184,8 @@ fieldset input ,textarea{
   }
   .poppins{
     font-family: 'Poppins', sans-serif;
-
   }
+  
   .accordion{
     --bs-accordion-bg: #fff0;
   }
@@ -227,9 +227,12 @@ fieldset input ,textarea{
   .css-11tgw8h {
     display: flex;
     flex-direction: column;
-    flex: 0 1 0%;
+    flex: 0 1;
     -webkit-box-align: center;
     /* align-items: center; */
+    text-align: -webkit-center;
+    /* justify-content: center; */
+    align-items: center;
 }
 .css-18ki27g {
   margin: 0px;
@@ -321,7 +324,7 @@ fieldset input ,textarea{
 .dzu-dropzone img{
   border-radius: 300px;
   width: 140px !important;
-  height: 140px;
+  height: 140px !important;
   background-size: contain;
 }
 .mrdg{
@@ -342,9 +345,17 @@ fieldset input ,textarea{
 }
 .text-3xl{
     
-  font-size: 1.240rem;
+  font-size: 24px;
+}
+.mxxxx{
+  margin-right: 1rem;
+  margin-left: 1rem;
 }
 @media (min-width: 600px) and (max-width: 681px){
+  .mxxxx{
+    /* margin-left: 0px !important; */
+    margin-right: 10px !important;
+      }
   .text-3xl{
     
     font-size: 1.440rem;
@@ -357,11 +368,57 @@ fieldset input ,textarea{
     font-size: 10px !important;
   }
 }
+.text-2xl{
+  font-size: 18px;
+}
+.text-lg{
+  font-size: 16px;
+}
+.text-xl{
+  font-size: 16px;
+}
 /* .pos-abs{
 position: absolute;
 } */
+.accord{
+  width: 95%;
+  display: flex;
+  justify-content: space-between;
+}
+.fontpxx{
+  color: rgb(148, 147, 147);
+  float: right;
+  align-items: center;
+  display: flex;
+  font-size: 14px;
+}
+.posting{
+  text-align: -webkit-right;
+  float: right;
+}
 @media only screen and (max-width: 992px) {
-  
+  .posting{
+    text-align: -webkit-center;
+    float: none;
+  }
+  .fontpxx{
+    color: rgb(148, 147, 147);
+    float: right;
+    align-items: center;
+    display: contents;
+    font-size: 14px;
+  }
+  .accord{
+    
+    font-size: 19px;
+    width: auto !important;
+    display: flex;
+    justify-content: space-between;
+  }
+  .mxxxx{
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+      }
 /* .pos-abs{
   position: absolute;
   } */
@@ -375,7 +432,6 @@ position: absolute;
   float: none;
   text-align: center;
 }
-
   .boxshad .imgprofile{
     width: 70% !important;
   }
@@ -559,6 +615,7 @@ p{
 }
 .nav-link:focus{
     background-color: #39BEC1;
+    border-radius: 20px;
     color: white;
     padding: 10px;
 }
@@ -710,7 +767,7 @@ p{
     border-radius: 40px;
 }
 #mm1 .swiper-button-next, #mm1 .swiper-button-prev{
-    top: 92% !important;
+    top: 94% !important;
 }
 #paymentmodal .modal-content{
  
@@ -770,6 +827,7 @@ p{
         font-weight: 700;
   }
   .react-tabs__tab--selected{
+    font-weight: 500;
     background: none !important;
     border-color: none !important; 
     text-decoration: underline;
@@ -778,6 +836,7 @@ p{
      border-radius: none !important;
   }
   .react-tabs__tab{
+    font-weight: 500;
     display: inline-block;
     border: none !important;
     border-bottom: none;

@@ -12,6 +12,7 @@ import { BsArrowBarDown, BsBookmark } from "react-icons/bs";
 import { useEffect } from "react";
 import axios from "../../../utils/axios.api";
 import { useNavigate } from "react-router-dom";
+import Loader from "../../../assets/loader.gif";
 
 export const FreelanceFindWork = () => {
   const [modalShowGoogFunc, setModalShowGoogFunc] = useState(false);
@@ -266,6 +267,12 @@ export const FreelanceFindWork = () => {
   const [maxExperience, setMaxExperience] = useState("");
   const [applyShow, setApplyShow] = useState(false);
   const [applyShowError, setApplyShowError] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => {
+      searchFun();
+    }, 1000);
+  }, []);
 
   const searchFun = (props) => {
     console.log(props, "props");
@@ -967,7 +974,7 @@ export const FreelanceFindWork = () => {
                           )}
                           <Button
                             onClick={() => modalshow(values)}
-                            className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
+                            className="text-white border-rounded px-3 py-3 w-48 mt-2"
                             style={{ background: "#C1C1C1", border: "none" }}
                           >
                             VIEW MORE DETAIL
@@ -1111,12 +1118,23 @@ export const FreelanceFindWork = () => {
             );
           })
         ) : (
-          <div style={{ textAlign: "center" }}>
-            {" "}
-            <h1 style={{ fontSize: "3vh", fontWeight: "bolder" }}>
-              {" "}
-              No Opportunities Found{" "}
-            </h1>{" "}
+          <div
+            style={{
+              textAlign: "center",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <h1
+              style={{
+                fontSize: "3vh",
+                fontWeight: "bolder",
+                paddingTop: "80px",
+              }}
+            >
+              No Opportunities Found
+            </h1>
+            <img src={Loader} style={{ width: 180, height: 180 }} />
           </div>
         )}
       </Container>

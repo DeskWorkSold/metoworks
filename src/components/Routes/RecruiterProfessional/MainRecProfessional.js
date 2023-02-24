@@ -26,6 +26,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Toast from "react-bootstrap/Toast";
 import axios from "../../../utils/axios.api";
 import Accordion from "react-bootstrap/Accordion";
+import Loader from "../../../assets/loader.gif";
+import { useNavigate } from "react-router-dom";
 
 function MyVerticallyCenteredModal2(props) {
   const [isSalaryRange, setisSalaryRange] = useState({
@@ -674,7 +676,7 @@ function MyVerticallyCenteredModal2(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUAL–NO SET HOURS OR DAYS OF WORK</option>
+                    <option>CASUALâ€“NO SET HOURS OR DAYS OF WORK</option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -1368,9 +1370,19 @@ export const MainRecProfessional = () => {
     keyword: "",
   });
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    checkAuth();
     searchFun();
   }, []);
+
+  const checkAuth = async () => {
+    const token = await localStorage.getItem("access-token");
+    if (!token) {
+      navigate("/login");
+    }
+  };
 
   const searchFun = () => {
     const reqBody = {
@@ -1500,7 +1512,7 @@ export const MainRecProfessional = () => {
           <Modal.Body className="webkit">
             <h2 className="text-2xl font-bold">10 Tokens</h2>
             <p className="text-lg" style={{ color: "#C1C1C1" }}>
-              10 Tokens to View Proﬁle
+              10 Tokens to View Proï¬le
             </p>
             <div style={{ display: "inline-grid" }}>
               <Button
@@ -2171,12 +2183,17 @@ export const MainRecProfessional = () => {
               );
             })
           ) : (
-            <div style={{ textAlign: "center" }}>
-              {" "}
-              <h1 style={{ fontSize: "3vh", fontWeight: "bolder" }}>
-                {" "}
-                No Job Found{" "}
-              </h1>{" "}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <h1
+                style={{
+                  fontSize: "3vh",
+                  fontWeight: "bolder",
+                  paddingTop: "80px",
+                }}
+              >
+                No Job Found
+              </h1>
+              <img src={Loader} style={{ width: 180, height: 180 }} />
             </div>
           )}
         </Row>

@@ -10,10 +10,12 @@ import { Container, Col, Row, Button, Form, Image } from "react-bootstrap";
 import axios from "../../../utils/axios.api";
 
 import { BsArrowBarDown, BsBookmark } from "react-icons/bs";
+import Loader from "../../../assets/loader.gif";
+import { useNavigate } from "react-router-dom";
 
 export const FreelanceSavedJobs = () => {
   const [isToken, setIsToken] = useState("");
-  const [modalShow, setModalShow] = React.useState(true);
+  const [modalShow, setModalShow] = React.useState(false);
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -22,9 +24,21 @@ export const FreelanceSavedJobs = () => {
   const [applyShow, setApplyShow] = useState(false);
   const [applyShowError, setApplyShowError] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
-    initialFun();
+    checkAuth();
+    setTimeout(() => {
+      initialFun();
+    }, 1000);
   }, []);
+
+  const checkAuth = async () => {
+    const token = await localStorage.getItem("access-token");
+    if (!token) {
+      navigate("/login");
+    }
+  };
 
   const initialFun = (props) => {
     axios
@@ -33,7 +47,7 @@ export const FreelanceSavedJobs = () => {
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data;
-        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+        // console.log(data, "daaaaaaaaataaaaaaaaaaaa");
         // setIsProfileData(data)
         if (props && props.id) {
           setSearchData(
@@ -76,7 +90,7 @@ export const FreelanceSavedJobs = () => {
   //     });
   // };
   const applyFunc = (event) => {
-    console.log(event, "eeeeeeeeeeeeeeee");
+    // console.log(event, "eeeeeeeeeeeeeeee");
     axios
       .post(`api/v1/interview/apply?jobId=${event.id}`)
       .then((res) => {
@@ -95,6 +109,7 @@ export const FreelanceSavedJobs = () => {
   const closeBookmark = (props) => {
     setApplyShow(false);
     setApplyShowError(false);
+    setModalShow(false);
     initialFun(props);
   };
   function MyVerticallyCenteredModal(props) {
@@ -320,19 +335,19 @@ export const FreelanceSavedJobs = () => {
         </Row>
       </Container>
       <hr className="my-2" />
-
-      <Container>
-        {searchData.length > 0 &&
-          searchData.map((items, keys) => {
-            console.log(items, "items");
-            return (
-              <Row>
-                <Col lg="12" key={keys}>
-                  <div className="p-3">
-                    <div className="boxshad">
-                      <Row className="align-items-center">
-                        <Col lg="7">
-                          {/* <p
+      {searchData.length > 0 && searchData ? (
+        <Container>
+          {searchData.length > 0 &&
+            searchData.map((items, keys) => {
+              console.log(items, "items");
+              return (
+                <Row>
+                  <Col lg="12" key={keys}>
+                    <div className="p-3">
+                      <div className="boxshad">
+                        <Row className="align-items-center">
+                          <Col lg="7">
+                            {/* <p
                         className="py-2"
                         style={{
                           float: "right",
@@ -343,48 +358,51 @@ export const FreelanceSavedJobs = () => {
                       >
                         <BsBookmark /> Bookmark
                       </p> */}
-                          <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                            {items?.title}
-                          </h2>
-                          <p style={{ color: "#7A7979" }} className="text-lg">
-                            {items?.empType}
-                          </p>
-                        </Col>
-                        <Col lg="5" className="webkit-right">
-                          <Button
-                            className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
-                            style={{ background: "#39BEC1", border: "none" }}
-                            onClick={() => applyFunc(items)}
-                          >
-                            APPLY
-                          </Button>
-                          {items.clicked && applyShow && (
-                            <MyVerticallyCenteredModalApply
-                              show={items.clicked}
-                              props={items}
-                            />
-                          )}
-                          {items.clicked && applyShowError && (
-                            <MyVerticallyCenteredModalApplyError
-                              show={applyShowError}
-                              props={items}
-                            />
-                          )}
-                          <Button
-                            onClick={() => modalshow(items)}
-                            className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
-                            style={{ background: "#C1C1C1", border: "none" }}
-                          >
-                            VIEW MORE DETAIL
-                          </Button>
-                          {items.clicked == true && (
-                            <MyVerticallyCenteredModal
-                              show={modalShow}
-                              props={items}
-                              onHide={() => modalshow(items)}
-                            />
-                          )}
-                          {/* <Modal
+                            <h2
+                              className="text-3xl"
+                              style={{ color: "#39BEC1" }}
+                            >
+                              {items?.title}
+                            </h2>
+                            <p style={{ color: "#7A7979" }} className="text-lg">
+                              {items?.empType}
+                            </p>
+                          </Col>
+                          <Col lg="5" className="webkit-right">
+                            <Button
+                              className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
+                              style={{ background: "#39BEC1", border: "none" }}
+                              onClick={() => applyFunc(items)}
+                            >
+                              APPLY
+                            </Button>
+                            {items.clicked && applyShow && (
+                              <MyVerticallyCenteredModalApply
+                                show={items.clicked}
+                                props={items}
+                              />
+                            )}
+                            {items.clicked && applyShowError && (
+                              <MyVerticallyCenteredModalApplyError
+                                show={applyShowError}
+                                props={items}
+                              />
+                            )}
+                            <Button
+                              onClick={() => modalshow(items)}
+                              className="text-white border-rounded px-3 py-3 w-48 mt-2"
+                              style={{ background: "#C1C1C1", border: "none" }}
+                            >
+                              VIEW MORE DETAIL
+                            </Button>
+                            {items.clicked == true && modalShow && (
+                              <MyVerticallyCenteredModal
+                                show={modalShow}
+                                props={items}
+                                onHide={() => modalshow(items)}
+                              />
+                            )}
+                            {/* <Modal
                             show={show}
                             onHide={handleClose}
                             backdrop="static"
@@ -534,7 +552,7 @@ export const FreelanceSavedJobs = () => {
                               </Button>
                             </Modal.Footer>
                           </Modal> */}
-                          {/* <Button
+                            {/* <Button
                         className="text-white border-rounded py-2 px-3 w-48"
                         style={{ background: "#39BEC1", border: "none" }}
                       >
@@ -546,117 +564,133 @@ export const FreelanceSavedJobs = () => {
                       >
                         view more details
                       </Button> */}
-                          <p style={{ color: "#7A7979" }} className="text-lg">
-                            Posted Date : {items?.postedDate.substring(0, 10)}
-                            {/* <span className="mrdg">
+                            <p style={{ color: "#7A7979" }} className="text-lg">
+                              Posted Date : {items?.postedDate.substring(0, 10)}
+                              {/* <span className="mrdg">
                               Expiry Date : {items?.expiryDate}{" "}
                             </span> */}
-                          </p>
-                        </Col>
-                      </Row>
-                      <Row className="align-items-center block-for-res">
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Company Name
-                            </h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {items?.companyName}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Job Industry
-                            </h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {items?.industry}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Salary Range
-                            </h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              HKD{items?.salaryRange.gte} - HDK
-                              {items?.salaryRange.lte}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">Location</h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {items?.location}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              No. of candidates
-                            </h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {items?.noOfOpenings}
-                            </h2>
-                          </div>
-                        </Col>
-                      </Row>
-                      <hr className="my-2" />
-                      <Row className="align-items-center">
-                        <Col lg="10">
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Job Description
-                            </h2>
-                            <h2
-                              className="text-l py-3"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {items?.description}
-                            </h2>
-                          </div>
-                        </Col>
+                            </p>
+                          </Col>
+                        </Row>
+                        <Row className="align-items-center block-for-res">
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Company Name
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {items?.companyName}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Job Industry
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {items?.industry}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Salary Range
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                HKD{items?.salaryRange.gte} - HDK
+                                {items?.salaryRange.lte}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Location
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {items?.location}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                No. of candidates
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {items?.noOfOpenings}
+                              </h2>
+                            </div>
+                          </Col>
+                        </Row>
+                        <hr className="my-2" />
+                        <Row className="align-items-center">
+                          <Col lg="10">
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Job Description
+                              </h2>
+                              <h2
+                                className="text-l py-3"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {items?.description}
+                              </h2>
+                            </div>
+                          </Col>
 
-                        <Col lg="2">
-                          <p
-                            className="py-2"
-                            style={{
-                              float: "right",
-                              color: "#7A7979",
-                              fontSize: "25px",
-                              display: "flex",
-                            }}
-                          >
-                            <BsBookmark style={{ color: "#39BEC1" }} />
-                          </p>
-                        </Col>
-                      </Row>
+                          <Col lg="2">
+                            <p
+                              className="py-2"
+                              style={{
+                                float: "right",
+                                color: "#7A7979",
+                                fontSize: "25px",
+                                display: "flex",
+                              }}
+                            >
+                              <BsBookmark style={{ color: "#39BEC1" }} />
+                            </p>
+                          </Col>
+                        </Row>
+                      </div>
                     </div>
-                  </div>
-                </Col>
-              </Row>
-            );
-          })}
-      </Container>
+                  </Col>
+                </Row>
+              );
+            })}
+        </Container>
+      ) : (
+        <div
+          style={{
+            height: "100vh",
+            width: "100vw",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {" "}
+          <img src={Loader} style={{ width: 180, height: 180 }} />
+        </div>
+      )}
     </Container>
   );
 };

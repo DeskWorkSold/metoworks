@@ -471,7 +471,7 @@ export const Signup = () => {
                               //   display: "flex",
                               textAlign: "left",
                             }}
-                            className="py-2"
+                            className="py-2 poppins"
                           >
                             <span
                               style={{
@@ -516,6 +516,16 @@ export const Signup = () => {
                               OR
                             </p> */}
                           </Col>
+                        </div>
+                        <div>
+                          <p className="py-2">
+                            Already have an Account?
+                            <span
+                              style={{ color: "#6A489C", fontWeight: "bold" }}
+                            >
+                              <Link to="/Login"> Log in</Link>
+                            </span>
+                          </p>
                         </div>
                       </Container>
                     </TabPanel>

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Container, Button, Row, Col, Image, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../utils/axios.api";
+import Loader from "../../../assets/loader.gif";
 
 export const FreelanceOffer = () => {
   const navigate = useNavigate();
@@ -11,7 +12,9 @@ export const FreelanceOffer = () => {
 
   useEffect(() => {
     checkAuth();
-    initialFun();
+    setTimeout(() => {
+      initialFun();
+    }, 1000);
   }, []);
 
   const checkAuth = async () => {
@@ -72,17 +75,18 @@ export const FreelanceOffer = () => {
         </Row>
       </Container>
       <hr className="my-2" />
-      <Container>
-        <Col lg="12">
-          {searchData.length > 0 &&
-            searchData.map((event, key) => {
-              return (
-                <>
-                  <div className="p-3">
-                    <div className="boxshad">
-                      <Row>
-                        <Col lg="7">
-                          {/* <p
+      {searchData.length > 0 && searchData ? (
+        <Container>
+          <Col lg="12">
+            {searchData.length > 0 &&
+              searchData.map((event, key) => {
+                return (
+                  <>
+                    <div className="p-3">
+                      <div className="boxshad">
+                        <Row>
+                          <Col lg="7">
+                            {/* <p
                                   className="py-2"
                                   style={{
                                     float: "right",
@@ -94,149 +98,168 @@ export const FreelanceOffer = () => {
                                   <BsBookmark /> Bookmark
                                 </p> */}
 
-                          <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                            {event.recruiter.companyName}
-                          </h2>
-                          <p style={{ color: "#7A7979" }} className="text-lg">
-                            {event.job.title}
-                          </p>
-                        </Col>
-                        <Col lg="5" className="webkit-right">
-                          <Button
-                            className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
-                            style={{ background: "#6A489C", border: "none" }}
-                          >
-                            Revise
-                          </Button>
-                          <Button
-                            className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
-                            style={{ background: "#39BEC1", border: "none" }}
-                            onClick={() => setAcceptFunc(event)}
-                          >
-                            Accept
-                          </Button>
-                          <Button
-                            //   onClick={handleShow}
-                            className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
-                            style={{ background: "#C1272D", border: "none" }}
-                          >
-                            Reject
-                          </Button>
-                        </Col>
-                      </Row>
-
-                      <Row className="align-items-center block-for-res">
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Interview Date & Time
-                            </h2>
                             <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
+                              className="text-3xl"
+                              style={{ color: "#39BEC1" }}
                             >
-                              {event.schedule}
+                              {event.recruiter.companyName}
                             </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Interview Type
-                            </h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {event.type}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">Salary</h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {event.offer.salary}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">Location</h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {event.location}
-                            </h2>
-                          </div>
-                        </Col>
-                      </Row>
-                      {/* <hr className="my-2" /> */}
-                      <Row className="align-items-center">
-                        <Col lg="3">
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Joining Date
-                            </h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {event.offer.joiningDate}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col lg="3">
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">Notes</h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {event.notes}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div
-                            className="py-2"
-                            style={{
-                              float: "right",
-                              color: "#7A7979",
-                              fontSize: "25px",
-                              display: "flex",
-                            }}
-                          >
+                            <p style={{ color: "#7A7979" }} className="text-lg">
+                              {event.job.title}
+                            </p>
+                          </Col>
+                          <Col lg="5" className="webkit-right">
                             <Button
-                              className="rounded-full px-3 py-3 w-48 mx-2"
+                              className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
+                              style={{ background: "#6A489C", border: "none" }}
+                            >
+                              Revise
+                            </Button>
+                            <Button
+                              className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
+                              style={{ background: "#39BEC1", border: "none" }}
+                              onClick={() => setAcceptFunc(event)}
+                            >
+                              Accept
+                            </Button>
+                            <Button
+                              //   onClick={handleShow}
+                              className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
+                              style={{ background: "#C1272D", border: "none" }}
+                            >
+                              Reject
+                            </Button>
+                          </Col>
+                        </Row>
+
+                        <Row className="align-items-center block-for-res">
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Interview Date & Time
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {event.schedule}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Interview Type
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {event.type}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">Salary</h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {event.offer.salary}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Location
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {event.location}
+                              </h2>
+                            </div>
+                          </Col>
+                        </Row>
+                        {/* <hr className="my-2" /> */}
+                        <Row className="align-items-center">
+                          <Col lg="3">
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Joining Date
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {event.offer.joiningDate}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col lg="3">
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">Notes</h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {event.notes}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div
+                              className="py-2"
                               style={{
-                                background: "none",
-                                border: "1px solid #39BEC1",
-                                color: "#39BEC1",
+                                float: "right",
+                                color: "#7A7979",
+                                fontSize: "25px",
+                                display: "flex",
                               }}
                             >
-                              {event.internalState}
-                            </Button>
-                          </div>
-                          {/* <Button
+                              <Button
+                                className="rounded-full px-3 py-3 w-48 mx-2"
+                                style={{
+                                  background: "none",
+                                  border: "1px solid #39BEC1",
+                                  color: "#39BEC1",
+                                }}
+                              >
+                                {event.internalState}
+                              </Button>
+                            </div>
+                            {/* <Button
                               className="text-white border-rounded px-3"
                               style={{ background: "#39BEC1", border: "none" }}
                             >
                               View Profile
                             </Button> */}
-                        </Col>
-                      </Row>
+                          </Col>
+                        </Row>
+                      </div>
                     </div>
-                  </div>
-                </>
-              );
-            })}
-        </Col>
-      </Container>
+                  </>
+                );
+              })}
+          </Col>
+        </Container>
+      ) : (
+        <div
+          style={{
+            height: "100vh",
+            width: "100vw",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {" "}
+          <img src={Loader} style={{ width: 180, height: 180 }} />{" "}
+        </div>
+      )}
     </Container>
   );
 };

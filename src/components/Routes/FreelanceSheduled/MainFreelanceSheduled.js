@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { Container, Button, Row, Col, Image, Form } from "react-bootstrap";
 import Modal from "react-bootstrap/Modal";
-
+import { useNavigate } from "react-router-dom";
+import Loader from "../../../assets/loader.gif";
 import axios from "../../../utils/axios.api";
 
 export const MainFreelanceSheduled = () => {
@@ -13,20 +14,28 @@ export const MainFreelanceSheduled = () => {
   const [isToken, setIsToken] = useState("");
   const [searchData, setSearchData] = useState({});
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     const token = localStorage.getItem("access-token");
     setIsToken(token);
-    initialFun();
+    checkAuth();
+    setTimeout(() => {
+      initialFun();
+    }, 1000);
   }, []);
 
+  const checkAuth = async () => {
+    const token = await localStorage.getItem("access-token");
+    if (!token) {
+      navigate("/login");
+    }
+  };
+
   const initialFun = () => {
-    const param = {
-      from: 0,
-      size: 5,
-    };
     axios
       .get(
-        `api/v1/interview/freelancer?stage=schedule&state=pending&size=${param.size}&from=${param.from}`
+        `api/v1/interview/freelancer?stage=schedule&state=pending&size=${80}&from=${0}`
       )
       .then((res) => {
         // console.log(res, "Initial Data");
@@ -346,17 +355,18 @@ export const MainFreelanceSheduled = () => {
         </Row>
       </Container>
       <hr className="my-2" />
-      <Container>
-        {searchData.length > 0 &&
-          searchData.map((items, keys) => {
-            return (
-              <Row>
-                <Col lg="12">
-                  <div className="p-3">
-                    <div className="boxshad">
-                      <Row>
-                        <Col lg="7">
-                          {/* <p
+      {searchData.length > 0 && searchData ? (
+        <Container>
+          {searchData.length > 0 &&
+            searchData.map((items, keys) => {
+              return (
+                <Row>
+                  <Col lg="12">
+                    <div className="p-3">
+                      <div className="boxshad">
+                        <Row>
+                          <Col lg="7">
+                            {/* <p
                         className="py-2"
                         style={{
                           float: "right",
@@ -367,150 +377,169 @@ export const MainFreelanceSheduled = () => {
                       >
                         <BsBookmark /> Bookmark
                       </p> */}
-                          <h2 className="text-3xl" style={{ color: "#39BEC1" }}>
-                            {items?.recruiter?.companyName}
-                          </h2>
-                          <p style={{ color: "#7A7979" }} className="text-lg">
-                            {items?.job?.title}
-                          </p>
-                        </Col>
-                        <Col lg="5" className="webkit-right">
-                          <Button
-                            className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
-                            style={{ background: "#6A489C", border: "none" }}
-                            // onClick={() => reSchedule(items.id)}
-                            onClick={() => modalshow(items)}
-                          >
-                            Reschedule
-                          </Button>
-                          {items.clicked == true && (
-                            <MyVerticallyCenteredReSchedule
-                              show={modalShow}
-                              props={items}
-                              onHide={() => modalshow(items)}
-                            />
-                          )}
-                          <Button
-                            className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
-                            style={{ background: "#39BEC1", border: "none" }}
-                            // onClick={() => confirmSchedule(items.id)}
-                            onClick={() => modalshowconfirm(items)}
-                          >
-                            Confirm
-                          </Button>
-                          {items.clicked == true && (
-                            <MyVerticallyCenteredConfirm
-                              show={modalShowConfirm}
-                              props={items}
-                              onHide={() => modalshowconfirm(items)}
-                            />
-                          )}
-                          <Button
-                            //   onClick={handleShow}
-                            className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
-                            style={{ background: "#C1272D", border: "none" }}
-                            // onClick={() => rejectSchedule(items.id)}
-                            onClick={() => modalshowdecline(items)}
-                          >
-                            Decline
-                          </Button>
-                          {items.clicked == true && (
-                            <MyVerticallyCenteredDecline
-                              show={modalShowDecline}
-                              props={items}
-                              onHide={() => modalshowdecline(items)}
-                            />
-                          )}
-                        </Col>
-                      </Row>
-                      <Row className="align-items-center block-for-res">
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Interview Date & Time
-                            </h2>
                             <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
+                              className="text-3xl"
+                              style={{ color: "#39BEC1" }}
                             >
-                              {items?.schedule}
+                              {items?.recruiter?.companyName}
                             </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">
-                              Interview Type
-                            </h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {items?.type}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">Notes</h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {items?.notes}
-                            </h2>
-                          </div>
-                        </Col>
-                        <Col>
-                          <div className="p3 py-3">
-                            <h2 className="text-lg font-semibold">Location</h2>
-                            <h2
-                              className="text-lg"
-                              style={{ color: "#7A7979" }}
-                            >
-                              {items?.location}
-                            </h2>
-                          </div>
-                        </Col>
-                      </Row>
-                      <hr className="my-2" />
-                      <Row className="align-items-center">
-                        <Col lg="12">
-                          <div
-                            className="py-2"
-                            style={{
-                              float: "right",
-                              color: "#7A7979",
-                              fontSize: "25px",
-                              display: "flex",
-                            }}
-                          >
+                            <p style={{ color: "#7A7979" }} className="text-lg">
+                              {items?.job?.title}
+                            </p>
+                          </Col>
+                          <Col lg="5" className="webkit-right">
                             <Button
-                              className="rounded-full px-3 py-3 w-48 mx-2"
+                              className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
+                              style={{ background: "#6A489C", border: "none" }}
+                              // onClick={() => reSchedule(items.id)}
+                              onClick={() => modalshow(items)}
+                            >
+                              Reschedule
+                            </Button>
+                            {items.clicked == true && (
+                              <MyVerticallyCenteredReSchedule
+                                show={modalShow}
+                                props={items}
+                                onHide={() => modalshow(items)}
+                              />
+                            )}
+                            <Button
+                              className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
+                              style={{ background: "#39BEC1", border: "none" }}
+                              // onClick={() => confirmSchedule(items.id)}
+                              onClick={() => modalshowconfirm(items)}
+                            >
+                              Confirm
+                            </Button>
+                            {items.clicked == true && (
+                              <MyVerticallyCenteredConfirm
+                                show={modalShowConfirm}
+                                props={items}
+                                onHide={() => modalshowconfirm(items)}
+                              />
+                            )}
+                            <Button
+                              //   onClick={handleShow}
+                              className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
+                              style={{ background: "#C1272D", border: "none" }}
+                              // onClick={() => rejectSchedule(items.id)}
+                              onClick={() => modalshowdecline(items)}
+                            >
+                              Decline
+                            </Button>
+                            {items.clicked == true && (
+                              <MyVerticallyCenteredDecline
+                                show={modalShowDecline}
+                                props={items}
+                                onHide={() => modalshowdecline(items)}
+                              />
+                            )}
+                          </Col>
+                        </Row>
+                        <Row className="align-items-center block-for-res">
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Interview Date & Time
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {items?.schedule}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Interview Type
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {items?.type}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">Notes</h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {items?.notes}
+                              </h2>
+                            </div>
+                          </Col>
+                          <Col>
+                            <div className="p3 py-3">
+                              <h2 className="text-lg font-semibold">
+                                Location
+                              </h2>
+                              <h2
+                                className="text-lg"
+                                style={{ color: "#7A7979" }}
+                              >
+                                {items?.location}
+                              </h2>
+                            </div>
+                          </Col>
+                        </Row>
+                        <hr className="my-2" />
+                        <Row className="align-items-center">
+                          <Col lg="12">
+                            <div
+                              className="py-2"
                               style={{
-                                background: "none",
-                                border: "1px solid #39BEC1",
-                                color: "#39BEC1",
+                                float: "right",
+                                color: "#7A7979",
+                                fontSize: "25px",
+                                display: "flex",
                               }}
                             >
-                              {items?.internalState}
-                            </Button>
-                          </div>
-                          {/* <Button
+                              <Button
+                                className="rounded-full px-3 py-3 w-48 mx-2"
+                                style={{
+                                  background: "none",
+                                  border: "1px solid #39BEC1",
+                                  color: "#39BEC1",
+                                }}
+                              >
+                                {items?.internalState}
+                              </Button>
+                            </div>
+                            {/* <Button
                         className="text-white border-rounded px-3"
                         style={{ background: "#39BEC1", border: "none" }}
                       >
                         View Profile
                       </Button> */}
-                        </Col>
-                      </Row>
+                          </Col>
+                        </Row>
+                      </div>
                     </div>
-                  </div>
-                </Col>
-              </Row>
-            );
-          })}
-      </Container>
+                  </Col>
+                </Row>
+              );
+            })}
+        </Container>
+      ) : (
+        <div
+          style={{
+            height: "100vh",
+            width: "100vw",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {" "}
+          <img src={Loader} style={{ width: 180, height: 180 }} />{" "}
+        </div>
+      )}
     </Container>
   );
 };

@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import axios from "../../../utils/axios.api";
 import { useNavigate } from "react-router-dom/dist";
 import { FilterCenterFocus } from "@mui/icons-material";
+import Loader from "../../../assets/loading.gif";
 
 function MyVerticallyCenteredModal2(props) {
   const [isSalaryRange, setisSalaryRange] = useState({
@@ -581,7 +582,9 @@ function MyVerticallyCenteredModal2(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUALÃ¢â‚¬â€œNO SET HOURS OR DAYS OF WORK</option>
+                    <option>
+                      CASUALÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“NO SET HOURS OR DAYS OF WORK
+                    </option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -1161,9 +1164,19 @@ export const Interview = () => {
   const [isInput, setIsInput] = useState({});
   console.log("interviewFilterdData", interviewFilterdData);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
+    checkAuth();
     searchFunc();
   }, []);
+
+  const checkAuth = async () => {
+    const token = await localStorage.getItem("access-token");
+    if (!token) {
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
     if (filteredCategory && filteredCategory.length > 0) {
@@ -1440,7 +1453,8 @@ export const Interview = () => {
           <Modal.Body className="webkit">
             <h2 className="text-2xl font-bold">10 Tokens</h2>
             <p className="text-lg" style={{ color: "#C1C1C1" }}>
-              10 Tokens to View ProÃƒÆ’Ã‚Â¯Ãƒâ€šÃ‚Â¬Ãƒâ€šÃ‚Âle
+              10 Tokens to View
+              ProÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âle
             </p>
             <div style={{ display: "inline-grid" }}>
               <Button
@@ -2031,27 +2045,38 @@ export const Interview = () => {
         </Row>
       </Container>
       <Container>
-        <div>
+        <div className="d-flex">
           <h2 className="text-2xl">
-            {interviewFilterdData ? interviewFilterdData.length : 0} Total
-            Candidates
-          </h2>
+            {interviewFilterdData ? (
+              interviewFilterdData.length
+            ) : (
+              <img src={Loader} style={{ width: 30, height: 30 }} />
+            )}
+          </h2>{" "}
+          &#160; <h2 className="text-2xl"> Total Candidates </h2>
         </div>
         <Accordion defaultActiveKey="0" flush>
           {filteredCategory &&
+          filteredCategory.length > 0 &&
+          filteredCategory ? (
+            filteredCategory &&
             filteredCategory.length > 0 &&
             filteredCategory.map((items, keys) => {
               console.log(items, "itemsss");
               return (
                 <Accordion.Item eventKey={keys} key={keys}>
                   <Accordion.Header>
-                    {items && items.category} &#160;&#160;&#160;
-                    <span
-                      className="fontpxx"
-                      style={{ color: "rgb(148,147,147)", float: "right" }}
-                    >
-                      {`${items.count} Candidate`}
-                    </span>
+                    <div className="accord">
+                      {items && items.category} &#160;&#160;&#160;
+                      <span className="fontpxx">
+                        {items.count > 0 ? (
+                          items.count
+                        ) : (
+                          <img src={Loader} style={{ width: 20, height: 20 }} />
+                        )}{" "}
+                        &#160; Candidates
+                      </span>
+                    </div>
                   </Accordion.Header>
                   <Accordion.Body>
                     {/* {
@@ -2422,7 +2447,20 @@ export const Interview = () => {
                   </Accordion.Body>
                 </Accordion.Item>
               );
-            })}
+            })
+          ) : (
+            <div
+              style={{
+                height: "100vh",
+                width: "100vw",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <img src={Loader} style={{ width: 180, height: 180 }} />{" "}
+            </div>
+          )}
         </Accordion>
       </Container>
     </Container>

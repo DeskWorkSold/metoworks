@@ -201,12 +201,12 @@ export const Login = () => {
                           </Row>
                           <h3
                             style={{
-                              // fontSize: "15px",
+                              fontSize: "13px",
                               color: "black",
                               //   display: "flex",
                               textAlign: "left",
                             }}
-                            className="py-2 fontpxx"
+                            className="py-2"
                           >
                             <span
                               style={{
@@ -357,12 +357,12 @@ export const Login = () => {
                           </Row>
                           <h3
                             style={{
-                              // fontSize: "15px",
+                              fontSize: "13px",
                               color: "black",
                               //   display: "flex",
                               textAlign: "left",
                             }}
-                            className="py-2 fontpxx"
+                            className="py-2"
                           >
                             <span
                               style={{

@@ -23,13 +23,16 @@
 }
 .nnnnav .nav-link{
     text-align: center;
-    background-color: rgb(57, 190, 193);
+    background: none !important;
     color: rgb(255, 255, 255) !important;
     border-radius: 40px;
     padding: 10px;
 }
 .nnnnav .dropdown-menu .dropdown-item:hover{
     background:none !important;
+}
+.nav-link:focus{
+    color: white !important;
 }
 .nnnnav .dropdown-menu a:hover{
     color: #39bec1 !important;

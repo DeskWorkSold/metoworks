@@ -20,6 +20,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useNavigate } from "react-router-dom/dist";
 import { useEffect } from "react";
 import axios from "../../../utils/axios.api";
+import profilePicture from "../../../assets/profilePicture.png";
+import Loader from "../../../assets/loader.gif";
 
 function MyVerticallyCenteredModal(props) {
   const [isSalaryRange, setisSalaryRange] = useState({
@@ -211,7 +213,6 @@ function MyVerticallyCenteredModal(props) {
       setErrors(newErrors);
     }
   };
-  console.log("errors", errors);
   const draftFunc = () => {
     axios
       .post("api/v1/job-post", jobData)
@@ -238,28 +239,6 @@ function MyVerticallyCenteredModal(props) {
 
   const [success, setSuccess] = useState(false);
 
-  // const [errors, setErrors] = useState({
-  //   title: '',
-  //   industry: '',
-  //   jobFunction: '',
-  //   jobSubFunction: '',
-  //   location: '',
-  //   description: '',
-  //   requirements: '',
-  //   educationLevel: '',
-  //   profession: '',
-  //   madeOfWork: '',
-  //   noOfOpenings: '',
-  //   salaryCurrency: '',
-  //   salaryType: '',
-  //   salaryPayFreq: '',
-  //   lte: '',
-  //   gte: '',
-  //   lte: '',
-  //   gte: '',
-  //   isEmail: '',
-
-  // });
   const validateForm = () => {
     let newErrors = {};
     if (!jobData.title) {
@@ -668,7 +647,9 @@ function MyVerticallyCenteredModal(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUALÃ¢â‚¬â€œNO SET HOURS OR DAYS OF WORK</option>
+                    <option>
+                      CASUALÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“NO SET HOURS OR DAYS OF WORK
+                    </option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -1215,7 +1196,6 @@ export const MainProfile = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [modalShow, setModalShow] = React.useState(false);
-  const [userId, setUserId] = useState("");
   // console.log(userId, 'user ID');
   const [isProfileData, setIsProfileData] = useState({});
 
@@ -1238,20 +1218,32 @@ export const MainProfile = () => {
   const [editProfileData, setEditProfileData] = useState({});
   const [profileImg, setProfileImg] = useState("");
   const [thumbnail, setThumbnail] = useState("");
-
+  const [isLoader, setIsLoader] = useState(false);
+  console.log(isLoader, "isLoader");
   // const [profilePicture, setProfilePicture] = useState('')
 
   // console.log(profilePicture, 'profilePicture');
-  console.log(isProfileData, "isProfileData");
+  // console.log(isProfileData, "isProfileData");
 
   // console.log(profileData, 'profile Data');
+  const navigate = useNavigate();
+
   useEffect(() => {
+    checkAuth();
     setIsToken(localStorage.getItem("access-token"));
-    // let id = localStorage.getItem('id')
-    setUserId();
-    initialFun();
+    setTimeout(() => {
+      setIsLoader(true);
+      initialFun();
+    }, 1000);
     profileImageFunc();
   }, []);
+
+  const checkAuth = async () => {
+    const token = await localStorage.getItem("access-token");
+    if (!token) {
+      navigate("/login");
+    }
+  };
 
   const initialFun = () => {
     axios
@@ -1330,7 +1322,6 @@ export const MainProfile = () => {
 
     let values = Object.values(data);
     values = values.every((e, i) => e !== "");
-    console.log(values, "values");
     if (values) {
       axios
         .post(`api/v1/user/recruiter`, data)
@@ -1387,25 +1378,6 @@ export const MainProfile = () => {
       setEditError(newErrors);
     }
   };
-  console.log("editError", editError);
-
-  const profilePictureUpdate = () => {
-    let formdata = new FormData();
-    Object.entries(profileData).map(([key, value]) => {
-      formdata.append(key, value);
-    });
-    axios
-      .patch(`http://localhost:3000/v1/users/${userId}`, formdata)
-      .then((res) => {
-        console.log(res, "profile data successfully added");
-        // setProfileExp(res.data, "ProfileExp");
-        // ProfileExpData();
-        setProfileData(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   const updateProfileImage = (event) => {
     setThumbnail(event.target.files[0]);
@@ -1423,7 +1395,7 @@ export const MainProfile = () => {
       axios
         .post(`api/v1/user/asset/thumbnail`, formData)
         .then((res) => {
-          console.log("Updated Image");
+          // console.log("Updated Image");
           initialFun();
         })
         .catch((err) => {
@@ -1457,7 +1429,7 @@ export const MainProfile = () => {
           <Image
             onClick={() => FileUploadComponent()}
             style={{ width: "100%" }}
-            src={profileImg}
+            src={profileImg ? profileImg : profilePicture}
           />
 
           <input
@@ -1470,20 +1442,6 @@ export const MainProfile = () => {
         </label>
       );
     };
-
-    // const profileImageUploadHandle = (e) => {
-    //   getFilesFromEvent(e).then((chosenFiles) => {
-    //     let data = chosenFiles
-    //     // console.log(data, 'daaaaaaataaaaa');
-    //     // console.log(chosenFiles, 'choaaaaaaaaaaaaasen File');
-    //     setProfileData({...profileData, image : data})
-    //     if(data) {
-    //       profilePictureUpdate()
-    //     }
-    //   });
-    // }
-
-    // console.log(isProfileData, 'aaaaaaaaa')
 
     return (
       <Dropzone
@@ -1540,558 +1498,573 @@ export const MainProfile = () => {
               </div>
             </div>
           </Col>
-          <Col lg="12">
-            <div className="m-3">
-              <div className="boxshad py-5">
-                <Row className="align-items-center">
-                  <Col lg="3" className="webkit">
-                    <button>
-                      <FileUploadComponent />
-                    </button>
-                  </Col>
-                  <Col lg="3">
-                    <h2 className="text-3xl py-3 robot">
-                      {profileData?.companyName
-                        ? profileData.companyName
-                        : "Gia (PVT) LTD"}{" "}
-                      <br />
-                      <span className="text-xl" style={{ color: "#6A489C" }}>
-                        {profileData?.whatsMakesUsSpecial
-                          ? profileData.whatsMakesUsSpecial
-                          : "A Service Like No Other"}
-                      </span>
-                    </h2>
-                  </Col>
-                  <Col lg="3">
-                    <div className="text-left">
-                      <ul style={{ color: "#6A489C", fontSize: "15px" }}>
-                        <li>
-                          <FontAwesomeIcon
-                            icon={faUserClock}
-                            style={{
-                              color: "#39BEC1",
-
-                              fontWeight: "bolder",
-                            }}
-                          />{" "}
-                          Founded in{" "}
-                          {profileData?.foundedIn
-                            ? profileData.foundedIn
-                            : "2000"}
-                        </li>
-                        <li>
-                          <FontAwesomeIcon
-                            icon={faLocationDot}
-                            style={{
-                              color: "#39BEC1",
-                              fontWeight: "bolder",
-                            }}
-                          />{" "}
-                          {profileData?.headquarters
-                            ? profileData.headquarters
-                            : "USA"}
-                        </li>
-                        <li>
-                          <FontAwesomeIcon
-                            icon={faEarth}
-                            style={{
-                              color: "#39BEC1",
-                              fontWeight: "bolder",
-                            }}
-                          />{" "}
-                          {profileData?.websiteLink}
-                        </li>
-                      </ul>
-                    </div>
-                  </Col>
-                  <Col lg="3">
-                    <div className="webkit" style={{ display: "grid" }}>
-                      <Button
-                        variant="primary"
-                        onClick={() => setModalShow(true)}
-                        className="text-white border-rounded px-3"
-                        style={{ background: "#39BEC1", border: "none" }}
-                      >
-                        <div
-                          className="inline-flex"
-                          style={{ fontSize: "16px", alignItems: "center" }}
-                        >
-                          <BsReceipt />
-                          &nbsp; POST A JOB
-                        </div>
-                      </Button>
-                      <MyVerticallyCenteredModal
-                        show={modalShow}
-                        onHide={() => setModalShow(false)}
-                      />
-
-                      <Button
-                        onClick={handleShow}
-                        className="text-white border-rounded px-3"
-                        style={{
-                          background: "#39BEC1",
-                          border: "none",
-                          marginTop: "10px",
-                        }}
-                      >
-                        <div
-                          className="inline-flex"
-                          style={{ fontSize: "16px", alignItems: "center" }}
-                        >
-                          <BsPencilSquare /> &nbsp; edit profile
-                        </div>
-                      </Button>
-                      <Modal
-                        show={show}
-                        onHide={handleClose}
-                        backdrop="static"
-                        keyboard={false}
-                      >
-                        <Modal.Header closeButton>
-                          <Modal.Title style={{ color: "black" }}>
-                            Edit Recruiter Profile
-                          </Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                          <Row>
-                            <Col lg="6">
-                              <h2
-                                className="text-2xl"
-                                style={{ color: "#39BEC1" }}
-                              >
-                                Personal Info
-                              </h2>
-                              <div className="p-3">
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      First Name
-                                    </label>
-                                    <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      name="fname"
-                                      type={"text"}
-                                      onChange={(e) =>
-                                        setEditProfileData({
-                                          ...editProfileData,
-                                          firstName: e.target.value,
-                                        })
-                                      }
-                                      //   value={user.number}
-                                      //   onChange={getUserData}
-                                      placeholder={profileData?.firstName || ""}
-                                    />
-                                    {editError && editError.firstName && (
-                                      <p style={{ color: "red" }}>
-                                        {editError.firstName}
-                                      </p>
-                                    )}
-                                  </fieldset>
-                                </Col>
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      Last Name
-                                    </label>
-                                    <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      name="lname"
-                                      type={"text"}
-                                      onChange={(e) =>
-                                        setEditProfileData({
-                                          ...editProfileData,
-                                          lastName: e.target.value,
-                                        })
-                                      }
-                                      //   value={user.number}
-                                      //   onChange={getUserData}
-                                      placeholder={profileData?.lastName || ""}
-                                    />
-                                    {editError && editError.lastName && (
-                                      <p style={{ color: "red" }}>
-                                        {editError.lastName}
-                                      </p>
-                                    )}
-                                  </fieldset>
-                                </Col>
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      Email Address
-                                    </label>
-                                    <input
-                                      disabled
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      name="email"
-                                      type={"email"}
-                                      value={profileData?.email || ""}
-                                      onChange={(e) =>
-                                        setEditProfileData({
-                                          ...editProfileData,
-                                          email: e.target.value,
-                                        })
-                                      }
-                                      //   value={user.number}
-                                      //   onChange={getUserData}
-                                      placeholder="gaiaewreeytyrt@gmail.com"
-                                    />
-                                  </fieldset>
-                                </Col>
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      Phone Number
-                                    </label>
-                                    <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      name="email"
-                                      type={"number"}
-                                      onChange={(e) =>
-                                        setEditProfileData({
-                                          ...editProfileData,
-                                          phoneNumber: e.target.value,
-                                        })
-                                      }
-                                      //   value={user.number}
-                                      //   onChange={getUserData}
-                                      placeholder={
-                                        profileData?.phoneNumber || ""
-                                      }
-                                    />
-                                    {editError && editError.phoneNumber && (
-                                      <p style={{ color: "red" }}>
-                                        {editError.phoneNumber}
-                                      </p>
-                                    )}
-                                  </fieldset>
-                                </Col>
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      Founded in
-                                    </label>
-                                    <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      name=""
-                                      type={"number"}
-                                      onChange={(e) =>
-                                        setEditProfileData({
-                                          ...editProfileData,
-                                          founded: e.target.value,
-                                        })
-                                      }
-                                      //   value={user.number}
-                                      //   onChange={getUserData}
-                                      placeholder={profileData?.foundedIn || ""}
-                                    />
-                                    {editError && editError.founded && (
-                                      <p style={{ color: "red" }}>
-                                        {editError.founded}
-                                      </p>
-                                    )}
-                                  </fieldset>
-                                </Col>
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      What makes us special
-                                    </label>
-                                    <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      name="email"
-                                      type={"text"}
-                                      onChange={(e) =>
-                                        setEditProfileData({
-                                          ...editProfileData,
-                                          speciality: e.target.value,
-                                        })
-                                      }
-                                      //   value={user.number}
-                                      //   onChange={getUserData}
-                                      placeholder={
-                                        profileData?.whatsMakesUsSpecial || ""
-                                      }
-                                    />
-                                    {editError && editError.speciality && (
-                                      <p style={{ color: "red" }}>
-                                        {editError.speciality}
-                                      </p>
-                                    )}
-                                  </fieldset>
-                                </Col>
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      Website
-                                    </label>
-                                    <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      name="email"
-                                      type={"text"}
-                                      onChange={(e) =>
-                                        setEditProfileData({
-                                          ...editProfileData,
-                                          websiteLink: e.target.value,
-                                        })
-                                      }
-                                      //   value={user.number}
-                                      //   onChange={getUserData}
-                                      placeholder={
-                                        profileData?.whatsMakesUsSpecial || ""
-                                      }
-                                    />
-                                    {editError && editError.websiteLink && (
-                                      <p style={{ color: "red" }}>
-                                        {editError.websiteLink}
-                                      </p>
-                                    )}
-                                  </fieldset>
-                                </Col>
-                              </div>
-                            </Col>
-                            <Col lg="6">
-                              <h2
-                                className="text-2xl"
-                                style={{ color: "#39BEC1" }}
-                              >
-                                Company Info
-                              </h2>
-                              <div className="p-3">
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      Company Name
-                                    </label>
-
-                                    <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      type={"text"}
-                                      name="firstname"
-                                      onChange={(e) =>
-                                        setEditProfileData({
-                                          ...editProfileData,
-                                          companyName: e.target.value,
-                                        })
-                                      }
-                                      //   value={user.name}
-                                      //   onChange={getUserData}
-                                      placeholder={
-                                        profileData?.companyName || ""
-                                      }
-                                      required
-                                    />
-                                    {editError && editError.companyName && (
-                                      <p style={{ color: "red" }}>
-                                        {editError.companyName}
-                                      </p>
-                                    )}
-                                  </fieldset>
-                                </Col>
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      Company Scope
-                                    </label>
-
-                                    <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      type={"text"}
-                                      name="lastname"
-                                      onChange={(e) =>
-                                        setEditProfileData({
-                                          ...editProfileData,
-                                          sop: e.target.value,
-                                        })
-                                      }
-                                      //   value={user.email}
-                                      //   onChange={getUserData}
-                                      placeholder={
-                                        profileData?.companyScope || ""
-                                      }
-                                      required
-                                    />
-                                    {editError && editError.sop && (
-                                      <p style={{ color: "red" }}>
-                                        {editError.sop}
-                                      </p>
-                                    )}
-                                  </fieldset>
-                                </Col>
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      Salary Range
-                                    </label>
-                                    <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      name="Email"
-                                      type={"text"}
-                                      //   value={user.number}
-                                      //   onChange={getUserData}
-                                      placeholder={
-                                        profileData?.salaryRange || ""
-                                      }
-                                    />
-                                  </fieldset>
-                                </Col>
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      Headquaters
-                                    </label>
-                                    <div style={{ display: "flex" }}>
-                                      <input
-                                        style={{ width: "100%" }}
-                                        className="form-control"
-                                        name="minwork"
-                                        type={"text"}
-                                        onChange={(e) =>
-                                          setEditProfileData({
-                                            ...editProfileData,
-                                            headquarters: e.target.value,
-                                          })
-                                        }
-                                        //   value={user.number}
-                                        //   onChange={getUserData}
-                                        placeholder={
-                                          profileData?.headquarters || ""
-                                        }
-                                      />
-                                    </div>
-                                    {editError && editError.headquarters && (
-                                      <p style={{ color: "red" }}>
-                                        {editError.headquarters}
-                                      </p>
-                                    )}
-                                  </fieldset>
-                                </Col>
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      Company Location
-                                    </label>
-                                    <input
-                                      style={{ width: "100%" }}
-                                      className="form-control"
-                                      name="Email"
-                                      type={"text"}
-                                      onChange={(e) =>
-                                        setEditProfileData({
-                                          ...editProfileData,
-                                          location: e.target.value,
-                                        })
-                                      }
-                                      //   value={user.number}
-                                      //   onChange={getUserData}
-                                      placeholder={
-                                        profileData?.companyLocation || ""
-                                      }
-                                    />
-                                    {editError && editError.companyLocation && (
-                                      <p style={{ color: "red" }}>
-                                        {editError.companyLocation}
-                                      </p>
-                                    )}
-                                  </fieldset>
-                                </Col>
-                                <Col lg="12">
-                                  <fieldset>
-                                    <label
-                                      className="text-lg"
-                                      style={{ width: "100%" }}
-                                    >
-                                      Description
-                                    </label>
-                                    <textarea
-                                      onChange={(e) =>
-                                        setEditProfileData({
-                                          ...editProfileData,
-                                          companyDesc: e.target.value,
-                                        })
-                                      }
-                                      placeholder={
-                                        profileData?.description || ""
-                                      }
-                                      className="form-control"
-                                    />
-                                    {editError && editError.companyDesc && (
-                                      <p style={{ color: "red" }}>
-                                        {editError.companyDesc}
-                                      </p>
-                                    )}
-                                  </fieldset>
-                                </Col>
-                              </div>
-                            </Col>
-                          </Row>
-                        </Modal.Body>
-                        <Modal.Footer>
-                          <Button
-                            variant="secondary"
-                            onClick={handleClose}
-                            style={{ background: "none", color: "#C1C1C1" }}
+          {profileData ? (
+            <>
+              <Col lg="12">
+                <div className="m-3">
+                  <div className="boxshad py-5">
+                    <Row className="align-items-center">
+                      <Col lg="3" className="webkit">
+                        <button>
+                          <FileUploadComponent />
+                        </button>
+                      </Col>
+                      <Col lg="3">
+                        <h2 className="text-3xl py-3 robot">
+                          {profileData?.companyName
+                            ? profileData.companyName
+                            : "Gia (PVT) LTD"}{" "}
+                          <br />
+                          <span
+                            className="text-xl"
+                            style={{ color: "#6A489C" }}
                           >
-                            Cancel
-                          </Button>
+                            {profileData?.whatsMakesUsSpecial
+                              ? profileData.whatsMakesUsSpecial
+                              : "A Service Like No Other"}
+                          </span>
+                        </h2>
+                      </Col>
+                      <Col lg="3">
+                        <div className="text-left">
+                          <ul style={{ color: "#6A489C", fontSize: "15px" }}>
+                            <li>
+                              <FontAwesomeIcon
+                                icon={faUserClock}
+                                style={{
+                                  color: "#39BEC1",
+
+                                  fontWeight: "bolder",
+                                }}
+                              />{" "}
+                              Founded in{" "}
+                              {profileData?.foundedIn
+                                ? profileData.foundedIn
+                                : "2000"}
+                            </li>
+                            <li>
+                              <FontAwesomeIcon
+                                icon={faLocationDot}
+                                style={{
+                                  color: "#39BEC1",
+                                  fontWeight: "bolder",
+                                }}
+                              />{" "}
+                              {profileData?.headquarters
+                                ? profileData.headquarters
+                                : "USA"}
+                            </li>
+                            <li>
+                              <FontAwesomeIcon
+                                icon={faEarth}
+                                style={{
+                                  color: "#39BEC1",
+                                  fontWeight: "bolder",
+                                }}
+                              />{" "}
+                              {profileData?.websiteLink}
+                            </li>
+                          </ul>
+                        </div>
+                      </Col>
+                      <Col lg="3">
+                        <div className="webkit" style={{ display: "grid" }}>
                           <Button
                             variant="primary"
-                            style={{ background: "none", color: "#39BEC1" }}
-                            onClick={profileFunc}
+                            onClick={() => setModalShow(true)}
+                            className="text-white border-rounded px-3"
+                            style={{ background: "#39BEC1", border: "none" }}
                           >
-                            Save
+                            <div
+                              className="inline-flex"
+                              style={{ fontSize: "16px", alignItems: "center" }}
+                            >
+                              <BsReceipt />
+                              &nbsp; POST A JOB
+                            </div>
                           </Button>
-                        </Modal.Footer>
-                      </Modal>
-                    </div>
-                  </Col>
-                </Row>
-                {/* <hr className="my-2" />
+                          <MyVerticallyCenteredModal
+                            show={modalShow}
+                            onHide={() => setModalShow(false)}
+                          />
+
+                          <Button
+                            onClick={handleShow}
+                            className="text-white border-rounded px-3"
+                            style={{
+                              background: "#39BEC1",
+                              border: "none",
+                              marginTop: "10px",
+                            }}
+                          >
+                            <div
+                              className="inline-flex"
+                              style={{ fontSize: "16px", alignItems: "center" }}
+                            >
+                              <BsPencilSquare /> &nbsp; edit profile
+                            </div>
+                          </Button>
+                          <Modal
+                            show={show}
+                            onHide={handleClose}
+                            backdrop="static"
+                            keyboard={false}
+                          >
+                            <Modal.Header closeButton>
+                              <Modal.Title style={{ color: "black" }}>
+                                Edit Recruiter Profile
+                              </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                              <Row>
+                                <Col lg="6">
+                                  <h2
+                                    className="text-2xl"
+                                    style={{ color: "#39BEC1" }}
+                                  >
+                                    Personal Info
+                                  </h2>
+                                  <div className="p-3">
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          First Name
+                                        </label>
+                                        <input
+                                          style={{ width: "100%" }}
+                                          className="form-control"
+                                          name="fname"
+                                          type={"text"}
+                                          onChange={(e) =>
+                                            setEditProfileData({
+                                              ...editProfileData,
+                                              firstName: e.target.value,
+                                            })
+                                          }
+                                          //   value={user.number}
+                                          //   onChange={getUserData}
+                                          placeholder={
+                                            profileData?.firstName || ""
+                                          }
+                                        />
+                                        {editError && editError.firstName && (
+                                          <p style={{ color: "red" }}>
+                                            {editError.firstName}
+                                          </p>
+                                        )}
+                                      </fieldset>
+                                    </Col>
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          Last Name
+                                        </label>
+                                        <input
+                                          style={{ width: "100%" }}
+                                          className="form-control"
+                                          name="lname"
+                                          type={"text"}
+                                          onChange={(e) =>
+                                            setEditProfileData({
+                                              ...editProfileData,
+                                              lastName: e.target.value,
+                                            })
+                                          }
+                                          //   value={user.number}
+                                          //   onChange={getUserData}
+                                          placeholder={
+                                            profileData?.lastName || ""
+                                          }
+                                        />
+                                        {editError && editError.lastName && (
+                                          <p style={{ color: "red" }}>
+                                            {editError.lastName}
+                                          </p>
+                                        )}
+                                      </fieldset>
+                                    </Col>
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          Email Address
+                                        </label>
+                                        <input
+                                          disabled
+                                          style={{ width: "100%" }}
+                                          className="form-control"
+                                          name="email"
+                                          type={"email"}
+                                          value={profileData?.email || ""}
+                                          onChange={(e) =>
+                                            setEditProfileData({
+                                              ...editProfileData,
+                                              email: e.target.value,
+                                            })
+                                          }
+                                          //   value={user.number}
+                                          //   onChange={getUserData}
+                                          placeholder="gaiaewreeytyrt@gmail.com"
+                                        />
+                                      </fieldset>
+                                    </Col>
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          Phone Number
+                                        </label>
+                                        <input
+                                          style={{ width: "100%" }}
+                                          className="form-control"
+                                          name="email"
+                                          type={"number"}
+                                          onChange={(e) =>
+                                            setEditProfileData({
+                                              ...editProfileData,
+                                              phoneNumber: e.target.value,
+                                            })
+                                          }
+                                          //   value={user.number}
+                                          //   onChange={getUserData}
+                                          placeholder={
+                                            profileData?.phoneNumber || ""
+                                          }
+                                        />
+                                        {editError && editError.phoneNumber && (
+                                          <p style={{ color: "red" }}>
+                                            {editError.phoneNumber}
+                                          </p>
+                                        )}
+                                      </fieldset>
+                                    </Col>
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          Founded in
+                                        </label>
+                                        <input
+                                          style={{ width: "100%" }}
+                                          className="form-control"
+                                          name=""
+                                          type={"number"}
+                                          onChange={(e) =>
+                                            setEditProfileData({
+                                              ...editProfileData,
+                                              founded: e.target.value,
+                                            })
+                                          }
+                                          //   value={user.number}
+                                          //   onChange={getUserData}
+                                          placeholder={
+                                            profileData?.foundedIn || ""
+                                          }
+                                        />
+                                        {editError && editError.founded && (
+                                          <p style={{ color: "red" }}>
+                                            {editError.founded}
+                                          </p>
+                                        )}
+                                      </fieldset>
+                                    </Col>
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          What makes us special
+                                        </label>
+                                        <input
+                                          style={{ width: "100%" }}
+                                          className="form-control"
+                                          name="email"
+                                          type={"text"}
+                                          onChange={(e) =>
+                                            setEditProfileData({
+                                              ...editProfileData,
+                                              speciality: e.target.value,
+                                            })
+                                          }
+                                          //   value={user.number}
+                                          //   onChange={getUserData}
+                                          placeholder={
+                                            profileData?.whatsMakesUsSpecial ||
+                                            ""
+                                          }
+                                        />
+                                        {editError && editError.speciality && (
+                                          <p style={{ color: "red" }}>
+                                            {editError.speciality}
+                                          </p>
+                                        )}
+                                      </fieldset>
+                                    </Col>
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          Website
+                                        </label>
+                                        <input
+                                          style={{ width: "100%" }}
+                                          className="form-control"
+                                          name="email"
+                                          type={"text"}
+                                          onChange={(e) =>
+                                            setEditProfileData({
+                                              ...editProfileData,
+                                              websiteLink: e.target.value,
+                                            })
+                                          }
+                                          //   value={user.number}
+                                          //   onChange={getUserData}
+                                          placeholder={
+                                            profileData?.whatsMakesUsSpecial ||
+                                            ""
+                                          }
+                                        />
+                                        {editError && editError.websiteLink && (
+                                          <p style={{ color: "red" }}>
+                                            {editError.websiteLink}
+                                          </p>
+                                        )}
+                                      </fieldset>
+                                    </Col>
+                                  </div>
+                                </Col>
+                                <Col lg="6">
+                                  <h2
+                                    className="text-2xl"
+                                    style={{ color: "#39BEC1" }}
+                                  >
+                                    Company Info
+                                  </h2>
+                                  <div className="p-3">
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          Company Name
+                                        </label>
+
+                                        <input
+                                          style={{ width: "100%" }}
+                                          className="form-control"
+                                          type={"text"}
+                                          name="firstname"
+                                          onChange={(e) =>
+                                            setEditProfileData({
+                                              ...editProfileData,
+                                              companyName: e.target.value,
+                                            })
+                                          }
+                                          //   value={user.name}
+                                          //   onChange={getUserData}
+                                          placeholder={
+                                            profileData?.companyName || ""
+                                          }
+                                          required
+                                        />
+                                        {editError && editError.companyName && (
+                                          <p style={{ color: "red" }}>
+                                            {editError.companyName}
+                                          </p>
+                                        )}
+                                      </fieldset>
+                                    </Col>
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          Company Scope
+                                        </label>
+
+                                        <input
+                                          style={{ width: "100%" }}
+                                          className="form-control"
+                                          type={"text"}
+                                          name="lastname"
+                                          onChange={(e) =>
+                                            setEditProfileData({
+                                              ...editProfileData,
+                                              sop: e.target.value,
+                                            })
+                                          }
+                                          //   value={user.email}
+                                          //   onChange={getUserData}
+                                          placeholder={
+                                            profileData?.companyScope || ""
+                                          }
+                                          required
+                                        />
+                                        {editError && editError.sop && (
+                                          <p style={{ color: "red" }}>
+                                            {editError.sop}
+                                          </p>
+                                        )}
+                                      </fieldset>
+                                    </Col>
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          Salary Range
+                                        </label>
+                                        <input
+                                          style={{ width: "100%" }}
+                                          className="form-control"
+                                          name="Email"
+                                          type={"text"}
+                                          //   value={user.number}
+                                          //   onChange={getUserData}
+                                          placeholder={
+                                            profileData?.salaryRange || ""
+                                          }
+                                        />
+                                      </fieldset>
+                                    </Col>
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          Headquaters
+                                        </label>
+                                        <div style={{ display: "flex" }}>
+                                          <input
+                                            style={{ width: "100%" }}
+                                            className="form-control"
+                                            name="minwork"
+                                            type={"text"}
+                                            onChange={(e) =>
+                                              setEditProfileData({
+                                                ...editProfileData,
+                                                headquarters: e.target.value,
+                                              })
+                                            }
+                                            //   value={user.number}
+                                            //   onChange={getUserData}
+                                            placeholder={
+                                              profileData?.headquarters || ""
+                                            }
+                                          />
+                                        </div>
+                                        {editError &&
+                                          editError.headquarters && (
+                                            <p style={{ color: "red" }}>
+                                              {editError.headquarters}
+                                            </p>
+                                          )}
+                                      </fieldset>
+                                    </Col>
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          Company Location
+                                        </label>
+                                        <input
+                                          style={{ width: "100%" }}
+                                          className="form-control"
+                                          name="Email"
+                                          type={"text"}
+                                          onChange={(e) =>
+                                            setEditProfileData({
+                                              ...editProfileData,
+                                              location: e.target.value,
+                                            })
+                                          }
+                                          //   value={user.number}
+                                          //   onChange={getUserData}
+                                          placeholder={
+                                            profileData?.companyLocation || ""
+                                          }
+                                        />
+                                        {editError &&
+                                          editError.companyLocation && (
+                                            <p style={{ color: "red" }}>
+                                              {editError.companyLocation}
+                                            </p>
+                                          )}
+                                      </fieldset>
+                                    </Col>
+                                    <Col lg="12">
+                                      <fieldset>
+                                        <label
+                                          className="text-lg"
+                                          style={{ width: "100%" }}
+                                        >
+                                          Description
+                                        </label>
+                                        <textarea
+                                          onChange={(e) =>
+                                            setEditProfileData({
+                                              ...editProfileData,
+                                              companyDesc: e.target.value,
+                                            })
+                                          }
+                                          placeholder={
+                                            profileData?.description || ""
+                                          }
+                                          className="form-control"
+                                        />
+                                        {editError && editError.companyDesc && (
+                                          <p style={{ color: "red" }}>
+                                            {editError.companyDesc}
+                                          </p>
+                                        )}
+                                      </fieldset>
+                                    </Col>
+                                  </div>
+                                </Col>
+                              </Row>
+                            </Modal.Body>
+                            <Modal.Footer>
+                              <Button
+                                variant="secondary"
+                                onClick={handleClose}
+                                style={{ background: "none", color: "#C1C1C1" }}
+                              >
+                                Cancel
+                              </Button>
+                              <Button
+                                variant="primary"
+                                style={{ background: "none", color: "#39BEC1" }}
+                                onClick={profileFunc}
+                              >
+                                Save
+                              </Button>
+                            </Modal.Footer>
+                          </Modal>
+                        </div>
+                      </Col>
+                    </Row>
+                    {/* <hr className="my-2" />
               <Row className="align-items-center pl-4">
                 <Col lg="3">
                   <div className="p3 py-3">
@@ -2135,127 +2108,159 @@ export const MainProfile = () => {
                   </Button>
                 </Col>
               </Row> */}
-              </div>
-            </div>
-          </Col>
+                  </div>
+                </div>
+              </Col>
 
-          <Col lg="12">
-            <div className="m-3">
-              <div className="boxshad">
-                <h3 className="text-3xl" style={{ color: "#39BEC1" }}>
-                  Personal Info
-                </h3>
-                <Container>
-                  <Row className="align-items-center ">
-                    <Col lg="4">
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">Full Name</h2>
+              <Col lg="12">
+                <div className="m-3">
+                  <div className="boxshad">
+                    <h3 className="text-3xl" style={{ color: "#39BEC1" }}>
+                      Personal Info
+                    </h3>
+                    <Container>
+                      <Row className="align-items-center ">
+                        <Col lg="4">
+                          <div className="p3">
+                            <h2 className="text-xl font-semibold">Full Name</h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.firstName && profileData?.lastName
-                            ? profileData.firstName + " " + profileData.lastName
-                            : "Gia Jay"}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col lg="4">
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">Email</h2>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {profileData?.firstName && profileData?.lastName
+                                ? profileData.firstName +
+                                  " " +
+                                  profileData.lastName
+                                : "Gia Jay"}
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col lg="4">
+                          <div className="p3">
+                            <h2 className="text-xl font-semibold">Email</h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.email
-                            ? profileData.email
-                            : "gaiaewreeytyrt@gmail.com"}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col lg="4">
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">Phone Number</h2>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {profileData?.email
+                                ? profileData.email
+                                : "gaiaewreeytyrt@gmail.com"}
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col lg="4">
+                          <div className="p3">
+                            <h2 className="text-xl font-semibold">
+                              Phone Number
+                            </h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.phoneNumber
-                            ? profileData.phoneNumber
-                            : "61453472"}
-                        </h2>
-                      </div>
-                    </Col>
-                  </Row>
-                </Container>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {profileData?.phoneNumber
+                                ? profileData.phoneNumber
+                                : "61453472"}
+                            </h2>
+                          </div>
+                        </Col>
+                      </Row>
+                    </Container>
 
-                <h3 className="text-3xl" style={{ color: "#39BEC1" }}>
-                  Company Info
-                </h3>
-                <Container>
-                  <Row className="align-items-center">
-                    <Col lg="3">
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">Company Name</h2>
+                    <h3 className="text-3xl" style={{ color: "#39BEC1" }}>
+                      Company Info
+                    </h3>
+                    <Container>
+                      <Row className="align-items-center">
+                        <Col lg="3">
+                          <div className="p3">
+                            <h2 className="text-xl font-semibold">
+                              Company Name
+                            </h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.companyName
-                            ? profileData.companyName
-                            : "Gia (PVT) LTD"}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col lg="3">
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">Company Scope</h2>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {profileData?.companyName
+                                ? profileData.companyName
+                                : "Gia (PVT) LTD"}
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col lg="3">
+                          <div className="p3">
+                            <h2 className="text-xl font-semibold">
+                              Company Scope
+                            </h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.companyScope
-                            ? profileData.companyScope
-                            : "IT Industry"}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col lg="3">
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">
-                          No. of Employees
-                        </h2>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {profileData?.companyScope
+                                ? profileData.companyScope
+                                : "IT Industry"}
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col lg="3">
+                          <div className="p3">
+                            <h2 className="text-xl font-semibold">
+                              No. of Employees
+                            </h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          5000 Employees
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col lg="3">
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">
-                          Company Location
-                        </h2>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              5000 Employees
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col lg="3">
+                          <div className="p3">
+                            <h2 className="text-xl font-semibold">
+                              Company Location
+                            </h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.companyLocation
-                            ? profileData.companyLocation
-                            : "Huston"}
-                        </h2>
-                      </div>
-                    </Col>
-                    <Col lg="12" className="pt-4">
-                      <div className="p3">
-                        <h2 className="text-xl font-semibold">
-                          Company Description
-                        </h2>
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {profileData?.companyLocation
+                                ? profileData.companyLocation
+                                : "Huston"}
+                            </h2>
+                          </div>
+                        </Col>
+                        <Col lg="12" className="pt-4">
+                          <div className="p3">
+                            <h2 className="text-xl font-semibold">
+                              Company Description
+                            </h2>
 
-                        <h2 className="text-lg" style={{ color: "#7A7979" }}>
-                          {profileData?.companyDesc
-                            ? profileData.companyDesc
-                            : `A .It has survived t is a long established fact that
+                            <h2
+                              className="text-lg"
+                              style={{ color: "#7A7979" }}
+                            >
+                              {profileData?.companyDesc
+                                ? profileData.companyDesc
+                                : `A .It has survived t is a long established fact that
                           a reader will be distracted by the readable content of
                           a page when looking at its layout. The point of using
                           Lorem Ipsum is that it has a more-or-less normal
                           distribution of letters, as opposed to using 'Content
                           here, content here', making it look like readable
                           English.`}
-                        </h2>
-                      </div>
-                    </Col>
-                  </Row>
-                </Container>
-                {/* <hr style={{ border: "1px solid" }} />
+                            </h2>
+                          </div>
+                        </Col>
+                      </Row>
+                    </Container>
+                    {/* <hr style={{ border: "1px solid" }} />
                 <div className="webkit pt-3">
                   <Button
                     className="mx-2 px-3 font-semibold"
@@ -2269,9 +2274,24 @@ export const MainProfile = () => {
                     SEE MORE DETAIL
                   </Button>
                 </div> */}
-              </div>
+                  </div>
+                </div>
+              </Col>
+            </>
+          ) : (
+            <div
+              style={{
+                height: "100vh",
+                width: "100vw",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              {" "}
+              <img src={Loader} style={{ width: 180, height: 180 }} />{" "}
             </div>
-          </Col>
+          )}
         </Row>
       </Container>
     </Container>

@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { Container, Button, Row, Col, Image, Form } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 
@@ -9,8 +10,26 @@ import {
   BsPencilSquare,
   BsReceipt,
 } from "react-icons/bs";
-import { BrowserRouter as Route, Router, Link, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Route,
+  Router,
+  Link,
+  Switch,
+  useNavigate,
+} from "react-router-dom";
 export const PurchasePlan = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    const token = await localStorage.getItem("access-token");
+    if (!token) {
+      navigate("/login");
+    }
+  };
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
