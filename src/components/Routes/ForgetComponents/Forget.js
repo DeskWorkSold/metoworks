@@ -2,13 +2,16 @@ import { React, useState } from "react";
 import { Button, Col, Container, Row } from "react-bootstrap";
 import { BsEyeFill } from "react-icons/bs";
 // import { useState } from "react/cjs/react.development";
+import axios from "../../../utils/axios.api";
 
 export const Forget = () => {
   const [passwordType, setPasswordType] = useState("password");
   const [passwordInput, setPasswordInput] = useState("");
+  const [email, setEmail] = useState('')
   const handlePasswordChange = (evnt) => {
     setPasswordInput(evnt.target.value);
   };
+
   const togglePassword = () => {
     if (passwordType === "password") {
       setPasswordType("text");
@@ -16,6 +19,19 @@ export const Forget = () => {
     }
     setPasswordType("password");
   };
+
+  const resetPassword = () => {
+  axios
+  .post(`api/v1/user/send-reset-pw?email=${email}`)
+  .then((res) => {
+   console.log(res);
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+};
+
+
   return (
     <Container fluid>
       <Container>
@@ -40,11 +56,12 @@ export const Forget = () => {
                   <div className="input-group py-4">
                     <input
                       type={passwordType}
-                      onChange={handlePasswordChange}
-                      value={passwordInput}
+                      // onChange={handlePasswordChange}
+                      // value={passwordInput}
                       name="password"
                       class="form-control py-2"
-                      placeholder="Password"
+                      placeholder="Enter Your Email"
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                     {/* <div className="input-group-btn"> */}
                     <Button onClick={togglePassword}>
@@ -57,7 +74,7 @@ export const Forget = () => {
                   </div>
                 </Col>
                 <Col lg="12" className="py-3">
-                  <Button className="w-full py-3">Reset Password</Button>
+                  <Button className="w-full py-3" onClick={() => resetPassword()}>Reset Password</Button>
                 </Col>
               </Row>
             </div>
