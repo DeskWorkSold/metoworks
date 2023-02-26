@@ -261,7 +261,7 @@ export const ForthSec = () => {
                 <div className="pt-5 pb-3">
                   <Link to="Login">
                     <button
-                      className="text-white px-5 p-2"
+                      className="text-white px-5 p-2 bg-hove"
                       style={{
                         background: "none",
                         borderRadius: "10px",

@@ -146,269 +146,259 @@ export const Login = () => {
                     </TabList>
 
                     <TabPanel>
-                      <Container>
-                        <div className="p-3">
-                          <Row>
+                      <div className="p-3">
+                        <Row>
+                          <Col lg="12">
+                            <fieldset>
+                              {/* <label style={{ width: "100%" }}>First name</label> */}
+                              <input
+                                style={{ width: "100%" }}
+                                className="form-control"
+                                type={"text"}
+                                name="FullName"
+                                //   value={user.name}
+                                //   onChange={getUserData}
+                                onChange={(e) =>
+                                  setFreelancerData({
+                                    ...freelancerData,
+                                    email: e.target.value,
+                                  })
+                                }
+                                placeholder="User Name"
+                                required
+                              />
+                            </fieldset>
+                          </Col>
+                          <Col lg="12">
+                            <fieldset>
+                              {/* <label style={{ width: "100%" }}>First name</label> */}
+                              <input
+                                style={{ width: "100%" }}
+                                className="form-control"
+                                type={"password"}
+                                name="Password"
+                                onChange={(e) =>
+                                  setFreelancerData({
+                                    ...freelancerData,
+                                    password: e.target.value,
+                                  })
+                                }
+                                //   value={user.name}
+                                //   onChange={getUserData}
+                                placeholder="Password"
+                                required
+                              />
+                            </fieldset>
+                          </Col>
+                          {validation && validation.length ? (
                             <Col lg="12">
-                              <fieldset>
-                                {/* <label style={{ width: "100%" }}>First name</label> */}
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  type={"text"}
-                                  name="FullName"
-                                  //   value={user.name}
-                                  //   onChange={getUserData}
-                                  onChange={(e) =>
-                                    setFreelancerData({
-                                      ...freelancerData,
-                                      email: e.target.value,
-                                    })
-                                  }
-                                  placeholder="User Name"
-                                  required
-                                />
-                              </fieldset>
+                              <p style={{ color: "red" }}> {validation} </p>
                             </Col>
-                            <Col lg="12">
-                              <fieldset>
-                                {/* <label style={{ width: "100%" }}>First name</label> */}
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  type={"password"}
-                                  name="Password"
-                                  onChange={(e) =>
-                                    setFreelancerData({
-                                      ...freelancerData,
-                                      password: e.target.value,
-                                    })
-                                  }
-                                  //   value={user.name}
-                                  //   onChange={getUserData}
-                                  placeholder="Password"
-                                  required
-                                />
-                              </fieldset>
-                            </Col>
-                            {validation && validation.length ? (
-                              <Col lg="12">
-                                <p style={{ color: "red" }}> {validation} </p>
-                              </Col>
-                            ) : (
-                              <span> </span>
-                            )}
-                          </Row>
-                          <h3
+                          ) : (
+                            <span> </span>
+                          )}
+                        </Row>
+                        <h3
+                          style={{
+                            fontSize: "13px",
+                            color: "black",
+                            //   display: "flex",
+                            textAlign: "left",
+                          }}
+                          className="py-2"
+                        >
+                          <span
                             style={{
-                              fontSize: "13px",
-                              color: "black",
-                              //   display: "flex",
-                              textAlign: "left",
+                              display: "inline-flex",
+                              color: "#7A7979",
                             }}
-                            className="py-2"
                           >
-                            <span
-                              style={{
-                                display: "inline-flex",
-                                color: "#7A7979",
-                              }}
-                            >
-                              <FormCheck id="check" color="blue" />
-                              &#160;&#160;Keep me logged in
-                            </span>
+                            <FormCheck id="check" color="blue" />
+                            &#160;&#160;Keep me logged in
+                          </span>
+                          <Link to="/Forget">
                             <span style={{ float: "right", color: "#6A489C" }}>
                               Forgot Password?
                             </span>
-                          </h3>
-                          <Col lg="12" className="webkit">
-                            <div className="py-3">
-                              {/* <Link to="/FreelancerProfile"> */}
-                              <Button
-                                className="text-white border-rounded text-xl px-5 py-2 w-2/3"
-                                style={{
-                                  background: "#39BEC1",
-                                  border: "none",
-                                }}
-                                onClick={freelancerFunc}
-                              >
-                                LOGIN
-                              </Button>
-                              {/* </Link> */}
-                            </div>
-                            <p
-                              className="pt-2 text-xl"
-                              style={{ color: "#7A7979" }}
+                          </Link>
+                        </h3>
+                        <Col lg="12" className="webkit">
+                          <div className="py-3">
+                            {/* <Link to="/FreelancerProfile"> */}
+                            <Button
+                              className="border-rounded text-xl px-5 py-2 w-2/3"
+                              onClick={freelancerFunc}
                             >
-                              OR
-                            </p>
-                          </Col>
-                        </div>
-                        <div className="dflex py-3">
-                          <Row className="webkit">
-                            <Col lg="1"></Col>
-                            <Col lg="4">
-                              <BsLinkedin
-                                className="text-7xl"
-                                style={{ color: "#0077B5" }}
-                                onClick={() =>
-                                  setIsLinkedin(isLinkedin ? false : true)
-                                }
-                              />
-                              {isLinkedin && (
-                                <LinkedInUI
-                                  type={"signup"}
-                                  callBackFun={callBackFun}
-                                  style={{ top: -50 }}
-                                />
-                              )}
-                            </Col>
-                            <Col
-                              lg="2"
-                              className="marres"
-                              style={{ marginTop: "35px" }}
-                            >
-                              <hr className="hr" style={{ width: "60px" }} />
-                            </Col>
-                            <Col lg="4">
-                              <BsFacebook
-                                className="text-7xl"
-                                style={{ color: "#4267B2" }}
-                                onClick={() =>
-                                  setIsFacebook(isFacebook ? false : true)
-                                }
-                              />
-                              {isFacebook && (
-                                <FacebookInUI
-                                  type={"signUp"}
-                                  style={{ top: -50 }}
-                                />
-                              )}
-                            </Col>
-                            <Col lg="1"></Col>
-                          </Row>
-                          <div className="pt-40">
-                            <p className="py-2">
-                              Not a member?{" "}
-                              <span
-                                style={{ color: "#6A489C", fontWeight: "bold" }}
-                              >
-                                <Link to="/Signup">Sign up</Link>
-                              </span>
-                            </p>
+                              LOGIN
+                            </Button>
+                            {/* </Link> */}
                           </div>
+                          <p
+                            className="pt-2 text-xl"
+                            style={{ color: "#7A7979" }}
+                          >
+                            OR
+                          </p>
+                        </Col>
+                      </div>
+                      <div className="dflex py-3">
+                        <Row className="webkit">
+                          <Col lg="1"></Col>
+                          <Col lg="4">
+                            <BsLinkedin
+                              className="text-7xl"
+                              style={{ color: "#0077B5" }}
+                              onClick={() =>
+                                setIsLinkedin(isLinkedin ? false : true)
+                              }
+                            />
+                            {isLinkedin && (
+                              <LinkedInUI
+                                type={"signup"}
+                                callBackFun={callBackFun}
+                                style={{ top: -50 }}
+                              />
+                            )}
+                          </Col>
+                          <Col
+                            lg="2"
+                            className="marres"
+                            style={{ marginTop: "35px" }}
+                          >
+                            <hr className="hr" style={{ width: "60px" }} />
+                          </Col>
+                          <Col lg="4">
+                            <BsFacebook
+                              className="text-7xl"
+                              style={{ color: "#4267B2" }}
+                              onClick={() =>
+                                setIsFacebook(isFacebook ? false : true)
+                              }
+                            />
+                            {isFacebook && (
+                              <FacebookInUI
+                                type={"signUp"}
+                                style={{ top: -50 }}
+                              />
+                            )}
+                          </Col>
+                          <Col lg="1"></Col>
+                        </Row>
+                        <div className="pt-40">
+                          <p className="py-2">
+                            Not a member?{" "}
+                            <span
+                              style={{ color: "#6A489C", fontWeight: "bold" }}
+                            >
+                              <Link to="/Signup">Sign up</Link>
+                            </span>
+                          </p>
                         </div>
-                      </Container>
+                      </div>
                     </TabPanel>
 
                     <TabPanel>
-                      <Container>
-                        <div className="p-3">
-                          <Row>
+                      <div className="p-3">
+                        <Row>
+                          <Col lg="12">
+                            <fieldset>
+                              {/* <label style={{ width: "100%" }}>First name</label> */}
+                              <input
+                                style={{ width: "100%" }}
+                                className="form-control"
+                                type={"text"}
+                                name="FullName"
+                                onChange={(e) =>
+                                  setRecruiterData({
+                                    ...recruiterData,
+                                    email: e.target.value,
+                                  })
+                                }
+                                //   value={user.name}
+                                //   onChange={getUserData}
+                                placeholder="User Name"
+                                required
+                              />
+                            </fieldset>
+                          </Col>
+                          <Col lg="12">
+                            <fieldset>
+                              {/* <label style={{ width: "100%" }}>First name</label> */}
+                              <input
+                                style={{ width: "100%" }}
+                                className="form-control"
+                                type={"password"}
+                                name="Password"
+                                onChange={(e) =>
+                                  setRecruiterData({
+                                    ...recruiterData,
+                                    password: e.target.value,
+                                  })
+                                }
+                                //   value={user.name}
+                                //   onChange={getUserData}
+                                placeholder="Password"
+                                required
+                              />
+                            </fieldset>
+                          </Col>
+                          {validation && validation.length ? (
                             <Col lg="12">
-                              <fieldset>
-                                {/* <label style={{ width: "100%" }}>First name</label> */}
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  type={"text"}
-                                  name="FullName"
-                                  onChange={(e) =>
-                                    setRecruiterData({
-                                      ...recruiterData,
-                                      email: e.target.value,
-                                    })
-                                  }
-                                  //   value={user.name}
-                                  //   onChange={getUserData}
-                                  placeholder="User Name"
-                                  required
-                                />
-                              </fieldset>
+                              <p style={{ color: "red" }}> {validation} </p>
                             </Col>
-                            <Col lg="12">
-                              <fieldset>
-                                {/* <label style={{ width: "100%" }}>First name</label> */}
-                                <input
-                                  style={{ width: "100%" }}
-                                  className="form-control"
-                                  type={"password"}
-                                  name="Password"
-                                  onChange={(e) =>
-                                    setRecruiterData({
-                                      ...recruiterData,
-                                      password: e.target.value,
-                                    })
-                                  }
-                                  //   value={user.name}
-                                  //   onChange={getUserData}
-                                  placeholder="Password"
-                                  required
-                                />
-                              </fieldset>
-                            </Col>
-                            {validation && validation.length ? (
-                              <Col lg="12">
-                                <p style={{ color: "red" }}> {validation} </p>
-                              </Col>
-                            ) : (
-                              <span> </span>
-                            )}
-                          </Row>
-                          <h3
+                          ) : (
+                            <span> </span>
+                          )}
+                        </Row>
+                        <h3
+                          style={{
+                            fontSize: "13px",
+                            color: "black",
+                            //   display: "flex",
+                            textAlign: "left",
+                          }}
+                          className="py-2"
+                        >
+                          <span
                             style={{
-                              fontSize: "13px",
-                              color: "black",
-                              //   display: "flex",
-                              textAlign: "left",
+                              display: "inline-flex",
+                              color: "#7A7979",
                             }}
-                            className="py-2"
                           >
-                            <span
-                              style={{
-                                display: "inline-flex",
-                                color: "#7A7979",
-                              }}
-                            >
-                              <FormCheck id="check" color="blue" />
-                              &#160;&#160;Keep me logged in
-                            </span>
+                            <FormCheck id="check" color="blue" />
+                            &#160;&#160;Keep me logged in
+                          </span>
+                          <Link to="/Forget">
                             <span style={{ float: "right", color: "#6A489C" }}>
                               Forgot Password?
                             </span>
-                          </h3>
-                          <Col lg="12" className="webkit">
-                            <div className="py-3">
-                              {/* <Link to="/CompanyProfile"> */}
-                              <Button
-                                className="text-white border-rounded text-xl px-5 py-2 w-2/3"
-                                style={{
-                                  background: "#39BEC1",
-                                  border: "none",
-                                }}
-                                onClick={RecruiteFunc}
-                              >
-                                LOGIN
-                              </Button>
-                              {/* </Link> */}
-                            </div>
-                            {/* <p
+                          </Link>
+                        </h3>
+                        <Col lg="12" className="webkit">
+                          <div className="py-3">
+                            {/* <Link to="/CompanyProfile"> */}
+                            <Button
+                              className="border-rounded text-xl px-5 py-2 w-2/3"
+                              onClick={RecruiteFunc}
+                            >
+                              LOGIN
+                            </Button>
+                            {/* </Link> */}
+                          </div>
+                          {/* <p
                               className="pt-2 text-xl"
                               style={{ color: "#7A7979" }}
                             >
                               OR
                             </p> */}
-                          </Col>
-                        </div>
-                        <p className="py-2">
-                          Not a member?{" "}
-                          <span
-                            style={{ color: "#6A489C", fontWeight: "bold" }}
-                          >
-                            <Link to="/Signup">Sign up</Link>
-                          </span>
-                        </p>
-                      </Container>
+                        </Col>
+                      </div>
+                      <p className="py-2">
+                        Not a member?{" "}
+                        <span style={{ color: "#6A489C", fontWeight: "bold" }}>
+                          <Link to="/Signup">Sign up</Link>
+                        </span>
+                      </p>
                     </TabPanel>
                   </Tabs>
                 </div>

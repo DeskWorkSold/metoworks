@@ -69,19 +69,14 @@ export const MembershipPlanTwo = () => {
                 </h2>
                 <p className="text-lg ">10 Tokens</p>
                 <Button
-                  className="text-white border-rounded text-lg w-2/3 px-5"
-                  style={{
-                    background: "#6A489C",
-                    border: "none",
-                    fontSize: "13px",
-                  }}
+                  className="package-btn text-lg w-2/3 px-5"
                   onClick={() => selectFunc()}
                 >
                   SELECT
                 </Button>
                 {isSelect === true ? (
                   <Button
-                    className="text-white border-rounded text-lg w-2/3 px-5 mt-2"
+                    className="text-white border-rounded text-lg w-2/3 px-5 mt-2 package-btn1"
                     style={{
                       background: "#313131",
                       border: "none",
@@ -122,19 +117,14 @@ export const MembershipPlanTwo = () => {
                 </h2>
                 <p className="text-lg ">10 Tokens</p>
                 <Button
-                  className="text-white border-rounded text-lg w-2/3 px-5"
-                  style={{
-                    background: "#6A489C",
-                    border: "none",
-                    fontSize: "13px",
-                  }}
+                  className="package-btn text-lg w-2/3 px-5"
                   onClick={() => selectFunc1()}
                 >
                   SELECT
                 </Button>
                 {isSelect1 === true ? (
                   <Button
-                    className="text-white border-rounded text-lg w-2/3 px-5 mt-2"
+                    className="text-white border-rounded text-lg w-2/3 px-5 mt-2 package-btn1"
                     style={{
                       background: "#313131",
                       border: "none",
@@ -175,19 +165,14 @@ export const MembershipPlanTwo = () => {
                 </h2>
                 <p className="text-lg ">10 Tokens</p>
                 <Button
-                  className="text-white border-rounded text-lg w-2/3 px-5"
-                  style={{
-                    background: "#6A489C",
-                    border: "none",
-                    fontSize: "13px",
-                  }}
+                  className="package-btn text-lg w-2/3 px-5"
                   onClick={() => selectFunc2()}
                 >
                   SELECT
                 </Button>
                 {isSelect2 === true ? (
                   <Button
-                    className="text-white border-rounded text-lg w-2/3 px-5 mt-2"
+                    className="text-white border-rounded text-lg w-2/3 px-5 mt-2 package-btn1"
                     style={{
                       background: "#313131",
                       border: "none",
@@ -228,19 +213,14 @@ export const MembershipPlanTwo = () => {
                 </h2>
                 <p className="text-lg ">10 Tokens</p>
                 <Button
-                  className="text-white border-rounded text-lg w-2/3 px-5"
-                  style={{
-                    background: "#6A489C",
-                    border: "none",
-                    fontSize: "13px",
-                  }}
+                  className="package-btn text-lg w-2/3 px-5"
                   onClick={() => selectFunc3()}
                 >
                   SELECT
                 </Button>
                 {isSelect3 === true ? (
                   <Button
-                    className="text-white border-rounded text-lg w-2/3 px-5 mt-2"
+                    className="package-btn1 text-white border-rounded text-lg w-2/3 px-5 mt-2 package-btn1"
                     style={{
                       background: "#313131",
                       border: "none",

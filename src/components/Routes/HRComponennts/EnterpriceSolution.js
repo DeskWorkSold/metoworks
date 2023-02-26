@@ -45,7 +45,7 @@ export const EnterpriceSolution = () => {
               contact HireCo experts for the best solution.
             </p>
             <Link to="/Login">
-              <Button className="text-white border-rounded px-5 mt-4">
+              <Button className="border-rounded px-5 mt-4">
                 Contact Me2Works
               </Button>
             </Link>

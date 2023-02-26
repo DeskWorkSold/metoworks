@@ -166,10 +166,8 @@ export const SecBanner = () => {
               />{" "}
               Work-Life balance
             </p>
-            <Link to={token ? 'CompanyProfile' : 'Login'}>
-              <Button className="text-white border-rounded px-3">
-                Post a Job
-              </Button>
+            <Link to={token ? "CompanyProfile" : "Login"}>
+              <Button className=" border-rounded px-3">Post a Job</Button>
             </Link>
           </Col>
         </Row>
@@ -213,10 +211,8 @@ export const SecBanner = () => {
               />{" "}
               Work-Life balance
             </p>
-            <Link to={token ? 'FreelancerFindWork' : 'Login'}>
-              <Button className="text-white border-rounded px-3">
-                FIND A JOB
-              </Button>
+            <Link to={token ? "FreelancerFindWork" : "Login"}>
+              <Button className=" border-rounded px-3">FIND A JOB</Button>
             </Link>
           </Col>
           <Col lg="6" className="webkit">

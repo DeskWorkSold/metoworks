@@ -95,12 +95,7 @@ export const Contact = () => {
                 ></textarea>
               </fieldset>
               <div className="webkit py-4">
-                <Button
-                  className="text-white border-rounded text-lg w-2/3 px-3"
-                  style={{ background: "#39BEC1", border: "none" }}
-                >
-                  add Q&A
-                </Button>
+                <Button className=" text-lg w-2/3 px-3">add Q&A</Button>
               </div>
             </div>
           </Col>

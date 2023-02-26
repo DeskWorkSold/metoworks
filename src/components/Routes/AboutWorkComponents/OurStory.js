@@ -17,12 +17,7 @@ export const OurStory = () => {
             it to make a type specimen book. It has survived
           </p>
 
-          <Button
-            className="text-white border-rounded px-5 mt-3 text-lg"
-            style={{ background: "#39BEC1", border: "none" }}
-          >
-            join Me2Works Family
-          </Button>
+          <Button className="px-5 mt-3 text-lg">join Me2Works Family</Button>
         </div>
       </div>
     </Container>

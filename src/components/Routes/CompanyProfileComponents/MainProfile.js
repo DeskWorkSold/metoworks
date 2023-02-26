@@ -1572,8 +1572,7 @@ export const MainProfile = () => {
                           <Button
                             variant="primary"
                             onClick={() => setModalShow(true)}
-                            className="text-white border-rounded px-3"
-                            style={{ background: "#39BEC1", border: "none" }}
+                            className="border-rounded px-3"
                           >
                             <div
                               className="inline-flex"
@@ -1590,10 +1589,8 @@ export const MainProfile = () => {
 
                           <Button
                             onClick={handleShow}
-                            className="text-white border-rounded px-3"
+                            className="border-rounded px-3"
                             style={{
-                              background: "#39BEC1",
-                              border: "none",
                               marginTop: "10px",
                             }}
                           >

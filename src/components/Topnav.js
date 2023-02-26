@@ -19,7 +19,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useNavigate } from "react-router-dom/dist";
 // import profilePicture from "../assets/profile-picture.png";
-import profilePicture from "../assets/Profile.png";
+import profilePicture from "../assets/profile-picture.png";
 
 export const Topnav = () => {
   const [auth, setAuth] = React.useState(true);
@@ -113,112 +113,109 @@ export const Topnav = () => {
             )}
 
             <NavDropdown title={isNavLink} id="navbarScrollingDropdown">
-              <NavDropdown.Item>
-                <Link
-                  to="/AboutMe"
-                  onClick={() => setIsNavLink("About Me2Works")}
-                >
-                  About Me2Works
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link
-                  to="/HelpSupport"
-                  onClick={() => setIsNavLink("Help & Support")}
-                >
-                  Help & Support
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link
-                  to="/HowWork"
-                  onClick={() => setIsNavLink("How it works")}
-                >
-                  How it works
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link to="/OurStory" onClick={() => setIsNavLink("Our Story")}>
-                  Our Story
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link
-                  to="/WhyMeWorks"
-                  onClick={() => setIsNavLink("Why Me2Works")}
-                >
-                  Why Me2Works
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link
-                  to="/MemberPlans"
-                  onClick={() => setIsNavLink("Membership Plans")}
-                >
-                  Membership Plans
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link
-                  to="/ExtendKnowledge"
-                  onClick={() => setIsNavLink("Extend Knowledge")}
-                >
-                  Extend Knowledge
-                </Link>
-              </NavDropdown.Item>
+              <Link
+                className="dropdown-item"
+                to="/AboutMe"
+                onClick={() => setIsNavLink("About Me2Works")}
+              >
+                About Me2Works
+              </Link>
+
+              <Link
+                className="dropdown-item"
+                to="/HelpSupport"
+                onClick={() => setIsNavLink("Help & Support")}
+              >
+                Help & Support
+              </Link>
+
+              <Link
+                className="dropdown-item"
+                to="/HowWork"
+                onClick={() => setIsNavLink("How it works")}
+              >
+                How it works
+              </Link>
+
+              <Link
+                className="dropdown-item"
+                to="/OurStory"
+                onClick={() => setIsNavLink("Our Story")}
+              >
+                Our Story
+              </Link>
+
+              <Link
+                className="dropdown-item"
+                to="/WhyMeWorks"
+                onClick={() => setIsNavLink("Why Me2Works")}
+              >
+                Why Me2Works
+              </Link>
+
+              <Link
+                className="dropdown-item"
+                to="/MemberPlans"
+                onClick={() => setIsNavLink("Membership Plans")}
+              >
+                Membership Plans
+              </Link>
+
+              <Link
+                className="dropdown-item"
+                to="/ExtendKnowledge"
+                onClick={() => setIsNavLink("Extend Knowledge")}
+              >
+                Extend Knowledge
+              </Link>
             </NavDropdown>
             <NavDropdown title={isHrNavLink} id="navbarScrollingDropdown">
-              <NavDropdown.Item>
-                <Link
-                  to="/Agreement"
-                  onClick={() => setIsHrNavLink("Agreement")}
-                >
-                  Agreement
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link
-                  to="/HRsupport"
-                  onClick={() => setIsHrNavLink("HR Support")}
-                >
-                  HR Support{" "}
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link
-                  to="/Enterprice"
-                  onClick={() => setIsHrNavLink("Enterprise Solutions")}
-                >
-                  Enterprise Solutions
-                </Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link
-                  to="/FreeContact"
-                  onClick={() => setIsHrNavLink("FreeContact")}
-                >
-                  Contact
-                </Link>
-              </NavDropdown.Item>
+              {/* <NavDropdown.Item> */}
+              <Link
+                role="button"
+                className="dropdown-item"
+                tabindex="0"
+                data-rr-ui-dropdown-item
+                to="/Agreement"
+                onClick={() => setIsHrNavLink("Agreement")}
+              >
+                Agreement
+              </Link>
+              {/* </NavDropdown.Item> */}
+
+              <Link
+                className="dropdown-item"
+                to="/HRsupport"
+                onClick={() => setIsHrNavLink("HR Support")}
+              >
+                HR Support{" "}
+              </Link>
+
+              <Link
+                className="dropdown-item"
+                to="/Enterprice"
+                onClick={() => setIsHrNavLink("Enterprise Solutions")}
+              >
+                Enterprise Solutions
+              </Link>
+
+              <Link
+                to="/FreeContact"
+                className="dropdown-item"
+                onClick={() => setIsHrNavLink("FreeContact")}
+              >
+                Contact
+              </Link>
             </NavDropdown>
             {!isToken && !isToken?.length > 0 ? (
               <>
-                <Nav.Link>
-                  <Button
-                    className="text-black"
-                    style={{ background: "none", border: "none" }}
-                  >
-                    <Link to="/Login">Login</Link>
-                  </Button>
-                </Nav.Link>
-                <Nav.Link>
-                  <Button
-                    className="text-white border-rounded"
-                    style={{ background: "#39BEC1", border: "none" }}
-                  >
-                    <Link to="/Signup">Sign up</Link>
-                  </Button>
-                </Nav.Link>
+                <Link to="/Login" className="nav-link">
+                  <Button>Login</Button>
+                </Link>
+
+                <Link to="/Signup" className="nav-link">
+                  <Button>Sign up</Button>
+                </Link>
               </>
             ) : (
               <Nav.Link className="profileWidth">

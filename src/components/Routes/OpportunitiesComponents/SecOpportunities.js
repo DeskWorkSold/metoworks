@@ -268,18 +268,8 @@ export const SecOpportunities = () => {
                       }
                     ></input>
 
-                    <Button
-                      className="text-white border-rounded"
-                      style={{ background: "#39BEC1", border: "none" }}
-                      onClick={() => searchFun()}
-                    >
-                      Search
-                    </Button>
-                    <Button
-                      className="text-white border-rounded mx-2"
-                      style={{ background: "#39BEC1", border: "none" }}
-                      onClick={() => resetFun()}
-                    >
+                    <Button onClick={() => searchFun()}>Search</Button>
+                    <Button className="mx-2" onClick={() => resetFun()}>
                       Reset
                     </Button>
                   </div>
@@ -699,8 +689,7 @@ export const SecOpportunities = () => {
                         </Col>
                         <Col lg="5" className="webkit-right">
                           <Button
-                            className="text-white border-rounded px-3 py-3 w-48 mx-2 mt-2"
-                            style={{ background: "#39BEC1", border: "none" }}
+                            className=" border-rounded px-3 py-3 w-48 mx-2 mt-2"
                             onClick={() => applyJobFunc(values)}
                           >
                             APPLY

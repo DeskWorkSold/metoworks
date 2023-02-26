@@ -37,6 +37,7 @@ import { FreelancerSheduled } from "./components/Routes/FreelancerSheduled";
 import { FreelanceMainOffer } from "./components/Routes/FreelanceMainOffer";
 import FacebookInUI from "./components/Routes/facebook";
 import { Navigate } from "react-router-dom";
+import { Forget } from "./components/Routes/ForgetComponents/Forget";
 
 function App() {
   const navigate = useNavigate();
@@ -81,6 +82,7 @@ function App() {
         <Route path="/FreeContact" element={<Contact />} />
         <Route path="/Login" element={<LoaginMain />} />
         <Route path="/Signup" element={<MainSignin />} />
+        <Route path="/Forget" element={<Forget />} />
         <Route path="/facebook" element={<FacebookInUI />} />
         {/* Recruiter */}
         <Route path="/CompanyProfile" element={<CompanyProfile />} />
