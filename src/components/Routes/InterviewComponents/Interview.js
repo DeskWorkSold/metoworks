@@ -1703,7 +1703,6 @@ export const Interview = () => {
             <h2 className="text-2xl font-bold">10 Tokens</h2>
             <p className="text-lg" style={{ color: "#C1C1C1" }}>
               10 Tokens to View
-              ProÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¯ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Âle
             </p>
             <div style={{ display: "inline-grid" }}>
               <Button
@@ -2700,13 +2699,13 @@ export const Interview = () => {
             <div
               style={{
                 height: "100vh",
-                width: "100vw",
+                width: "100%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
               }}
             >
-              <img src={Loader} style={{ width: 180, height: 180 }} />{" "}
+              <img src={Loader} style={{ width: 30, height: 30 }} />
             </div>
           )}
         </Accordion>

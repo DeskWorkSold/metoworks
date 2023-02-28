@@ -38,6 +38,10 @@ import { FreelanceMainOffer } from "./components/Routes/FreelanceMainOffer";
 import FacebookInUI from "./components/Routes/facebook";
 import { Navigate } from "react-router-dom";
 import { Forget } from "./components/Routes/ForgetComponents/Forget";
+import { RecruiterShedule } from "./components/Routes/RecruiterShedule&Offer/RecruiterShedule";
+import { RecruiterOffer } from "./components/Routes/RecruiterShedule&Offer/RecruiterOffer";
+import { RecMainOffer } from "./components/Routes/RecMainOffer";
+import { RecMainShedule } from "./components/Routes/RecMainShedule";
 
 function App() {
   const navigate = useNavigate();
@@ -89,6 +93,8 @@ function App() {
         <Route path="/PublishedJob" element={<MainPublishJobs />} />
         <Route path="/DraftJob" element={<MainDraftJobs />} />
         <Route path="/Interview" element={<MainInterview />} />
+        <Route path="/RecruiterSheduled" element={<RecMainShedule />} />
+        <Route path="/RecruiterOffeer" element={<RecMainOffer />} />
         <Route path="/Professional" element={<RecuriterProfessional />} />
         <Route path="/PurchasePlan" element={<MainPurchasePlan />} />
         <Route path="/RenewPlan" element={<RenewPlanMain />} />

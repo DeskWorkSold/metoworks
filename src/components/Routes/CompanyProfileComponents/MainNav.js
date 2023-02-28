@@ -7,6 +7,7 @@ import { BrowserRouter as Route, Router, Link, Switch } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import "../CompanyProfileComponents/BotNav.css";
+import { NavDropdown } from "react-bootstrap";
 
 export const MainNav = () => {
   return (
@@ -33,9 +34,25 @@ export const MainNav = () => {
             <Link to="/DraftJob" className="nav-link">
               Draft Jobs{" "}
             </Link>
-            <Link to="/Interview" className="nav-link">
-              Interviews
-            </Link>
+            <NavDropdown title="Interviews" id="navbarScrollingDropdown">
+           
+              <NavDropdown.Item>
+                <Link to="/Interview">
+                Interviews
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link to="/RecruiterSheduled">
+                  Scheduled
+                </Link>
+              </NavDropdown.Item>
+              <NavDropdown.Item>
+                <Link to="/RecruiterOffeer">
+                  Offer
+                </Link>
+              </NavDropdown.Item>
+            </NavDropdown>
+          
             {/* <NavDropdown title="Link" id="navbarScrollingDropdown">
             <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
             <NavDropdown.Item href="#action4">

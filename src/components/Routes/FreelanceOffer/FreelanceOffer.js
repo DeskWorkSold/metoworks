@@ -8,6 +8,9 @@ import Loader from "../../../assets/loader.gif";
 export const FreelanceOffer = () => {
   const navigate = useNavigate();
   const [searchData, setSearchData] = useState({});
+  const [modalShowAccept,setModalShowAccept] = useState(false)
+  const [modalShowRevise,setModalShowRevise] = useState(false)
+  const [modalShowReject,setModalShowReject] = useState(false)
   console.log(searchData);
 
   useEffect(() => {
@@ -40,12 +43,14 @@ export const FreelanceOffer = () => {
   };
 
   const setAcceptFunc = (event) => {
+    let eventVal = event.clicked == true
     axios
       .post(`api/v1/interview/offer/confirm?id=${event.id}`)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data;
-        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+        // console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+        modalshowaccept(eventVal)
         // setIsProfileData(data)
         setTimeout(() => {
           initialFun();
@@ -54,6 +59,176 @@ export const FreelanceOffer = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const revisedFunc = (event) => {
+    let eventVal = event.clicked == true
+    axios
+      .post(`api/v1/interview/offer/freelancer/revise?id=${event.id}`)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data.data;
+        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+        // setIsProfileData(data)
+        modalshowrevise(eventVal)
+        setTimeout(() => {
+          initialFun();
+        }, 1000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const rejectFunc = (event) => {
+    let eventVal = event.clicked == true
+    axios
+      .post(`api/v1/interview/offer/reject?id=${event.id}`)
+      .then((res) => {
+        // console.log(res, "Initial Data");
+        let data = res.data.data;
+        // console.log(data, "daaaaaaaaataaaaaaaaaaaa");
+        
+        modalshowreject(eventVal)
+        // setIsProfileData(data)
+        setTimeout(() => {
+          initialFun();
+        }, 1000);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  
+
+  // Revise
+  function MyVerticallyCenteredRevise(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Revise</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Revised succesfully</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+
+  const modalshowrevise = (event) => {
+    // console.log(event, "funtion event");
+    if (event.clicked == true) {
+      event.clicked = false;
+      setModalShowRevise(false);
+    } else {
+      setModalShowRevise(true);
+      event.clicked = true;
+    }
+  };
+
+   // Accept
+   function MyVerticallyCenteredAccept(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Accept</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Accept succesfully</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+
+  const modalshowaccept = (event) => {
+    // console.log(event, "funtion event");
+    if (event.clicked == true) {
+      event.clicked = false;
+      setModalShowAccept(false);
+    } else {
+      setModalShowAccept(true);
+      event.clicked = true;
+    }
+  };
+
+  // Reject
+  function MyVerticallyCenteredReject(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Reject</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Reject Succesfully</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+
+  const modalshowreject = (event) => {
+    // console.log(event, "funtion event");
+    if (event.clicked == true) {
+      event.clicked = false;
+      setModalShowReject(false);
+    } else {
+      setModalShowReject(true);
+      event.clicked = true;
+    }
   };
 
   return (
@@ -112,9 +287,17 @@ export const FreelanceOffer = () => {
                             <Button
                               className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
                               style={{ background: "#6A489C", border: "none" }}
+                              onClick={() => revisedFunc(event)}
                             >
                               Revise
                             </Button>
+                            {event.clicked == true && (
+                              <MyVerticallyCenteredRevise
+                                show={modalShowRevise}
+                                props={event}
+                                onHide={() => modalshowrevise(event)}
+                              />
+                            )}
                             <Button
                               className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
                               style={{ background: "#39BEC1", border: "none" }}
@@ -122,13 +305,28 @@ export const FreelanceOffer = () => {
                             >
                               Accept
                             </Button>
+                            {event.clicked == true && (
+                              <MyVerticallyCenteredAccept
+                                show={modalShowAccept}
+                                props={event}
+                                onHide={() => modalshowaccept(event)}
+                              />
+                            )}
                             <Button
                               //   onClick={handleShow}
                               className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
                               style={{ background: "#C1272D", border: "none" }}
+                              onClick={() => rejectFunc(event)}
                             >
                               Reject
                             </Button>
+                            {event.clicked == true && (
+                              <MyVerticallyCenteredReject
+                                show={modalShowReject}
+                                props={event}
+                                onHide={() => modalshowreject(event)}
+                              />
+                            )}
                           </Col>
                         </Row>
 
