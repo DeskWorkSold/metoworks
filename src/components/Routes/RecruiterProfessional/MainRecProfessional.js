@@ -437,7 +437,9 @@ function MyVerticallyCenteredModal2(props) {
                     <option>
                       Banking and Financial Institue Professionals
                     </option>
-                    <option>Insurance Professionals (back-end functions</option>
+                    <option>
+                      Insurance Professionals (back-end functions)
+                    </option>
                     <option>IT Professionals (Specific Fields)</option>
                     <option>Manufacturing</option>
                     <option>Finance and Accounting</option>
@@ -473,9 +475,258 @@ function MyVerticallyCenteredModal2(props) {
                       setJobData({ ...jobData, jobSubFunction: e.target.value })
                     }
                   >
-                    <option value="DEFAULT" disabled="">
-                      Sub Job Function
-                    </option>
+                    {jobData?.jobFunction == "DEFAULT" && (
+                      <option value="" disabled="">
+                        Sub Job Function
+                      </option>
+                    )}
+                    {jobData?.jobFunction == "HR & Admin" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          HR Director / Manager
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Admin Manager
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          C&B Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Training Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Organizational Development Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Recruiters
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          APAC HR
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "General Management" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          International HR
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          EMEA HR
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          CEO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          COO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          CFO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          CTO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          CMO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          CIO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          In-House Legal Council
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Finance and Accounting" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Financial Controller
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          International / Regional FC
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Accounting Manager
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Finance Manager
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Internal Audit
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Sales and Marketing" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Sales and Marketing Director
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Digital Marketer
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Regional / International Marketer
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Local Corp. Marketer
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          O2O Experts
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction ==
+                      "Banking and Financial Institue Professionals" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Banking and Financial Institue Professionals
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Funds Professionals
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Responsible Director
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction ==
+                      "Insurance Professionals (back-end functions)" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Actuary
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Team Leaders
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Trainers
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Policy Admin
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction ==
+                      "IT Professionals (Specific Fields)" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Network Security
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Hackers (White)
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Fin Tech
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          MedTech
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          BioTech
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Manufacturing" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Automation Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Plastic Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Mechanic Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          China Plants Management
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Regional Plants Management
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Regional Legal Advisors
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction ==
+                      "Real Estate (Surveyers / reasearchers etc.)" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Surveyers (All Aspects)
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Researchers
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Valuation and Advisory
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Property Management
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Sales Leaders
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Leasing Leaders
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Project Managements
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Investment Management
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Capital Market
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Professional Designers" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Interial Design
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Graphic Designer
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Hotel interial design
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Retail store design
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Lecturers / Teachers" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Marketing
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Legal
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Languages
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          STEAM
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          International Business
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Engineering / Architect" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Chief Engineer
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Project Manager
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Architect
+                        </option>
+                      </>
+                    )}
                   </Form.Select>
                   {errors && errors.jobSubFunction && (
                     <p style={{ color: "red" }}>{errors.jobSubFunction}</p>
@@ -676,7 +927,7 @@ function MyVerticallyCenteredModal2(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUALâ€“NO SET HOURS OR DAYS OF WORK</option>
+                    <option>CASUAL–NO SET HOURS OR DAYS OF WORK</option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -1263,7 +1514,7 @@ function MyVerticallyCenteredModal1(props) {
                 <option>Finance and Accounting</option>
                 <option>Sales and Marketing</option>
                 <option>Banking and Financial Institue Professionals</option>
-                <option>Insurance Professionals (back-end functions</option>
+                <option>Insurance Professionals (back-end functions)</option>
                 <option>IT Professionals (Specific Fields)</option>
                 <option>Manufacturing</option>
                 <option>Finance and Accounting</option>
@@ -1712,7 +1963,7 @@ export const MainRecProfessional = () => {
                         aria-label="Default select example"
                         onChange={(e) => setJobFunction(e.target.value)}
                       >
-                        <option hidden="">Select Job Function</option>
+                        <option value="DEFAULT">Select Job Function</option>
                         <option>HR &amp; Admin</option>
                         <option>General Management</option>
                         <option>Finance and Accounting</option>
@@ -1755,7 +2006,258 @@ export const MainRecProfessional = () => {
                         aria-label="Default select example"
                         onChange={(e) => setSubJobFunction(e.target.value)}
                       >
-                        <option hidden="">Select Sub Job Function</option>
+                        {jobFunction == "DEFAULT" && (
+                          <option value="" disabled="">
+                            Sub Job Function
+                          </option>
+                        )}
+                        {jobFunction == "HR & Admin" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              HR Director / Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Admin Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              C&B Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Training Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Organizational Development Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Recruiters
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              APAC HR
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "General Management" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              International HR
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              EMEA HR
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CEO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              COO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CFO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CTO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CMO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CIO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              In-House Legal Council
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Finance and Accounting" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Financial Controller
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              International / Regional FC
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Accounting Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Finance Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Internal Audit
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Sales and Marketing" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Sales and Marketing Director
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Digital Marketer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Regional / International Marketer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Local Corp. Marketer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              O2O Experts
+                            </option>
+                          </>
+                        )}
+                        {jobFunction ==
+                          "Banking and Financial Institue Professionals" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Banking and Financial Institue Professionals
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Funds Professionals
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Responsible Director
+                            </option>
+                          </>
+                        )}
+                        {jobFunction ==
+                          "Insurance Professionals (back-end functions)" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Actuary
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Team Leaders
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Trainers
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Policy Admin
+                            </option>
+                          </>
+                        )}
+                        {jobFunction ==
+                          "IT Professionals (Specific Fields)" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Network Security
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Hackers (White)
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Fin Tech
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              MedTech
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              BioTech
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Manufacturing" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Automation Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Plastic Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Mechanic Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              China Plants Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Regional Plants Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Regional Legal Advisors
+                            </option>
+                          </>
+                        )}
+                        {jobFunction ==
+                          "Real Estate (Surveyers / reasearchers etc.)" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Surveyers (All Aspects)
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Researchers
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Valuation and Advisory
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Property Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Sales Leaders
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Leasing Leaders
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Project Managements
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Investment Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Capital Market
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Professional Designers" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Interial Design
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Graphic Designer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Hotel interial design
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Retail store design
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Lecturers / Teachers" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Marketing
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Legal
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Languages
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              STEAM
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              International Business
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Engineering / Architect" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Chief Engineer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Project Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Architect
+                            </option>
+                          </>
+                        )}
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -2055,7 +2557,7 @@ export const MainRecProfessional = () => {
                           >
                             <Button
                               className="border-rounded text-2xl"
-                              onClick={() => modalshowtoast(event)}
+                              // onClick={() => modalshowtoast(event)}
                               style={{
                                 background: "none",
                                 color: "#C1C1C1",
@@ -2063,13 +2565,13 @@ export const MainRecProfessional = () => {
                             >
                               <BsBookmark />
                             </Button>
-                            {event.clicked == true && (
+                            {/* {event.clicked == true && (
                               <MyVerticallyCenteredModalToast
                                 show={showToast}
                                 props={event}
                                 onHide={() => modalshowtoast(event)}
                               />
-                            )}
+                            )} */}
                           </div>
                         </Col>
 
@@ -2171,7 +2673,7 @@ export const MainRecProfessional = () => {
                                 style={{
                                   fontWeight: "bolder",
                                 }}
-                              />
+                              />{" "}
                               {event?._source?.country}
                             </h2>
                           </div>

@@ -16,7 +16,7 @@ export const ThirdSec = () => {
         </h2>
 
         <Row>
-          <Col lg="3">
+          <Col>
             <div className="padnng">
               <div className="package-box webkit py-4">
                 <div className="numbers-box">
@@ -32,7 +32,7 @@ export const ThirdSec = () => {
               </div>
             </div>
           </Col>
-          <Col lg="3">
+          <Col>
             <div className="padnng">
               <div className="package-box webkit py-4">
                 <div className="numbers-box">
@@ -48,7 +48,7 @@ export const ThirdSec = () => {
               </div>
             </div>
           </Col>
-          <Col lg="3">
+          <Col>
             <div className="padnng">
               <div className="package-box webkit py-4">
                 <div className="numbers-box">
@@ -64,7 +64,7 @@ export const ThirdSec = () => {
               </div>
             </div>
           </Col>
-          <Col lg="3">
+          <Col>
             <div className="padnng">
               <div className="package-box webkit py-4">
                 <div className="numbers-box">

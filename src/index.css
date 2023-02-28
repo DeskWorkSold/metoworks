@@ -332,9 +332,9 @@ fieldset input ,textarea{
 }
 @media only screen and (max-width: 768px) {
  
-.boxshad .btn{
+/* .boxshad .btn{
   width: 85% !important;
- }
+ } */
 }
 .box-center{
   text-align: -webkit-center;
@@ -352,6 +352,17 @@ fieldset input ,textarea{
   margin-left: 1rem;
 }
 @media (min-width: 600px) and (max-width: 681px){
+  .package-box {
+    padding: 10px;
+    align-items: center;
+    /* height: 488px; */
+    background-color: white;
+    border-radius: 322px;
+    border: 17px solid #6a489cb3;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: space-between;
+}
   .mxxxx{
     /* margin-left: 0px !important; */
     margin-right: 10px !important;
@@ -397,6 +408,9 @@ position: absolute;
   float: right;
 }
 @media only screen and (max-width: 992px) {
+  .w-mm{
+    width: auto !important;
+  }
   .posting{
     text-align: -webkit-center;
     float: none;
@@ -624,12 +638,12 @@ p{
     font-size: 1.5rem;
     padding: 20px;
 }
-.nav-link:focus{
+/* .nav-link:focus{
     background-color: #39BEC1;
     border-radius: 20px;
     color: white;
     padding: 10px;
-}
+} */
 .nav-link link{
   background: none;
 }
@@ -648,8 +662,8 @@ p{
   display: block;
 }
 .numbers-box{
-  height: 150px;
-    width: 150px;
+  height: 130px;
+    width: 130px;
     border-radius: 100px;
     background-color: #39BEC1;
     display: grid;
@@ -849,16 +863,14 @@ color: white !important;
     background: #39bec1;
 }
 #mm1 .swiper-button-prev:hover{
- border-radius: 0% !important;
- transition-duration: 1ms;
+  background: #39bec1;
 }
 #mm1 .swiper-button-next:hover{
-  border-radius: 0% !important;
-  transition-duration: 1ms;
+  background: #39bec1;
 }
 #mm1 .swiper-button-prev{
     padding: 23px;
-    background: #39bec1;
+    background-color: #808080cf;
     left: 45%;
     border-radius: 40px;
 }
@@ -872,9 +884,12 @@ color: white !important;
 .MuiTabs-indicator {
   display: none;
 }
+.react-tabs__tab{
+  color: #7A7979;
+}
 #mm1 .swiper-button-next{
     padding: 23px;
-    background: #39bec1;
+    background: #808080cf;
     /* left: 45% !important; */
     border-radius: 40px;
     right: 45%;

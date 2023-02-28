@@ -43,7 +43,7 @@ import { Link, useNavigate } from "react-router-dom";
 import ModelComponents from "../ModelComponents/ModelComponents";
 import { duration, FormGroup, Stack, Switch, Typography } from "@mui/material";
 import { styled } from "@mui/material";
-import profilePicture from "../../../assets/profilePicture.png";
+import profilePicture from "../../../assets/profilePicture.jpg";
 import Loader from "../../../assets/loader.gif";
 
 // import { Buffer } from 'buffer'
@@ -2921,7 +2921,7 @@ export const FreelanceProfileView = () => {
                         >
                           <div
                             className="inline-flex"
-                            style={{ fontSize: "18px" }}
+                            style={{ fontSize: "18px", alignItems: "center" }}
                           >
                             <BsReceiptCutoff />
                             &nbsp; VIEW CV

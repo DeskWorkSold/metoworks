@@ -6,6 +6,16 @@
     text-align: -webkit-center;
     border-left: 1px solid white !important;
 }
+#bot .nav-link:nth-child(1){
+    border-left: none !important;
+}
 #bot{
     z-index: 1;
+}
+#bot .nav-link:focus{
+    border-radius: 0px !important;
+}
+#bot .nav-link:hover{
+    text-decoration: underline;
+    color: #efefef;
 }

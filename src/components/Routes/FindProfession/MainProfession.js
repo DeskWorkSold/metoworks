@@ -22,29 +22,28 @@ import { useNavigate } from "react-router-dom";
 // import "swiper/css/scrollbar";
 
 export const MainProfession = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
-    checkAuth()
-  }, [])
+    checkAuth();
+  }, []);
 
-  const checkAuth  = async () => {
+  const checkAuth = async () => {
     const token = await localStorage.getItem("access-token");
-    if(!token){
-      navigate('/login')
+    if (!token) {
+      navigate("/login");
     }
-  }
-  const [jobIndustry, setJobIndustry] = useState('');
-  const [languageType, setLanguage] = useState('');
-  const [educationLevel, setEducationLevel] = useState('');
-  const [city, setCity] = useState('');
-  const [jobFunction, setJobFunction] = useState('');
-  const [subJobFunction, setSubJobFunction] = useState('');
-  const [minSalary, setMinSalary] = useState('');
-  const [maxSalary, setMaxSalary] = useState('');
-  const [minExperience, setMinExperience] = useState('');
-  const [maxExperience, setMaxExperience] = useState('');
+  };
+  const [jobIndustry, setJobIndustry] = useState("");
+  const [languageType, setLanguage] = useState("");
+  const [educationLevel, setEducationLevel] = useState("");
+  const [city, setCity] = useState("");
+  const [jobFunction, setJobFunction] = useState("");
+  const [subJobFunction, setSubJobFunction] = useState("");
+  const [minSalary, setMinSalary] = useState("");
+  const [maxSalary, setMaxSalary] = useState("");
+  const [minExperience, setMinExperience] = useState("");
+  const [maxExperience, setMaxExperience] = useState("");
   const [isSearch, setIsSearch] = useState({
     keyword: "",
   });
@@ -55,19 +54,55 @@ export const MainProfession = () => {
 
   const searchFun = () => {
     const reqBody = {
-      "keyword": isSearch.keyword,
-      "filter": []
-  };
+      keyword: isSearch.keyword,
+      filter: [],
+    };
 
-  if(jobIndustry) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobIndustry":jobIndustry}}}});
-  if(city) reqBody?.filter?.push({"term": {"city":city}});
-  if(jobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobFunction":jobFunction}}}});
-  if(jobFunction && subJobFunction) reqBody?.filter?.push({"nested":{"path":"experience","query":{"term":{"experience.jobSubFunction":subJobFunction}}}});
-  if(minSalary && maxSalary) reqBody?.filter?.push({"range":{"salaryRange":{"gte":minSalary,"lte":maxSalary}}});
-  if(minExperience && maxExperience) reqBody?.filter?.push( {"range":{"expYears":{"gte":minExperience,"lte":maxExperience}}});
-  if(educationLevel) reqBody?.filter?.push({"nested":{"path":"education","query":{"term":{"education.educationLevel":educationLevel}}}});
-  if(languageType) reqBody?.filter?.push({"nested":{"path":"language","query":{"term":{"language.languageType":languageType}}}});
-  console.log(reqBody, 'eeeeeeeeeeeee');
+    if (jobIndustry)
+      reqBody?.filter?.push({
+        nested: {
+          path: "experience",
+          query: { term: { "experience.jobIndustry": jobIndustry } },
+        },
+      });
+    if (city) reqBody?.filter?.push({ term: { city: city } });
+    if (jobFunction)
+      reqBody?.filter?.push({
+        nested: {
+          path: "experience",
+          query: { term: { "experience.jobFunction": jobFunction } },
+        },
+      });
+    if (jobFunction && subJobFunction)
+      reqBody?.filter?.push({
+        nested: {
+          path: "experience",
+          query: { term: { "experience.jobSubFunction": subJobFunction } },
+        },
+      });
+    if (minSalary && maxSalary)
+      reqBody?.filter?.push({
+        range: { salaryRange: { gte: minSalary, lte: maxSalary } },
+      });
+    if (minExperience && maxExperience)
+      reqBody?.filter?.push({
+        range: { expYears: { gte: minExperience, lte: maxExperience } },
+      });
+    if (educationLevel)
+      reqBody?.filter?.push({
+        nested: {
+          path: "education",
+          query: { term: { "education.educationLevel": educationLevel } },
+        },
+      });
+    if (languageType)
+      reqBody?.filter?.push({
+        nested: {
+          path: "language",
+          query: { term: { "language.languageType": languageType } },
+        },
+      });
+    console.log(reqBody, "eeeeeeeeeeeee");
     axios
       .post(`api/v1/job-post?from=0&size=4&submitted=true`, reqBody)
       .then((res) => {
@@ -277,8 +312,10 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Industry
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setJobIndustry(e.target.value)}>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setJobIndustry(e.target.value)}
+                      >
                         <option hidden="">Select Job Industry</option>
                         <option>Universities / Education</option>
                         <option>Manufacturing</option>
@@ -330,8 +367,10 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Job Function
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) =>setJobFunction(e.target.value)}>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setJobFunction(e.target.value)}
+                      >
                         <option hidden="">Select Job Function</option>
                         <option>HR &amp; Admin</option>
                         <option>General Management</option>
@@ -371,10 +410,262 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Sub Job Function
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setSubJobFunction(e.target.value)}
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setSubJobFunction(e.target.value)}
                       >
-                        <option hidden="">Select Sub Job Function</option>
+                        {jobFunction == "DEFAULT" && (
+                          <option value="" disabled="">
+                            Sub Job Function
+                          </option>
+                        )}
+                        {jobFunction == "HR & Admin" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              HR Director / Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Admin Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              C&B Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Training Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Organizational Development Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Recruiters
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              APAC HR
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "General Management" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              International HR
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              EMEA HR
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CEO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              COO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CFO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CTO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CMO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CIO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              In-House Legal Council
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Finance and Accounting" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Financial Controller
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              International / Regional FC
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Accounting Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Finance Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Internal Audit
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Sales and Marketing" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Sales and Marketing Director
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Digital Marketer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Regional / International Marketer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Local Corp. Marketer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              O2O Experts
+                            </option>
+                          </>
+                        )}
+                        {jobFunction ==
+                          "Banking and Financial Institue Professionals" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Banking and Financial Institue Professionals
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Funds Professionals
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Responsible Director
+                            </option>
+                          </>
+                        )}
+                        {jobFunction ==
+                          "Insurance Professionals (back-end functions)" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Actuary
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Team Leaders
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Trainers
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Policy Admin
+                            </option>
+                          </>
+                        )}
+                        {jobFunction ==
+                          "IT Professionals (Specific Fields)" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Network Security
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Hackers (White)
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Fin Tech
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              MedTech
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              BioTech
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Manufacturing" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Automation Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Plastic Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Mechanic Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              China Plants Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Regional Plants Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Regional Legal Advisors
+                            </option>
+                          </>
+                        )}
+                        {jobFunction ==
+                          "Real Estate (Surveyers / reasearchers etc.)" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Surveyers (All Aspects)
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Researchers
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Valuation and Advisory
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Property Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Sales Leaders
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Leasing Leaders
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Project Managements
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Investment Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Capital Market
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Professional Designers" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Interial Design
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Graphic Designer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Hotel interial design
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Retail store design
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Lecturers / Teachers" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Marketing
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Legal
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Languages
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              STEAM
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              International Business
+                            </option>
+                          </>
+                        )}
+                        {jobFunction == "Engineering / Architect" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Chief Engineer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Project Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Architect
+                            </option>
+                          </>
+                        )}
                       </Form.Select>
                       {/* <input
                 style={{ width: "100%" }}
@@ -416,8 +707,9 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Language
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setLanguage(e.target.value)}
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setLanguage(e.target.value)}
                       >
                         <option hidden="">Select Language</option>
                         <option value="English">English</option>
@@ -479,8 +771,7 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Company Name
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      >
+                      <Form.Select aria-label="Default select example">
                         <option>Enter Company Name</option>
                         <option value="1">One</option>
                         <option value="2">Two</option>
@@ -534,7 +825,7 @@ export const MainProfession = () => {
                           className="form-control"
                           name="Email"
                           type={"email"}
-                      onChange={(e) => setMinSalary(e.target.value)}
+                          onChange={(e) => setMinSalary(e.target.value)}
                           //   value={user.number}
                           //   onChange={getUserData}
                           placeholder="Enter Min Salary 
@@ -548,7 +839,7 @@ export const MainProfession = () => {
                           type={"email"}
                           //   value={user.number}
                           //   onChange={getUserData}
-                      onChange={(e) =>setMaxSalary(e.target.value)}
+                          onChange={(e) => setMaxSalary(e.target.value)}
                           placeholder="Enter Max Salary 
 
                 "
@@ -592,8 +883,9 @@ export const MainProfession = () => {
                       <label className="text-2xl" style={{ width: "100%" }}>
                         Location
                       </label>
-                      <Form.Select aria-label="Default select example"
-                      onChange={(e) => setCity(e.target.value)}
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => setCity(e.target.value)}
                       >
                         <option hidden="">Select Job Location</option>
                         <option>Central and Western</option>

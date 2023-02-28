@@ -113,7 +113,7 @@ export const FreelanceSavedJobs = () => {
     initialFun(props);
   };
   function MyVerticallyCenteredModal(props) {
-    // console.log(props, "proooooooooops");
+    console.log(props, "proooooooooops");
     return (
       <div>
         <Modal
@@ -132,29 +132,29 @@ export const FreelanceSavedJobs = () => {
                 <ul style={{ listStyle: "none" }}>
                   <li>
                     <p className="text-lg">
-                      <span className="font-semibold">Title:</span>{" "}
+                      <span className="font-semibold">Title : </span>{" "}
                       {props?.props?.title}
                     </p>
                   </li>
                   <li>
                     <p className="text-lg">
-                      <span className="font-semibold">Industry:</span>{" "}
+                      <span className="font-semibold">Industry : </span>{" "}
                       {props?.props?.industry}
                     </p>
                   </li>
-                  <li>
+                  {/* <li>
                     <p className="text-lg">
                       <span className="font-semibold">Job Function : </span>{" "}
                       General Management
                     </p>
-                  </li>
+                  </li> */}
                   <li>
                     <p className="text-lg">
-                      <span className="font-semibold">Job Location :</span>{" "}
-                      Central and Western
+                      <span className="font-semibold">Job Location : </span>{" "}
+                      {props?.props?.location}
                     </p>
                   </li>
-                  <li>
+                  {/* <li>
                     <p className="text-lg">
                       <span className="font-semibold">Description :</span>{" "}
                       simply dummy text of the printing and typesetting
@@ -162,8 +162,8 @@ export const FreelanceSavedJobs = () => {
                       dummy text ever since the 1500s, when avn unknown printer
                       took a galley of type and scramble.
                     </p>
-                  </li>
-                  <li>
+                  </li> */}
+                  {/* <li>
                     <p className="text-lg">
                       <span className="font-semibold">Requirements :</span>{" "}
                       simply dummy text of the printing and typesetting
@@ -194,26 +194,26 @@ export const FreelanceSavedJobs = () => {
                       <span className="font-semibold">Mode of Work:</span>{" "}
                       Office
                     </p>
-                  </li>
+                  </li> */}
                   <li>
                     <p className="text-lg">
-                      <span className="font-semibold">No. of Openings :</span>
-                      04
+                      <span className="font-semibold">No. of Openings : </span>
+                      {props?.props?.noOfOpenings}
                     </p>
                   </li>
                   <li>
                     <p className="text-lg">
-                      <span className="font-semibold">Salary Range:</span> HKD
-                      {props?.props?._source?.salaryRange.gte} - HDK
-                      {props?.props?._source?.salaryRange.lte}
+                      <span className="font-semibold">Salary Range : </span>
+                      {props?.props?.salaryRange.gte} -
+                      {props?.props?.salaryRange.lte}
                     </p>
                   </li>
-                  <li>
+                  {/* <li>
                     <p className="text-lg">
                       <span className="font-semibold">Salary Type :</span>
                       1000-5000
                     </p>
-                  </li>
+                  </li> */}
                 </ul>
               </div>
             </Row>

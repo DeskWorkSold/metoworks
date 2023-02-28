@@ -19,7 +19,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { useNavigate } from "react-router-dom/dist";
 // import profilePicture from "../assets/profile-picture.png";
-import profilePicture from "../assets/profile-picture.png";
+import profilePicture from "../assets/profilePicture.jpg";
 
 export const Topnav = () => {
   const [auth, setAuth] = React.useState(true);
@@ -73,6 +73,12 @@ export const Topnav = () => {
     setProfileImage(profimg);
   }, [location.state]);
 
+  useEffect(() => {
+    intitialFunc();
+    let profimg = localStorage.getItem("profileImg");
+    setProfileImage(profimg);
+  }, []);
+
   const intitialFunc = async () => {
     const token = await localStorage.getItem("access-token");
     const userType = await localStorage.getItem("userType");
@@ -87,7 +93,7 @@ export const Topnav = () => {
   };
   return (
     // <Router>
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" id="botone" expand="lg">
       <Container>
         <Navbar.Brand>
           <Link to="/">

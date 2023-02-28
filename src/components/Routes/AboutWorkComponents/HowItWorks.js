@@ -29,9 +29,7 @@ export const HowItWorks = () => {
               scrambled it to make a type specimen book. It has survived not
               only five centuries,
             </p>
-            <Button className="text-white border-rounded px-5 mt-4">
-              Ready To Post{" "}
-            </Button>
+            <Button className="border-rounded px-5 mt-4">Ready To Post </Button>
           </Col>
         </Row>
       </Container>
@@ -47,9 +45,7 @@ export const HowItWorks = () => {
               scrambled it to make a type specimen book. It has survived not
               only five centuries,
             </p>
-            <Button className="text-white border-rounded px-5 mt-4">
-              Start{" "}
-            </Button>
+            <Button className="border-rounded px-5 mt-4">Start </Button>
           </Col>
           <Col lg="6" className="webkit">
             <div>

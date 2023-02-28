@@ -446,7 +446,8 @@ export const MainFreelanceSheduled = () => {
                                 className="text-lg"
                                 style={{ color: "#7A7979" }}
                               >
-                                {items?.schedule}
+                                {items?.schedule?.substring(0, 10)} -{" "}
+                                {items?.schedule?.substring(11, 16)}
                               </h2>
                             </div>
                           </Col>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Image, FormCheck, Button } from "react-bootstrap";
-import { BsFacebook, BsLinkedin } from "react-icons/bs";
+import { BsEyeFill, BsFacebook, BsLinkedin } from "react-icons/bs";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { BrowserRouter as Route, Router, Link, Switch } from "react-router-dom";
 import LinkedInUI from "../linkedin";
@@ -23,6 +23,7 @@ export const Login = () => {
 
   const [validation, setValidation] = useState("");
   const [isLinkedin, setIsLinkedin] = useState(false);
+  const [isToken, setIsToken] = useState("");
   // console.log(recruiterData, 'recruiterData dataaaaaa');
 
   // npm catch clean --force
@@ -45,12 +46,13 @@ export const Login = () => {
         .then((res) => {
           console.log(res);
           const { token, type } = res.data.data;
-          console.log(token, "token");
+          // console.log(token, "token");
           let userType = "freeLancer";
-          console.log(userType, "type");
+          // console.log(userType, "type");
           // localStorage.setItem("id", id);
           localStorage.setItem("access-token", token);
           localStorage.setItem("userType", userType);
+          setIsToken(token);
           // console.log(data, 'daata');
           if (type === "freelancer") {
             navigate("/FreelancerProfile" + `?id=${token.substring(0, 20)}`, {
@@ -104,11 +106,43 @@ export const Login = () => {
   React.useEffect(() => {
     setIsFacebook(false);
     setIsLinkedin(false);
+    AuthCheck();
   }, [setIsFacebook, setIsLinkedin]);
 
+  const [passwordType, setPasswordType] = useState("password");
+  const [passwordInput, setPasswordInput] = useState("");
+  const [email, setEmail] = useState("");
+  const handlePasswordChange = (evnt) => {
+    setPasswordInput(evnt.target.value);
+    setFreelancerData({
+      ...freelancerData,
+      password: evnt.target.value,
+    });
+  };
+
+  const AuthCheck = () => {
+    if (isToken) {
+      navigate.goBack();
+    }
+  };
+  const ishandlePasswordChange = (evnt) => {
+    setPasswordInput(evnt.target.value);
+    setRecruiterData({
+      ...recruiterData,
+      password: evnt.target.value,
+    });
+  };
+
+  const togglePassword = () => {
+    if (passwordType === "password") {
+      setPasswordType("text");
+      return;
+    }
+    setPasswordType("password");
+  };
   return (
     <Container>
-      <Row className="align-items-center">
+      <Row>
         <Col lg="6">
           <div className="p-3 webkit">
             <div className="boxshad">
@@ -171,23 +205,28 @@ export const Login = () => {
                           </Col>
                           <Col lg="12">
                             <fieldset>
-                              {/* <label style={{ width: "100%" }}>First name</label> */}
-                              <input
-                                style={{ width: "100%" }}
-                                className="form-control"
-                                type={"password"}
-                                name="Password"
-                                onChange={(e) =>
-                                  setFreelancerData({
-                                    ...freelancerData,
-                                    password: e.target.value,
-                                  })
-                                }
-                                //   value={user.name}
-                                //   onChange={getUserData}
-                                placeholder="Password"
-                                required
-                              />
+                              <div className="input-group">
+                                {/* <label style={{ width: "100%" }}>First name</label> */}
+                                <input
+                                  className="form-control"
+                                  // type={"password"}
+                                  name="Password"
+                                  type={passwordType}
+                                  onChange={handlePasswordChange}
+                                  value={passwordInput}
+                                  //   value={user.name}
+                                  //   onChange={getUserData}
+                                  placeholder="Password"
+                                  required
+                                />
+                                <Button onClick={togglePassword}>
+                                  {passwordType === "password" ? (
+                                    <BsEyeFill />
+                                  ) : (
+                                    <BsEyeFill />
+                                  )}
+                                </Button>
+                              </div>
                             </fieldset>
                           </Col>
                           {validation && validation.length ? (
@@ -200,7 +239,7 @@ export const Login = () => {
                         </Row>
                         <h3
                           style={{
-                            fontSize: "13px",
+                            fontSize: "12px",
                             color: "black",
                             //   display: "flex",
                             textAlign: "left",
@@ -323,23 +362,31 @@ export const Login = () => {
                           </Col>
                           <Col lg="12">
                             <fieldset>
-                              {/* <label style={{ width: "100%" }}>First name</label> */}
-                              <input
-                                style={{ width: "100%" }}
-                                className="form-control"
-                                type={"password"}
-                                name="Password"
-                                onChange={(e) =>
-                                  setRecruiterData({
-                                    ...recruiterData,
-                                    password: e.target.value,
-                                  })
-                                }
-                                //   value={user.name}
-                                //   onChange={getUserData}
-                                placeholder="Password"
-                                required
-                              />
+                              <div className="input-group">
+                                {/* <label style={{ width: "100%" }}>First name</label> */}
+                                <input
+                                  // type={"password"}
+                                  name="Password"
+                                  type={passwordType}
+                                  onChange={ishandlePasswordChange}
+                                  value={passwordInput}
+                                  // style={{ width: "100%" }}
+                                  className="form-control"
+                                  // type={"password"}
+                                  // name="Password"
+                                  //   value={user.name}
+                                  //   onChange={getUserData}
+                                  placeholder="Password"
+                                  required
+                                />
+                                <Button onClick={togglePassword}>
+                                  {passwordType === "password" ? (
+                                    <BsEyeFill />
+                                  ) : (
+                                    <BsEyeFill />
+                                  )}
+                                </Button>
+                              </div>
                             </fieldset>
                           </Col>
                           {validation && validation.length ? (
@@ -352,7 +399,7 @@ export const Login = () => {
                         </Row>
                         <h3
                           style={{
-                            fontSize: "13px",
+                            fontSize: "12px",
                             color: "black",
                             //   display: "flex",
                             textAlign: "left",

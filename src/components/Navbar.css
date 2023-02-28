@@ -14,6 +14,16 @@
 #navbarScroll .navbar-nav {
     align-items: center;
 }
+#botone .nav-link:hover {
+        text-decoration: underline;
+        color: #6a489c;
+        font-weight: 500;
+}
+#botone .dropdown-menu .dropdown-item:hover{
+    text-decoration: underline;
+        color: #6a489c;
+        font-weight: 500;
+}
 .navbar-brand img{
     object-fit: cover;
     width: 100%;
@@ -31,9 +41,9 @@
 .nnnnav .dropdown-menu .dropdown-item:hover{
     background:none !important;
 }
-.nav-link:focus{
+/* .nav-link:focus{
     color: white !important;
-}
+} */
 .nnnnav .dropdown-menu a:hover{
     color: #39bec1 !important;
     background: none !important;

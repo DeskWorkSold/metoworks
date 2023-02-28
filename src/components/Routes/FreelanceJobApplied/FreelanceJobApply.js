@@ -89,9 +89,9 @@ export const FreelanceJobApply = () => {
                           <Col lg="6" className="webkit-right">
                             <p style={{ color: "#7A7979" }} className="text-lg">
                               Posted Date : {items?.postedDate.substring(0, 10)}
-                              <span className="mrdg">
+                              {/* <span className="mrdg">
                                 Expiry Date : Feb 2023
-                              </span>
+                              </span> */}
                             </p>
                           </Col>
                         </Row>
@@ -163,7 +163,7 @@ export const FreelanceJobApply = () => {
                             </div>
                           </Col>
                         </Row>
-                        <hr className="my-2" />
+                        {/* <hr className="my-2" />
                         <Row className="align-items-center">
                           <Col lg="12">
                             <div
@@ -186,14 +186,14 @@ export const FreelanceJobApply = () => {
                                 completed
                               </Button>
                             </div>
-                            {/* <Button
+                            <Button
                         className="text-white border-rounded px-3"
                         style={{ background: "#39BEC1", border: "none" }}
                       >
                         View Profile
-                      </Button> */}
+                      </Button>
                           </Col>
-                        </Row>
+                        </Row> */}
                       </div>
                     </div>
                   </Col>

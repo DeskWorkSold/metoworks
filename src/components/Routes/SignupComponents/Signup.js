@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Image, FormCheck, Button } from "react-bootstrap";
 import { BsFacebook, BsLinkedin } from "react-icons/bs";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { BrowserRouter as Route, Router, Link, Switch } from "react-router-dom";
+import {
+  BrowserRouter as Route,
+  Router,
+  Link,
+  Switch,
+  useNavigate,
+} from "react-router-dom";
 import FacebookInUI from "../facebook";
 import LinkedInUI from "../linkedin";
 import "react-tabs/style/react-tabs.css";
@@ -28,6 +34,7 @@ export const Signup = () => {
     confirmPassword: "",
   });
   // console.log(recruiterSignupData, 'recruiterSignupData');
+  const navigate = useNavigate();
 
   const freelancerFunc = () => {
     if (
@@ -46,6 +53,7 @@ export const Signup = () => {
           console.log(res);
           let id = res.data.user.id;
           localStorage.setItem("id", id);
+          navigate("/login");
         })
         .catch((error) => {
           console.log(error);
@@ -70,6 +78,7 @@ export const Signup = () => {
         .post(`api/v1/user/register?type=${obj1.type}`, obj1)
         .then((res) => {
           console.log(res);
+          navigate("/login");
         })
         .catch((error) => {
           console.log(error);
@@ -78,6 +87,7 @@ export const Signup = () => {
   };
   const [isFacebook, setIsFacebook] = useState(false);
   const [isLinkedin, setIsLinkedin] = useState(false);
+  const [isToken, setIsToken] = useState("");
   const [count, setCount] = useState(0);
 
   const facebookSignUp = () => {
@@ -100,6 +110,12 @@ export const Signup = () => {
     setIsLinkedin(false);
   }, [isFacebook, isLinkedin]);
 
+  useEffect(() => {
+    let token = localStorage.getItem("accec-token");
+    setIsToken(token);
+    AuthCheck();
+  });
+
   const [passwordType, setPasswordType] = useState("password");
   const [passwordInput, setPasswordInput] = useState("");
   const handlePasswordChange = (evnt) => {
@@ -112,9 +128,16 @@ export const Signup = () => {
     }
     setPasswordType("password");
   };
+
+  const AuthCheck = () => {
+    if (isToken) {
+      navigate.goBack();
+    }
+  };
+
   return (
     <Container>
-      <Row className="align-items-center">
+      <Row>
         <Col lg="6">
           <div className="p-3 webkit">
             <div className="boxshad">

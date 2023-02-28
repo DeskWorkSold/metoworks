@@ -430,7 +430,9 @@ function MyVerticallyCenteredModal(props) {
                     <option>
                       Banking and Financial Institue Professionals
                     </option>
-                    <option>Insurance Professionals (back-end functions</option>
+                    <option>
+                      Insurance Professionals (back-end functions)
+                    </option>
                     <option>IT Professionals (Specific Fields)</option>
                     <option>Manufacturing</option>
                     <option>Finance and Accounting</option>
@@ -466,9 +468,258 @@ function MyVerticallyCenteredModal(props) {
                       setJobData({ ...jobData, jobSubFunction: e.target.value })
                     }
                   >
-                    <option value="DEFAULT" disabled="">
-                      Sub Job Function
-                    </option>
+                    {jobData?.jobFunction == "DEFAULT" && (
+                      <option value="" disabled="">
+                        Sub Job Function
+                      </option>
+                    )}
+                    {jobData?.jobFunction == "HR & Admin" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          HR Director / Manager
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Admin Manager
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          C&B Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Training Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Organizational Development Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Recruiters
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          APAC HR
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "General Management" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          International HR
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          EMEA HR
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          CEO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          COO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          CFO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          CTO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          CMO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          CIO
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          In-House Legal Council
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Finance and Accounting" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Financial Controller
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          International / Regional FC
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Accounting Manager
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Finance Manager
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Internal Audit
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Sales and Marketing" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Sales and Marketing Director
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Digital Marketer
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Regional / International Marketer
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Local Corp. Marketer
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          O2O Experts
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction ==
+                      "Banking and Financial Institue Professionals" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Banking and Financial Institue Professionals
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Funds Professionals
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Responsible Director
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction ==
+                      "Insurance Professionals (back-end functions)" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Actuary
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Team Leaders
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Trainers
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Policy Admin
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction ==
+                      "IT Professionals (Specific Fields)" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Network Security
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Hackers (White)
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Fin Tech
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          MedTech
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          BioTech
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Manufacturing" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Automation Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Plastic Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Mechanic Professional
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          China Plants Management
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Regional Plants Management
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Regional Legal Advisors
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction ==
+                      "Real Estate (Surveyers / reasearchers etc.)" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Surveyers (All Aspects)
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Researchers
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Valuation and Advisory
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Property Management
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Sales Leaders
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Leasing Leaders
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Project Managements
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Investment Management
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Capital Market
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Professional Designers" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Interial Design
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Graphic Designer
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Hotel interial design
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Retail store design
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Lecturers / Teachers" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Marketing
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Legal
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Languages
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          STEAM
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          International Business
+                        </option>
+                      </>
+                    )}
+                    {jobData?.jobFunction == "Engineering / Architect" && (
+                      <>
+                        <option value="DEFAULT" disabled="">
+                          Chief Engineer
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Project Manager
+                        </option>
+                        <option value="DEFAULT" disabled="">
+                          Architect
+                        </option>
+                      </>
+                    )}
                   </Form.Select>
                   {errors && errors.jobSubFunction && (
                     <p style={{ color: "red" }}>{errors.jobSubFunction}</p>
@@ -669,7 +920,7 @@ function MyVerticallyCenteredModal(props) {
                       Select Employment Type
                     </option>
                     <option>PART TIME</option>
-                    <option>CASUALÃ¢â‚¬â€œNO SET HOURS OR DAYS OF WORK</option>
+                    <option>CASUAL–NO SET HOURS OR DAYS OF WORK</option>
                     <option>PROJECT BASED</option>
                     <option>OTHER</option>
                   </Form.Select>
@@ -1422,545 +1673,782 @@ export const PublishedJob = () => {
   const [success, setSuccess] = useState(false);
 
   // edit
-  const MyVerticallyCenteredModalPublish = useCallback(
-    (props) => {
-      console.log(props, "proooooooooops");
-      const jobData = {
-        title: "",
-        industry: "",
-        jobFunction: "",
-        jobSubFunction: "",
-        location: "",
-        description: "",
-        requirements: "",
-        profession: "",
-        educationLevel: "",
-        empType: "",
-        projectTimelineGte: "",
-        projectTimelineLte: "",
-        postedDate: new Date(),
-        expiryDate: `${date.getDate()}-${
-          date.getMonth() + 1
-        }-${date.getFullYear()}`,
-        modeOfWork: "",
-        noOfOpenings: "",
-        salaryCurrency: "",
-        salaryRange: { gte: isSalaryRange.gte, lte: isSalaryRange.lte },
-        salaryType: "negotiable",
-        salaryPayFreq: "",
-        additionalEmails: [],
+  const MyVerticallyCenteredModalPublish = (props) => {
+    console.log(props, "proooooooooops");
+    const jobData = {
+      title: "",
+      industry: "",
+      jobFunction: "",
+      jobSubFunction: "",
+      location: "",
+      description: "",
+      requirements: "",
+      profession: "",
+      educationLevel: "",
+      empType: "",
+      projectTimelineGte: "",
+      projectTimelineLte: "",
+      postedDate: new Date(),
+      expiryDate: `${date.getDate()}-${
+        date.getMonth() + 1
+      }-${date.getFullYear()}`,
+      modeOfWork: "",
+      noOfOpenings: "",
+      salaryCurrency: "",
+      salaryRange: { gte: isSalaryRange.gte, lte: isSalaryRange.lte },
+      salaryType: "negotiable",
+      salaryPayFreq: "",
+      additionalEmails: [],
+      closed: false,
+    };
+
+    const profileFunc = () => {
+      // console.log(isProjectTimeline?.gte, "my name is odho");
+      // let currentDate = new Date();
+      const data = {
+        title: jobData.title ? jobData.title : props?.props?._source?.title,
+        industry: jobData.industry
+          ? jobData.industry
+          : props?.props?._source?.industry,
+        jobFunction: jobData.jobFunction
+          ? jobData.jobFunction
+          : props?.props?._source?.jobFunction,
+        location: jobData.location
+          ? jobData.location
+          : props?.props?._source?.location,
+        description: jobData.description
+          ? jobData.description
+          : props?.props?._source?.description,
+        requirements: jobData.requirements
+          ? jobData.requirements
+          : props?.props?._source?.requirements,
+        profession: jobData.profession
+          ? jobData.profession
+          : props?.props?._source?.profession,
+        projectTimeline: {
+          gte: jobData.projectTimelineGte
+            ? jobData.projectTimelineGte
+            : props?.props?._source?.projectTimeline.gte,
+          lte: jobData.projectTimelineLte
+            ? jobData.projectTimelineLte
+            : props?.props?._source?.projectTimeline.lte,
+        },
+        noOfOpenings: jobData.noOfOpenings.toString()
+          ? jobData.noOfOpenings.toString()
+          : props?.props?._source?.noOfOpenings.toString(),
+        postedDate: props?.props?._source?.postedDate.substring(0, 10),
         closed: false,
+        modeOfWork: jobData.modeOfWork
+          ? jobData.modeOfWork
+          : props?.props?._source?.modeOfWork,
+        submitted: true,
+        educationLevel: jobData.educationLevel
+          ? jobData.educationLevel
+          : props?.props?._source?.educationLevel,
+        empType: jobData.empType
+          ? jobData.empType
+          : props?.props?._source?.empType,
+        // salaryPayFreq: jobData.salaryPayFreq ? jobData.salaryPayFreq : props?.props?._source?.salaryPayFreq,
+        // salaryCurrency: jobData.salaryCurrency ? jobData.salaryCurrency : props?.props?._source?.salaryCurrency,
+        // "expiryDate": props?.props?._source?.expiryDate,
+        id: props.props._id,
+        jobSubFunction: jobData.jobSubFunction
+          ? jobData.jobSubFunction
+          : props?.props?._source?.jobSubFunction,
+        salaryRange: {
+          gte: isSalaryRange?.gte
+            ? isSalaryRange?.gte
+            : props?.props?._source?.salaryRange.gte,
+          lte: isSalaryRange?.lte
+            ? isSalaryRange?.lte
+            : props?.props?._source?.salaryRange.lte,
+        },
       };
 
-      const profileFunc = () => {
-        // console.log(isProjectTimeline?.gte, "my name is odho");
-        // let currentDate = new Date();
-        const data = {
-          title: jobData.title ? jobData.title : props?.props?._source?.title,
-          industry: jobData.industry
-            ? jobData.industry
-            : props?.props?._source?.industry,
-          jobFunction: jobData.jobFunction
-            ? jobData.jobFunction
-            : props?.props?._source?.jobFunction,
-          location: jobData.location
-            ? jobData.location
-            : props?.props?._source?.location,
-          description: jobData.description
-            ? jobData.description
-            : props?.props?._source?.description,
-          requirements: jobData.requirements
-            ? jobData.requirements
-            : props?.props?._source?.requirements,
-          profession: jobData.profession
-            ? jobData.profession
-            : props?.props?._source?.profession,
-          projectTimeline: {
-            gte: jobData.projectTimelineGte
-              ? jobData.projectTimelineGte
-              : props?.props?._source?.projectTimeline.gte,
-            lte: jobData.projectTimelineLte
-              ? jobData.projectTimelineLte
-              : props?.props?._source?.projectTimeline.lte,
-          },
-          noOfOpenings: jobData.noOfOpenings.toString()
-            ? jobData.noOfOpenings.toString()
-            : props?.props?._source?.noOfOpenings.toString(),
-          postedDate: props?.props?._source?.postedDate.substring(0, 10),
-          closed: false,
-          modeOfWork: jobData.modeOfWork
-            ? jobData.modeOfWork
-            : props?.props?._source?.modeOfWork,
-          submitted: true,
-          educationLevel: jobData.educationLevel
-            ? jobData.educationLevel
-            : props?.props?._source?.educationLevel,
-          empType: jobData.empType
-            ? jobData.empType
-            : props?.props?._source?.empType,
-          // salaryPayFreq: jobData.salaryPayFreq ? jobData.salaryPayFreq : props?.props?._source?.salaryPayFreq,
-          // salaryCurrency: jobData.salaryCurrency ? jobData.salaryCurrency : props?.props?._source?.salaryCurrency,
-          // "expiryDate": props?.props?._source?.expiryDate,
-          id: props.props._id,
-          jobSubFunction: jobData.jobSubFunction
-            ? jobData.jobSubFunction
-            : props?.props?._source?.jobSubFunction,
-          salaryRange: {
-            gte: isSalaryRange?.gte
-              ? isSalaryRange?.gte
-              : props?.props?._source?.salaryRange.gte,
-            lte: isSalaryRange?.lte
-              ? isSalaryRange?.lte
-              : props?.props?._source?.salaryRange.lte,
-          },
-        };
+      let values = Object.values(data);
 
-        let values = Object.values(data);
+      // console.log(values,"values")
+      values = values.every((e, i) => e !== "");
 
-        // console.log(values,"values")
-        values = values.every((e, i) => e !== "");
-
-        // console.log(data, "dataa");
-        if (values) {
-          axios
-            .patch(`api/v1/job-post?id=${props.props._id}`, data)
-            .then((res) => {
-              console.log(res, "profile data successfully added");
-              if (res) {
-                // profileFunc(false);
-                setTimeout(() => {
-                  initialFun();
-                }, 1000);
-              }
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } else {
-          let newErrors = {};
-          if (!data.title) {
-            newErrors.title = "Job Title is required";
-          }
-          if (!jobData.industry) {
-            newErrors.industry = "Job industry is required";
-          }
-          if (!jobData.jobFunction) {
-            newErrors.jobFunction = "Job jobFunction is required";
-          }
-          if (!jobData.jobSubFunction) {
-            newErrors.jobSubFunction = "Job jobSubFunction is required";
-          }
-          if (!jobData.location) {
-            newErrors.location = "Job location is required";
-          }
-          if (!jobData.description) {
-            newErrors.description = "Job DESCRIPTION is required";
-          }
-          if (!jobData.requirements) {
-            newErrors.requirements = "Job requirements is required";
-          }
-          if (!jobData.educationLevel) {
-            newErrors.educationLevel = "Job educationLevel is required";
-          }
-          if (!jobData.profession) {
-            newErrors.profession = "Job profession is required";
-          }
-          if (!jobData.madeOfWork) {
-            newErrors.madeOfWork = "Job madeOfWork is required";
-          }
-          if (!jobData.noOfOpenings) {
-            newErrors.noOfOpenings = "Job noOfOpenings is required";
-          }
-          if (!jobData.salaryCurrency) {
-            newErrors.salaryCurrency = "Job salaryCurrency is required";
-          }
-          if (!jobData.salaryType) {
-            newErrors.salaryType = "Job salaryCurrency is required";
-          }
-          if (!jobData.salaryPayFreq) {
-            newErrors.salaryPayFreq = "Job salaryCurrency is required";
-          }
-          if (!isProjectTimeline.projectTimelinegte) {
-            newErrors.gte = "Job gte is required";
-          }
-          if (!isProjectTimeline.projectTimelinelte) {
-            newErrors.lte = "Job lte is required";
-          }
-          if (!isSalaryRange.salaryRangegte) {
-            newErrors.gte = "Job gte is required";
-          }
-          if (!isSalaryRange.salaryRangelte) {
-            newErrors.lte = "Job lte is required";
-          }
-          if (!isEmail) {
-            newErrors.isEmail = "Email is required";
-          }
-          if (!/\S+@\S+\.\S+/.test(isEmail)) {
-            newErrors.email = "Email address is invalid";
-          }
-          console.log(newErrors);
-          setErrors(newErrors);
-        }
-      };
-
-      const validateForm = () => {
+      // console.log(data, "dataa");
+      if (values) {
+        axios
+          .patch(`api/v1/job-post?id=${props.props._id}`, data)
+          .then((res) => {
+            console.log(res, "profile data successfully added");
+            if (res) {
+              // profileFunc(false);
+              setTimeout(() => {
+                initialFun();
+              }, 1000);
+            }
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
         let newErrors = {};
-        if (!jobData.title) {
+        if (!data.title) {
           newErrors.title = "Job Title is required";
-        } else if (!jobData.industry) {
+        }
+        if (!jobData.industry) {
           newErrors.industry = "Job industry is required";
-        } else if (!jobData.jobFunction) {
+        }
+        if (!jobData.jobFunction) {
           newErrors.jobFunction = "Job jobFunction is required";
-        } else if (!jobData.jobSubFunction) {
+        }
+        if (!jobData.jobSubFunction) {
           newErrors.jobSubFunction = "Job jobSubFunction is required";
-        } else if (!jobData.location) {
+        }
+        if (!jobData.location) {
           newErrors.location = "Job location is required";
-        } else if (!jobData.description) {
+        }
+        if (!jobData.description) {
           newErrors.description = "Job DESCRIPTION is required";
-        } else if (!jobData.requirements) {
+        }
+        if (!jobData.requirements) {
           newErrors.requirements = "Job requirements is required";
-        } else if (!jobData.educationLevel) {
+        }
+        if (!jobData.educationLevel) {
           newErrors.educationLevel = "Job educationLevel is required";
-        } else if (!jobData.profession) {
+        }
+        if (!jobData.profession) {
           newErrors.profession = "Job profession is required";
-        } else if (!jobData.modeOfWork) {
-          newErrors.modeOfWork = "Job madeOfWork is required";
-        } else if (!jobData.noOfOpenings) {
+        }
+        if (!jobData.madeOfWork) {
+          newErrors.madeOfWork = "Job madeOfWork is required";
+        }
+        if (!jobData.noOfOpenings) {
           newErrors.noOfOpenings = "Job noOfOpenings is required";
-        } else if (!jobData.salaryCurrency) {
+        }
+        if (!jobData.salaryCurrency) {
           newErrors.salaryCurrency = "Job salaryCurrency is required";
-        } else if (!jobData.salaryType) {
+        }
+        if (!jobData.salaryType) {
           newErrors.salaryType = "Job salaryCurrency is required";
-        } else if (!jobData.salaryPayFreq) {
+        }
+        if (!jobData.salaryPayFreq) {
           newErrors.salaryPayFreq = "Job salaryCurrency is required";
-        } else if (!isProjectTimeline.gte) {
-          newErrors.projectTimelinegte = "Job gte is required";
-        } else if (!isProjectTimeline.lte) {
-          newErrors.projectTimelinelte = "Job lte is required";
-        } else if (!isSalaryRange.gte) {
-          newErrors.salaryRangegte = "Job gte is required";
-        } else if (!isSalaryRange.lte) {
-          newErrors.salaryRangelte = "Job lte is required";
-        } else if (!isEmail) {
+        }
+        if (!isProjectTimeline.projectTimelinegte) {
+          newErrors.gte = "Job gte is required";
+        }
+        if (!isProjectTimeline.projectTimelinelte) {
+          newErrors.lte = "Job lte is required";
+        }
+        if (!isSalaryRange.salaryRangegte) {
+          newErrors.gte = "Job gte is required";
+        }
+        if (!isSalaryRange.salaryRangelte) {
+          newErrors.lte = "Job lte is required";
+        }
+        if (!isEmail) {
           newErrors.isEmail = "Email is required";
-        } else if (!/\S+@\S+\.\S+/.test(isEmail)) {
+        }
+        if (!/\S+@\S+\.\S+/.test(isEmail)) {
           newErrors.email = "Email address is invalid";
         }
-
+        console.log(newErrors);
         setErrors(newErrors);
-        console.log(Object.keys(newErrors).length === 0, "validation");
-        return Object.keys(newErrors).length === 0;
-      };
+      }
+    };
 
-      const handleSubmit = (event) => {
-        event.preventDefault();
-        if (validateForm()) {
-          setSuccess(true);
-        }
-      };
+    const validateForm = () => {
+      let newErrors = {};
+      if (!jobData.title) {
+        newErrors.title = "Job Title is required";
+      } else if (!jobData.industry) {
+        newErrors.industry = "Job industry is required";
+      } else if (!jobData.jobFunction) {
+        newErrors.jobFunction = "Job jobFunction is required";
+      } else if (!jobData.jobSubFunction) {
+        newErrors.jobSubFunction = "Job jobSubFunction is required";
+      } else if (!jobData.location) {
+        newErrors.location = "Job location is required";
+      } else if (!jobData.description) {
+        newErrors.description = "Job DESCRIPTION is required";
+      } else if (!jobData.requirements) {
+        newErrors.requirements = "Job requirements is required";
+      } else if (!jobData.educationLevel) {
+        newErrors.educationLevel = "Job educationLevel is required";
+      } else if (!jobData.profession) {
+        newErrors.profession = "Job profession is required";
+      } else if (!jobData.modeOfWork) {
+        newErrors.modeOfWork = "Job madeOfWork is required";
+      } else if (!jobData.noOfOpenings) {
+        newErrors.noOfOpenings = "Job noOfOpenings is required";
+      } else if (!jobData.salaryCurrency) {
+        newErrors.salaryCurrency = "Job salaryCurrency is required";
+      } else if (!jobData.salaryType) {
+        newErrors.salaryType = "Job salaryCurrency is required";
+      } else if (!jobData.salaryPayFreq) {
+        newErrors.salaryPayFreq = "Job salaryCurrency is required";
+      } else if (!isProjectTimeline.gte) {
+        newErrors.projectTimelinegte = "Job gte is required";
+      } else if (!isProjectTimeline.lte) {
+        newErrors.projectTimelinelte = "Job lte is required";
+      } else if (!isSalaryRange.gte) {
+        newErrors.salaryRangegte = "Job gte is required";
+      } else if (!isSalaryRange.lte) {
+        newErrors.salaryRangelte = "Job lte is required";
+      } else if (!isEmail) {
+        newErrors.isEmail = "Email is required";
+      } else if (!/\S+@\S+\.\S+/.test(isEmail)) {
+        newErrors.email = "Email address is invalid";
+      }
 
-      return (
-        <div>
-          <Modal
-            id="modal"
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-          >
-            <Modal.Header closeButton>
-              <Modal.Title style={{ color: "black" }}>
-                Edit Recruiter Profile
-              </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Row>
-                <Col lg="12">
-                  <div className="p-3">
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Job Title
-                        </label>
-                        <input
-                          style={{ width: "100%" }}
-                          className="form-control"
-                          name="fname"
-                          type={"text"}
-                          onChange={(e) => (jobData.title = e.target.value)}
-                          //   value={user.number}
-                          //   onChange={getUserData}
-                          placeholder={props.props._source.title}
-                        />
-                        {errors && errors.title && (
-                          <p style={{ color: "red" }}>{errors.title}</p>
-                        )}
-                      </fieldset>
-                    </Col>
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Job Industry
-                        </label>
-                        <Form.Select
-                          aria-label="Default select example"
-                          onChange={(e) => (jobData.industry = e.target.value)}
-                          placeholder={props.props._source.industry}
-                        >
-                          <option value="DEFAULT" disabled="">
-                            Select Job Industry
-                          </option>
-                          <option>Universities / Education</option>
-                          <option>Manufacturing</option>
-                          <option>Security</option>
-                          <option>Real Estate</option>
-                          <option>
-                            Professional Consultings (Legal, HR, Finance etc.)
-                          </option>
-                          <option>Banking and Finance</option>
-                          <option>
-                            Beautiy Care and Health / Welness / Fitness
-                          </option>
-                          <option>Government / Public Utilities</option>
-                          <option>
-                            Hospitality / Travel / Airlines / Clubhouse
-                          </option>
-                          <option>
-                            IT / R&amp;D / Cyber Security / Telecommunication /
-                            Science
-                          </option>
-                          <option>Retail</option>
-                          <option>Insurance</option>
-                          <option>
-                            Logistics / Transportaton / Supply Chain
-                          </option>
-                          <option>F&amp;B / Wine &amp; Spriits</option>
-                          <option>
-                            Logistics / Transportaton / Supply Chain
-                          </option>
-                          <option>Medical / Pharmacy / Hospital</option>
-                          <option>Engineerings</option>
-                          <option>Others</option>
-                        </Form.Select>
-                        {errors && errors.industry && (
-                          <p style={{ color: "red" }}>{errors.industry}</p>
-                        )}
-                        {/* <input
-              style={{ width: "100%" }}
-              className="form-control"
-              type={"text"}
-              name="firstname"
-              //   value={user.name}
-              //   onChange={getUserData}
-              placeholder="Select Job Industry
-              "
-              required
-            /> */}
-                      </fieldset>
-                    </Col>
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Job Function
-                        </label>
-                        <Form.Select
-                          aria-label="Default select example"
-                          onChange={(e) =>
-                            (jobData.jobFunction = e.target.value)
-                          }
-                          placeholder={props.props._source.jobFunction}
-                        >
-                          <option value="DEFAULT" disabled="">
-                            Select Job Function
-                          </option>
-                          <option>HR &amp; Admin</option>
-                          <option>General Management</option>
-                          <option>Finance and Accounting</option>
-                          <option>Sales and Marketing</option>
-                          <option>
-                            Banking and Financial Institue Professionals
-                          </option>
-                          <option>
-                            Insurance Professionals (back-end functions
-                          </option>
-                          <option>IT Professionals (Specific Fields)</option>
-                          <option>Manufacturing</option>
-                          <option>Finance and Accounting</option>
-                          <option>Professional Designers</option>
-                          <option>Lecturers / Teachers</option>
-                          <option>Engineering / Architect</option>
-                          <option>Others</option>
-                        </Form.Select>
-                        {errors && errors.jobFunction && (
-                          <p style={{ color: "red" }}>{errors.jobFunction}</p>
-                        )}
-                        {/* <input
-              style={{ width: "100%" }}
-              className="form-control"
-              type={"text"}
-              name="firstname"
-              //   value={user.name}
-              //   onChange={getUserData}
-              placeholder="Select Job Industry
-              "
-              required
-            /> */}
-                      </fieldset>
-                    </Col>
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Sub Job Function
-                        </label>
-                        <Form.Select
-                          aria-label="Default select example"
-                          onClick={(e) => {
-                            jobData.jobSubFunction = e.target.value;
-                          }}
-                        >
-                          <option value="DEFAULT" disabled="">
-                            Financial Controller
-                          </option>
-                          <option value="DEFAULT" disabled="">
-                            International / Regional FC
-                          </option>
-                          <option value="DEFAULT" disabled="">
-                            Accounting Manager
-                          </option>
-                          <option value="DEFAULT" disabled="">
-                            Finance Manager
-                          </option>
-                          <option value="DEFAULT" disabled="">
-                            Internal Audit
-                          </option>
-                        </Form.Select>
-                        {errors && errors.jobSubFunction && (
-                          <p style={{ color: "red" }}>
-                            {errors.jobSubFunction}
-                          </p>
-                        )}
-                        {/* <input
-              style={{ width: "100%" }}
-              className="form-control"
-              type={"text"}
-              name="firstname"
-              //   value={user.name}
-              //   onChange={getUserData}
-              placeholder="Select Job Industry
-              "
-              required
-            /> */}
-                      </fieldset>
-                    </Col>
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Job Location
-                        </label>
-                        <Form.Select
-                          aria-label="Default select example"
-                          onChange={(e) => (jobData.location = e.target.value)}
-                        >
-                          <option value="DEFAULT" disabled="">
-                            Select Job Location
-                          </option>
-                          <option>Central and Western</option>
-                          <option>Eastern</option>
-                          <option>Southern</option>
-                          <option>Wan Chai</option>
-                          <option>Kowloon City</option>
-                          <option>Kwun Tong</option>
-                          <option>Sham Shui Po</option>
-                          <option>Wong Tai Sin</option>
-                          <option>Yau Tsim Mong</option>
-                          <option>Islands</option>
-                          <option>Kwai Tsing</option>
-                          <option>North</option>
-                          <option>Sai Kung</option>
-                          <option>Shatin</option>
-                          <option>Tai Po</option>
-                          <option>Tsuen Wan</option>
-                          <option>Tuen Mun</option>
-                          <option>Yuen Long</option>
-                          <option>China</option>
-                          <option>South East Asia (SEA)</option>
-                          <option>Asia Pacific (APAC)</option>
-                          <option>Others</option>
-                        </Form.Select>
-                        {errors && errors.location && (
-                          <p style={{ color: "red" }}>{errors.location}</p>
-                        )}
-                        {/* <input
-              style={{ width: "100%" }}
-              className="form-control"
-              type={"text"}
-              name="firstname"
-              //   value={user.name}
-              //   onChange={getUserData}
-              placeholder="Select Job Industry
-              "
-              required
-            /> */}
-                      </fieldset>
-                    </Col>
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Job Description
-                        </label>
-                        <CKEditor
-                          editor={ClassicEditor}
-                          data={props.props._source.description}
-                          onReady={(editor) => {
-                            // You can store the "editor" and use when it is needed.
-                            console.log("Editor is ready to use!", editor);
-                          }}
-                          onChange={(event, editor) => {
-                            const data = editor.getData();
-                            jobData.description = data;
-                          }}
-                          onBlur={(event, editor) => {
-                            console.log("Blur.", editor);
-                          }}
-                          onFocus={(event, editor) => {
-                            console.log("Focus.", editor);
-                          }}
-                        />
-                      </fieldset>
-                      {errors && errors.description && (
-                        <p style={{ color: "red" }}>{errors.description}</p>
+      setErrors(newErrors);
+      console.log(Object.keys(newErrors).length === 0, "validation");
+      return Object.keys(newErrors).length === 0;
+    };
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      if (validateForm()) {
+        setSuccess(true);
+      }
+    };
+    const [functionJobVal, setFunctionJobVal] = useState("");
+
+    const handleChange = (e) => {
+      setFunctionJobVal(e.target.value);
+      jobData.jobFunction = e.target.value;
+    };
+
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>
+              Edit Recruiter Profile
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <Col lg="12">
+                <div className="p-3">
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Job Title
+                      </label>
+                      <input
+                        style={{ width: "100%" }}
+                        className="form-control"
+                        name="fname"
+                        type={"text"}
+                        onChange={(e) => (jobData.title = e.target.value)}
+                        //   value={user.number}
+                        //   onChange={getUserData}
+                        placeholder={props.props._source.title}
+                      />
+                      {errors && errors.title && (
+                        <p style={{ color: "red" }}>{errors.title}</p>
                       )}
-                    </Col>
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Job Requirements
-                        </label>
-                        <CKEditor
-                          editor={ClassicEditor}
-                          data={props.props._source.requirements}
-                          onReady={(editor) => {
-                            // You can store the "editor" and use when it is needed.
-                            console.log("Editor is ready to use!", editor);
-                          }}
-                          onChange={(event, editor) => {
-                            const data = editor.getData();
-                            // console.log({ event, editor, data });
-                            jobData.requirements = data;
-                          }}
-                          onBlur={(event, editor) => {
-                            console.log("Blur.", editor);
-                          }}
-                          onFocus={(event, editor) => {
-                            console.log("Focus.", editor);
-                          }}
-                        />
-                      </fieldset>
-                      {errors && errors.requirements && (
-                        <p style={{ color: "red" }}>{errors.requirements}</p>
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Job Industry
+                      </label>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => (jobData.industry = e.target.value)}
+                        placeholder={props.props._source.industry}
+                      >
+                        <option value="DEFAULT" disabled="">
+                          Select Job Industry
+                        </option>
+                        <option>Universities / Education</option>
+                        <option>Manufacturing</option>
+                        <option>Security</option>
+                        <option>Real Estate</option>
+                        <option>
+                          Professional Consultings (Legal, HR, Finance etc.)
+                        </option>
+                        <option>Banking and Finance</option>
+                        <option>
+                          Beautiy Care and Health / Welness / Fitness
+                        </option>
+                        <option>Government / Public Utilities</option>
+                        <option>
+                          Hospitality / Travel / Airlines / Clubhouse
+                        </option>
+                        <option>
+                          IT / R&amp;D / Cyber Security / Telecommunication /
+                          Science
+                        </option>
+                        <option>Retail</option>
+                        <option>Insurance</option>
+                        <option>
+                          Logistics / Transportaton / Supply Chain
+                        </option>
+                        <option>F&amp;B / Wine &amp; Spriits</option>
+                        <option>
+                          Logistics / Transportaton / Supply Chain
+                        </option>
+                        <option>Medical / Pharmacy / Hospital</option>
+                        <option>Engineerings</option>
+                        <option>Others</option>
+                      </Form.Select>
+                      {errors && errors.industry && (
+                        <p style={{ color: "red" }}>{errors.industry}</p>
                       )}
-                    </Col>
-                    {/* <Col lg="12">
+                      {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Job Function
+                      </label>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => handleChange(e)}
+                        placeholder={props.props._source.jobFunction}
+                      >
+                        <option value="DEFAULT" disabled="">
+                          Select Job Function
+                        </option>
+                        <option>HR &amp; Admin</option>
+                        <option>General Management</option>
+                        <option>Finance and Accounting</option>
+                        <option>Sales and Marketing</option>
+                        <option>
+                          Banking and Financial Institue Professionals
+                        </option>
+                        <option>
+                          Insurance Professionals (back-end functions)
+                        </option>
+                        <option>IT Professionals (Specific Fields)</option>
+                        <option>Manufacturing</option>
+                        <option>Finance and Accounting</option>
+                        <option>Professional Designers</option>
+                        <option>Lecturers / Teachers</option>
+                        <option>Engineering / Architect</option>
+                        <option>Others</option>
+                      </Form.Select>
+                      {errors && errors.jobFunction && (
+                        <p style={{ color: "red" }}>{errors.jobFunction}</p>
+                      )}
+                      {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Sub Job Function
+                      </label>
+                      <Form.Select
+                        aria-label="Default select example"
+                        // onChange={
+                        //   jobData.subJobFunction = e.target.value}
+                      >
+                        {functionJobVal == "DEFAULT" && (
+                          <option value="" disabled="">
+                            Sub Job Function
+                          </option>
+                        )}
+                        {functionJobVal == "HR & Admin" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              HR Director / Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Admin Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              C&B Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Training Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Organizational Development Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Recruiters
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              APAC HR
+                            </option>
+                          </>
+                        )}
+                        {functionJobVal == "General Management" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              International HR
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              EMEA HR
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CEO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              COO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CFO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CTO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CMO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              CIO
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              In-House Legal Council
+                            </option>
+                          </>
+                        )}
+                        {functionJobVal == "Finance and Accounting" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Financial Controller
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              International / Regional FC
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Accounting Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Finance Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Internal Audit
+                            </option>
+                          </>
+                        )}
+                        {functionJobVal == "Sales and Marketing" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Sales and Marketing Director
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Digital Marketer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Regional / International Marketer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Local Corp. Marketer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              O2O Experts
+                            </option>
+                          </>
+                        )}
+                        {functionJobVal ==
+                          "Banking and Financial Institue Professionals" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Banking and Financial Institue Professionals
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Funds Professionals
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Responsible Director
+                            </option>
+                          </>
+                        )}
+                        {functionJobVal ==
+                          "Insurance Professionals (back-end functions)" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Actuary
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Team Leaders
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Trainers
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Policy Admin
+                            </option>
+                          </>
+                        )}
+                        {functionJobVal ==
+                          "IT Professionals (Specific Fields)" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Network Security
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Hackers (White)
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Fin Tech
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              MedTech
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              BioTech
+                            </option>
+                          </>
+                        )}
+                        {functionJobVal == "Manufacturing" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Automation Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Plastic Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Mechanic Professional
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              China Plants Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Regional Plants Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Regional Legal Advisors
+                            </option>
+                          </>
+                        )}
+                        {functionJobVal ==
+                          "Real Estate (Surveyers / reasearchers etc.)" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Surveyers (All Aspects)
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Researchers
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Valuation and Advisory
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Property Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Sales Leaders
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Leasing Leaders
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Project Managements
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Investment Management
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Capital Market
+                            </option>
+                          </>
+                        )}
+                        {functionJobVal == "Professional Designers" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Interial Design
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Graphic Designer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Hotel interial design
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Retail store design
+                            </option>
+                          </>
+                        )}
+                        {functionJobVal == "Lecturers / Teachers" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Marketing
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Legal
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Languages
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              STEAM
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              International Business
+                            </option>
+                          </>
+                        )}
+                        {functionJobVal == "Engineering / Architect" && (
+                          <>
+                            <option value="DEFAULT" disabled="">
+                              Chief Engineer
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Project Manager
+                            </option>
+                            <option value="DEFAULT" disabled="">
+                              Architect
+                            </option>
+                          </>
+                        )}
+                      </Form.Select>
+                      {errors && errors.jobSubFunction && (
+                        <p style={{ color: "red" }}>{errors.jobSubFunction}</p>
+                      )}
+                      {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Job Location
+                      </label>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => (jobData.location = e.target.value)}
+                      >
+                        <option value="DEFAULT" disabled="">
+                          Select Job Location
+                        </option>
+                        <option>Central and Western</option>
+                        <option>Eastern</option>
+                        <option>Southern</option>
+                        <option>Wan Chai</option>
+                        <option>Kowloon City</option>
+                        <option>Kwun Tong</option>
+                        <option>Sham Shui Po</option>
+                        <option>Wong Tai Sin</option>
+                        <option>Yau Tsim Mong</option>
+                        <option>Islands</option>
+                        <option>Kwai Tsing</option>
+                        <option>North</option>
+                        <option>Sai Kung</option>
+                        <option>Shatin</option>
+                        <option>Tai Po</option>
+                        <option>Tsuen Wan</option>
+                        <option>Tuen Mun</option>
+                        <option>Yuen Long</option>
+                        <option>China</option>
+                        <option>South East Asia (SEA)</option>
+                        <option>Asia Pacific (APAC)</option>
+                        <option>Others</option>
+                      </Form.Select>
+                      {errors && errors.location && (
+                        <p style={{ color: "red" }}>{errors.location}</p>
+                      )}
+                      {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Job Description
+                      </label>
+                      <CKEditor
+                        editor={ClassicEditor}
+                        data={props.props._source.description}
+                        onReady={(editor) => {
+                          // You can store the "editor" and use when it is needed.
+                          console.log("Editor is ready to use!", editor);
+                        }}
+                        onChange={(event, editor) => {
+                          const data = editor.getData();
+                          jobData.description = data;
+                        }}
+                        onBlur={(event, editor) => {
+                          console.log("Blur.", editor);
+                        }}
+                        onFocus={(event, editor) => {
+                          console.log("Focus.", editor);
+                        }}
+                      />
+                    </fieldset>
+                    {errors && errors.description && (
+                      <p style={{ color: "red" }}>{errors.description}</p>
+                    )}
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Job Requirements
+                      </label>
+                      <CKEditor
+                        editor={ClassicEditor}
+                        data={props.props._source.requirements}
+                        onReady={(editor) => {
+                          // You can store the "editor" and use when it is needed.
+                          console.log("Editor is ready to use!", editor);
+                        }}
+                        onChange={(event, editor) => {
+                          const data = editor.getData();
+                          // console.log({ event, editor, data });
+                          jobData.requirements = data;
+                        }}
+                        onBlur={(event, editor) => {
+                          console.log("Blur.", editor);
+                        }}
+                        onFocus={(event, editor) => {
+                          console.log("Focus.", editor);
+                        }}
+                      />
+                    </fieldset>
+                    {errors && errors.requirements && (
+                      <p style={{ color: "red" }}>{errors.requirements}</p>
+                    )}
+                  </Col>
+                  {/* <Col lg="12">
               <fieldset>
                 <label className="text-lg" style={{ width: "100%" }}>
                   Profession
@@ -1982,32 +2470,30 @@ export const PublishedJob = () => {
                 />
               </fieldset>
             </Col> */}
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Education Level
-                        </label>
-                        <Form.Select
-                          aria-label="Default select example"
-                          onChange={(e) =>
-                            (jobData.educationLevel = e.target.value)
-                          }
-                        >
-                          <option value="DEFAULT" disabled="">
-                            Select Education level
-                          </option>
-                          <option>ASSOCIATE DEGREE</option>
-                          <option>MASTER DEGREE</option>
-                          <option>DOCTORATE DEGREE</option>
-                          <option>PHD</option>
-                          <option>OTHER</option>
-                        </Form.Select>
-                        {errors && errors.educationLevel && (
-                          <p style={{ color: "red" }}>
-                            {errors.educationLevel}
-                          </p>
-                        )}
-                        {/* <input
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Education Level
+                      </label>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) =>
+                          (jobData.educationLevel = e.target.value)
+                        }
+                      >
+                        <option value="DEFAULT" disabled="">
+                          Select Education level
+                        </option>
+                        <option>ASSOCIATE DEGREE</option>
+                        <option>MASTER DEGREE</option>
+                        <option>DOCTORATE DEGREE</option>
+                        <option>PHD</option>
+                        <option>OTHER</option>
+                      </Form.Select>
+                      {errors && errors.educationLevel && (
+                        <p style={{ color: "red" }}>{errors.educationLevel}</p>
+                      )}
+                      {/* <input
               style={{ width: "100%" }}
               className="form-control"
               type={"text"}
@@ -2018,31 +2504,29 @@ export const PublishedJob = () => {
               "
               required
             /> */}
-                      </fieldset>
-                    </Col>
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Employment Type
-                        </label>
-                        <Form.Select
-                          aria-label="Default select example"
-                          onChange={(e) => (jobData.empType = e.target.value)}
-                        >
-                          <option value="DEFAULT" disabled="">
-                            Select Employment Type
-                          </option>
-                          <option>PART TIME</option>
-                          <option>
-                            CASUALÃ¢â‚¬â€œNO SET HOURS OR DAYS OF WORK
-                          </option>
-                          <option>PROJECT BASED</option>
-                          <option>OTHER</option>
-                        </Form.Select>
-                        {errors && errors.empType && (
-                          <p style={{ color: "red" }}>{errors.empType}</p>
-                        )}
-                        {/* <input
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Employment Type
+                      </label>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => (jobData.empType = e.target.value)}
+                      >
+                        <option value="DEFAULT" disabled="">
+                          Select Employment Type
+                        </option>
+                        <option>PART TIME</option>
+                        <option>CASUAL–NO SET HOURS OR DAYS OF WORK</option>
+                        <option>PROJECT BASED</option>
+                        <option>OTHER</option>
+                      </Form.Select>
+                      {errors && errors.empType && (
+                        <p style={{ color: "red" }}>{errors.empType}</p>
+                      )}
+                      {/* <input
               style={{ width: "100%" }}
               className="form-control"
               type={"text"}
@@ -2053,95 +2537,87 @@ export const PublishedJob = () => {
               "
               required
             /> */}
-                      </fieldset>
-                    </Col>
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Project Timeline
-                        </label>
-                      </fieldset>
-                    </Col>
-                    <Container>
-                      <Row>
-                        <Col>
-                          <label
-                            className="text-l"
-                            style={{ color: "#7A7979" }}
-                          >
-                            Start :
-                          </label>
-                          <input
-                            onChange={(e) =>
-                              (jobData.projectTimelineGte = e.target.value)
-                            }
-                            style={{ width: "100%" }}
-                            className="form-control"
-                            type={"date"}
-                            name="firstname"
-                            //   value={user.name}
-                            //   onChange={getUserData}
-                            placeholder="Start"
-                            required
-                          />
-                        </Col>
-                        {errors && errors.projectTimelinegte && (
-                          <p style={{ color: "red" }}>
-                            {errors.projectTimelinegte}
-                          </p>
-                        )}
-                        <Col>
-                          <label
-                            className="text-l"
-                            style={{ color: "#7A7979" }}
-                          >
-                            End :
-                          </label>
-                          <input
-                            onChange={(e) =>
-                              (jobData.projectTimelineLte = e.target.value)
-                            }
-                            style={{ width: "100%" }}
-                            className="form-control mx-2"
-                            type={"date"}
-                            name="firstname"
-                            //   value={user.name}
-                            //   onChange={getUserData}
-                            placeholder="Start
-              "
-                            required
-                          />
-                        </Col>
-                        {errors && errors.projectTimelinelte && (
-                          <p style={{ color: "red" }}>
-                            {errors.projectTimelinelte}
-                          </p>
-                        )}
-                      </Row>
-                    </Container>
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Profession
+                    </fieldset>
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Project Timeline
+                      </label>
+                    </fieldset>
+                  </Col>
+                  <Container>
+                    <Row>
+                      <Col>
+                        <label className="text-l" style={{ color: "#7A7979" }}>
+                          Start :
                         </label>
                         <input
+                          onChange={(e) =>
+                            (jobData.projectTimelineGte = e.target.value)
+                          }
                           style={{ width: "100%" }}
                           className="form-control"
+                          type={"date"}
                           name="firstname"
-                          onChange={(e) =>
-                            (jobData.profession = e.target.value)
-                          }
                           //   value={user.name}
                           //   onChange={getUserData}
-                          placeholder="Enter Profession"
+                          placeholder="Start"
                           required
                         />
-                      </fieldset>
-                    </Col>
-                    {errors && errors.profession && (
-                      <p style={{ color: "red" }}>{errors.profession}</p>
-                    )}
-                    {/* <Container>
+                      </Col>
+                      {errors && errors.projectTimelinegte && (
+                        <p style={{ color: "red" }}>
+                          {errors.projectTimelinegte}
+                        </p>
+                      )}
+                      <Col>
+                        <label className="text-l" style={{ color: "#7A7979" }}>
+                          End :
+                        </label>
+                        <input
+                          onChange={(e) =>
+                            (jobData.projectTimelineLte = e.target.value)
+                          }
+                          style={{ width: "100%" }}
+                          className="form-control mx-2"
+                          type={"date"}
+                          name="firstname"
+                          //   value={user.name}
+                          //   onChange={getUserData}
+                          placeholder="Start
+              "
+                          required
+                        />
+                      </Col>
+                      {errors && errors.projectTimelinelte && (
+                        <p style={{ color: "red" }}>
+                          {errors.projectTimelinelte}
+                        </p>
+                      )}
+                    </Row>
+                  </Container>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Profession
+                      </label>
+                      <input
+                        style={{ width: "100%" }}
+                        className="form-control"
+                        name="firstname"
+                        onChange={(e) => (jobData.profession = e.target.value)}
+                        //   value={user.name}
+                        //   onChange={getUserData}
+                        placeholder="Enter Profession"
+                        required
+                      />
+                    </fieldset>
+                  </Col>
+                  {errors && errors.profession && (
+                    <p style={{ color: "red" }}>{errors.profession}</p>
+                  )}
+                  {/* <Container>
               <Row>
                 <Col lg="6">
                   <label className="text-l">Start :</label>
@@ -2173,23 +2649,21 @@ export const PublishedJob = () => {
               </Row>
             </Container> */}
 
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Mode of Work
-                        </label>
-                        <Form.Select
-                          aria-label="Default select example"
-                          onChange={(e) =>
-                            (jobData.modeOfWork = e.target.value)
-                          }
-                        >
-                          <option>Select Mode of Work</option>
-                          <option value="1">One</option>
-                          <option value="2">Two</option>
-                          <option value="3">Three</option>
-                        </Form.Select>
-                        {/* <input
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Mode of Work
+                      </label>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) => (jobData.modeOfWork = e.target.value)}
+                      >
+                        <option>Select Mode of Work</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                      </Form.Select>
+                      {/* <input
               style={{ width: "100%" }}
               className="form-control"
               type={"text"}
@@ -2200,340 +2674,328 @@ export const PublishedJob = () => {
               "
               required
             /> */}
-                      </fieldset>
-                      {errors && errors.modeOfWork && (
-                        <p style={{ color: "red" }}>{errors.modeOfWork}</p>
-                      )}
-                    </Col>
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          No. of Openings
-                        </label>
+                    </fieldset>
+                    {errors && errors.modeOfWork && (
+                      <p style={{ color: "red" }}>{errors.modeOfWork}</p>
+                    )}
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        No. of Openings
+                      </label>
 
+                      <input
+                        style={{ width: "100%" }}
+                        className="form-control"
+                        type={"number"}
+                        name="firstname"
+                        onChange={(e) =>
+                          (jobData.noOfOpenings = e.target.value)
+                        }
+                        //   value={user.name}
+                        //   onChange={getUserData}
+                        placeholder="Enter No. of Openings
+              "
+                        required
+                      />
+                    </fieldset>
+                    {errors && errors.noOfOpenings && (
+                      <p style={{ color: "red" }}>{errors.noOfOpenings}</p>
+                    )}
+                  </Col>
+                  <Col lg="12">
+                    <fieldset>
+                      <label className="text-lg" style={{ width: "100%" }}>
+                        Salary Info
+                      </label>
+                      <Form.Select
+                        aria-label="Default select example"
+                        onChange={(e) =>
+                          (jobData.salaryCurrency = e.target.value)
+                        }
+                      >
+                        <option value="DEFAULT" disabled="">
+                          Currency
+                        </option>
+                        <option>HKD</option>
+                        <option>USD</option>
+                        <option>RMB</option>
+                        <option>Yen</option>
+                        <option>Won</option>
+                        <option>TWD</option>
+                        <option>Others</option>
+                      </Form.Select>
+
+                      {/* <input
+              style={{ width: "100%" }}
+              className="form-control"
+              type={"text"}
+              name="firstname"
+              //   value={user.name}
+              //   onChange={getUserData}
+              placeholder="Select Job Industry
+              "
+              required
+            /> */}
+                    </fieldset>
+                    {errors && errors.salaryCurrency && (
+                      <p style={{ color: "red" }}>{errors.salaryCurrency}</p>
+                    )}
+                  </Col>
+                  <Container>
+                    <Row>
+                      <Col lg="6">
+                        <label className="text-l" style={{ color: "#7A7979" }}>
+                          Min :
+                        </label>
                         <input
                           style={{ width: "100%" }}
                           className="form-control"
                           type={"number"}
                           name="firstname"
                           onChange={(e) =>
-                            (jobData.noOfOpenings = e.target.value)
+                            (jobData.salaryRange.gte = e.target.value)
                           }
                           //   value={user.name}
                           //   onChange={getUserData}
-                          placeholder="Enter No. of Openings
+                          placeholder="Minimum Salary"
+                          required
+                        />
+                      </Col>
+                      {errors && errors.salaryRangegte && (
+                        <p style={{ color: "red" }}>{errors.salaryRangegte}</p>
+                      )}
+                      <Col lg="6">
+                        <label className="text-l" style={{ color: "#7A7979" }}>
+                          Max :
+                        </label>
+                        <input
+                          style={{ width: "100%" }}
+                          className="form-control mx-2"
+                          type={"number"}
+                          name="firstname"
+                          onChange={(e) =>
+                            (jobData.salaryRange.lte = e.target.value)
+                          }
+                          //   value={user.name}
+                          //   onChange={getUserData}
+                          placeholder="Maximum Salary
+              "
+                          required
+                        />
+                      </Col>
+                      {errors && errors.salaryRangelte && (
+                        <p style={{ color: "red" }}>{errors.salaryRangelte}</p>
+                      )}
+                    </Row>
+                  </Container>
+                  <Col lg="12">
+                    <fieldset className="dflexx">
+                      <label className="text-lg">Salary Type :</label>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio1"
+                        value="Salary Negotiable"
+                        style={{ marginLeft: "60px" }}
+                      />
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio1"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Salary Negotiable
+                      </label>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio2"
+                        value="Project Based"
+                        style={{ marginLeft: "60px" }}
+                      />
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Project Based
+                      </label>
+                      <input
+                        type="radio"
+                        name="radios"
+                        class="form-check-input"
+                        id="exampleRadio3"
+                        style={{ marginLeft: "60px" }}
+                        value="Others"
+                      />
+                      <label
+                        class="form-check-label"
+                        for="exampleRadio3"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Others
+                      </label>
+                    </fieldset>
+                    {errors && errors.salaryType && (
+                      <p style={{ color: "red" }}>{errors.salaryType}</p>
+                    )}
+                  </Col>
+                  <Col lg="12">
+                    <fieldset className="dflexx">
+                      <label className="text-lg">Salary Freq :</label>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio1"
+                        value="Per Day"
+                        style={{ marginLeft: "60px" }}
+                        onChange={(e) =>
+                          (jobData.salaryPayFreq = e.target.value)
+                        }
+                      />
+                      <label
+                        for="radio1"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Day
+                      </label>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio2"
+                        value="per Week"
+                        style={{ marginLeft: "60px" }}
+                        onChange={(e) =>
+                          (jobData.salaryPayFreq = e.target.value)
+                        }
+                      />
+                      <label
+                        for="radio2"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Week
+                      </label>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio3"
+                        value="per Month"
+                        style={{ marginLeft: "60px" }}
+                        onChange={(e) =>
+                          (jobData.salaryPayFreq = e.target.value)
+                        }
+                      />
+                      <label
+                        for="radio3"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Per Month
+                      </label>
+                      <input
+                        type="radio"
+                        class="form-check-input"
+                        name="bsradio"
+                        id="radio4"
+                        value="others"
+                        style={{ marginLeft: "60px" }}
+                        onChange={(e) =>
+                          (jobData.salaryPayFreq = e.target.value)
+                        }
+                      />
+                      <label
+                        for="radio4"
+                        class="form-check-label pl-2"
+                        style={{ color: "#7A7979" }}
+                      >
+                        Others
+                      </label>
+                    </fieldset>
+                    {errors && errors.salaryPayFreq && (
+                      <p style={{ color: "red" }}>{errors.salaryPayFreq}</p>
+                    )}
+                  </Col>
+
+                  <Row>
+                    <Col lg="6">
+                      <fieldset>
+                        <label className="text-lg" style={{ width: "100%" }}>
+                          Posted Date
+                        </label>
+
+                        <input
+                          style={{ width: "100%" }}
+                          className="form-control"
+                          name="firstname"
+                          //   value={user.name}
+                          //   onChange={getUserData}
+                          disabled
+                          value={`${date.getDate()}-${
+                            date.getMonth() + 1
+                          }-${date.getFullYear()}`}
+                          placeholder="Enter No. of Openings"
+                          // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
+                          required
+                        />
+                      </fieldset>
+                    </Col>
+
+                    <Col lg="6">
+                      <fieldset>
+                        <label className="text-lg" style={{ width: "100%" }}>
+                          Additional Emails
+                        </label>
+
+                        <input
+                          style={{ width: "100%" }}
+                          className="form-control"
+                          type={"email"}
+                          name="firstname"
+                          onChange={(e) => setIsEmail(e.target.value)}
+                          //   value={user.name}
+                          //   onChange={getUserData}
+                          placeholder="Enter Additional Emails
               "
                           required
                         />
                       </fieldset>
-                      {errors && errors.noOfOpenings && (
-                        <p style={{ color: "red" }}>{errors.noOfOpenings}</p>
-                      )}
                     </Col>
-                    <Col lg="12">
-                      <fieldset>
-                        <label className="text-lg" style={{ width: "100%" }}>
-                          Salary Info
-                        </label>
-                        <Form.Select
-                          aria-label="Default select example"
-                          onChange={(e) =>
-                            (jobData.salaryCurrency = e.target.value)
-                          }
-                        >
-                          <option value="DEFAULT" disabled="">
-                            Currency
-                          </option>
-                          <option>HKD</option>
-                          <option>USD</option>
-                          <option>RMB</option>
-                          <option>Yen</option>
-                          <option>Won</option>
-                          <option>TWD</option>
-                          <option>Others</option>
-                        </Form.Select>
+                  </Row>
+                  {errors && errors.isEmail && (
+                    <p style={{ color: "red" }}>{errors.isEmail}</p>
+                  )}
+                </div>
+              </Col>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
 
-                        {/* <input
-              style={{ width: "100%" }}
-              className="form-control"
-              type={"text"}
-              name="firstname"
-              //   value={user.name}
-              //   onChange={getUserData}
-              placeholder="Select Job Industry
-              "
-              required
-            /> */}
-                      </fieldset>
-                      {errors && errors.salaryCurrency && (
-                        <p style={{ color: "red" }}>{errors.salaryCurrency}</p>
-                      )}
-                    </Col>
-                    <Container>
-                      <Row>
-                        <Col lg="6">
-                          <label
-                            className="text-l"
-                            style={{ color: "#7A7979" }}
-                          >
-                            Min :
-                          </label>
-                          <input
-                            style={{ width: "100%" }}
-                            className="form-control"
-                            type={"number"}
-                            name="firstname"
-                            onChange={(e) =>
-                              (jobData.salaryRange.gte = e.target.value)
-                            }
-                            //   value={user.name}
-                            //   onChange={getUserData}
-                            placeholder="Minimum Salary"
-                            required
-                          />
-                        </Col>
-                        {errors && errors.salaryRangegte && (
-                          <p style={{ color: "red" }}>
-                            {errors.salaryRangegte}
-                          </p>
-                        )}
-                        <Col lg="6">
-                          <label
-                            className="text-l"
-                            style={{ color: "#7A7979" }}
-                          >
-                            Max :
-                          </label>
-                          <input
-                            style={{ width: "100%" }}
-                            className="form-control mx-2"
-                            type={"number"}
-                            name="firstname"
-                            onChange={(e) =>
-                              (jobData.salaryRange.lte = e.target.value)
-                            }
-                            //   value={user.name}
-                            //   onChange={getUserData}
-                            placeholder="Maximum Salary
-              "
-                            required
-                          />
-                        </Col>
-                        {errors && errors.salaryRangelte && (
-                          <p style={{ color: "red" }}>
-                            {errors.salaryRangelte}
-                          </p>
-                        )}
-                      </Row>
-                    </Container>
-                    <Col lg="12">
-                      <fieldset className="dflexx">
-                        <label className="text-lg">Salary Type :</label>
-                        <input
-                          type="radio"
-                          name="radios"
-                          class="form-check-input"
-                          id="exampleRadio1"
-                          value="Salary Negotiable"
-                          style={{ marginLeft: "60px" }}
-                        />
-                        <label
-                          class="form-check-label"
-                          for="exampleRadio1"
-                          style={{ color: "#7A7979" }}
-                        >
-                          Salary Negotiable
-                        </label>
-                        <input
-                          type="radio"
-                          name="radios"
-                          class="form-check-input"
-                          id="exampleRadio2"
-                          value="Project Based"
-                          style={{ marginLeft: "60px" }}
-                        />
-                        <label
-                          class="form-check-label"
-                          for="exampleRadio2"
-                          style={{ color: "#7A7979" }}
-                        >
-                          Project Based
-                        </label>
-                        <input
-                          type="radio"
-                          name="radios"
-                          class="form-check-input"
-                          id="exampleRadio3"
-                          style={{ marginLeft: "60px" }}
-                          value="Others"
-                        />
-                        <label
-                          class="form-check-label"
-                          for="exampleRadio3"
-                          style={{ color: "#7A7979" }}
-                        >
-                          Others
-                        </label>
-                      </fieldset>
-                      {errors && errors.salaryType && (
-                        <p style={{ color: "red" }}>{errors.salaryType}</p>
-                      )}
-                    </Col>
-                    <Col lg="12">
-                      <fieldset className="dflexx">
-                        <label className="text-lg">Salary Freq :</label>
-                        <input
-                          type="radio"
-                          class="form-check-input"
-                          name="bsradio"
-                          id="radio1"
-                          value="Per Day"
-                          style={{ marginLeft: "60px" }}
-                          onChange={(e) =>
-                            (jobData.salaryPayFreq = e.target.value)
-                          }
-                        />
-                        <label
-                          for="radio1"
-                          class="form-check-label pl-2"
-                          style={{ color: "#7A7979" }}
-                        >
-                          Per Day
-                        </label>
-                        <input
-                          type="radio"
-                          class="form-check-input"
-                          name="bsradio"
-                          id="radio2"
-                          value="per Week"
-                          style={{ marginLeft: "60px" }}
-                          onChange={(e) =>
-                            (jobData.salaryPayFreq = e.target.value)
-                          }
-                        />
-                        <label
-                          for="radio2"
-                          class="form-check-label pl-2"
-                          style={{ color: "#7A7979" }}
-                        >
-                          Per Week
-                        </label>
-                        <input
-                          type="radio"
-                          class="form-check-input"
-                          name="bsradio"
-                          id="radio3"
-                          value="per Month"
-                          style={{ marginLeft: "60px" }}
-                          onChange={(e) =>
-                            (jobData.salaryPayFreq = e.target.value)
-                          }
-                        />
-                        <label
-                          for="radio3"
-                          class="form-check-label pl-2"
-                          style={{ color: "#7A7979" }}
-                        >
-                          Per Month
-                        </label>
-                        <input
-                          type="radio"
-                          class="form-check-input"
-                          name="bsradio"
-                          id="radio4"
-                          value="others"
-                          style={{ marginLeft: "60px" }}
-                          onChange={(e) =>
-                            (jobData.salaryPayFreq = e.target.value)
-                          }
-                        />
-                        <label
-                          for="radio4"
-                          class="form-check-label pl-2"
-                          style={{ color: "#7A7979" }}
-                        >
-                          Others
-                        </label>
-                      </fieldset>
-                      {errors && errors.salaryPayFreq && (
-                        <p style={{ color: "red" }}>{errors.salaryPayFreq}</p>
-                      )}
-                    </Col>
-
-                    <Row>
-                      <Col lg="6">
-                        <fieldset>
-                          <label className="text-lg" style={{ width: "100%" }}>
-                            Posted Date
-                          </label>
-
-                          <input
-                            style={{ width: "100%" }}
-                            className="form-control"
-                            name="firstname"
-                            //   value={user.name}
-                            //   onChange={getUserData}
-                            disabled
-                            value={`${date.getDate()}-${
-                              date.getMonth() + 1
-                            }-${date.getFullYear()}`}
-                            placeholder="Enter No. of Openings"
-                            // onChange={(e) => setJobData({...jobData, postedDate : e.target.value})}
-                            required
-                          />
-                        </fieldset>
-                      </Col>
-
-                      <Col lg="6">
-                        <fieldset>
-                          <label className="text-lg" style={{ width: "100%" }}>
-                            Additional Emails
-                          </label>
-
-                          <input
-                            style={{ width: "100%" }}
-                            className="form-control"
-                            type={"email"}
-                            name="firstname"
-                            onChange={(e) => setIsEmail(e.target.value)}
-                            //   value={user.name}
-                            //   onChange={getUserData}
-                            placeholder="Enter Additional Emails
-              "
-                            required
-                          />
-                        </fieldset>
-                      </Col>
-                    </Row>
-                    {errors && errors.isEmail && (
-                      <p style={{ color: "red" }}>{errors.isEmail}</p>
-                    )}
-                  </div>
-                </Col>
-              </Row>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button
-                style={{ background: "none", color: "#C1C1C1" }}
-                onClick={props.onHide}
-              >
-                Cancel
-              </Button>
-
-              <Button
-                variant="primary"
-                style={{ background: "none", color: "#39BEC1" }}
-                onClick={() => profileFunc()}
-              >
-                Save
-              </Button>
-            </Modal.Footer>
-          </Modal>
-        </div>
-      );
-    },
-    [profileData]
-  );
+            <Button
+              variant="primary"
+              style={{ background: "none", color: "#39BEC1" }}
+              onClick={() => profileFunc()}
+            >
+              Save
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  };
 
   console.log(searchData, "search");
 
@@ -2697,7 +3159,10 @@ export const PublishedJob = () => {
                                           >
                                             <div
                                               className="inline-flex"
-                                              style={{ fontSize: "20px" }}
+                                              style={{
+                                                fontSize: "20px",
+                                                alignItems: "center",
+                                              }}
                                               onClick={() => btnEdit(items)}
                                             >
                                               <BsPencilSquare /> &nbsp; Edit Job
@@ -2974,7 +3439,10 @@ export const PublishedJob = () => {
                                             >
                                               <div
                                                 className="inline-flex"
-                                                style={{ fontSize: "20px" }}
+                                                style={{
+                                                  fontSize: "20px",
+                                                  alignItems: "center",
+                                                }}
                                                 onClick={() => btnEdit(items)}
                                               >
                                                 <BsPencilSquare /> &nbsp; Edit
