@@ -4,13 +4,14 @@ import { Container, Button, Row, Col, Image, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "../../../utils/axios.api";
 import Loader from "../../../assets/loader.gif";
+import Modal from "react-bootstrap/Modal";
 
 export const FreelanceOffer = () => {
   const navigate = useNavigate();
   const [searchData, setSearchData] = useState({});
-  const [modalShowAccept,setModalShowAccept] = useState(false)
-  const [modalShowRevise,setModalShowRevise] = useState(false)
-  const [modalShowReject,setModalShowReject] = useState(false)
+  const [modalShowAccept, setModalShowAccept] = useState(false);
+  const [modalShowRevise, setModalShowRevise] = useState(false);
+  const [modalShowReject, setModalShowReject] = useState(false);
   console.log(searchData);
 
   useEffect(() => {
@@ -29,7 +30,7 @@ export const FreelanceOffer = () => {
 
   const initialFun = () => {
     axios
-      .get(`api/v1/interview/freelancer?stage=offer&size=100&from=30`)
+      .get(`api/v1/interview/freelancer?stage=offer&size=100&from=0`)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data;
@@ -43,14 +44,14 @@ export const FreelanceOffer = () => {
   };
 
   const setAcceptFunc = (event) => {
-    let eventVal = event.clicked == true
+    let eventVal = event.clicked == true;
     axios
       .post(`api/v1/interview/offer/confirm?id=${event.id}`)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data;
         // console.log(data, "daaaaaaaaataaaaaaaaaaaa");
-        modalshowaccept(eventVal)
+        modalshowaccept(eventVal);
         // setIsProfileData(data)
         setTimeout(() => {
           initialFun();
@@ -62,7 +63,7 @@ export const FreelanceOffer = () => {
   };
 
   const revisedFunc = (event) => {
-    let eventVal = event.clicked == true
+    let eventVal = event.clicked == true;
     axios
       .post(`api/v1/interview/offer/freelancer/revise?id=${event.id}`)
       .then((res) => {
@@ -70,7 +71,7 @@ export const FreelanceOffer = () => {
         let data = res.data.data;
         console.log(data, "daaaaaaaaataaaaaaaaaaaa");
         // setIsProfileData(data)
-        modalshowrevise(eventVal)
+        modalshowrevise(eventVal);
         setTimeout(() => {
           initialFun();
         }, 1000);
@@ -81,15 +82,15 @@ export const FreelanceOffer = () => {
   };
 
   const rejectFunc = (event) => {
-    let eventVal = event.clicked == true
+    let eventVal = event.clicked == true;
     axios
       .post(`api/v1/interview/offer/reject?id=${event.id}`)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data;
         // console.log(data, "daaaaaaaaataaaaaaaaaaaa");
-        
-        modalshowreject(eventVal)
+
+        modalshowreject(eventVal);
         // setIsProfileData(data)
         setTimeout(() => {
           initialFun();
@@ -99,8 +100,6 @@ export const FreelanceOffer = () => {
         console.log(err);
       });
   };
-
-  
 
   // Revise
   function MyVerticallyCenteredRevise(props) {
@@ -145,8 +144,8 @@ export const FreelanceOffer = () => {
     }
   };
 
-   // Accept
-   function MyVerticallyCenteredAccept(props) {
+  // Accept
+  function MyVerticallyCenteredAccept(props) {
     return (
       <div>
         <Modal
@@ -340,7 +339,8 @@ export const FreelanceOffer = () => {
                                 className="text-lg"
                                 style={{ color: "#7A7979" }}
                               >
-                                {event.schedule}
+                                {event.schedule.substring(0, 10)} -{" "}
+                                {event.schedule.substring(11, 16)}
                               </h2>
                             </div>
                           </Col>
@@ -393,7 +393,7 @@ export const FreelanceOffer = () => {
                                 className="text-lg"
                                 style={{ color: "#7A7979" }}
                               >
-                                {event.offer.joiningDate}
+                                {event.offer.joiningDate.substring(0, 10)}
                               </h2>
                             </div>
                           </Col>

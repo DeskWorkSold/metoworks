@@ -27,7 +27,7 @@ export const FreelanceNavMain = () => {
           <Button variant="outline-success">Search</Button>
         </Form> */}
           <Nav className="my-2 my-lg-0" navbarScroll>
-            <Link to="/FreelancerProfile" className="nav-link">
+            <Link to="/FreelancerProfile" className="nav-link" id="bottomBord">
               Profile
             </Link>
             <Link to="/FreelancerGenerateCv" className="nav-link">

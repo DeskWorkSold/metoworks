@@ -25,7 +25,7 @@ export const MainNav = () => {
           <Button variant="outline-success">Search</Button>
         </Form> */}
           <Nav className="my-2 my-lg-0" navbarScroll>
-            <Link to="/CompanyProfile" className="nav-link">
+            <Link to="/CompanyProfile" className="nav-link" id="bottomBord">
               Company Profile
             </Link>
             <Link to="/PublishedJob" className="nav-link">
@@ -35,24 +35,17 @@ export const MainNav = () => {
               Draft Jobs{" "}
             </Link>
             <NavDropdown title="Interviews" id="navbarScrollingDropdown">
-           
               <NavDropdown.Item>
-                <Link to="/Interview">
-                Interviews
-                </Link>
+                <Link to="/Interview">Interviews</Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to="/RecruiterSheduled">
-                  Scheduled
-                </Link>
+                <Link to="/RecruiterSheduled">Scheduled</Link>
               </NavDropdown.Item>
               <NavDropdown.Item>
-                <Link to="/RecruiterOffeer">
-                  Offer
-                </Link>
+                <Link to="/RecruiterOffeer">Offer</Link>
               </NavDropdown.Item>
             </NavDropdown>
-          
+
             {/* <NavDropdown title="Link" id="navbarScrollingDropdown">
             <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
             <NavDropdown.Item href="#action4">

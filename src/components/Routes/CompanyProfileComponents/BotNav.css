@@ -4,9 +4,9 @@
     font-size: 14px;
     padding: 10px;
     text-align: -webkit-center;
-    border-left: 1px solid white !important;
+    border-left: 1px solid white ;
 }
-#bot .nav-link:nth-child(1){
+#bottomBord{
     border-left: none !important;
 }
 #bot{

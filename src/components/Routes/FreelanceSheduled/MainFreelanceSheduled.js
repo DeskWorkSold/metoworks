@@ -10,7 +10,12 @@ export const MainFreelanceSheduled = () => {
   const [modalShow, setModalShow] = useState(false);
   const [modalShowConfirm, setModalShowConfirm] = useState(false);
   const [modalShowDecline, setModalShowDecline] = useState(false);
-
+  const [resheduleSuccess, setResheduleSuccess] = useState(false);
+  const [resheduleError, setResheduleError] = useState(false);
+  const [confirmSuccess, setConfirmSuccess] = useState(false);
+  const [confirmError, setConfirmError] = useState(false);
+  const [declineSuccess, setDeclineSuccess] = useState(false);
+  const [declineError, setdeclineError] = useState(false);
   const [isToken, setIsToken] = useState("");
   const [searchData, setSearchData] = useState({});
 
@@ -34,9 +39,7 @@ export const MainFreelanceSheduled = () => {
 
   const initialFun = () => {
     axios
-      .get(
-        `api/v1/interview/freelancer?stage=schedule&state=pending&size=${80}&from=${0}`
-      )
+      .get(`api/v1/interview/freelancer?stage=schedule&size=${80}&from=${0}`)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data;
@@ -128,6 +131,7 @@ export const MainFreelanceSheduled = () => {
           })
           .catch((error) => {
             console.log(error, "error");
+            props.onHide();
           });
       } else {
         let newErrors = {};
@@ -206,6 +210,105 @@ export const MainFreelanceSheduled = () => {
     }
   };
 
+  // reschedule success
+  function MyVerticallyCenteredResheduleSuccess(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Seccess</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Succesfully Reschedule</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              // onClick={() => deleteProfileEducationData(props.props)}
+              onClick={props.onHide}
+            >
+              ok
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+  const reshedulesuccess = (items) => {
+    // console.log(items, "funtion items");
+    if (items.clicked == true) {
+      items.clicked = false;
+      setResheduleSuccess(false);
+    } else {
+      setResheduleSuccess(true);
+      items.clicked = true;
+    }
+  };
+  //reschedule Error
+  function MyVerticallyCenteredResheduleError(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Error</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Error Reshedule</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              // onClick={() => deleteProfileEducationData(props.props)}
+              onClick={props.onHide}
+            >
+              ok
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+  const resheduleerror = (items) => {
+    // console.log(items, "funtion items");
+    if (items.clicked == true) {
+      items.clicked = false;
+      setResheduleError(false);
+    } else {
+      setResheduleError(true);
+      items.clicked = true;
+    }
+  };
+
   // confirm
   function MyVerticallyCenteredConfirm(props) {
     // console.log(props, "proooooooooops");
@@ -268,6 +371,104 @@ export const MainFreelanceSheduled = () => {
       setModalShowConfirm(false);
     } else {
       setModalShowConfirm(true);
+      items.clicked = true;
+    }
+  };
+  // Confirm success
+  function MyVerticallyCenteredConfirmSuccess(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Seccess</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Succesfully Confirm</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              // onClick={() => deleteProfileEducationData(props.props)}
+              onClick={props.onHide}
+            >
+              ok
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+  const confirmsuccess = (items) => {
+    // console.log(items, "funtion items");
+    if (items.clicked == true) {
+      items.clicked = false;
+      setConfirmSuccess(false);
+    } else {
+      setConfirmSuccess(true);
+      items.clicked = true;
+    }
+  };
+  //Confirm Error
+  function MyVerticallyCenteredConfirmError(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Error</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Error Confirm</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              // onClick={() => deleteProfileEducationData(props.props)}
+              onClick={props.onHide}
+            >
+              ok
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+  const confirmerror = (items) => {
+    // console.log(items, "funtion items");
+    if (items.clicked == true) {
+      items.clicked = false;
+      setConfirmError(false);
+    } else {
+      setConfirmError(true);
       items.clicked = true;
     }
   };
@@ -336,6 +537,106 @@ export const MainFreelanceSheduled = () => {
       items.clicked = true;
     }
   };
+
+  // Decline success
+  function MyVerticallyCenteredDeclineSuccess(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Seccess</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Succesfully Decline</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              // onClick={() => deleteProfileEducationData(props.props)}
+              onClick={props.onHide}
+            >
+              ok
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+  const declinesuccess = (items) => {
+    // console.log(items, "funtion items");
+    if (items.clicked == true) {
+      items.clicked = false;
+      setDeclineSuccess(false);
+    } else {
+      setDeclineSuccess(true);
+      items.clicked = true;
+    }
+  };
+  //Decline Error
+  function MyVerticallyCenteredDeclineError(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Error</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Error Decline</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#C1C1C1" }}
+              onClick={props.onHide}
+            >
+              Cancel
+            </Button>
+
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              // onClick={() => deleteProfileEducationData(props.props)}
+              onClick={props.onHide}
+            >
+              ok
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
+  const declineerror = (items) => {
+    // console.log(items, "funtion items");
+    if (items.clicked == true) {
+      items.clicked = false;
+      setdeclineError(false);
+    } else {
+      setdeclineError(true);
+      items.clicked = true;
+    }
+  };
+
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
       <Container>
@@ -403,6 +704,20 @@ export const MainFreelanceSheduled = () => {
                                 onHide={() => modalshow(items)}
                               />
                             )}
+                            {/* {items.clicked == true && (
+                              <MyVerticallyCenteredResheduleSuccess
+                                show={resheduleSuccess}
+                                props={items}
+                                onHide={() => reshedulesuccess(items)}
+                              />
+                            )}
+                            {items.clicked == true && (
+                              <MyVerticallyCenteredResheduleError
+                                show={resheduleError}
+                                props={items}
+                                onHide={() => resheduleerror(items)}
+                              />
+                            )} */}
                             <Button
                               className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
                               style={{ background: "#39BEC1", border: "none" }}
@@ -418,6 +733,20 @@ export const MainFreelanceSheduled = () => {
                                 onHide={() => modalshowconfirm(items)}
                               />
                             )}
+                            {/* {items.clicked == true && (
+                              <MyVerticallyCenteredConfirmSuccess
+                                show={confirmSuccess}
+                                props={items}
+                                onHide={() => confirmsuccess(items)}
+                              />
+                            )}
+                            {items.clicked == true && (
+                              <MyVerticallyCenteredConfirmError
+                                show={confirmError}
+                                props={items}
+                                onHide={() => confirmerror(items)}
+                              />
+                            )} */}
                             <Button
                               //   onClick={handleShow}
                               className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
@@ -434,6 +763,20 @@ export const MainFreelanceSheduled = () => {
                                 onHide={() => modalshowdecline(items)}
                               />
                             )}
+                            {/* {items.clicked == true && (
+                              <MyVerticallyCenteredDeclineSuccess
+                                show={declineSuccess}
+                                props={items}
+                                onHide={() => declinesuccess(items)}
+                              />
+                            )}
+                            {items.clicked == true && (
+                              <MyVerticallyCenteredDeclineError
+                                show={declineError}
+                                props={items}
+                                onHide={() => declineerror(items)}
+                              />
+                            )} */}
                           </Col>
                         </Row>
                         <Row className="align-items-center block-for-res">
