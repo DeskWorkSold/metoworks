@@ -12,7 +12,8 @@ export const RecruiterShedule = () => {
   const [modalShowDecline, setModalShowDecline] = useState(false);
   const [isToken, setIsToken] = useState("");
   const [searchData, setSearchData] = useState({});
-
+  const [resheduleSuccess, setResheduleSuccess] = useState(false);
+  const [offerSuccess, setOfferSuccess] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,24 +32,39 @@ export const RecruiterShedule = () => {
     }
   };
 
-  const initialFun = () => {
+  const initialFun = (props) => {
     axios
-      .get(`api/v1/interview?stage=schedule&size=20&from=0`)
+      .get(`api/v1/interview?stage=schedule&size=4&from=0`)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data;
-        console.log(data, "daaaaaaaaataaaaaaaaaaaa");
-        // setIsProfileData(data)
-        let isData = data.filter((e) => {
-          return e.internalState == "RESCHEDULE";
-        });
-        setSearchData(isData);
+        if (props && props.id) {
+          setSearchData(
+            data &&
+              data.length > 0 &&
+              data.map((e, i) => {
+                if (e.id == props.id) {
+                  return {
+                    ...e,
+                    clicked: (e.clicked = true),
+                  };
+                } else {
+                  return {
+                    ...e,
+                    clicked: false,
+                  };
+                }
+              })
+          );
+        } else {
+          setSearchData(data);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
+  console.log(searchData, "seaaaaaaaaaaaaaaaaarch Dataaaaaaaaaa");
   const rejectSchedule = (id) => {
     axios
       .post(`api/v1/interview/schedule/reject?id=${id}`)
@@ -105,6 +121,16 @@ export const RecruiterShedule = () => {
       });
   };
 
+  const closeBookmark = (props) => {
+    console.log(props, "propssssss");
+    initialFun();
+    setResheduleSuccess(false);
+  };
+  const closeBookmark1 = (props) => {
+    console.log(props, "propssssss");
+    initialFun();
+    setOfferSuccess(false);
+  };
   // reschedule
   function MyVerticallyCenteredReSchedule(props) {
     const [errors, setErrors] = useState();
@@ -116,7 +142,7 @@ export const RecruiterShedule = () => {
       type: "",
     });
 
-    const reSchedule = () => {
+    const reSchedule = (event) => {
       let values = Object.values(isReschedule);
       values = values.every((e, i) => e !== "");
       if (values) {
@@ -127,10 +153,14 @@ export const RecruiterShedule = () => {
           )
           .then((res) => {
             if (res.data) {
-              props.onHide();
+              initialFun(event);
+              event.clicked = false;
+              setModalShow(false);
+              setResheduleSuccess(true);
             }
           })
           .catch((error) => {
+            setModalShow(false);
             console.log(error, "error");
           });
       } else {
@@ -263,7 +293,7 @@ export const RecruiterShedule = () => {
 
           <Button
             style={{ background: "none", color: "#39BEC1" }}
-            onClick={() => reSchedule(props)}
+            onClick={() => reSchedule(props?.props)}
           >
             Send
           </Button>
@@ -274,14 +304,41 @@ export const RecruiterShedule = () => {
 
   const modalshow = (items) => {
     // console.log(items, "funtion items");
-    if (items.clicked == true) {
-      items.clicked = false;
-      setModalShow(false);
-    } else {
-      setModalShow(true);
-      items.clicked = true;
-    }
+    initialFun(items);
+    setModalShow(true);
   };
+  // ReSchedule success
+  function MyVerticallyCenteredReScheduleSuccess(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Success</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Succesfully Reshedule</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              // onClick={() => deleteProfileEducationData(props.props)}
+              onClick={() => closeBookmark(props)}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
 
   // confirm
   function MyVerticallyCenteredConfirm(props) {
@@ -297,7 +354,7 @@ export const RecruiterShedule = () => {
       salary: "",
     });
     // console.log(offerJob, 'sdfds');
-    const ConfirmFunc = () => {
+    const ConfirmFunc = (event) => {
       let values = Object.values(offerJob);
       values = values.every((e) => e !== "");
       if (values) {
@@ -305,11 +362,15 @@ export const RecruiterShedule = () => {
           .post(`api/v1/interview/offer`, offerJob)
           .then((res) => {
             if (res.data) {
-              props.onHide();
+              initialFun(event);
+              event.clicked = false;
+              setModalShowConfirm(false);
+              setOfferSuccess(true);
             }
           })
           .catch((error) => {
             console.log(error, "error");
+            setOfferSuccess(false);
           });
       } else {
         let newErrors = {};
@@ -328,7 +389,6 @@ export const RecruiterShedule = () => {
         setErrors(newErrors);
       }
     };
-
     return (
       <div>
         <Modal
@@ -439,7 +499,7 @@ export const RecruiterShedule = () => {
             <Button
               style={{ background: "none", color: "#39BEC1" }}
               // onClick={() => deleteProfileEducationData(props.props)}
-              onClick={() => ConfirmFunc()}
+              onClick={() => ConfirmFunc(props?.props)}
             >
               Confirm
             </Button>
@@ -451,15 +511,42 @@ export const RecruiterShedule = () => {
 
   const modalshowconfirm = (items) => {
     // console.log(items, "funtion items");
-    if (items.clicked == true) {
-      items.clicked = false;
-      setModalShowConfirm(false);
-    } else {
-      setModalShowConfirm(true);
-      items.clicked = true;
-    }
+    initialFun(items);
+    setModalShowConfirm(true);
   };
 
+  // Offer success
+  function MyVerticallyCenteredOfferPositionSuccess(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Success</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Succesfully Offer</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              // onClick={() => deleteProfileEducationData(props.props)}
+              onClick={() => closeBookmark1(props)}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
   // decline
   function MyVerticallyCenteredDecline(props) {
     const [errors, setErrors] = useState();
@@ -579,33 +666,25 @@ export const RecruiterShedule = () => {
         </Row>
       </Container>
       <hr className="my-2" />
-      {searchData.length > 0 && searchData ? (
+      {searchData?.length > 0 && searchData ? (
         <Container>
           {searchData.length > 0 &&
             searchData.map((items, keys) => {
+              console.log(items, "items items items items items");
               return (
-                <Row>
+                <Row keys={keys}>
                   <Col lg="12">
                     <div className="p-3">
                       <div className="boxshad">
                         <Row>
                           <Col lg="7">
-                            {/* <p
-                          className="py-2"
-                          style={{
-                            float: "right",
-                            color: "#7A7979",
-                            fontSize: "20px",
-                            display: "flex",
-                          }}
-                        >
-                          <BsBookmark /> Bookmark
-                        </p> */}
                             <h2
                               className="text-3xl"
                               style={{ color: "#39BEC1" }}
                             >
-                              {items?.recruiter?.companyName}
+                              {items?.freelancer?.firstName +
+                                " " +
+                                items?.freelancer?.lastName}
                             </h2>
                             <p style={{ color: "#7A7979" }} className="text-lg">
                               {items?.job?.title}
@@ -613,6 +692,13 @@ export const RecruiterShedule = () => {
                           </Col>
                           <Col lg="5" className="webkit-right">
                             <Button
+                              disabled={
+                                `${(items.internalState =
+                                  "CONFIRM")} || ${(items.internalState =
+                                  "REJECT")}`
+                                  ? true
+                                  : false
+                              }
                               className="text-white border-rounded px-3 py-3 w-32 mx-2 mt-2"
                               style={{ background: "#6A489C", border: "none" }}
                               // onClick={() => reSchedule(items.id)}
@@ -620,11 +706,18 @@ export const RecruiterShedule = () => {
                             >
                               Reschedule
                             </Button>
-                            {items.clicked == true && (
+                            {items.clicked && modalShow && (
                               <MyVerticallyCenteredReSchedule
-                                show={modalShow}
+                                show={items.clicked}
                                 props={items}
-                                onHide={() => modalshow(items)}
+                                // onHide={() => modalshow(items)}
+                              />
+                            )}
+                            {items.clicked && resheduleSuccess && (
+                              <MyVerticallyCenteredReScheduleSuccess
+                                show={resheduleSuccess}
+                                props={items}
+                                // onHide={() => reshedulesuccess(items)}
                               />
                             )}
                             <Button
@@ -635,11 +728,18 @@ export const RecruiterShedule = () => {
                             >
                               Offer Position
                             </Button>
-                            {items.clicked == true && (
+                            {items.clicked && modalShowConfirm && (
                               <MyVerticallyCenteredConfirm
-                                show={modalShowConfirm}
+                                show={items.clicked}
                                 props={items}
-                                onHide={() => modalshowconfirm(items)}
+                                // onHide={() => modalshowconfirm(items)}
+                              />
+                            )}
+                            {items.clicked && offerSuccess && (
+                              <MyVerticallyCenteredOfferPositionSuccess
+                                show={offerSuccess}
+                                props={items}
+                                // onHide={() => reshedulesuccess(items)}
                               />
                             )}
                             <Button

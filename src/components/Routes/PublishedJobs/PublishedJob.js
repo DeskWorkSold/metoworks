@@ -3356,7 +3356,7 @@ export const PublishedJob = () => {
                     justifyContent: "center",
                   }}
                 >
-                  <img src={Loader} style={{ width: 180, height: 180 }} />{" "}
+                  <p> No Active Data Found! </p>
                 </div>
               )}
               {searchData.length > 0 && searchData ? (
@@ -3637,7 +3637,7 @@ export const PublishedJob = () => {
                     justifyContent: "center",
                   }}
                 >
-                  <img src={Loader} style={{ width: 180, height: 180 }} />{" "}
+                  <p> No Expiry Data Found </p>
                 </div>
               )}
             </Tabs>

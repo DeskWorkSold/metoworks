@@ -12,6 +12,7 @@ export const RecruiterOffer = () => {
   // const [modalShowAccept, setModalShowAccept] = useState(false);
   // const [modalShowRevise, setModalShowRevise] = useState(false);
   const [modalShowOffer, setModalShowOffer] = useState(false);
+  const [offerSuccess, setOfferSuccess] = useState(false);
   console.log(searchData);
 
   useEffect(() => {
@@ -28,19 +29,49 @@ export const RecruiterOffer = () => {
     }
   };
 
-  const initialFun = () => {
+  console.log(searchData, "ssefklsdhfkjdshfkjhadskjfhkj");
+
+  const initialFun = (props) => {
+    console.log(props, "intial Proioooooops");
     axios
       .get(`api/v1/interview?stage=offer&size=4&from=0`)
       .then((res) => {
         // console.log(res, "Initial Data");
         let data = res.data.data;
         console.log(data, "daaaaaaaaataaaaaaaaaaaa");
-        // setIsProfileData(data)
-        setSearchData(data);
+        if (props && props.id) {
+          setSearchData(
+            data &&
+              data.length > 0 &&
+              data.map((e, i) => {
+                if (e.id == props.id) {
+                  return {
+                    ...e,
+                    clicked: (e.clicked = true),
+                  };
+                } else {
+                  return {
+                    ...e,
+                    clicked: false,
+                  };
+                }
+              })
+          );
+        } else {
+          setSearchData(data);
+        }
       })
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  console.log(searchData, "search");
+
+  const closeBookmark = (props) => {
+    console.log(props, "propssssss");
+    initialFun();
+    setOfferSuccess(false);
   };
 
   // Offer
@@ -55,20 +86,24 @@ export const RecruiterOffer = () => {
     // console.log(isJobOffer, 'isJobOffer');
     const [errors, setErrors] = useState();
 
-    const JobOfferFunc = () => {
+    const JobOfferFunc = (event) => {
+      console.log(event, "eventeventeventevent");
       let value = Object.values(isJobOffer);
       value = value.every((e) => e !== "");
-      // console.log(value, 'value');
       if (value) {
         axios
           .post(`api/v1/interview/offer`, isJobOffer)
           .then((res) => {
             if (res.data) {
-              props.onHide();
+              initialFun(event);
+              event.clicked = false;
+              setModalShowOffer(false);
+              setOfferSuccess(true);
             }
           })
           .catch((error) => {
             console.log(error, "error");
+            setModalShowOffer(false);
           });
       } else {
         let newErrors = {};
@@ -193,7 +228,7 @@ export const RecruiterOffer = () => {
           <Modal.Footer>
             <Button
               style={{ background: "none", color: "#C1C1C1" }}
-              onClick={props.onHide}
+              onClick={() => closeBookmark(props)}
             >
               Cancel
             </Button>
@@ -201,7 +236,7 @@ export const RecruiterOffer = () => {
             <Button
               style={{ background: "none", color: "#39BEC1" }}
               // onClick={() => deleteProfileEducationData(props.props)}
-              onClick={() => JobOfferFunc()}
+              onClick={() => JobOfferFunc(props?.props)}
             >
               Confirm
             </Button>
@@ -213,14 +248,41 @@ export const RecruiterOffer = () => {
 
   const modalshowoffer = (items) => {
     // console.log(items, "funtion items");
-    if (items.clicked == true) {
-      items.clicked = false;
-      setModalShowOffer(false);
-    } else {
-      setModalShowOffer(true);
-      items.clicked = true;
-    }
+    initialFun(items);
+    setModalShowOffer(true);
   };
+  // offer success
+  function MyVerticallyCenteredOfferSuccess(props) {
+    return (
+      <div>
+        <Modal
+          id="modal"
+          {...props}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title style={{ color: "black" }}>Success</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <Row>
+              <div className="p-3">Succesfully Offer</div>
+            </Row>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              style={{ background: "none", color: "#39BEC1" }}
+              // onClick={() => deleteProfileEducationData(props.props)}
+              onClick={() => closeBookmark(props)}
+            >
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </div>
+    );
+  }
 
   return (
     <Container fluid style={{ background: "#F7F7F7" }}>
@@ -283,11 +345,17 @@ export const RecruiterOffer = () => {
                             >
                               Offer Position
                             </Button>
-                            {event.clicked == true && (
+                            {event.clicked && modalShowOffer && (
                               <MyVerticallyCenteredOffer
-                                show={modalShowOffer}
+                                show={event.clicked}
                                 props={event}
-                                onHide={() => modalshowoffer(event)}
+                              />
+                            )}
+
+                            {event.clicked && offerSuccess && (
+                              <MyVerticallyCenteredOfferSuccess
+                                show={offerSuccess}
+                                props={event}
                               />
                             )}
                           </Col>
@@ -303,7 +371,8 @@ export const RecruiterOffer = () => {
                                 className="text-lg"
                                 style={{ color: "#7A7979" }}
                               >
-                                {event.schedule}
+                                {event?.schedule?.substring(0, 10)} -
+                                {event?.schedule?.substring(11, 16)}
                               </h2>
                             </div>
                           </Col>
@@ -356,7 +425,7 @@ export const RecruiterOffer = () => {
                                 className="text-lg"
                                 style={{ color: "#7A7979" }}
                               >
-                                {event.offer.joiningDate}
+                                {event.offer.joiningDate.substring(0, 10)}
                               </h2>
                             </div>
                           </Col>
@@ -389,7 +458,7 @@ export const RecruiterOffer = () => {
                                   color: "#39BEC1",
                                 }}
                               >
-                                {event.interviewState}
+                                {event.internalState}
                               </Button>
                             </div>
                             {/* <Button

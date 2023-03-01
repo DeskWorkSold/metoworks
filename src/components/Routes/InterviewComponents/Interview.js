@@ -2531,12 +2531,12 @@ export const Interview = () => {
                                                 events.freelancer.lastName}
                                             </span>{" "}
                                             <br />
-                                            <span
+                                            {/* <span
                                               className="text-2xl"
                                               style={{ color: "black" }}
                                             >
-                                              Doctor
-                                            </span>
+                                              {events?.}
+                                            </span> */}
                                             <br />
                                             <br />
                                             <span
