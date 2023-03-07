@@ -35,15 +35,17 @@ export const MainNav = () => {
               Draft Jobs{" "}
             </Link>
             <NavDropdown title="Interviews" id="navbarScrollingDropdown">
-              <NavDropdown.Item>
-                <Link to="/Interview">Interviews</Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link to="/RecruiterSheduled">Scheduled</Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link to="/RecruiterOffeer">Offer</Link>
-              </NavDropdown.Item>
+              <Link className="dropdown-item" to="/Interview">
+                Interviews
+              </Link>
+
+              <Link className="dropdown-item" to="/RecruiterSheduled">
+                Scheduled
+              </Link>
+
+              <Link className="dropdown-item" to="/RecruiterOffeer">
+                Offer
+              </Link>
             </NavDropdown>
 
             {/* <NavDropdown title="Link" id="navbarScrollingDropdown">

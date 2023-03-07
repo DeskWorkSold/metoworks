@@ -43,12 +43,12 @@ export const FreelanceNavMain = () => {
               Saved Jobs
             </Link>
             <NavDropdown title="Interviews" id="navbarScrollingDropdown">
-              <NavDropdown.Item>
-                <Link to="/FreelanceSheduled">Scheduled</Link>
-              </NavDropdown.Item>
-              <NavDropdown.Item>
-                <Link to="/FreelanceOffeer">Offer</Link>
-              </NavDropdown.Item>
+              <Link className="dropdown-item" to="/FreelanceSheduled">
+                Scheduled
+              </Link>
+              <Link className="dropdown-item" to="/FreelanceOffeer">
+                Offer
+              </Link>
             </NavDropdown>
             {/* <NavDropdown title="Interviews" id="navbarScrollingDropdown">
               <NavDropdown.Item>
